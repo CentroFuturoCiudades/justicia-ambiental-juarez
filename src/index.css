@@ -11,6 +11,17 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --text-primary: #545454;
+
+  --background: #efeeeb;
+  --background-d1: #e3e1dd;
+  --background-d2: #40423d;
+
+  --ambiental-primary: #a2b687;
+  --industria-primary: #8d8473;
+  --equipamiento-primary: #9b87b6;
+  --poblacion-primary: #acbab6;
 }
 
 a {
