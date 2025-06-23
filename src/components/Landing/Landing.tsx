@@ -8,7 +8,6 @@ const Landing = ()=> {
         <div className="landing">
             <div className="landing__header">
                 Header
-                <div>Test <p>test2</p></div>
                 {/* HEADER COMPONENT */}
             </div>
             <div className="landing__body">
