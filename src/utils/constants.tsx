@@ -17,7 +17,9 @@ export const COLORS = {
     }
 }
 
-export const SECTIONS = {
+export const SECTIONS = {}
+
+export const TEMAS = {
     ambiental: {
         title: "Ambiental"
     },
