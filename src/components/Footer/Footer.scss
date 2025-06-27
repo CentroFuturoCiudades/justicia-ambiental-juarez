@@ -1,0 +1,32 @@
+.footer {
+  width: 100%;
+  background-color: var(--background-d1);
+  padding: 3rem 0;
+
+  // Truco para romper el contenedor y abarcar toda la pantalla sin causar scroll horizontal
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+
+  &__logos {
+    width: 100%;
+    max-width: 1280px;
+    padding: 0 3rem;
+    margin: 0 auto;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__logo {
+    height: 64px;
+    max-width: 160px;
+    object-fit: contain;
+  }
+}

@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./Landing.scss";
+import Footer from "../Footer/Footer";
 
 const Landing = ()=> {
     
@@ -15,8 +16,7 @@ const Landing = ()=> {
                 {/* BODY COMPONENT */}
             </div>
             <div className="landing__footer">
-                Footer
-                {/* FOOTER COMPONENT */}
+                <Footer />
             </div>
         </div>
     )
