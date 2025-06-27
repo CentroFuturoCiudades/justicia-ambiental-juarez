@@ -1,0 +1,36 @@
+.visor {
+    
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    color: var(--text-primary);
+    font-size: var(--font-size-body);
+
+    &__leftPanel {
+        width: 300px;
+        background: var(--background-d1);
+        height: 100%;
+
+        padding: 1rem;
+    }
+
+    &__summary {
+        background-color: var(--background);
+        padding: 1rem;
+    }
+
+    &__mapContainer {
+        background: peachpuff;
+        flex: 1 0;
+
+
+        .mapboxgl-control-container {
+            display: none !important;
+        }
+
+        [mapboxgl-children] {
+            display: none !important;
+        }
+    }
+
+}
