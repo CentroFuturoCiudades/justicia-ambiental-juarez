@@ -1,13 +1,14 @@
 import React from "react";
 
 import "./Landing.scss";
+import PageHeader from "./Page-Header/PageHeader";
 
 const Landing = ()=> {
     
     return (
         <div className="landing">
             <div className="landing__header">
-                Header
+                <PageHeader />
                 {/* HEADER COMPONENT */}
             </div>
             <div className="landing__body">
