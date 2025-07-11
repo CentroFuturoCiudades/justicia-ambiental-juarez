@@ -19,26 +19,53 @@ export const COLORS = {
     }
 }
 
+export type LayerKey = keyof typeof LAYERS;
 export const SECTIONS = {
     ambiental: {
         label: "Ambiental",
         icon: MdForest,
-        layers: ["vulnerabilidad_ambiental", "islas_calor", "calidad_del_aire", "riesgo_inundacion", "riesgo_trafico_vehicular", "indice_vulnerabilidad_ambiental"],
+        layers: [
+            "vulnerabilidad_ambiental", 
+            "islas_calor", 
+            "calidad_del_aire", 
+            "riesgo_inundacion", 
+            "riesgo_trafico_vehicular", 
+            "indice_vulnerabilidad_ambiental"
+        ] as LayerKey[],
     },
     industria: {
         label: "Industria",
         icon: FaIndustry,
-        layers: ["hogares_vulnerables_industria", "infantes_vulnerables_industria"],
+        layers: [
+            "hogares_vulnerables_industria", 
+            "infantes_vulnerables_industria"
+        ] as LayerKey[],
     },
     equipamiento: {
         label: "Equipamiento",
         icon: FaCar,
-        layers: ["equipamientos", "indice_accesibilidad", "tiempo_acceso_recreativos", "tiempo_acceso_salud", "tiempo_acceso_preparatorias", "hogares_15min_espacios_recreativos", "hogares_30min_salud", "hogares_30min_preparatorias"],
+        layers: [
+            "equipamientos", 
+            "indice_accesibilidad", 
+            "tiempo_acceso_recreativos", 
+            "tiempo_acceso_salud", 
+            "tiempo_acceso_preparatorias", 
+            "hogares_15min_espacios_recreativos", 
+            "hogares_30min_salud", 
+            "hogares_30min_preparatorias"
+        ] as LayerKey[],
     },
     poblacion: {
         label: "Población",
         icon: MdFamilyRestroom,
-        layers: ["ingreso", "porcentaje_pob_0a5", "porcentaje_pob_60", "porcentaje_escolaridad", "porcentaje_bajos_ingresos", "indice_bienestar"],
+        layers: [
+            "ingreso", 
+            "porcentaje_pob_0a5", 
+            "porcentaje_pob_60", 
+            "porcentaje_escolaridad", 
+            "porcentaje_bajos_ingresos", 
+            "indice_bienestar"
+        ] as LayerKey[],
     }
 }
 

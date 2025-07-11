@@ -10,6 +10,8 @@ type ViewState = {
 interface AppContextI {
     viewState: ViewState;
     setViewState: Dispatch<SetStateAction<ViewState>>;
+    selectedLayers: string;
+    setSelectedLayers: Dispatch<SetStateAction<string>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -30,10 +32,14 @@ const AppContextProvider = ({ children }: { children: any }) => {
         zoom: 11,
     })
 
+    const [selectedLayers, setSelectedLayers] = useState("");
+
     return (
         <AppContext.Provider value={{
             viewState,
-            setViewState
+            setViewState,
+            selectedLayers,
+            setSelectedLayers
         }}
         >
             {children}
