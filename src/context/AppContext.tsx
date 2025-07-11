@@ -1,13 +1,32 @@
-import React, { createContext, useContext, useState, type ReactElement } from "react";
+import { type MapViewState } from "deck.gl";
+import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
 
-const AppContext = createContext({});
+type ViewState = {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+};
 
-export const useAppContext = () => useContext( AppContext );
+interface AppContextI {
+    viewState: ViewState;
+    setViewState: Dispatch<SetStateAction<ViewState>>;
+}
+
+const AppContext = createContext<AppContextI | undefined>(undefined);
+
+export const useAppContext = () => {
+    const context = useContext(AppContext);
+    if (!context) {
+        throw new Error("useAppContext must be used within an AppContextProvider");
+    }
+    return context;
+};
+
 
 const AppContextProvider = ({ children }: { children: any }) => {
-    const [viewState, setViewState] = useState({
-        latitude: 0,
-        longitude: 0,
+    const [viewState, setViewState] = useState<MapViewState>({
+        latitude: 31.6904,
+        longitude: -106.4245,
         zoom: 11,
     })
 

@@ -1,0 +1,49 @@
+.visor {
+    width: auto;
+    
+    display: flex;
+    flex-direction: row;
+    height: calc( 100vh - 0rem);
+    color: var(--text-primary);
+    font-size: var(--font-size-body);
+    border-radius: var(--border-radius);
+
+    &__leftPanel {
+        width: 300px;
+        background: var(--background-d1);
+        height: auto;
+
+        padding: 1rem;
+    }
+
+    &__title {
+        font-size: var(--font-size-header);
+        font-weight: bold;
+        line-height: 1;
+
+        padding: 2rem 0;
+        border-bottom: 2px solid var(--text-primary);
+        margin-bottom: 2rem;
+    }
+
+    &__summary {
+        background-color: var(--background);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+    }
+
+    &__mapContainer {
+        background: peachpuff;
+        flex: 1;
+
+
+        .mapboxgl-control-container {
+            display: none !important;
+        }
+
+        [mapboxgl-children] {
+            display: none !important;
+        }
+    }
+
+}
