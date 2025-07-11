@@ -1,6 +1,8 @@
-import { useState, useRef, useEffect, type JSX } from "react";
-import './AccordionComponent.scss';
+import { useState, type JSX } from "react";
+import AccordionItem from "./AccordionItem";  // Import the individual accordion item component
+import './AccordionComponent.scss';            // Styles for accordion wrapper and components
 
+// SVG icon used for accordion items (a search/magnifying glass icon)
 const searchIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50">
     <path d="M 21 3 C 11.62 3 4 10.62 4 20 C 4 29.38 11.62 37 21 37 
@@ -11,37 +13,100 @@ const searchIcon = (
              C 12.7 35 6 28.3 6 20 C 6 11.7 12.7 5 21 5 Z" />
   </svg>
 );
-const items = [
+
+// Type definition for each accordion item.
+// `content` can be either plain string or JSX.Element (React component, element, or fragment).
+type AccordionItemType = {
+  id: string;                   // Unique id used for keys and accessibility attributes
+  title: string;                // Header title shown on the accordion button
+  content: JSX.Element | string;// The content shown inside the accordion panel when expanded
+  images: string[];             // Optional array of image URLs displayed inside the panel
+  icon?: JSX.Element;           // Optional icon shown next to the title in the header button
+};
+
+import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu"; // Example complex component to render inside content
+
+// Predefined accordion items data.
+// One item includes a custom JSX component (QuadrantMenu) as its content.
+const items: AccordionItemType[] = [
   {
     id: "a",
     title: "uso de la herramienta",
-    content: "....",
-    images: [
-      "https://via.placeholder.com/150x100"
-    ],
+    content: "Esto es una descripción básica.",
+    images: ["https://via.placeholder.com/150x100"],
     icon: searchIcon,
   },
   {
     id: "b",
-    title: "Segundo ítem",
-    content: "Contenido sin imágenes.",
-    images: [],
+    title: "Menú interactivo",
+    content: (
+      <QuadrantMenu
+        mainHeader="Elige un cuadrante"
+        items={[
+          {
+            title: "Item 1",
+            description: "Descripción del item 1",
+            iconUrl: "https://via.placeholder.com/100",
+            url: "#",
+            mainHeader: ""
+          },
+          {
+            title: "Item 2",
+            description: "Descripción del item 2",
+            iconUrl: "https://via.placeholder.com/100",
+            url: "#",
+            mainHeader: ""
+          },
+          {
+            title: "Item 3",
+            description: "Descripción del item 3",
+            iconUrl: "https://via.placeholder.com/100",
+            url: "#",
+            mainHeader: ""
+          },
+          {
+            title: "Item 4",
+            description: "Descripción del item 4",
+            iconUrl: "https://via.placeholder.com/100",
+            url: "#",
+            mainHeader: ""
+          },
+        ]}
+      />
+    ),
+    images: [],  // No images for this item, as content is custom JSX component
     icon: searchIcon,
   },
   {
     id: "c",
-    title: "Tercer ítem",
-    content: "...",
+    title: "Más contenido",
+    content: (
+      <div>
+        <p>Contenido más complejo</p>
+        <ul>
+          <li>Elemento 1</li>
+          <li>Elemento 2</li>
+        </ul>
+      </div>
+    ),
     images: ["https://via.placeholder.com/150x100"],
     icon: searchIcon,
   },
 ];
 
+// Props type for the AccordionComponent
+type AccordionComponentProps = {
+  content?: JSX.Element;  // Optional additional JSX content to render inside the accordion wrapper
+};
 
-
-export default function AccordionComponent() {
+// AccordionComponent renders a list of AccordionItem components
+// Manages open/closed state of each item internally using an array of open item ids
+export default function AccordionComponent({ content }: AccordionComponentProps) {
   const [openIds, setOpenIds] = useState<string[]>([]);
 
+  // Toggles the open state of the accordion item by id.
+  // If the id is already in the open list, it removes it (closing the item).
+  // Otherwise, it adds it to open list (opening the item).
   const toggle = (id: string) => {
     setOpenIds((prev) =>
       prev.includes(id) ? prev.filter((openId) => openId !== id) : [...prev, id]
@@ -50,84 +115,26 @@ export default function AccordionComponent() {
 
   return (
     <div className="accordion-wrapper">
-      {items.map(({ id, title, content, images }) => (
+      {/* Render the predefined accordion items */}
+      {items.map(({ id, title, content, images, icon }) => (
         <AccordionItem
           key={id}
           id={id}
           title={title}
           content={content}
           images={images}
-          isOpen={openIds.includes(id)}
-          toggle={toggle}
-          icon={searchIcon} 
+          isOpen={openIds.includes(id)}  // Open if this id is in openIds state
+          toggle={toggle}                // Pass toggle function down
+          icon={icon}
         />
       ))}
-    </div>
-  );
-}
 
-type AccordionItemProps = {
-  id: string;
-  title: string;
-  content: string;
-  images: string[];
-  isOpen: boolean;
-  toggle: (id: string) => void;
-  icon?: JSX.Element;
-};
-
-
-function AccordionItem({ id, title, content, images, isOpen, toggle, icon }: AccordionItemProps) {
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [height, setHeight] = useState("0px");
-
-  useEffect(() => {
-    if (contentRef.current) {
-      setHeight(isOpen ? `${contentRef.current.scrollHeight}px` : "0px");
-    }
-  }, [isOpen]);
-
-  return (
-    <div className={`accordion-item ${isOpen ? "open" : "closed"}`}>
-      <button
-        onClick={() => toggle(id)}
-        className="accordion-button"
-        aria-expanded={isOpen}
-        aria-controls={`panel-${id}`}
-        id={`accordion-${id}`}
-      >
-        {title}
-        {icon && (
-          <span className={`accordion-icon ${isOpen ? "open" : ""}`} aria-hidden="true" role="img">
-            {icon}
-          </span>
-        )}
-      </button>
-
-
-      <div
-        id={`panel-${id}`}
-        role="region"
-        aria-labelledby={`accordion-${id}`}
-        className="accordion-panel"
-        ref={contentRef}
-        style={{ height }}
-      >
-        <div className="accordion-content">
-          <div className="accordion-text">{content}</div>
-          {images.length > 0 && (
-            <div className="accordion-images">
-              {images.map((src, idx) => (
-                <img
-                  key={idx}
-                  src={src}
-                  alt={`Imagen ${idx + 1} de ${title}`}
-                />
-              ))}
-            </div>
-          )}
+      {/* Optional extra JSX content passed as props (e.g. from Landing page) */}
+      {content && (
+        <div className="accordion-custom">
+          {content}
         </div>
-      </div>
+      )}
     </div>
   );
 }
