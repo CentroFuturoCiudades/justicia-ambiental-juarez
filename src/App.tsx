@@ -9,7 +9,7 @@ function App() {
   return (
     <AppContextProvider>
       <Landing></Landing>
-      {/* <Visor></Visor> */}
+      <Visor></Visor>
     </AppContextProvider>
   )
 }

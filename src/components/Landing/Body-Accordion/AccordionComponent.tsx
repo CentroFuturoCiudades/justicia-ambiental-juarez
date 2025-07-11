@@ -1,18 +1,11 @@
 import { useState, type JSX } from "react";
 import AccordionItem from "./AccordionItem";  // Import the individual accordion item component
 import './AccordionComponent.scss';            // Styles for accordion wrapper and components
+import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu"; // Example complex component to render inside content
+import { FaSearch } from "react-icons/fa";
 
 // SVG icon used for accordion items (a search/magnifying glass icon)
-const searchIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 50 50">
-    <path d="M 21 3 C 11.62 3 4 10.62 4 20 C 4 29.38 11.62 37 21 37 
-             C 24.71 37 28.14 35.8 30.94 33.78 L 44.09 46.91 
-             L 46.91 44.09 L 33.91 31.06 C 36.46 28.09 38 24.22 
-             38 20 C 38 10.62 30.38 3 21 3 Z M 21 5 
-             C 29.3 5 36 11.7 36 20 C 36 28.3 29.3 35 21 35 
-             C 12.7 35 6 28.3 6 20 C 6 11.7 12.7 5 21 5 Z" />
-  </svg>
-);
+const searchIcon = <FaSearch></FaSearch>
 
 // Type definition for each accordion item.
 // `content` can be either plain string or JSX.Element (React component, element, or fragment).
@@ -23,8 +16,6 @@ type AccordionItemType = {
   images: string[];             // Optional array of image URLs displayed inside the panel
   icon?: JSX.Element;           // Optional icon shown next to the title in the header button
 };
-
-import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu"; // Example complex component to render inside content
 
 // Predefined accordion items data.
 // One item includes a custom JSX component (QuadrantMenu) as its content.

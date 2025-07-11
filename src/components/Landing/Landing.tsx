@@ -13,11 +13,8 @@ const Landing = () => {
                 {/* HEADER COMPONENT */}
             </div>
             <div className="landing__body">
-                Body
-                {/* BODY COMPONENT */}
-            </div>
                 <AccordionComponent />
-
+            </div>
             <div className="landing__footer">
                 Footer
                 {/* FOOTER COMPONENT */}
