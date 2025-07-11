@@ -1,18 +1,19 @@
-import React from "react";
-
 import "./Landing.scss";
+import QuadrantMenu from "./Quadrant-Menu/QuadrantMenu";
+import PageHeader from "./Page-Header/PageHeader";
 
-const Landing = ()=> {
-    
+import "./Body-Accordion/AccordionComponent";
+import AccordionComponent from "./Body-Accordion/AccordionComponent";
+const Landing = () => {
+
     return (
         <div className="landing">
             <div className="landing__header">
-                Header
+                <PageHeader />
                 {/* HEADER COMPONENT */}
             </div>
             <div className="landing__body">
-                Body
-                {/* BODY COMPONENT */}
+                <AccordionComponent />
             </div>
             <div className="landing__footer">
                 Footer
