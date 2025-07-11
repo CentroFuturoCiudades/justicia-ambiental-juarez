@@ -3,8 +3,8 @@
   align-items: center;
   width: auto;
   border-bottom: 1px solid var(--border-color);
-  box-sizing: border-box; /* include border and padding in width */
-  overflow-x: hidden; /* prevent horizontal scroll if small overflow */
+  box-sizing: border-box; 
+  overflow-x: hidden; 
 }
 
 .page-header__content {
