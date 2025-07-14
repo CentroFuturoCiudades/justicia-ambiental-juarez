@@ -13,10 +13,10 @@ const Tematica = () => {
  
     return (
         <div className="tematica-container">
-            <Accordion.Root collapsible variant={"plain"}>
-                <Accordion.Item value="tematica">
+            <Accordion.Root collapsible variant={"enclosed"} style={{ border:"none"}}>
+                <Accordion.Item value="main" style={{ background: "#424242", border: "none" }}>
                     
-                    <Accordion.ItemTrigger className="tematica-container__main-trigger" >
+                    <Accordion.ItemTrigger className="tematica-container__main-trigger" _expanded={{ bg: "#a1a1a1" }}>
                         <Span className="tematica-container__main-title" >
                             Temática
                         </Span>
@@ -25,13 +25,13 @@ const Tematica = () => {
 
                     <Accordion.ItemContent>
 
-                        <AccordionItemBody className="tematica-container__sub-accordion">
+                        <AccordionItemBody className="tematica-container__sub-accordion" >
 
-                            <Accordion.Root collapsible variant={"enclosed"}>
+                            <Accordion.Root collapsible variant={"enclosed"} border={"none"}>
                                 {Object.entries(SECTIONS).map(([sectionKey, section]) => (
-                                    <Accordion.Item key={sectionKey} value={sectionKey} >
-                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" >
-                                            <Span className="tematica-container__section-title">
+                                    <Accordion.Item key={sectionKey} value={sectionKey}>
+                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" _expanded={{ bg: "#363636" }}>
+                                           <Span className="tematica-container__section-title">
                                                 {section.label}
                                             </Span>
                                             <Accordion.ItemIndicator className="tematica-container__main-indicator"/>
@@ -62,7 +62,7 @@ const Tematica = () => {
                                                     />
                                                 )}
                                             </>
-    ))}
+                                            ))}
                                             </AccordionItemBody>
                                             
                                         </Accordion.ItemContent>

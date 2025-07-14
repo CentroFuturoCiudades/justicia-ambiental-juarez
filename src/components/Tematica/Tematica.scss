@@ -57,9 +57,11 @@
 
 .tematica-container__main-trigger:focus,
 .tematica-container__main-trigger[aria-expanded="true"],
-.tematica-container__main-trigger:active {
+.tematica-container__main-trigger:active 
+{
   outline: none !important;
   box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 
@@ -75,4 +77,14 @@
 .tematica-container .chakra-accordion__itemBody {
   padding: 0 !important;
   background: #f5f5f5 !important;
+}
+
+.tematica-container__section-trigger:hover {
+  background: #363636 !important;
+  cursor: pointer;
+}
+
+.tematica-container__main-trigger:hover {
+  background: #a1a1a1 !important;
+  cursor: pointer;
 }
