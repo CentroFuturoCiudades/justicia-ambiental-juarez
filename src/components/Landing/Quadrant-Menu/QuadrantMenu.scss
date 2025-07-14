@@ -1,0 +1,114 @@
+:root {
+  --first-quadrant-color: #a5b99a;   
+  --second-quadrant-color: #c5aba5;  
+  --third-quadrant-color: #a59da9;   
+  --fourth-quadrant-color: #93b8b6;  
+}
+
+
+.quadrant-menu {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9; 
+}
+.quadrant-menu__header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  background-color: #f0f0f0;
+  width: 200px;         
+  height: 200px;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+
+  display: flex;         
+  justify-content: center;
+  align-items: center;
+}
+
+
+.quadrant-menu__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  width: 450px;
+  height: 400px;
+  margin: 0 auto;
+  gap: 1rem;
+  position: relative;
+  outline: none;
+}
+
+.quadrant-menu__grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.quadrant-menu__item {
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0;
+  color: white;
+  outline: none;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Custom colors */
+.quadrant-menu__item-0 .quadrant-menu__item {
+  background-color: var(--first-quadrant-color);
+  border-top-right-radius: 40% 50%;
+}
+.quadrant-menu__item-1 .quadrant-menu__item {
+  background-color: var(--second-quadrant-color);
+  border-top-left-radius: 40% 50%;
+}
+.quadrant-menu__item-2 .quadrant-menu__item {
+  background-color: var(--third-quadrant-color);
+  border-bottom-right-radius: 40% 50%;
+}
+.quadrant-menu__item-3 .quadrant-menu__item {
+  background-color: var(--fourth-quadrant-color);
+  border-bottom-left-radius: 40% 50%;
+}
+
+.quadrant-menu__item-details {
+  // border: 1px solid #ccc;
+  // border-radius: 8px;
+  position: absolute;
+  // background-color: rgba(112, 10, 10, 0.9);
+  top: 420px; // position below the circle
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 1rem;
+  width: 100%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* dynamic title colors */
+.quadrant-title--0 {
+  color: var(--first-quadrant-color);
+}
+.quadrant-title--1 {
+  color: var(--second-quadrant-color);
+}
+.quadrant-title--2 {
+  color: var(--third-quadrant-color);
+}
+.quadrant-title--3 {
+  color: var(--fourth-quadrant-color);
+}

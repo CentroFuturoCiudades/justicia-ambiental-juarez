@@ -251,6 +251,11 @@
     d3-scale "^4.0.2"
     h3-js "4.1.0"
 
+"@chakra-ui/icons@^2.2.4":
+  version "2.2.4"
+  resolved "https://registry.npmjs.org/@chakra-ui/icons/-/icons-2.2.4.tgz"
+  integrity sha512-l5QdBgwrAg3Sc2BRqtNkJpfuLw/pWRDwwT58J6c4PqQT6wzXxyNa8Q0PForu1ltB5qEiFb1kxr/F/HO1EwNa6g==
+
 "@chakra-ui/react@^3.21.0":
   version "3.21.0"
   resolved "https://registry.npmjs.org/@chakra-ui/react/-/react-3.21.0.tgz"
