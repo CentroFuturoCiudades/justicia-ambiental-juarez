@@ -45,7 +45,6 @@
         font-weight: bold;
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
-        background-color: var(--ambiental-primary);
         color: white;
         padding: 0.5rem;
         border-radius: 8px;
@@ -65,13 +64,6 @@
 
         [mapboxgl-children] {
             display: none !important;
-        }
-
-        .tematica-container {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 20;
         }
     }
 

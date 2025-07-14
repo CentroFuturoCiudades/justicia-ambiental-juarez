@@ -1,79 +1,78 @@
 .tematica-container {
-  width: 250px;
-  display: inline-block;
   position: absolute;
   top: 1.5rem;
-  right: 1.5rem;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #ededed;
-  border-radius: 8px; // las 4 esquinas
-  box-shadow: none;
-  overflow: hidden; // para que el contenido respete el border-radius
+  right: 2rem;
+  width: 250px;
+
+  &__main-trigger {
+    background-color: #bdbdbd;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 0.2rem;
+    padding: 0.25rem 1rem
+
+  }
+
+  &__main-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  &__main-indicator {
+    color: gray;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__sub-accordion {
+    padding: 0rem;
+    margin-top: 0rem;
+    width: 100%;
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+
+  &__section-trigger {
+    background: #424242;
+    color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 0 !important;
+    border: none !important;
+
+    padding: 0.25rem 1rem !important;
+  }
+
+  &__section-title {
+    font-weight: 200;
+    font-size: 0.9rem;
+  }
 }
 
-.tematica__dropdown-header {
-  height: 20px;
-  display: flex;
-  align-items: center;
-  background: #bdbdbd;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  border-bottom: 1px solid #a0a0a0;
+.tematica-container__main-trigger:focus,
+.tematica-container__main-trigger[aria-expanded="true"],
+.tematica-container__main-trigger:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.tematica__arrow {
-  margin-left: 0.5rem;
-  font-size: 1.1rem;
-  color: #ffffff;
-  transition: color 0.2s;
+
+.tematica-container__section-trigger:focus,
+.tematica-container__section-trigger[aria-expanded="true"],
+.tematica-container__section-trigger:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-.tematica__arrow.open {
-  color: #343434; // color cuando está abierto
-}
-
-.tematica__dropdown-content {
-  background: #ededed;
-  min-width: 200px;
-  z-index: 10;
-}
-
-.tematica__section {
-  border-top: 1px solid #d0d0d0;
-}
-
-.tematica__section-header {
-    height: 20px;
-  display: flex;
-  align-items: center;
-  background: #424242;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-.tematica__section-arrow {
-  margin-left: 0.5rem;
-  font-size: 1.1rem;
-  transition: transform 0.2s;
-}
-
-.tematica__section ul {
-  list-style: none;
-  padding: 0 0 0 2.2rem;
-  background: #ededed;
-}
-
-.tematica__section li {
-  padding: 0.3rem 0.7rem;
-  cursor: pointer;
-  border-radius: 4px;
-  background: none;
-  color: #222;
-  transition: background 0.2s;
-}
-
-.tematica__section li.selected {
-  background: #bdbdbd;
-  font-weight: 500;
+/* Quita el padding y el fondo blanco del panel del segundo accordion */
+.tematica-container .chakra-accordion__itemContent,
+.tematica-container .chakra-accordion__itemBody {
+  padding: 0 !important;
+  background: #f5f5f5 !important;
 }

@@ -71,7 +71,7 @@ export const SECTIONS = {
 
 export const LAYERS = {
     vulnerabilidad_ambiental: {
-        title: "Índice de Vulnerabilidad Ambiental",
+        title: "Indice de Vulnerabilidad Ambiental",
         url: "",
         type: "Categorica",
         metric: "puntaje_0_100", //Puntaje de 0 a 100 (Alto, Medio, Bajo)
@@ -175,27 +175,27 @@ export const LAYERS = {
         metrics: [],
     },
     equipamientos: {
-        title: "Número y tipos de equipamientos (salud, educación, recreativos y cuidados)",
+        title: "Número y tipos de equipamientos",
         url: "",
         type: "Continua",
         metric: "num_equipamientos",
         visualization_type: "Treemap y mapa",
         geographic_unit: "Puntos latitud-longitud",
         threshold: "",
-        description: "Índice que mide la disponibilidad de equipamientos en una zona",
+        description: "Índice que mide la disponibilidad de equipamientos (salud, educación, recreativos y cuidados) en una zona",
         year: null,
         graphs: [],
         metrics: [],
     },
     indice_accesibilidad: {
-        title: "Índice de Accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
+        title: "Indice de Accesibilidad",
         url: "",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
         geographic_unit: "AGEB",
         threshold: "",
-        description: "Índice que mide la accesibilidad a distintos tipos de equipamientos",
+        description: "Índice de accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
         year: null,
         graphs: [],
         metrics: [],

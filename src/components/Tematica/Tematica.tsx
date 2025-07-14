@@ -1,75 +1,81 @@
+import { Accordion, AccordionItemBody, Box, Checkbox, Span } from "@chakra-ui/react";
 import { SECTIONS, LAYERS } from "../../utils/constants";
-import { useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
-import { FaCaretDown } from "react-icons/fa";
 
 const Tematica = () => {
+
     const { selectedLayers, setSelectedLayers } = useAppContext();
-
-    const [selectedSection, setSelectedSection] = useState("");
-    const [isOpen, setIsOpen] = useState(false);
-
-    const handleSectionChange = (sectionKey: string) => {
-        setSelectedSection(prev => prev === sectionKey ? "" : sectionKey);
-    };
 
     const handleLayerToggle = (layerKey: string) => {
         setSelectedLayers(prev => prev === layerKey ? "" : layerKey);
     }
-
+ 
     return (
         <div className="tematica-container">
-            <div className="tematica__dropdown-header" onClick={() => setIsOpen((prev) => !prev)}>
-                <h1 style={{ fontSize: "1.1rem", margin: 0, fontWeight: 600 }}>Temática</h1>
-                <span 
-                    className={`tematica__arrow${isOpen ? " open" : ""}`}
-                    style={{ marginLeft: "auto" }}
-                >
-                    <FaCaretDown size={38}/>
-                </span>
-            </div>
-            
-            {isOpen && (
-                <div className="tematica__dropdown-content">
-                    {Object.entries(SECTIONS).map(([sectionKey, section]) => {
-                        const isSectionOpen = selectedSection === sectionKey;
-                        return (
-                            <div key={sectionKey} className="tematica__section">
-                                <div className="tematica__section-header" onClick={() => handleSectionChange(sectionKey)}>
-                                    <p style={{ fontSize: "1.1rem", margin: 0 }}> {section.label} </p>
-                                    <span 
-                                        className="tematica__section-arrow"
-                                        style={{ marginLeft: "auto" }}
-                                    >
-                                        < FaCaretDown size={38}/>
-                                    </span>
-                                </div>
+            <Accordion.Root collapsible variant={"plain"}>
+                <Accordion.Item value="tematica">
+                    
+                    <Accordion.ItemTrigger className="tematica-container__main-trigger" >
+                        <Span className="tematica-container__main-title" >
+                            Temática
+                        </Span>
+                        <Accordion.ItemIndicator className="tematica-container__main-indicator" />
+                    </Accordion.ItemTrigger>
 
+                    <Accordion.ItemContent>
 
-                                {isSectionOpen && (
-                                    <div>
-                                        {section.layers.map((layerKey) => (
-                                            <label key={layerKey} style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedLayers.includes(layerKey)}
-                                                    onChange={() => handleLayerToggle(layerKey)}
-                                                    style={{ marginRight: "0.5rem", fontSize: "1rem" }}
-                                                /> 
-                                                <p style={{fontSize: "1.1rem", margin: 0}}> {LAYERS[layerKey]?.title || layerKey} </p>
-                                            </label>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
+                        <AccordionItemBody className="tematica-container__sub-accordion">
+
+                            <Accordion.Root collapsible variant={"enclosed"}>
+                                {Object.entries(SECTIONS).map(([sectionKey, section]) => (
+                                    <Accordion.Item key={sectionKey} value={sectionKey} >
+                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" >
+                                            <Span className="tematica-container__section-title">
+                                                {section.label}
+                                            </Span>
+                                            <Accordion.ItemIndicator className="tematica-container__main-indicator"/>
+                                        </Accordion.ItemTrigger>
+
+                                        <Accordion.ItemContent>
+                                            <AccordionItemBody className="tematica-container__sub-accordion" >
+                                            {section.layers.map((layerKey, idx) => (
+                                            <>
+                                                <Box key={layerKey} p={2} display="flex" alignItems="center" cursor="pointer" width={"100%"} background={"#f5f5f5"}>
+                                                    <Checkbox.Root>
+                                                        <Checkbox.HiddenInput 
+                                                            checked={selectedLayers === layerKey}
+                                                            onChange={() => handleLayerToggle(layerKey)}
+                                                        />
+                                                        <Checkbox.Control />
+                                                        <Checkbox.Label style={{fontSize:"0.8rem"}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                    </Checkbox.Root>                                               
+                                                </Box>
+                                                {idx < section.layers.length - 1 && (
+                                                    <Box
+                                                        as="hr"
+                                                        border="none"
+                                                        borderBottom="1px solid #bdbdbd"
+                                                        width="90%" // Ajusta el ancho para que no vaya de edge a edge
+                                                        mx="auto"
+                                                        my={0}
+                                                    />
+                                                )}
+                                            </>
+    ))}
+                                            </AccordionItemBody>
+                                            
+                                        </Accordion.ItemContent>
+                                    </Accordion.Item>
+                                ))}
+                            </Accordion.Root>
+
+                        </AccordionItemBody>
+                    </Accordion.ItemContent>
+                </Accordion.Item>
+            </Accordion.Root>
         </div>
     );
-}
+};
 
 export default Tematica;
-

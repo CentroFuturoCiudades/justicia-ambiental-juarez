@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import "./Visor.scss";
 import DeckGL from "deck.gl";
@@ -11,14 +11,16 @@ const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const Visor = ()=> {
 
-    const { viewState, selectedLayers } = useAppContext();
-    const selectedLayersData = LAYERS[selectedLayers as keyof typeof LAYERS]; // si es selección única
-    const sectionKey = Object.entries(SECTIONS).find(([, section]) => section.layers.includes(selectedLayers as typeof section.layers[number]))?.[0] as keyof typeof COLORS | undefined;
-    const sectionColor = sectionKey ? COLORS[sectionKey]?.primary : undefined;
+    const { viewState, selectedLayers } = useAppContext(); //una a la vez (por ahora)
+    const selectedLayersData = LAYERS[selectedLayers as keyof typeof LAYERS];
 
-    useEffect(() => {
-        console.log("VISOR las selected layers han cambiado:", selectedLayers);
-    }, [selectedLayers]);
+    const validSectionKeys = Object.keys(COLORS).filter(key => key !== "GLOBAL") as (keyof typeof COLORS)[];
+    const sectionKey = Object.entries(SECTIONS)
+        .find(([, section]) => section.layers.includes(selectedLayers as typeof section.layers[number]))
+        ?.[0] as keyof typeof SECTIONS | undefined;
+    const sectionColor = validSectionKeys.includes(sectionKey as keyof typeof COLORS)
+        ? (COLORS[sectionKey as keyof typeof COLORS] as { primary?: string }).primary
+        : undefined;
     
     return (
         <div className="visor">
@@ -45,8 +47,8 @@ const Visor = ()=> {
             
 
                 { selectedLayers && (
-                    <div className="visor__layerCard">
-                        <div className="visor__layerCardTitle"> 
+                    <div className="visor__layerCard" style={{borderColor: sectionColor}}>
+                        <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
                             <p>{selectedLayersData?.title}</p>
                         </div>
                         <b>Descripción</b>
