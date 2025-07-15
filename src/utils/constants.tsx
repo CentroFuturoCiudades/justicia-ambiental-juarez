@@ -1,6 +1,5 @@
 //import { geoAlbers, lab } from "d3"
-import { FaIndustry, FaCar } from "react-icons/fa";
-import { MdForest, MdFamilyRestroom } from "react-icons/md";
+
 export const COLORS = {
     GLOBAL: {
         textPrimary: "#545454",
@@ -23,7 +22,6 @@ export type LayerKey = keyof typeof LAYERS;
 export const SECTIONS = {
     ambiental: {
         label: "Ambiental",
-        icon: MdForest,
         layers: [
             "vulnerabilidad_ambiental", 
             "islas_calor", 
@@ -35,7 +33,6 @@ export const SECTIONS = {
     },
     industria: {
         label: "Industria",
-        icon: FaIndustry,
         layers: [
             "hogares_vulnerables_industria", 
             "infantes_vulnerables_industria"
@@ -43,7 +40,6 @@ export const SECTIONS = {
     },
     equipamiento: {
         label: "Equipamiento",
-        icon: FaCar,
         layers: [
             "equipamientos", 
             "indice_accesibilidad", 
@@ -57,7 +53,6 @@ export const SECTIONS = {
     },
     poblacion: {
         label: "Población",
-        icon: MdFamilyRestroom,
         layers: [
             "ingreso", 
             "porcentaje_pob_0a5", 
@@ -76,7 +71,8 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100", //Puntaje de 0 a 100 (Alto, Medio, Bajo)
         visualization_type: "Gráfica de rango de edades y vulnerabilidad ambiental", // mantener?
-        geographic_unit: "",
+        tematica: "ambiental",
+        geographic_unit: "AGEB",
         threshold: "",
         description: "Índice que combina",
         year: 2020,
@@ -88,7 +84,8 @@ export const LAYERS = {
         url: "",
         type: "Continua",
         metric: "grados_centigrados",
-        visualization_type: "Numerico (grados)",
+        visualization_type: "Semaforo",
+        tematica: "ambiental",
         geographic_unit: "AGEB",    //Celdas de raster de 30 x 30m convertidas a AGEBs
         threshold: "",
         description: "Indice que mide la exposición a islas de calor",
@@ -102,7 +99,8 @@ export const LAYERS = {
         type: "Continua",
         metric: "indice_calidad_del_aire", //Varía dependiendo del contaminante
         visualization_type: "Mapa",
-        geographic_unit: "Mapa con celdas de raster de 1kmx1km", //simplificar?
+        tematica: "ambiental",
+        geographic_unit: "Mapa", //Mapa con celdas de raster de 1kmx1km
         threshold: "",
         description: "Índice que mide la calidad del aire en base a diferentes contaminantes",
         year: null,
@@ -115,6 +113,7 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
+        tematica: "ambiental",
         geographic_unit: "TIFF",
         threshold: "",
         description: "Índice que mide el riesgo de inundación",
@@ -128,6 +127,7 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
+        tematica: "ambiental",
         geographic_unit: "Líneas de vialidades principales",
         threshold: "",
         description: "Traffic proximity measures the count of vehicles per day (average annual daily traffic- AADT) divided by distance. EJScreen presents traffic proximity using percentile rank, ranging from 0 (lowest) to 100 (highest).",
@@ -141,6 +141,7 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
+        tematica: "ambiental",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Índice para medir la vulnerabilidad ambiental",
@@ -154,6 +155,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
+        tematica: "industria",
         geographic_unit: "AGEB y TIFF",
         threshold: "",
         description: "% de hogares que tienen en un radio de 5 km al menos 1 industria",
@@ -167,6 +169,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje_niños",
         visualization_type: "Velocimetro",
+        tematica: "industria",
         geographic_unit: "AGEB y TIFF",
         threshold: "",
         description: "% de infantes y adultos mayores que tienen en un radio de 5 km al menos 1 industria",
@@ -180,6 +183,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "num_equipamientos",
         visualization_type: "Treemap y mapa",
+        tematica: "equipamiento",
         geographic_unit: "Puntos latitud-longitud",
         threshold: "",
         description: "Índice que mide la disponibilidad de equipamientos (salud, educación, recreativos y cuidados) en una zona",
@@ -193,6 +197,7 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Índice de accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
@@ -206,6 +211,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "minutos", 
         visualization_type: "Numerico",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "< 5 min: Bueno, 5-20: Medio, > 20: Vulnerable",
         description: "Índice que mide el tiempo promedio de acceso a espacios recreativos",
@@ -219,6 +225,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "minutos",
         visualization_type: "Numerico",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "< 20 min: Bueno, 20-60: Medio, > 60: Vulnerable",
         description: "Índice que mide el tiempo promedio de acceso a equipamientos de salud",
@@ -232,6 +239,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "minutos",
         visualization_type: "Numerico",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "< 15 min: Bueno, 15-45: Medio, > 45: Vulnerable",
         description: "Índice que mide el tiempo promedio de acceso a preparatorias",
@@ -245,6 +253,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje_hogares", 
         visualization_type: "Velocimetro",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "",
         description: "% de hogares que tienen en un radio de 15 minutos al menos 1 espacio recreativo",
@@ -258,6 +267,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje_hogares", 
         visualization_type: "Velocimetro",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "",
         description: "% de hogares que tienen en un radio de 30 minutos al menos 1 equipamiento de salud",
@@ -271,6 +281,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
+        tematica: "equipamiento",
         geographic_unit: "AGEB",
         threshold: "",
         description: "% de hogares que tienen en un radio de 30 minutos al menos 1 preparatoria",
@@ -284,6 +295,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "ingreso_promedio", //(Alto, Medio, Bajo)
         visualization_type: "Semaforo",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Ingreso promedio",
@@ -297,6 +309,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje", //0% a 20%
         visualization_type: "Velocimetro",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Porcentaje de la población que tiene entre 0 y 5 años",
@@ -310,6 +323,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje", //0% a 10%
         visualization_type: "Velocimetro",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Porcentaje de la población que tiene 60 años o más",
@@ -323,6 +337,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje", // 0% a 60%
         visualization_type: "Velocimetro",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "> 60%: Vulnerable",
         description: "Porcentaje de la población total del AGEB que reportó tener menos de 12 años de escolaridad completada (preparatoria)",
@@ -336,6 +351,7 @@ export const LAYERS = {
         type: "Continua",
         metric: "porcentaje",
         visualization_type: "Velocimetro",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Porcentaje de hogares que reportaron tener ingresos por debajo del umbral de pobreza",
@@ -349,6 +365,7 @@ export const LAYERS = {
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
+        tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Índice de Bienestar Social  (variables utilizadas: % TV, % refri, % lavadoras, % microondas, grado prom. esc., prom. ocu. por cuarto. PC1 70%)",
@@ -369,3 +386,18 @@ export const TEMAS = {
     poblacion: {
     }
 }
+
+export const FOOTER_ITEMS = [
+    {
+        title: "Banco de Desarrollo de América del Norte",
+        imageUrl: "https://www.jornada.com.mx/ndjsimg/images/jornada/jornadaimg/nombran-a-alejandro-olivo-villa-director-adjunto-del-nadbank-2068/nombran-a-alejandro-olivo-villa-director-adjunto-del-nadbank-2068html-banco-norte-1png-8397html-ed1f54a2-578f-4591-bb5f-4d4f2abb4d2f.png"
+    },
+    {
+        title: "Baker Institute for Public Policy",
+        imageUrl: "https://networkofcenters.net/sites/networkofcenters.net/files/styles/center_logo/public/baker%20instutute%20rice%20u.png?itok=dQPPaoah"
+    },
+    {
+        title: "Tecnológico de Monterrey: Centro para el Futuro de las Ciudades",
+        imageUrl: "https://futurociudades.tec.mx/sites/g/files/vgjovo1811/files/Logotipo-Centro-Futuro-CD.png"
+    },
+];

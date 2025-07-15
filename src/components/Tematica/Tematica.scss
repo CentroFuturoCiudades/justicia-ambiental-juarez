@@ -11,7 +11,7 @@
     width: 100%;
     justify-content: space-between;
     border-radius: 0.2rem;
-    padding: 0.25rem 1rem
+    padding: 0.25rem 1rem !important;
 
   }
 
@@ -56,8 +56,8 @@
 }
 
 .tematica-container__main-trigger:focus,
-.tematica-container__main-trigger[aria-expanded="true"],
-.tematica-container__main-trigger:active 
+.tematica-container__main-trigger:active,
+.tematica-container__main-trigger[aria-expanded="true"]
 {
   outline: none !important;
   box-shadow: none !important;
@@ -87,4 +87,17 @@
 .tematica-container__main-trigger:hover {
   background: #a1a1a1 !important;
   cursor: pointer;
+}
+
+.chakra-accordion__itemContent {
+  transition: all 0.3s ease-in-out;
+}
+
+.chakra-accordion__itemTrigger:focus,
+.chakra-accordion__itemTrigger:focus-visible,
+.chakra-accordion__itemTrigger:active,
+.chakra-accordion__itemTrigger[aria-expanded="true"] {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }

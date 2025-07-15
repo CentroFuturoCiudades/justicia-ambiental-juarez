@@ -1,6 +1,7 @@
 import "./Landing.scss";
 import QuadrantMenu from "./Quadrant-Menu/QuadrantMenu";
 import PageHeader from "./Page-Header/PageHeader";
+import PageFooter from "./Page-Footer/Page-Footer";
 
 import "./Body-Accordion/AccordionComponent";
 import AccordionComponent from "./Body-Accordion/AccordionComponent";
@@ -16,8 +17,8 @@ const Landing = () => {
                 <AccordionComponent />
             </div>
             <div className="landing__footer">
-                Footer
                 {/* FOOTER COMPONENT */}
+                <PageFooter />
             </div>
         </div>
     )

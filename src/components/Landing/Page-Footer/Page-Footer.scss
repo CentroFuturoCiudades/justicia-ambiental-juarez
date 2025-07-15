@@ -1,0 +1,18 @@
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.image-container {
+    width: 160px;
+    height: auto;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+}
+

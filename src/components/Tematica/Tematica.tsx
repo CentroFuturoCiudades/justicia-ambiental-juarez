@@ -17,9 +17,9 @@ const Tematica = () => {
                 <Accordion.Item value="main" style={{ background: "#424242", border: "none" }}>
                     
                     <Accordion.ItemTrigger className="tematica-container__main-trigger" _expanded={{ bg: "#a1a1a1" }}>
-                        <Span className="tematica-container__main-title" >
+                        <Box className="tematica-container__main-title">
                             Temática
-                        </Span>
+                        </Box>
                         <Accordion.ItemIndicator className="tematica-container__main-indicator" />
                     </Accordion.ItemTrigger>
 
