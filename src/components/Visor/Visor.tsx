@@ -5,29 +5,31 @@ import DeckGL from "deck.gl";
 import Map from "react-map-gl/mapbox";
 import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
+import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, SECTIONS, COLORS } from "../../utils/constants";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const Visor = ()=> {
 
-    const { viewState, selectedLayers } = useAppContext(); //una a la vez (por ahora)
-    const selectedLayersData = LAYERS[selectedLayers as keyof typeof LAYERS];
+    const { viewState, selectedLayers, selectedLayersMultiple } = useAppContext(); //una a la vez (por ahora)
+    //const selectedLayersData = LAYERS[selectedLayers as keyof typeof LAYERS];
 
-    const validSectionKeys = Object.keys(COLORS).filter(key => key !== "GLOBAL") as (keyof typeof COLORS)[];
+    /*const validSectionKeys = Object.keys(COLORS).filter(key => key !== "GLOBAL") as (keyof typeof COLORS)[];
     const sectionKey = Object.entries(SECTIONS)
         .find(([, section]) => section.layers.includes(selectedLayers as typeof section.layers[number]))
         ?.[0] as keyof typeof SECTIONS | undefined;
     const sectionColor = validSectionKeys.includes(sectionKey as keyof typeof COLORS)
         ? (COLORS[sectionKey as keyof typeof COLORS] as { primary?: string }).primary
         : undefined;
-    
+    */
+
     return (
         <div className="visor">
             <div className="visor__leftPanel"> 
                 <div className="visor__title">visor para la evaluación ambiental</div>
 
-                { !selectedLayers && (
+                { selectedLayersMultiple.length == 0 && (
                     <div className="visor__summary">
                     <b>¿Qué es este visor?</b>
                     <br></br>
@@ -46,6 +48,7 @@ const Visor = ()=> {
                 )}
             
 
+                {/* -----una sola capa seleccionada a la vez-------
                 { selectedLayers && (
                     <div className="visor__layerCard" style={{borderColor: sectionColor}}>
                         <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
@@ -56,7 +59,26 @@ const Visor = ()=> {
                         {selectedLayersData?.description || "No hay descripción disponible."}
                         <br></br>
                         </div>
-                )}
+                )}*/}
+
+                {selectedLayersMultiple.length > 0 && selectedLayersMultiple.map(layerKey => {
+                    const layerData = LAYERS[layerKey as keyof typeof LAYERS];
+                    const sectionKey = Object.entries(SECTIONS)
+                        .find(([, section]) => section.layers.includes(layerKey as typeof section.layers[number]))
+                        ?.[0] as keyof typeof SECTIONS | undefined;
+                    const sectionColor = sectionKey ? COLORS[sectionKey]?.primary : undefined;
+                    return (
+                        <div key={layerKey} className="visor__layerCard" style={{borderColor: sectionColor}}>
+                            <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
+                                <p>{layerData?.title}</p>
+                            </div>
+                            <b>Descripción</b>
+                            <br></br>
+                            {layerData?.description || "No hay descripción disponible."}
+                            <br></br>
+                        </div>
+                    );
+                })}
 
             </div>
             <div className="visor__mapContainer"> 
@@ -73,6 +95,7 @@ const Visor = ()=> {
                     />
                 </DeckGL>
                 <Tematica />
+                <CapasBase />
             </div>
         </div>
     );

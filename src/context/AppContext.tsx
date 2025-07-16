@@ -12,6 +12,8 @@ interface AppContextI {
     setViewState: Dispatch<SetStateAction<ViewState>>;
     selectedLayers: string;
     setSelectedLayers: Dispatch<SetStateAction<string>>;
+    selectedLayersMultiple: string[];
+    setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -31,15 +33,20 @@ const AppContextProvider = ({ children }: { children: any }) => {
         longitude: -106.4245,
         zoom: 11,
     })
-
+    //una capa a la vez
     const [selectedLayers, setSelectedLayers] = useState("");
+    //varias capas
+    const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
 
     return (
         <AppContext.Provider value={{
             viewState,
             setViewState,
             selectedLayers,
-            setSelectedLayers
+            setSelectedLayers,
+            selectedLayersMultiple,
+            setSelectedLayersMultiple,
+
         }}
         >
             {children}

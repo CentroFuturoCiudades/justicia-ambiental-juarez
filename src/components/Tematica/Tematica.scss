@@ -39,12 +39,9 @@
   &__section-trigger {
     background: #424242;
     color: white;
-    display: flex;
-    align-items: center;
     width: 100%;
     justify-content: space-between;
     border-radius: 0 !important;
-    border: none !important;
 
     padding: 0.25rem 1rem !important;
   }
@@ -55,37 +52,12 @@
   }
 }
 
-.tematica-container__main-trigger:focus,
-.tematica-container__main-trigger:active,
-.tematica-container__main-trigger[aria-expanded="true"]
-{
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-
-
-.tematica-container__section-trigger:focus,
-.tematica-container__section-trigger[aria-expanded="true"],
-.tematica-container__section-trigger:active {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-/* Quita el padding y el fondo blanco del panel del segundo accordion */
-.tematica-container .chakra-accordion__itemContent,
-.tematica-container .chakra-accordion__itemBody {
-  padding: 0 !important;
-  background: #f5f5f5 !important;
-}
-
-.tematica-container__section-trigger:hover {
-  background: #363636 !important;
-  cursor: pointer;
-}
-
 .tematica-container__main-trigger:hover {
   background: #a1a1a1 !important;
+  cursor: pointer;
+}
+.tematica-container__section-trigger:hover {
+  background: #363636 !important;
   cursor: pointer;
 }
 

@@ -375,6 +375,18 @@ export const LAYERS = {
     }
 }
 
+export const CAPAS_BASE = {
+    capa1: {
+        title: "Capa 1",
+    },
+    capa2: {
+        title: "Capa 2",
+    },
+    capa3: {
+        title: "Capa 3",
+    },
+}
+
 export const TEMAS = {
     ambiental: {
         title: "Ambiental"
@@ -389,6 +401,10 @@ export const TEMAS = {
 
 export const FOOTER_ITEMS = [
     {
+        title: "Tecnológico de Monterrey: Centro para el Futuro de las Ciudades",
+        imageUrl: "https://futurociudades.tec.mx/sites/g/files/vgjovo1811/files/Logotipo-Centro-Futuro-CD.png"
+    },
+    {
         title: "Banco de Desarrollo de América del Norte",
         imageUrl: "https://www.jornada.com.mx/ndjsimg/images/jornada/jornadaimg/nombran-a-alejandro-olivo-villa-director-adjunto-del-nadbank-2068/nombran-a-alejandro-olivo-villa-director-adjunto-del-nadbank-2068html-banco-norte-1png-8397html-ed1f54a2-578f-4591-bb5f-4d4f2abb4d2f.png"
     },
@@ -397,7 +413,7 @@ export const FOOTER_ITEMS = [
         imageUrl: "https://networkofcenters.net/sites/networkofcenters.net/files/styles/center_logo/public/baker%20instutute%20rice%20u.png?itok=dQPPaoah"
     },
     {
-        title: "Tecnológico de Monterrey: Centro para el Futuro de las Ciudades",
-        imageUrl: "https://futurociudades.tec.mx/sites/g/files/vgjovo1811/files/Logotipo-Centro-Futuro-CD.png"
-    },
+        title:"RICE University",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6c2WxWCCQ79DBz1ieePMGAbwY8aGMawtc2g&s"
+    }
 ];
