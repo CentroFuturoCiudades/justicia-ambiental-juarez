@@ -5,7 +5,7 @@ import { CAPAS_BASE } from "../../utils/constants";
 const CapasBase = () => {   
     return (
         <div className="capas-base-container">
-            <Accordion.Root collapsible variant={"enclosed"} >
+            <Accordion.Root collapsible variant={"enclosed"} style={{border:"none"}}>
                 <Accordion.Item value="main">
 
                     <Accordion.ItemContent className="capas-base-container__itemContent" >
@@ -13,7 +13,7 @@ const CapasBase = () => {
                             {Object.entries(CAPAS_BASE).map(([key, value], idx, arr) => (
                                 <>
                                 <Box key={key} p={2} display="flex" alignItems="center" width={"100%"} >
-                                    <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer">
+                                    <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"}>
                                         <Checkbox.HiddenInput />
                                         <Checkbox.Control />
                                         <Checkbox.Label style={{fontSize:"0.8rem"}}>{value.title}</Checkbox.Label>

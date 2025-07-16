@@ -5,7 +5,7 @@
   width: 250px;
 
   &__main-trigger {
-    background-color: #bdbdbd;
+    background-color: #d1d1d1da;    //se cambio por el de COLORS.GLOBAL.backgroundMedium
     display: flex;
     align-items: center;
     width: 100%;
@@ -18,14 +18,19 @@
   &__main-title {
     font-weight: 600;
     font-size: 1.1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: black;
   }
 
   &__main-indicator {
-    color: gray;
-    font-weight: 600;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
+    color: black;
+  }
+
+  &__section-indicator {
+    color: white;
   }
 
   &__sub-accordion {
@@ -36,8 +41,13 @@
     border-top-right-radius: 0 !important;
   }
 
+  &__itemContent {
+    padding: 0rem;
+    border-radius: 0%;
+  }
+
   &__section-trigger {
-    background: #424242;
+    //background: #424242; //se cambio por el de COLORS.GLOBAL.backgroundDark
     color: white;
     width: 100%;
     justify-content: space-between;
@@ -47,13 +57,13 @@
   }
 
   &__section-title {
-    font-weight: 200;
+    font-weight: 600;
     font-size: 0.9rem;
   }
 }
 
 .tematica-container__main-trigger:hover {
-  background: #a1a1a1 !important;
+  background: #aaaaaa !important;
   cursor: pointer;
 }
 .tematica-container__section-trigger:hover {
@@ -72,4 +82,9 @@
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+.chakra-checkbox__control[data-state="unchecked"] {
+  border-color: rgb(112, 112, 112);
+  background: #d1d1d1da !important; // o el color que quieras para unchecked
 }

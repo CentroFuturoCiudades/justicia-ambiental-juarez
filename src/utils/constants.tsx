@@ -3,6 +3,11 @@
 export const COLORS = {
     GLOBAL: {
         textPrimary: "#545454",
+        highlightGreen: "#87b6b3",
+        highlightRed: "#bb6361",
+        backgroundLight: "#efeeeb",
+        backgroundMedium: "#e3e1dd",
+        backgroundDark: "#40423d"
     },
     ambiental: {
         primary: "#a2b687",

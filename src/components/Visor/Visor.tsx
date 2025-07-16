@@ -70,12 +70,13 @@ const Visor = ()=> {
                     return (
                         <div key={layerKey} className="visor__layerCard" style={{borderColor: sectionColor}}>
                             <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
-                                <p>{layerData?.title}</p>
+                                <p style={{fontSize:"1.1rem"}}>{layerData?.title}</p>
                             </div>
-                            <b>Descripción</b>
-                            <br></br>
-                            {layerData?.description || "No hay descripción disponible."}
-                            <br></br>
+                            <div className="visor__layerCardBody">
+                                <p style={{fontSize: "1.1rem"}}>
+                                    {layerData?.description || "No hay descripción disponible."}
+                                </p>
+                            </div>
                         </div>
                     );
                 })}

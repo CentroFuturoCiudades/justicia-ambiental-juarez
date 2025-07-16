@@ -1,5 +1,5 @@
 import { Accordion, AccordionItemBody, Box, Checkbox, Span } from "@chakra-ui/react";
-import { SECTIONS, LAYERS } from "../../utils/constants";
+import { SECTIONS, LAYERS, COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
 
@@ -25,32 +25,32 @@ const Tematica = () => {
             <Accordion.Root collapsible variant={"enclosed"} style={{ border:"none"}}>
                 <Accordion.Item value="main" style={{ background: "#424242"}}>
                     
-                    <Accordion.ItemTrigger className="tematica-container__main-trigger" _expanded={{ bg: "#a1a1a1" }}>
+                    <Accordion.ItemTrigger className="tematica-container__main-trigger" >
                         <Box className="tematica-container__main-title">
-                            Temática
+                            TEMÁTICA
                         </Box>
                         <Accordion.ItemIndicator className="tematica-container__main-indicator" />
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent style={{padding:"0rem", borderTopLeftRadius:"0rem", borderTopRightRadius:"0rem"}}>
+                    <Accordion.ItemContent className="tematica-container__itemContent">
                         <AccordionItemBody style={{padding:"0rem"}} >
 
                             <Accordion.Root collapsible variant={"enclosed"} style={{borderRadius:"0rem", border:"none"}}>
                                 {Object.entries(SECTIONS).map(([sectionKey, section]) => (
-                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:"#f5f5f5"}}>
-                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" _expanded={{ bg: "#363636" }}>
+                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:COLORS.GLOBAL.backgroundLight}}>
+                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" style={{ background: COLORS.GLOBAL.backgroundDark }}>
                                            <Span className="tematica-container__section-title">
                                                 {section.label}
                                             </Span>
-                                            <Accordion.ItemIndicator className="tematica-container__main-indicator"/>
+                                            <Accordion.ItemIndicator className="tematica-container__section-indicator"/>
                                         </Accordion.ItemTrigger>
 
-                                        <Accordion.ItemContent style={{padding:"0rem", borderRadius:"0rem"}}>
+                                        <Accordion.ItemContent className="tematica-container__itemContent">
                                             <AccordionItemBody className="tematica-container__sub-accordion" >
                                             {section.layers.map((layerKey, idx) => (
                                             <>
-                                                <Box key={layerKey} p={2} display="flex" alignItems="center" width={"100%"} background={"#f5f5f5"}>
-                                                    <Checkbox.Root cursor={"pointer"}>
+                                                <Box key={layerKey} p={2} display="flex" alignItems="center" width={"100%"} >
+                                                    <Checkbox.Root cursor={"pointer"} variant={"solid"} colorPalette={"green"}>
                                                         <Checkbox.HiddenInput 
                                                             //checked={selectedLayers === layerKey}
                                                             checked={selectedLayersMultiple.includes(layerKey)}
@@ -65,7 +65,7 @@ const Tematica = () => {
                                                         as="hr"
                                                         border="none"
                                                         borderBottom="1px solid #bdbdbd"
-                                                        width="90%" // Ajusta el ancho para que no vaya de edge a edge
+                                                        width="90%"
                                                         mx="auto"
                                                         my={0}
                                                     />
