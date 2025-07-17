@@ -2,6 +2,7 @@
 
 export const COLORS = {
     GLOBAL: {
+        primary: "",
         textPrimary: "#545454",
         highlightGreen: "#87b6b3",
         highlightRed: "#bb6361",
@@ -72,7 +73,7 @@ export const SECTIONS = {
 export const LAYERS = {
     vulnerabilidad_ambiental: {
         title: "Indice de Vulnerabilidad Ambiental",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100", //Puntaje de 0 a 100 (Alto, Medio, Bajo)
         visualization_type: "Gráfica de rango de edades y vulnerabilidad ambiental", // mantener?
@@ -86,7 +87,7 @@ export const LAYERS = {
     },
     islas_calor: {
         title: "Exposición a Islas de Calor",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "grados_centigrados",
         visualization_type: "Semaforo",
@@ -100,7 +101,7 @@ export const LAYERS = {
     },
     calidad_del_aire: {
         title: "Calidad del Aire",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "indice_calidad_del_aire", //Varía dependiendo del contaminante
         visualization_type: "Mapa",
@@ -114,7 +115,7 @@ export const LAYERS = {
     },
     riesgo_inundacion: {
         title: "Riesgo de Inundación",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
@@ -128,7 +129,7 @@ export const LAYERS = {
     },
     riesgo_trafico_vehicular: {
         title: "Exposición a zonas con alto tráfico vehicular",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
@@ -142,7 +143,7 @@ export const LAYERS = {
     },
     indice_vulnerabilidad_ambiental: {
         title: "Indice de Vulnerabilidad Ambiental",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
@@ -156,7 +157,7 @@ export const LAYERS = {
     },
     hogares_vulnerables_industria: {
         title: "Porcentaje de hogares próximos (5 km) a X tipo industria contaminante",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
@@ -170,7 +171,7 @@ export const LAYERS = {
     },
     infantes_vulnerables_industria: {
         title: "Porcentaje de 0-5 años, +65 años expuestos (5 km) a X tipo industria contaminante",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje_niños",
         visualization_type: "Velocimetro",
@@ -184,7 +185,7 @@ export const LAYERS = {
     },
     equipamientos: {
         title: "Número y tipos de equipamientos",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "num_equipamientos",
         visualization_type: "Treemap y mapa",
@@ -198,7 +199,7 @@ export const LAYERS = {
     },
     indice_accesibilidad: {
         title: "Indice de Accesibilidad",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
@@ -212,7 +213,7 @@ export const LAYERS = {
     },
     tiempo_acceso_recreativos: {
         title: "Tiempo promedio a espacios recreativos",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "minutos", 
         visualization_type: "Numerico",
@@ -226,7 +227,7 @@ export const LAYERS = {
     },
     tiempo_acceso_salud: {
         title: "Tiempo promedio a hospitales o clínicas",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "minutos",
         visualization_type: "Numerico",
@@ -240,7 +241,7 @@ export const LAYERS = {
     },
     tiempo_acceso_preparatorias: {
         title: "Tiempo promedio a preparatorias",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "minutos",
         visualization_type: "Numerico",
@@ -254,7 +255,7 @@ export const LAYERS = {
     },
     hogares_15min_espacios_recreativos: {
         title: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje_hogares", 
         visualization_type: "Velocimetro",
@@ -268,7 +269,7 @@ export const LAYERS = {
     },
     hogares_30min_salud: {
         title: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje_hogares", 
         visualization_type: "Velocimetro",
@@ -282,7 +283,7 @@ export const LAYERS = {
     },
     hogares_30min_preparatorias: {
         title: "Porcentaje de hogares con acceso a preparatorias a 30 minutos",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
@@ -296,7 +297,7 @@ export const LAYERS = {
     },
     ingreso: {
         title: "Ingreso Promedio",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "ingreso_promedio", //(Alto, Medio, Bajo)
         visualization_type: "Semaforo",
@@ -310,7 +311,7 @@ export const LAYERS = {
     },
     porcentaje_pob_0a5: {
         title: "Porcentaje de población de 0 a 5 años",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje", //0% a 20%
         visualization_type: "Velocimetro",
@@ -324,7 +325,7 @@ export const LAYERS = {
     },
     porcentaje_pob_60: {
         title: "Porcentaje de población de 60+",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje", //0% a 10%
         visualization_type: "Velocimetro",
@@ -338,7 +339,7 @@ export const LAYERS = {
     },
     porcentaje_escolaridad: {
         title: "Grado promedio de escolaridad",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje", // 0% a 60%
         visualization_type: "Velocimetro",
@@ -352,7 +353,7 @@ export const LAYERS = {
     },
     porcentaje_bajos_ingresos: {
         title: "Proporción de hogares con bajos ingresos (último quintil)",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "porcentaje",
         visualization_type: "Velocimetro",
@@ -366,7 +367,7 @@ export const LAYERS = {
     },
     indice_bienestar: {
         title: "Indice de Bienestar Social",
-        url: "",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Categorica",
         metric: "puntaje_0_100",
         visualization_type: "Semaforo",
@@ -383,13 +384,15 @@ export const LAYERS = {
 export const CAPAS_BASE = {
     capa1: {
         title: "Capa 1",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
     },
     capa2: {
         title: "Capa 2",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
     },
     capa3: {
         title: "Capa 3",
-    },
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",    },
 }
 
 export const TEMAS = {

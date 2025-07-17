@@ -1,8 +1,17 @@
 import { Accordion, Box, Checkbox } from "@chakra-ui/react";
 import "./CapasBase.scss";
 import { CAPAS_BASE } from "../../utils/constants";
+import { useAppContext } from "../../context/AppContext";
 
-const CapasBase = () => {   
+const CapasBase = () => { 
+    const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
+    
+    //seleccion de capas base
+    const handleBaseLayerToggle = (layerKey: string) => {
+        setSelectedBaseLayers(prev => 
+            prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
+        );
+    };
     return (
         <div className="capas-base-container">
             <Accordion.Root collapsible variant={"enclosed"} style={{border:"none"}}>
@@ -14,7 +23,10 @@ const CapasBase = () => {
                                 <>
                                 <Box key={key} p={2} display="flex" alignItems="center" width={"100%"} >
                                     <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"}>
-                                        <Checkbox.HiddenInput />
+                                        <Checkbox.HiddenInput 
+                                            checked={selectedBaseLayers.includes(key)}
+                                            onChange={() => handleBaseLayerToggle(key)}
+                                        />
                                         <Checkbox.Control />
                                         <Checkbox.Label style={{fontSize:"0.8rem"}}>{value.title}</Checkbox.Label>
                                     </Checkbox.Root>
