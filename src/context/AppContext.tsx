@@ -14,6 +14,8 @@ interface AppContextI {
     setSelectedLayers: Dispatch<SetStateAction<string>>;
     selectedLayersMultiple: string[];
     setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
+    zoomIn: () => void;
+    zoomOut: () => void;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -38,6 +40,10 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //varias capas
     const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
 
+    //zoom
+    const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
+    const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
+
     return (
         <AppContext.Provider value={{
             viewState,
@@ -46,6 +52,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setSelectedLayers,
             selectedLayersMultiple,
             setSelectedLayersMultiple,
+            zoomIn,
+            zoomOut,
 
         }}
         >

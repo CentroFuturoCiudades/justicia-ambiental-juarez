@@ -7,12 +7,14 @@ import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, SECTIONS, COLORS } from "../../utils/constants";
+import { Button } from "@chakra-ui/react";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const Visor = ()=> {
 
-    const { viewState, selectedLayers, selectedLayersMultiple } = useAppContext(); //una a la vez (por ahora)
+    //const { viewState, selectedLayers } = useAppContext(); //una a la vez (por ahora)
+    const { viewState, setViewState, selectedLayersMultiple, zoomIn, zoomOut } = useAppContext(); //varias capas
     //const selectedLayersData = LAYERS[selectedLayers as keyof typeof LAYERS];
 
     /*const validSectionKeys = Object.keys(COLORS).filter(key => key !== "GLOBAL") as (keyof typeof COLORS)[];
@@ -85,6 +87,11 @@ const Visor = ()=> {
             <div className="visor__mapContainer"> 
                 <DeckGL 
                     initialViewState={ viewState }
+                    viewState={ viewState }
+                    onViewStateChange={({ viewState }) => {
+                        const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
+                        setViewState({ latitude, longitude, zoom });
+                    }}
                     layers={[]}
                     style={{ height: "100%", width: "100%", position: "relative"}}
                     controller={ true }
@@ -97,6 +104,17 @@ const Visor = ()=> {
                 </DeckGL>
                 <Tematica />
                 <CapasBase />
+                <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark, borderRadius:"20px"}}>
+                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopRightRadius={0} borderBottomRightRadius={0}
+                        onClick={zoomOut}>
+                        -
+                    </Button>
+                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopLeftRadius={0} borderBottomLeftRadius={0}
+                        onClick={zoomIn}>
+                        +
+                    </Button>
+                </div>
+
             </div>
         </div>
     );
