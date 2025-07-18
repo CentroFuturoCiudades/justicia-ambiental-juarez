@@ -1,8 +1,8 @@
 .capas-base-container {
   position: absolute;
-  bottom: 10px;
+  top: 12rem;
   right: 2rem;
-  width: 250px;
+  width: 230px;
 
   &__main-trigger {
     background-color: #424242;
@@ -11,13 +11,14 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    border-radius: 0.2rem;
+    //border-radius: 0.2rem;
+    border-radius: 0%;
     padding: 0.25rem 1rem !important;
   }
 
   &__main-title {
     font-weight: 500;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
   }
 
   &__main-indicator {
@@ -31,10 +32,14 @@
   &__itemContent {
     background-color: #f5f5f5;
     padding: 0rem;
+    border-radius: 0%;
   }
 
   &__itemBody {
-    padding: 0rem;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   &__checkbox {

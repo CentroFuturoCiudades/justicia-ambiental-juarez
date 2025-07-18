@@ -23,11 +23,11 @@ const Tematica = () => {
     return (
         <div className="tematica-container">
             <Accordion.Root collapsible variant={"enclosed"} style={{ border:"none"}}>
-                <Accordion.Item value="main" style={{ background: "#424242"}}>
+                <Accordion.Item value="main" style={{ background: "#c6c6c6"}}>
                     
-                    <Accordion.ItemTrigger className="tematica-container__main-trigger" >
+                    <Accordion.ItemTrigger className="tematica-container__main-trigger" style={{background: COLORS.GLOBAL.backgroundDark}}>
                         <Box className="tematica-container__main-title">
-                            TEMÁTICA
+                            temática
                         </Box>
                         <Accordion.ItemIndicator className="tematica-container__main-indicator" />
                     </Accordion.ItemTrigger>
@@ -37,8 +37,8 @@ const Tematica = () => {
 
                             <Accordion.Root collapsible variant={"enclosed"} style={{borderRadius:"0rem", border:"none"}}>
                                 {Object.entries(SECTIONS).map(([sectionKey, section]) => (
-                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:COLORS.GLOBAL.backgroundLight}}>
-                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" style={{ background: COLORS.GLOBAL.backgroundDark }}>
+                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:"white"}}>
+                                        <Accordion.ItemTrigger className="tematica-container__section-trigger">
                                            <Span className="tematica-container__section-title">
                                                 {section.label}
                                             </Span>
@@ -50,12 +50,14 @@ const Tematica = () => {
                                             {section.layers.map((layerKey, idx) => (
                                             <>
                                                 <Box key={layerKey} p={2} display="flex" alignItems="center" width={"100%"} >
-                                                    <Checkbox.Root cursor={"pointer"} variant={"solid"} colorPalette={"green"}>
-                                                        <Checkbox.HiddenInput 
-                                                            //checked={selectedLayers === layerKey}
-                                                            checked={selectedLayer.includes(layerKey)}
-                                                            onChange={() => handleLayerToggle(layerKey)}
-                                                        />
+                                                    <Checkbox.Root 
+                                                        cursor={"pointer"} 
+                                                        variant={"solid"} 
+                                                        colorPalette={"green"}
+                                                        checked={selectedLayer === layerKey}
+                                                        onCheckedChange={() => handleLayerToggle(layerKey)}
+                                                    >
+                                                        <Checkbox.HiddenInput />
                                                         <Checkbox.Control />
                                                         <Checkbox.Label style={{fontSize:"0.8rem"}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
                                                     </Checkbox.Root>                                               

@@ -1,6 +1,6 @@
 import { Accordion, Box, Checkbox } from "@chakra-ui/react";
 import "./CapasBase.scss";
-import { CAPAS_BASE } from "../../utils/constants";
+import { CAPAS_BASE, COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 
 const CapasBase = () => { 
@@ -14,44 +14,34 @@ const CapasBase = () => {
     };
     return (
         <div className="capas-base-container">
-            <Accordion.Root collapsible variant={"enclosed"} style={{border:"none"}}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{border:"none", borderRadius:"0rem", background: COLORS.GLOBAL.backgroundMedium}}>
                 <Accordion.Item value="main">
 
-                    <Accordion.ItemContent className="capas-base-container__itemContent" >
+                    <Accordion.ItemTrigger className="capas-base-container__main-trigger">
+                        <Box className="capas-base-container__main-title">
+                            capas complementarias
+                        </Box>
+                        <Accordion.ItemIndicator className="capas-base-container__main-indicator"/>
+                    </Accordion.ItemTrigger>
+
+                    <Accordion.ItemContent className="capas-base-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundMedium }}>
                         <Accordion.ItemBody className="capas-base-container__itemBody" >
-                            {Object.entries(CAPAS_BASE).map(([key, value], idx, arr) => (
+                            {Object.entries(CAPAS_BASE).map(([key, value]) => (
                                 <>
-                                <Box key={key} p={2} display="flex" alignItems="center" width={"100%"} >
-                                    <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"}>
+                                <Box key={key} p={0} display="flex" alignItems="center" width={"100%"}>
+                                    <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"}>
                                         <Checkbox.HiddenInput 
                                             checked={selectedBaseLayers.includes(key)}
                                             onChange={() => handleBaseLayerToggle(key)}
                                         />
                                         <Checkbox.Control />
-                                        <Checkbox.Label style={{fontSize:"0.8rem"}}>{value.title}</Checkbox.Label>
+                                        <Checkbox.Label style={{fontSize:"0.7rem"}}>{value.title}</Checkbox.Label>
                                     </Checkbox.Root>
                                 </Box>
-                                {idx < arr.length -1 && (
-                                    <Box
-                                        as="hr"
-                                        border="none"
-                                        borderBottom="1px solid #bdbdbd"
-                                        width="90%"
-                                        mx="auto"
-                                        my={1}
-                                    />
-                                )}
                                 </>
                             ))}
                         </Accordion.ItemBody>
                     </Accordion.ItemContent>
-
-                    <Accordion.ItemTrigger className="capas-base-container__main-trigger">
-                        <Box className="capas-base-container__main-title">
-                            Capas Base
-                        </Box>
-                        <Accordion.ItemIndicator className="capas-base-container__main-indicator"/>
-                    </Accordion.ItemTrigger>
 
                 </Accordion.Item>
             </Accordion.Root>

@@ -109,6 +109,7 @@ const Visor = ()=> {
         <div className="visor">
             <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh"> 
                 <div className="visor__title">visor para la evaluación ambiental</div>
+                <Tematica />
 
                 { !selectedLayer && (
                     <div className="visor__summary">
@@ -167,7 +168,7 @@ const Visor = ()=> {
                         reuseMaps
                     />
                 </DeckGL>
-                <Tematica />
+                
                 <CapasBase />
                 <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark, borderRadius:"20px"}}>
                     <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopRightRadius={0} borderBottomRightRadius={0}

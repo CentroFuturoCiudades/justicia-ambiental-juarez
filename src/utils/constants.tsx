@@ -27,7 +27,7 @@ export const COLORS = {
 export type LayerKey = keyof typeof LAYERS;
 export const SECTIONS = {
     ambiental: {
-        label: "Ambiental",
+        label: "ambiental",
         layers: [
             "vulnerabilidad_ambiental", 
             "islas_calor", 
@@ -38,14 +38,14 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     industria: {
-        label: "Industria",
+        label: "industria",
         layers: [
             "hogares_vulnerables_industria", 
             "infantes_vulnerables_industria"
         ] as LayerKey[],
     },
     equipamiento: {
-        label: "Equipamiento",
+        label: "equipamiento",
         layers: [
             "equipamientos", 
             "indice_accesibilidad", 
@@ -58,7 +58,7 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     poblacion: {
-        label: "Población",
+        label: "población",
         layers: [
             "ingreso", 
             "porcentaje_pob_0a5", 

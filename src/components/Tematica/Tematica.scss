@@ -1,32 +1,27 @@
 .tematica-container {
-  position: absolute;
-  top: 1.5rem;
-  right: 2rem;
-  width: 250px;
+  margin-bottom: 1rem;
 
   &__main-trigger {
-    background-color: #d1d1d1da;    //se cambio por el de COLORS.GLOBAL.backgroundMedium
     display: flex;
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    border-radius: 0.2rem;
+    //border-radius: 0.2rem;
     padding: 0.25rem 1rem !important;
+    border-radius: 0%;
 
   }
 
   &__main-title {
-    font-weight: 600;
-    font-size: 1.1rem;
+    font-weight: 500;
+    font-size: 1.2rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
     width: 100%;
-    color: black;
+    color: white;
   }
 
   &__main-indicator {
-    color: black;
+    color: white;
   }
 
   &__section-indicator {
@@ -47,27 +42,27 @@
   }
 
   &__section-trigger {
-    //background: #424242; //se cambio por el de COLORS.GLOBAL.backgroundDark
-    color: white;
+    background: #c6c6c6; //se cambio por el de COLORS.GLOBAL.backgroundDark
+    color: black;
     width: 100%;
     justify-content: space-between;
     border-radius: 0 !important;
-
     padding: 0.25rem 1rem !important;
   }
 
   &__section-title {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 500;
+    font-size: 1rem;
+    color: white;
   }
 }
 
 .tematica-container__main-trigger:hover {
-  background: #aaaaaa !important;
+  background: #3b3b3b !important;
   cursor: pointer;
 }
 .tematica-container__section-trigger:hover {
-  background: #363636 !important;
+  background: #b3b3b3 !important;
   cursor: pointer;
 }
 
