@@ -7,9 +7,10 @@ import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
-import { Button, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
+import ZoomControls from "../ZoomControls/ZoomControls";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -27,7 +28,7 @@ function hexToRgba(hex: string, alpha = 80) {
 const Visor = ()=> {
 
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
-    const { viewState, setViewState, selectedLayer, selectedBaseLayers, zoomIn, zoomOut } = useAppContext();
+    const { viewState, setViewState, selectedLayer, selectedBaseLayers } = useAppContext();
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
@@ -108,7 +109,10 @@ const Visor = ()=> {
     return (
         <div className="visor">
             <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh"> 
-                <div className="visor__title">visor para la evaluación ambiental</div>
+                <div className="visor__title">
+                    <p className="visor__titleItalic">visor de </p>
+                    <p className="visor__titleBold"> indicadores ambientales</p>
+                </div>
                 <Tematica />
 
                 { !selectedLayer && (
@@ -134,12 +138,13 @@ const Visor = ()=> {
                 { selectedLayer && (
                     <div className="visor__layerCard" style={{borderColor: sectionColor}}>
                         <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
-                            <p>{selectedLayerData?.title}</p>
+                            <p className="visor__layerTitle">{selectedLayerData?.title}</p>
                         </div>
-                        <b>Descripción</b>
-                        <br></br>
-                        {selectedLayerData?.description || "No hay descripción disponible."}
-                        <br></br>
+                        <div className="visor__layerCardBody">
+                            <p className="visor__layerDescription">
+                                {selectedLayerData?.description || "No hay descripción disponible."}
+                            </p>
+                        </div>
                         </div>
                 )}
 
@@ -168,18 +173,9 @@ const Visor = ()=> {
                         reuseMaps
                     />
                 </DeckGL>
-                
+
                 <CapasBase />
-                <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark, borderRadius:"20px"}}>
-                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopRightRadius={0} borderBottomRightRadius={0}
-                        onClick={zoomOut}>
-                        -
-                    </Button>
-                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopLeftRadius={0} borderBottomLeftRadius={0}
-                        onClick={zoomIn}>
-                        +
-                    </Button>
-                </div>
+                <ZoomControls />
 
             </div>
         </div>

@@ -86,7 +86,7 @@ export const LAYERS = {
         metrics: [],
     },
     islas_calor: {
-        title: "Exposición a Islas de Calor",
+        title: "islas de calor",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "grados_centigrados",

@@ -18,12 +18,22 @@
 
     &__title {
         font-size: var(--font-size-header);
-        font-weight: bold;
+        //font-weight: bold;
         line-height: 1;
 
         padding: 2rem 0;
         border-bottom: 2px solid var(--text-primary);
         margin-bottom: 2rem;
+    }
+
+    &__titleItalic {
+        font-family: 'Space Mono', monospace;
+        font-style: italic;
+    }
+
+    &__titleBold {
+        font-family: 'Space Mono', monospace;
+        font-weight: bold !important;
     }
 
     &__summary {
@@ -34,25 +44,34 @@
 
     &__layerCard {
         background-color: var(--background);
-        padding: 1rem;
-        border: 3px solid;
-        border-radius: 14px;
+        padding: 0.5rem;
+        border: 2px solid;
+        border-radius: 2px;
         border-color: var(--ambiental-primary);
         margin-bottom: 1rem;
+        height: auto;
     }
 
     &__layerCardTitle {
-        font-weight: bold;
+        //font-weight: bold;
+        font-weight: 500;
         margin-bottom: 0.5rem;
         color: white;
         padding: 0.5rem;
-        border-radius: 8px;
-        text-align: center;
-        font-size: 1.1rem;
+        border-radius: 2px;
+        //text-align: center;
+        font-size: 1.2rem;
+        font-family: 'Roboto', sans-serif;
     }
+
 
     &__layerCardBody {
         padding: 0.5rem;
+    }
+
+    &__layerDescription {
+        font-size: 0.9rem;
+
     }
 
     &__mapContainer {

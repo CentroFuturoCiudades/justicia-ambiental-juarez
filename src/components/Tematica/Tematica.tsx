@@ -22,7 +22,7 @@ const Tematica = () => {
  
     return (
         <div className="tematica-container">
-            <Accordion.Root collapsible variant={"enclosed"} style={{ border:"none"}}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{ borderColor:"gray"}}>
                 <Accordion.Item value="main" style={{ background: "#c6c6c6"}}>
                     
                     <Accordion.ItemTrigger className="tematica-container__main-trigger" style={{background: COLORS.GLOBAL.backgroundDark}}>
@@ -53,13 +53,14 @@ const Tematica = () => {
                                                     <Checkbox.Root 
                                                         cursor={"pointer"} 
                                                         variant={"solid"} 
-                                                        colorPalette={"green"}
+                                                        //colorPalette={"green"}
+                                                        className="custom-green-checkbox"
                                                         checked={selectedLayer === layerKey}
                                                         onCheckedChange={() => handleLayerToggle(layerKey)}
                                                     >
                                                         <Checkbox.HiddenInput />
                                                         <Checkbox.Control />
-                                                        <Checkbox.Label style={{fontSize:"0.8rem"}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                        <Checkbox.Label className="tematica-container__checkbox-label"> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
                                                     </Checkbox.Root>                                               
                                                 </Box>
                                                 {idx < section.layers.length - 1 && (
