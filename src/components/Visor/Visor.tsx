@@ -10,6 +10,7 @@ import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
 import { Button, Box } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -24,7 +25,9 @@ function hexToRgba(hex: string, alpha = 80) {
     return [r, g, b, alpha];
 }
 
-const Visor = ()=> {
+const Visor = () => {
+
+    const navigate = useNavigate();
 
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
     const { viewState, setViewState, selectedLayer, selectedBaseLayers, zoomIn, zoomOut } = useAppContext();
@@ -34,9 +37,9 @@ const Visor = ()=> {
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | null>(null);
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
-    const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
+    const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
-    
+
     //una sola capa de TEMÁTICA
     useEffect(() => {
         if (!selectedLayer) {
@@ -99,68 +102,68 @@ const Visor = ()=> {
                             getLineColor: [255, 255, 255, 180],
                         });
                         setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
-                })
+                    })
                     .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
-                }
-            });
+            }
+        });
     }, [selectedBaseLayers]);
 
     return (
         <div className="visor">
-            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh"> 
+            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
                 <div className="visor__title">visor para la evaluación ambiental</div>
                 <Tematica />
 
-                { !selectedLayer && (
+                {!selectedLayer && (
                     <div className="visor__summary">
-                    <b>¿Qué es este visor?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>¿Cómo funciona?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>Recomendaciones</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit ame
-                </div>
+                        <b>¿Qué es este visor?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>¿Cómo funciona?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>Recomendaciones</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit ame
+                    </div>
                 )}
-            
 
-                
-                { selectedLayer && (
-                    <div className="visor__layerCard" style={{borderColor: sectionColor}}>
-                        <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
+
+
+                {selectedLayer && (
+                    <div className="visor__layerCard" style={{ borderColor: sectionColor }}>
+                        <div className="visor__layerCardTitle" style={{ background: sectionColor }}>
                             <p>{selectedLayerData?.title}</p>
                         </div>
                         <b>Descripción</b>
                         <br></br>
                         {selectedLayerData?.description || "No hay descripción disponible."}
                         <br></br>
-                        </div>
+                    </div>
                 )}
 
-                
+
 
             </Box>
-            <div className="visor__mapContainer"> 
-                <DeckGL 
-                    initialViewState={ viewState }
-                    viewState={ viewState }
+            <div className="visor__mapContainer">
+                <DeckGL
+                    initialViewState={viewState}
+                    viewState={viewState}
                     onViewStateChange={({ viewState }) => {
                         const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
                         setViewState({ latitude, longitude, zoom });
                     }}
                     //layers={[...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean), ...selectedLayersMultiple.map(key => tematicaLayers[key]).filter(Boolean)]}
-                   layers={[
-                       ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                       ...(tematicaLayer ? [tematicaLayer] : []),
-                   ]}
-                    style={{ height: "100%", width: "100%", position: "relative"}}
-                    controller={ true }
+                    layers={[
+                        ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
+                        ...(tematicaLayer ? [tematicaLayer] : []),
+                    ]}
+                    style={{ height: "100%", width: "100%", position: "relative" }}
+                    controller={true}
                 >
                     <Map
                         mapStyle="mapbox://styles/speakablekhan/clx519y7m00yc01qobp826m5t/draft"
@@ -168,9 +171,17 @@ const Visor = ()=> {
                         reuseMaps
                     />
                 </DeckGL>
-                
+
                 <CapasBase />
-                <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark, borderRadius:"20px"}}>
+                <div style={{ position: "absolute", top: "1.5rem", left: "2rem", display: "flex", gap: "0", background: COLORS.GLOBAL.backgroundDark, borderRadius: "20px" }}>
+                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} 
+                        onClick={() => navigate("/")}>
+                        <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 50 50" fill="#FFFFFF">
+                            <path d="M 25 1.0507812 C 24.7825 1.0507812 24.565859 1.1197656 24.380859 1.2597656 L 1.3808594 19.210938 C 0.95085938 19.550938 0.8709375 20.179141 1.2109375 20.619141 C 1.5509375 21.049141 2.1791406 21.129062 2.6191406 20.789062 L 4 19.710938 L 4 46 C 4 46.55 4.45 47 5 47 L 19 47 L 19 29 L 31 29 L 31 47 L 45 47 C 45.55 47 46 46.55 46 46 L 46 19.710938 L 47.380859 20.789062 C 47.570859 20.929063 47.78 21 48 21 C 48.3 21 48.589063 20.869141 48.789062 20.619141 C 49.129063 20.179141 49.049141 19.550938 48.619141 19.210938 L 25.619141 1.2597656 C 25.434141 1.1197656 25.2175 1.0507812 25 1.0507812 z M 35 5 L 35 6.0507812 L 41 10.730469 L 41 5 L 35 5 z"></path>
+                        </svg>
+                    </Button>
+                </div>
+                <div style={{ position: "absolute", top: "1.5rem", left: "6rem", display: "flex", gap: "0", background: COLORS.GLOBAL.backgroundDark, borderRadius: "20px" }}>
                     <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark} borderTopRightRadius={0} borderBottomRightRadius={0}
                         onClick={zoomOut}>
                         -
