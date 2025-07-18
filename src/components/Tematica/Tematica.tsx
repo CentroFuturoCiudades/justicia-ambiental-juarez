@@ -5,20 +5,20 @@ import "./Tematica.scss";
 
 const Tematica = () => {
 
-    //const { selectedLayers, setSelectedLayers } = useAppContext();
-    const { selectedLayersMultiple, setSelectedLayersMultiple } = useAppContext();
+    const { selectedLayer, setSelectedLayer } = useAppContext();
+    //const { selectedLayersMultiple, setSelectedLayersMultiple } = useAppContext();
 
     //una sola capa seleccionada a la vez
-    /*const handleLayerToggle = (layerKey: string) => {
-        setSelectedLayers(prev => prev === layerKey ? "" : layerKey);
-    }*/
+    const handleLayerToggle = (layerKey: string) => {
+        setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
+    }
 
     //varias capas seleccionadas
-    const handleMultipleLayerToggle = (layerKey: string) => {
+    /*const handleMultipleLayerToggle = (layerKey: string) => {
         setSelectedLayersMultiple(prev => 
             prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
         );
-    };
+    };*/
  
     return (
         <div className="tematica-container">
@@ -53,8 +53,8 @@ const Tematica = () => {
                                                     <Checkbox.Root cursor={"pointer"} variant={"solid"} colorPalette={"green"}>
                                                         <Checkbox.HiddenInput 
                                                             //checked={selectedLayers === layerKey}
-                                                            checked={selectedLayersMultiple.includes(layerKey)}
-                                                            onChange={() => handleMultipleLayerToggle(layerKey)}
+                                                            checked={selectedLayer.includes(layerKey)}
+                                                            onChange={() => handleLayerToggle(layerKey)}
                                                         />
                                                         <Checkbox.Control />
                                                         <Checkbox.Label style={{fontSize:"0.8rem"}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>

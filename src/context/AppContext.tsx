@@ -10,10 +10,10 @@ type ViewState = {
 interface AppContextI {
     viewState: ViewState;
     setViewState: Dispatch<SetStateAction<ViewState>>;
-    selectedLayers: string; // borrar si no se necesita
-    setSelectedLayers: Dispatch<SetStateAction<string>>;    // borrar si no se necesita
-    selectedLayersMultiple: string[];
-    setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
+    selectedLayer: string;
+    setSelectedLayer: Dispatch<SetStateAction<string>>;
+    //selectedLayersMultiple: string[];
+    //setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -37,10 +37,10 @@ const AppContextProvider = ({ children }: { children: any }) => {
         longitude: -106.4245,
         zoom: 11,
     })
-    //una capa a la vez (BORRAR SI NO SE NECESITA)
-    const [selectedLayers, setSelectedLayers] = useState("");
+    //una capa a la vez
+    const [selectedLayer, setSelectedLayer] = useState("");
     //varias capas
-    const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
+    //const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
 
     //zoom
@@ -51,10 +51,10 @@ const AppContextProvider = ({ children }: { children: any }) => {
         <AppContext.Provider value={{
             viewState,
             setViewState,
-            selectedLayers, // borrar si no se necesita
-            setSelectedLayers, // borrar si no se necesita
-            selectedLayersMultiple,
-            setSelectedLayersMultiple,
+            selectedLayer, 
+            setSelectedLayer, 
+            //selectedLayersMultiple,
+            //setSelectedLayersMultiple,
             selectedBaseLayers,
             setSelectedBaseLayers,
             zoomIn,
