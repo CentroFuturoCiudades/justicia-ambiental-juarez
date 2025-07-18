@@ -10,6 +10,14 @@ type ViewState = {
 interface AppContextI {
     viewState: ViewState;
     setViewState: Dispatch<SetStateAction<ViewState>>;
+    selectedLayers: string; // borrar si no se necesita
+    setSelectedLayers: Dispatch<SetStateAction<string>>;    // borrar si no se necesita
+    selectedLayersMultiple: string[];
+    setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
+    selectedBaseLayers: string[];
+    setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
+    zoomIn: () => void;
+    zoomOut: () => void;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -29,11 +37,29 @@ const AppContextProvider = ({ children }: { children: any }) => {
         longitude: -106.4245,
         zoom: 11,
     })
+    //una capa a la vez (BORRAR SI NO SE NECESITA)
+    const [selectedLayers, setSelectedLayers] = useState("");
+    //varias capas
+    const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
+    const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
+
+    //zoom
+    const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
+    const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
 
     return (
         <AppContext.Provider value={{
             viewState,
-            setViewState
+            setViewState,
+            selectedLayers, // borrar si no se necesita
+            setSelectedLayers, // borrar si no se necesita
+            selectedLayersMultiple,
+            setSelectedLayersMultiple,
+            selectedBaseLayers,
+            setSelectedBaseLayers,
+            zoomIn,
+            zoomOut,
+
         }}
         >
             {children}

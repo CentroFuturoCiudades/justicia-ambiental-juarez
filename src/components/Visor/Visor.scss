@@ -32,9 +32,33 @@
         border-radius: var(--border-radius);
     }
 
+    &__layerCard {
+        background-color: var(--background);
+        padding: 1rem;
+        border: 3px solid;
+        border-radius: 14px;
+        border-color: var(--ambiental-primary);
+        margin-bottom: 1rem;
+    }
+
+    &__layerCardTitle {
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: white;
+        padding: 0.5rem;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 1.1rem;
+    }
+
+    &__layerCardBody {
+        padding: 0.5rem;
+    }
+
     &__mapContainer {
         background: peachpuff;
         flex: 1;
+        position: relative;
 
 
         .mapboxgl-control-container {
