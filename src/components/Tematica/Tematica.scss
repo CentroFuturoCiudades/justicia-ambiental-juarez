@@ -18,7 +18,6 @@
     display: flex;
     width: 100%;
     color: white;
-    font-family: 'Roboto', sans-serif;
   }
 
   &__main-indicator {
@@ -43,8 +42,6 @@
   }
 
   &__section-trigger {
-    background: #c6c6c6; //se cambio por el de COLORS.GLOBAL.backgroundDark
-    color: black;
     width: 100%;
     justify-content: space-between;
     border-radius: 0 !important;
@@ -55,23 +52,24 @@
     font-weight: 500;
     font-size: 1rem;
     color: white;
-    font-family: 'Roboto', sans-serif;
   }
 
   &__checkbox-label {
     font-size: 0.8rem;
-    font-family: 'Roboto', sans-serif;
     font-weight: 300;
+    text-transform: lowercase;
   }
 }
 
 .tematica-container__main-trigger:hover {
   background: #3b3b3b !important;
   cursor: pointer;
+  border-color: #3b3b3b;
 }
 .tematica-container__section-trigger:hover {
   background: #b3b3b3 !important;
   cursor: pointer;
+  border-color: #b3b3b3;
 }
 
 .chakra-accordion__itemContent {
@@ -89,18 +87,10 @@
 
 .chakra-checkbox__control[data-state="unchecked"] {
   border-color: rgb(112, 112, 112);
-  background: #d1d1d1da !important; // o el color que quieras para unchecked
+  background: #d1d1d1da !important;
 }
 
 .custom-green-checkbox .chakra-checkbox__control[data-state="checked"] {
-  background: #a2b687; // O usa COLORS.GLOBAL.highlightGreen si lo tienes como variable CSS
+  background: #a2b687;
   border-color: #a2b687;
-}
-
-.tematica-container__main-trigger:hover{
-  border-color: #3b3b3b;
-}
-
-.tematica-container__section-trigger:hover{
-  border-color: #b3b3b3;
 }

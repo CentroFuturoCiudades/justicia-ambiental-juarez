@@ -1,14 +1,26 @@
 .legend {
 
     &__title {
-        font-size: var(--font-size-header);
-        margin: 0 0 0.5rem 0;
+        //font-size: var(--font-size-header);
+        font-size: medium;
+        //margin: 0 0 0.5rem 0;
         color: var(--primary);
-        text-transform: uppercase;
+        //text-transform: uppercase;
+        text-transform: lowercase;
 
         width: 100%;
         text-align: left;
-        border-bottom: 2px solid var(--secondary);
+        //border-bottom: 2px solid var(--secondary);
+
+        color: white;
+    }
+
+    &__title-container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 15px;
     }
 }
 
@@ -16,7 +28,8 @@
     pointer-events: auto;
 
     position: absolute;
-    right: 5rem; 
+    //right: 5rem; 
+    right: 2rem;
     bottom: 1.5rem;  
 }
 
@@ -26,10 +39,15 @@
     flex-direction: column;
     align-items: flex-start;
     justify-self: end;
-    width: 12rem;;
-    padding: 15px;
+    //width: 12rem;
+    //width: 100%;
+    width: 230px;
+
+
+
+    //padding: 15px;
     background-color: var(--background);
-    border-radius: var(--border-radius);
+    //border-radius: var(--border-radius);
     // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
     overflow: hidden;
 
@@ -69,7 +87,7 @@
 .legend-body {
     display: flex;
     width: 100%;
-    justify-content: flex-start;
+    justify-content: flex-start;padding: 15px;
 }
 
 .colorBox {

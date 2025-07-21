@@ -41,8 +41,8 @@ const Legend = ({
 
     const rangeText = `${ numberToString( value[ 1 ] ) } - ${ numberToString( value[0] ) }`;
     
-    return ( <div key={index} className="legend-item">
-        <div className="legend-text">{rangeText}</div>
+    return ( <div key={index} className="legend-item" >
+        <div className="legend-text" >{rangeText}</div>
     </div> );
   }
 
@@ -58,9 +58,11 @@ const Legend = ({
   };
 
   return (
-    <div className="legend-container">
-      <h6 className="legend__title">{title}</h6>
-      <div className="legend-body">
+    <div className="legend-container" style={{ border: `1px solid ${neutralColor}` }}>
+      <div className="legend__title-container" style={{ backgroundColor: neutralColor }}>
+        <h6 className="legend__title">{title}</h6>
+      </div>
+      <div className="legend-body" >
         <div style={gradientStyle}></div>
         <div >
           { positiveRange?.length && positiveRange.map( ( value, index )=> renderLegeindItem( value, index ) ) }

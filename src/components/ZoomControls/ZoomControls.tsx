@@ -6,7 +6,7 @@ const ZoomControls = () => {
     const { zoomIn, zoomOut } = useAppContext();
 
     return (
-        <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark, borderRadius:"0.1rem", padding:"0rem"}}>
+        <div style={{position:"absolute", top:"1.5rem", left:"2rem", display:"flex", gap:"0", background:COLORS.GLOBAL.backgroundDark}}>
             <Button 
                 size={"sm"} 
                 p={0} 
