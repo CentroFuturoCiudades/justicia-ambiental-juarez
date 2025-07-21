@@ -11,19 +11,11 @@ import { Box } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
+import { MapLayer } from "../../classes/MapLayer";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
-//convierte color hex (de constants) a rgba
-function hexToRgba(hex: string, alpha = 80) {
-    const h = hex.replace("#", "");
-    const bigint = parseInt(h, 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return [r, g, b, alpha];
-}
 
 const Visor = ()=> {
 
@@ -34,6 +26,7 @@ const Visor = ()=> {
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | null>(null);
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | null>(null);
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
     const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
 
@@ -42,6 +35,7 @@ const Visor = ()=> {
     useEffect(() => {
         if (!selectedLayer) {
             setTematicaLayer(null);
+            setMapLayerInstance(null);
             return;
         }
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
@@ -50,22 +44,31 @@ const Visor = ()=> {
             return;
         }
         const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
+        const tematicaKey = layer.tematica as keyof typeof COLORS;
+
+        // Genera variantes
+        const positiveColor = COLORS[tematicaKey]?.positive || "#ffffff";
+        const negativeColor = COLORS[tematicaKey]?.negative || "#000000";  
+        const neutralColor = COLORS[tematicaKey]?.primary || "#888888";
+        const mapLayer = new MapLayer(positiveColor, negativeColor, 0.7, neutralColor);
+
         fetch(urlBlob)
             .then(res => res.json())
             .then(data => {
-                const tematicaKey = layer.tematica as keyof typeof COLORS;
-                const colorHex = COLORS[tematicaKey]?.primary;
-                const color = colorHex ? hexToRgba(colorHex, 80) : [250, 0, 0, 80]; // Default color if not found
 
+                const newLayer = mapLayer.getLayer(data, layer.property, layer.is_lineLayer, false);
+
+                /*
                 const newLayer = new GeoJsonLayer({
                     id: selectedLayer,
                     data: data,
                     pickable: true,
                     filled: true,
-                    getFillColor: () => color as [number, number, number, number],
+                    getFillColor: () => [250, 0, 0, 80],
                     getLineColor: () => [255, 255, 255, 180],
-                });
+                });*/
                 setTematicaLayer(newLayer);
+                setMapLayerInstance(mapLayer);
             })
             .catch(error => console.error(`Error loading GeoJSON for layer ${selectedLayer}:`, error));
     }, [selectedLayer]);
@@ -174,7 +177,14 @@ const Visor = ()=> {
                     />
                 </DeckGL>
 
+               
                 <CapasBase />
+                {selectedLayer && mapLayerInstance && (
+                    <div className="visor__legend">
+                        {mapLayerInstance.getLegend(selectedLayerData?.title || "")}
+                    </div>
+                )}
+
                 <ZoomControls />
 
             </div>

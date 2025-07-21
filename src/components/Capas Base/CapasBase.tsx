@@ -14,7 +14,7 @@ const CapasBase = () => {
     };
     return (
         <div className="capas-base-container">
-            <Accordion.Root collapsible variant={"enclosed"} style={{border:"none", borderRadius:"0rem", background: COLORS.GLOBAL.backgroundMedium}}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{borderColor: "gray", borderRadius:"0rem", background: COLORS.GLOBAL.backgroundLight}}>
                 <Accordion.Item value="main">
 
                     <Accordion.ItemTrigger className="capas-base-container__main-trigger">
@@ -24,12 +24,12 @@ const CapasBase = () => {
                         <Accordion.ItemIndicator className="capas-base-container__main-indicator"/>
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="capas-base-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundMedium }}>
+                    <Accordion.ItemContent className="capas-base-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundLight }}>
                         <Accordion.ItemBody className="capas-base-container__itemBody" >
                             {Object.entries(CAPAS_BASE).map(([key, value]) => (
                                 <>
                                 <Box key={key} p={0} display="flex" alignItems="center" width={"100%"}>
-                                    <Checkbox.Root key={key} className="capas-base-container__checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"}>
+                                    <Checkbox.Root key={key} className="custom-green-checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"}>
                                         <Checkbox.HiddenInput 
                                             checked={selectedBaseLayers.includes(key)}
                                             onChange={() => handleBaseLayerToggle(key)}

@@ -42,9 +42,6 @@
     gap: 2px;
   }
 
-  &__checkbox {
-    margin-left: 0rem;
-  }
 }
 
 .chakra-accordion__itemContent {
@@ -54,4 +51,15 @@
 .capas-base-container__main-trigger:hover {
   background: #363636 !important;
   cursor: pointer;
+  border-color: #363636;
+}
+
+.custom-green-checkbox .chakra-checkbox__control[data-state="checked"] {
+  background: #a2b687;
+  border-color: #a2b687;
+}
+
+.chakra-checkbox__control[data-state="unchecked"] {
+  border-color: rgb(112, 112, 112);
+  background: #d1d1d1da !important; // o el color que quieras para unchecked
 }
