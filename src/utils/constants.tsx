@@ -27,7 +27,7 @@ export const COLORS = {
 export type LayerKey = keyof typeof LAYERS;
 export const SECTIONS = {
     ambiental: {
-        label: "Ambiental",
+        label: "ambiental",
         layers: [
             "vulnerabilidad_ambiental", 
             "islas_calor", 
@@ -38,14 +38,14 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     industria: {
-        label: "Industria",
+        label: "industria",
         layers: [
             "hogares_vulnerables_industria", 
             "infantes_vulnerables_industria"
         ] as LayerKey[],
     },
     equipamiento: {
-        label: "Equipamiento",
+        label: "equipamiento",
         layers: [
             "equipamientos", 
             "indice_accesibilidad", 
@@ -58,7 +58,7 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     poblacion: {
-        label: "Población",
+        label: "población",
         layers: [
             "ingreso", 
             "porcentaje_pob_0a5", 
@@ -86,7 +86,7 @@ export const LAYERS = {
         metrics: [],
     },
     islas_calor: {
-        title: "Exposición a Islas de Calor",
+        title: "islas de calor",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         type: "Continua",
         metric: "grados_centigrados",

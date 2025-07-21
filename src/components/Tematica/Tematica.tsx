@@ -5,29 +5,29 @@ import "./Tematica.scss";
 
 const Tematica = () => {
 
-    //const { selectedLayers, setSelectedLayers } = useAppContext();
-    const { selectedLayersMultiple, setSelectedLayersMultiple } = useAppContext();
+    const { selectedLayer, setSelectedLayer } = useAppContext();
+    //const { selectedLayersMultiple, setSelectedLayersMultiple } = useAppContext();
 
     //una sola capa seleccionada a la vez
-    /*const handleLayerToggle = (layerKey: string) => {
-        setSelectedLayers(prev => prev === layerKey ? "" : layerKey);
-    }*/
+    const handleLayerToggle = (layerKey: string) => {
+        setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
+    }
 
     //varias capas seleccionadas
-    const handleMultipleLayerToggle = (layerKey: string) => {
+    /*const handleMultipleLayerToggle = (layerKey: string) => {
         setSelectedLayersMultiple(prev => 
             prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
         );
-    };
+    };*/
  
     return (
         <div className="tematica-container">
-            <Accordion.Root collapsible variant={"enclosed"} style={{ border:"none"}}>
-                <Accordion.Item value="main" style={{ background: "#424242"}}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{ borderColor:"gray"}}>
+                <Accordion.Item value="main" style={{ background: "#c6c6c6"}}>
                     
-                    <Accordion.ItemTrigger className="tematica-container__main-trigger" >
+                    <Accordion.ItemTrigger className="tematica-container__main-trigger" style={{background: COLORS.GLOBAL.backgroundDark}}>
                         <Box className="tematica-container__main-title">
-                            TEMÁTICA
+                            temática
                         </Box>
                         <Accordion.ItemIndicator className="tematica-container__main-indicator" />
                     </Accordion.ItemTrigger>
@@ -37,8 +37,8 @@ const Tematica = () => {
 
                             <Accordion.Root collapsible variant={"enclosed"} style={{borderRadius:"0rem", border:"none"}}>
                                 {Object.entries(SECTIONS).map(([sectionKey, section]) => (
-                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:COLORS.GLOBAL.backgroundLight}}>
-                                        <Accordion.ItemTrigger className="tematica-container__section-trigger" style={{ background: COLORS.GLOBAL.backgroundDark }}>
+                                    <Accordion.Item key={sectionKey} value={sectionKey} style={{background:"white"}}>
+                                        <Accordion.ItemTrigger className="tematica-container__section-trigger">
                                            <Span className="tematica-container__section-title">
                                                 {section.label}
                                             </Span>
@@ -50,14 +50,17 @@ const Tematica = () => {
                                             {section.layers.map((layerKey, idx) => (
                                             <>
                                                 <Box key={layerKey} p={2} display="flex" alignItems="center" width={"100%"} >
-                                                    <Checkbox.Root cursor={"pointer"} variant={"solid"} colorPalette={"green"}>
-                                                        <Checkbox.HiddenInput 
-                                                            //checked={selectedLayers === layerKey}
-                                                            checked={selectedLayersMultiple.includes(layerKey)}
-                                                            onChange={() => handleMultipleLayerToggle(layerKey)}
-                                                        />
+                                                    <Checkbox.Root 
+                                                        cursor={"pointer"} 
+                                                        variant={"solid"} 
+                                                        //colorPalette={"green"}
+                                                        className="custom-green-checkbox"
+                                                        checked={selectedLayer === layerKey}
+                                                        onCheckedChange={() => handleLayerToggle(layerKey)}
+                                                    >
+                                                        <Checkbox.HiddenInput />
                                                         <Checkbox.Control />
-                                                        <Checkbox.Label style={{fontSize:"0.8rem"}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                        <Checkbox.Label className="tematica-container__checkbox-label"> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
                                                     </Checkbox.Root>                                               
                                                 </Box>
                                                 {idx < section.layers.length - 1 && (
