@@ -99,7 +99,7 @@ const Visor = ()=> {
                             data: data,
                             pickable: true,
                             filled: true,
-                            getFillColor: [250, 0, 0, 80],
+                            getFillColor: [250, 0, 0, 100],
                             getLineColor: [255, 255, 255, 180],
                         });
                         setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
@@ -164,8 +164,8 @@ const Visor = ()=> {
                     }}
                     //layers={[...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean), ...selectedLayersMultiple.map(key => tematicaLayers[key]).filter(Boolean)]}
                    layers={[
-                       ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
                        ...(tematicaLayer ? [tematicaLayer] : []),
+                       ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
                    ]}
                     style={{ height: "100%", width: "100%", position: "relative"}}
                     controller={ true }
