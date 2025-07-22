@@ -12,6 +12,7 @@ import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
+import type { Feature } from "geojson";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -20,7 +21,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 const Visor = ()=> {
 
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
-    const { viewState, setViewState, selectedLayer, selectedBaseLayers } = useAppContext();
+    const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS } = useAppContext();
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
@@ -30,7 +31,17 @@ const Visor = ()=> {
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
     const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
 
-    
+    const handleSelectedAGEBS = (info: any) => {
+        if (info) {
+            setSelectedAGEBS(prev => [...prev, (info.object.properties.cvegeo as string)]);
+            //console.log("Selected AGEBS:", info);
+        }
+    };
+
+    useEffect(() => {
+        console.log("VISOR: Selected AGEBS:", selectedAGEBS);
+    }, [selectedAGEBS]);
+
     //una sola capa de TEMÁTICA
     useEffect(() => {
         if (!selectedLayer) {
@@ -56,7 +67,7 @@ const Visor = ()=> {
             .then(res => res.json())
             .then(data => {
 
-                const newLayer = mapLayer.getLayer(data, layer.property, layer.is_lineLayer, false);
+                const newLayer = mapLayer.getLayer(data, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
 
                 /*
                 const newLayer = new GeoJsonLayer({
@@ -71,7 +82,7 @@ const Visor = ()=> {
                 setMapLayerInstance(mapLayer);
             })
             .catch(error => console.error(`Error loading GeoJSON for layer ${selectedLayer}:`, error));
-    }, [selectedLayer]);
+    }, [selectedLayer, selectedAGEBS]);
 
     //varias capas de BASE??
     useEffect(() => {

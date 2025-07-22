@@ -1,6 +1,7 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
+import type { Feature } from "geojson";
 
 export class MapLayer {
     positiveColor: string;
@@ -38,7 +39,7 @@ export class MapLayer {
       return filteredData;
     }
 
-    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean ): GeoJsonLayer => {
+    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: Feature[] = [] ): GeoJsonLayer => {
       this.isLineLayer = true;
       var getColor: any;
 
@@ -116,6 +117,13 @@ export class MapLayer {
 
         getColor =
           (feature: any): [number, number, number] => {
+
+            const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); // usa tu campo único real
+            if (isSelected) {
+              return [255, 220, 40];
+            }
+
+
             const item = feature.properties[field];
             let rgbValue;
 
@@ -150,6 +158,7 @@ export class MapLayer {
             ];
           }
         }
+
       
         const geojsonLayer = new GeoJsonLayer({
           id: "geojson-layer",
@@ -161,6 +170,10 @@ export class MapLayer {
           getFillColor: !isLineLayer ? getColor : [255,255,255,200],
           getLineColor: isLineLayer ? getColor : [255, 255, 255, 200],
           getLineWidth: isLineLayer ? 100 : 16,
+          onClick: handleFeatureClick,
+          updateTriggers: {
+            getFillColor: [selectedAGEBS]
+          }
         });
     
         return geojsonLayer;
