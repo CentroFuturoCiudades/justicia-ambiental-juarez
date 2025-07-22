@@ -118,9 +118,9 @@ export class MapLayer {
         getColor =
           (feature: any): [number, number, number] => {
 
-            const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); // usa tu campo único real
+            const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); 
             if (isSelected) {
-              return [255, 220, 40];
+              return [250, 218, 94];
             }
 
 
