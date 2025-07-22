@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import "./Visor.scss";
 import DeckGL from "deck.gl";
@@ -12,12 +12,13 @@ import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
+import { BitmapLayer } from "@deck.gl/layers";
+import { RasterLayer } from "../../classes/RasterLayer";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
-
-const Visor = ()=> {
+const Visor = () => {
 
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
     const { viewState, setViewState, selectedLayer, selectedBaseLayers } = useAppContext();
@@ -25,52 +26,51 @@ const Visor = ()=> {
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
-    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | null>(null);
-    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | null>(null);
+    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
     const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
 
     
     //una sola capa de TEMÁTICA
     useEffect(() => {
-        if (!selectedLayer) {
-            setTematicaLayer(null);
-            setMapLayerInstance(null);
-            return;
-        }
-        const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        if (!layer?.url) {
-            console.error(`No URL for layer: ${selectedLayer}`);
-            return;
-        }
-        const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
-        const tematicaKey = layer.tematica as keyof typeof COLORS;
+        (async () => {
+            if (!selectedLayer) {
+                setTematicaLayer(null);
+                setMapLayerInstance(null);
+                return;
+            }
 
-        // Genera variantes
-        const positiveColor = COLORS[tematicaKey]?.positive || "#ffffff";
-        const negativeColor = COLORS[tematicaKey]?.negative || "#000000";  
-        const neutralColor = COLORS[tematicaKey]?.primary || "#888888";
-        const mapLayer = new MapLayer(positiveColor, negativeColor, 0.7, neutralColor);
+            const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
+            if (!layer?.url) {
+                console.error(`No URL for layer: ${selectedLayer}`);
+                return;
+            }
+            const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
+            const tematicaKey = layer.tematica as keyof typeof COLORS;
 
-        fetch(urlBlob)
-            .then(res => res.json())
-            .then(data => {
+            if (layer.map_type === "geometry") {
+                // VECTOR
+                const colors = COLORS[tematicaKey as keyof typeof COLORS];
+                const positiveColor = colors?.positive || "#ffffff";
+                const negativeColor = colors?.negative || "#000000";
+                const neutralColor = colors?.primary || "#888888";
+                const mapLayer = new MapLayer(positiveColor, negativeColor, 0.7, neutralColor);
+                const jsonData = await mapLayer.loadData(urlBlob);
+                const geojsonLayer = mapLayer.getLayer(jsonData, layer.property, layer.is_lineLayer, false);
 
-                const newLayer = mapLayer.getLayer(data, layer.property, layer.is_lineLayer, false);
-
-                /*
-                const newLayer = new GeoJsonLayer({
-                    id: selectedLayer,
-                    data: data,
-                    pickable: true,
-                    filled: true,
-                    getFillColor: () => [250, 0, 0, 80],
-                    getLineColor: () => [255, 255, 255, 180],
-                });*/
-                setTematicaLayer(newLayer);
+                setTematicaLayer(geojsonLayer);
                 setMapLayerInstance(mapLayer);
-            })
-            .catch(error => console.error(`Error loading GeoJSON for layer ${selectedLayer}:`, error));
+            } else if (layer.map_type === "raster") {
+                const rasterLayerInstance = new RasterLayer({
+                    opacity: 0.7,
+                    title: layer.title
+                });
+                await rasterLayerInstance.loadRaster(urlBlob);
+                setTematicaLayer(rasterLayerInstance.getBitmapLayer());
+                setMapLayerInstance(rasterLayerInstance);
+            }
+        })();
     }, [selectedLayer]);
 
     //varias capas de BASE??

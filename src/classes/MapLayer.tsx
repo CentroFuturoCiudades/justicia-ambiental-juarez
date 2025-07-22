@@ -1,6 +1,7 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
+import { COLORS } from "../utils/constants";
 
 export class MapLayer {
     positiveColor: string;
@@ -36,6 +37,11 @@ export class MapLayer {
       } );
     
       return filteredData;
+    }
+
+    async loadData(url: string) {
+      const data = await fetch(url);
+      return await data.json();
     }
 
     getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean ): GeoJsonLayer => {
@@ -190,9 +196,8 @@ export class MapLayer {
 
       return <Legend
         title={ title } 
-        startColor={ this.positiveColor } 
-        neutralColor= { this.neutralColor }
-        endColor={ this.negativeColor } 
+        colors={ [this.positiveColor, this.neutralColor] }
+        legendColor={COLORS.GLOBAL.backgroundDark}
         positiveRange={ this.getRanges( this.colorScalePos, true) }
         negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
         data={ Data }

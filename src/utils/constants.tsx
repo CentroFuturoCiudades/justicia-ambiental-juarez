@@ -3,8 +3,8 @@
 export const COLORS = {
     GLOBAL: {
         primary: "",
-        positive:"",
-        negative:"",
+        positive: "",
+        negative: "",
         textPrimary: "#545454",
         highlightGreen: "#87b6b3",
         highlightRed: "#bb6361",
@@ -19,18 +19,18 @@ export const COLORS = {
     },
     industria: {
         primary: "#8d8473",
-        positive:"#b7ae9e",
-        negative:"#5f574a",
+        positive: "#b7ae9e",
+        negative: "#5f574a",
     },
     equipamiento: {
         primary: "#9b87b6",
-        positive:"#c7bfe0",
-        negative:"#6c5a7f",
+        positive: "#c7bfe0",
+        negative: "#6c5a7f",
     },
     poblacion: {
         primary: "#acbab6",
-        positive:"#d3e0dc",
-        negative:"#7a8683",
+        positive: "#d3e0dc",
+        negative: "#7a8683",
     }
 }
 
@@ -39,42 +39,42 @@ export const SECTIONS = {
     ambiental: {
         label: "ambiental",
         layers: [
-            "vulnerabilidad_ambiental", 
-            "islas_calor", 
-            "calidad_del_aire", 
-            "riesgo_inundacion", 
-            "riesgo_trafico_vehicular", 
+            "vulnerabilidad_ambiental",
+            "islas_calor",
+            "calidad_del_aire",
+            "riesgo_inundacion",
+            "riesgo_trafico_vehicular",
             "indice_vulnerabilidad_ambiental"
         ] as LayerKey[],
     },
     industria: {
         label: "industria",
         layers: [
-            "hogares_vulnerables_industria", 
+            "hogares_vulnerables_industria",
             "infantes_vulnerables_industria"
         ] as LayerKey[],
     },
     equipamiento: {
         label: "equipamiento",
         layers: [
-            "equipamientos", 
-            "indice_accesibilidad", 
-            "tiempo_acceso_recreativos", 
-            "tiempo_acceso_salud", 
-            "tiempo_acceso_preparatorias", 
-            "hogares_15min_espacios_recreativos", 
-            "hogares_30min_salud", 
+            "equipamientos",
+            "indice_accesibilidad",
+            "tiempo_acceso_recreativos",
+            "tiempo_acceso_salud",
+            "tiempo_acceso_preparatorias",
+            "hogares_15min_espacios_recreativos",
+            "hogares_30min_salud",
             "hogares_30min_preparatorias"
         ] as LayerKey[],
     },
     poblacion: {
         label: "población",
         layers: [
-            "ingreso", 
-            "porcentaje_pob_0a5", 
-            "porcentaje_pob_60", 
-            "porcentaje_escolaridad", 
-            "porcentaje_bajos_ingresos", 
+            "ingreso",
+            "porcentaje_pob_0a5",
+            "porcentaje_pob_60",
+            "porcentaje_escolaridad",
+            "porcentaje_bajos_ingresos",
             "indice_bienestar"
         ] as LayerKey[],
     }
@@ -84,6 +84,7 @@ export const LAYERS = {
     vulnerabilidad_ambiental: {
         title: "Indice de Vulnerabilidad Ambiental",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -99,7 +100,8 @@ export const LAYERS = {
     },
     islas_calor: {
         title: "islas de calor",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/heat_M08.01.tif",
+        map_type: "raster",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -115,7 +117,8 @@ export const LAYERS = {
     },
     calidad_del_aire: {
         title: "Calidad del Aire",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/calidad_del_aire_CO.tif",
+        map_type: "raster",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -132,6 +135,7 @@ export const LAYERS = {
     riesgo_inundacion: {
         title: "Riesgo de Inundación",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "raster",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -148,6 +152,7 @@ export const LAYERS = {
     riesgo_trafico_vehicular: {
         title: "Exposición a zonas con alto tráfico vehicular",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -164,6 +169,7 @@ export const LAYERS = {
     indice_vulnerabilidad_ambiental: {
         title: "Indice de Vulnerabilidad Ambiental",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -180,6 +186,7 @@ export const LAYERS = {
     hogares_vulnerables_industria: {
         title: "Porcentaje de hogares próximos (5 km) a X tipo industria contaminante",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -196,6 +203,7 @@ export const LAYERS = {
     infantes_vulnerables_industria: {
         title: "Porcentaje de 0-5 años, +65 años expuestos (5 km) a X tipo industria contaminante",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -212,6 +220,7 @@ export const LAYERS = {
     equipamientos: {
         title: "Número y tipos de equipamientos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -228,6 +237,7 @@ export const LAYERS = {
     indice_accesibilidad: {
         title: "Indice de Accesibilidad",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -244,10 +254,11 @@ export const LAYERS = {
     tiempo_acceso_recreativos: {
         title: "Tiempo promedio a espacios recreativos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
-        metric: "minutos", 
+        metric: "minutos",
         visualization_type: "Numerico",
         tematica: "equipamiento",
         geographic_unit: "AGEB",
@@ -260,6 +271,7 @@ export const LAYERS = {
     tiempo_acceso_salud: {
         title: "Tiempo promedio a hospitales o clínicas",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -276,6 +288,7 @@ export const LAYERS = {
     tiempo_acceso_preparatorias: {
         title: "Tiempo promedio a preparatorias",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -292,10 +305,10 @@ export const LAYERS = {
     hogares_15min_espacios_recreativos: {
         title: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
-        type: "Continua",
-        metric: "porcentaje_hogares", 
+        metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
         tematica: "equipamiento",
         geographic_unit: "AGEB",
@@ -308,10 +321,10 @@ export const LAYERS = {
     hogares_30min_salud: {
         title: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
-        type: "Continua",
-        metric: "porcentaje_hogares", 
+        metric: "porcentaje_hogares",
         visualization_type: "Velocimetro",
         tematica: "equipamiento",
         geographic_unit: "AGEB",
@@ -324,6 +337,7 @@ export const LAYERS = {
     hogares_30min_preparatorias: {
         title: "Porcentaje de hogares con acceso a preparatorias a 30 minutos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -340,6 +354,7 @@ export const LAYERS = {
     ingreso: {
         title: "Ingreso Promedio",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -356,6 +371,7 @@ export const LAYERS = {
     porcentaje_pob_0a5: {
         title: "Porcentaje de población de 0 a 5 años",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -372,6 +388,7 @@ export const LAYERS = {
     porcentaje_pob_60: {
         title: "Porcentaje de población de 60+",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -388,6 +405,7 @@ export const LAYERS = {
     porcentaje_escolaridad: {
         title: "Grado promedio de escolaridad",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -404,6 +422,7 @@ export const LAYERS = {
     porcentaje_bajos_ingresos: {
         title: "Proporción de hogares con bajos ingresos (último quintil)",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
@@ -420,6 +439,7 @@ export const LAYERS = {
     indice_bienestar: {
         title: "Indice de Bienestar Social",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        map_type: "geometry",
         property: "income_pc",
         is_lineLayer: false,
         type: "Categorica",
@@ -446,7 +466,8 @@ export const CAPAS_BASE = {
     },
     capa3: {
         title: "parques industriales",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",    },
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+    },
 }
 
 export const TEMAS = {
@@ -475,7 +496,7 @@ export const FOOTER_ITEMS = [
         imageUrl: "https://networkofcenters.net/sites/networkofcenters.net/files/styles/center_logo/public/baker%20instutute%20rice%20u.png?itok=dQPPaoah"
     },
     {
-        title:"RICE University",
+        title: "RICE University",
         imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6c2WxWCCQ79DBz1ieePMGAbwY8aGMawtc2g&s"
     }
 ];
