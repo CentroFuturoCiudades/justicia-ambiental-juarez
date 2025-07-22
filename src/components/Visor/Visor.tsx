@@ -12,7 +12,6 @@ import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
-import type { Feature } from "geojson";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -33,7 +32,7 @@ const Visor = ()=> {
 
     const handleSelectedAGEBS = (info: any) => {
         if (info) {
-            setSelectedAGEBS(prev => [...prev, (info.object.properties.cvegeo as string)]);
+            setSelectedAGEBS(prev => prev.includes(info.object.properties.cvegeo as string) ? prev.filter(key => key !== info.object.properties.cvegeo as string) : [...prev, info.object.properties.cvegeo as string]);
             //console.log("Selected AGEBS:", info);
         }
     };

@@ -39,7 +39,7 @@ export class MapLayer {
       return filteredData;
     }
 
-    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: Feature[] = [] ): GeoJsonLayer => {
+    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
       this.isLineLayer = true;
       var getColor: any;
 
