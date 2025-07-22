@@ -1,0 +1,57 @@
+.busqueda-colonia-container {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 230px;
+
+  &__main-trigger {
+    background-color: #424242;
+    color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    //border-radius: 0.2rem;
+    border-radius: 0%;
+    padding: 0.25rem 1rem !important;
+  }
+
+  &__main-title {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  &__main-indicator {
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  &__itemContent {
+    background-color: #f5f5f5;
+    padding: 0rem;
+    border-radius: 0%;
+  }
+
+  &__itemBody {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__checkbox {
+    margin-left: 0rem;
+  }
+}
+
+.chakra-accordion__itemContent {
+  transition: all 0.3s ease-in-out;
+}
+
+.busqueda-colonia-container__main-trigger:hover {
+  background: #363636 !important;
+  cursor: pointer;
+}

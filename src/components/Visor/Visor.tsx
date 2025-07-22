@@ -6,6 +6,7 @@ import Map from "react-map-gl/mapbox";
 import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
+import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
 import { Button, Box } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
@@ -173,7 +174,7 @@ const Visor = () => {
                         reuseMaps
                     />
                 </DeckGL>
-
+                <BusquedaColonia />
                 <CapasBase />
                 <div style={{ position: "absolute", top: "1.5rem", left: "2rem", display: "flex", gap: "0", background: COLORS.GLOBAL.backgroundDark, borderRadius: "20px" }}>
                     <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}

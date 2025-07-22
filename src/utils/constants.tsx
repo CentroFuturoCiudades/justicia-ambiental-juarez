@@ -395,6 +395,7 @@ export const CAPAS_BASE = {
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",    },
 }
 
+
 export const TEMAS = {
     ambiental: {
         title: "Ambiental"
