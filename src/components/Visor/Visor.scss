@@ -42,38 +42,6 @@
         border-radius: var(--border-radius);
     }
 
-    &__layerCard {
-        background-color: var(--background);
-        padding: 0.5rem;
-        border: 2px solid;
-        border-radius: 2px;
-        border-color: var(--ambiental-primary);
-        margin-bottom: 1rem;
-        height: auto;
-    }
-
-    &__layerCardTitle {
-        //font-weight: bold;
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        color: white;
-        padding: 0.5rem;
-        border-radius: 2px;
-        //text-align: center;
-        font-size: 1.2rem;
-        text-transform: lowercase;
-    }
-
-
-    &__layerCardBody {
-        padding: 0.5rem;
-    }
-
-    &__layerDescription {
-        font-size: 0.9rem;
-
-    }
-
     &__mapContainer {
         background: peachpuff;
         flex: 1;
