@@ -1,7 +1,6 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
-import type { Feature } from "geojson";
 
 export class MapLayer {
     positiveColor: string;

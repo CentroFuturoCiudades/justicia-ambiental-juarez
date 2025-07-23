@@ -1,6 +1,5 @@
 import { type MapViewState } from "deck.gl";
 import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
-import type { Feature } from "geojson";
 
 type ViewState = {
     latitude: number;
