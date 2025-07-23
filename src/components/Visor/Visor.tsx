@@ -135,36 +135,6 @@ const Visor = ()=> {
                     Lorem Ipsum dolor sit ame
                 </div>
                 )}
-                
-                {/* selectedLayer && (
-                    <div>
-                        <div className="visor__layerCard" style={{borderColor: sectionColor}}>
-                            <div className="visor__layerCardTitle" style={{background: sectionColor}}> 
-                                <p className="visor__layerTitle">{selectedLayerData?.title}</p>
-                            </div>
-                            <div className="visor__layerCardBody">
-                                <p className="visor__layerDescription">
-                                    {selectedLayerData?.description || "No hay descripción disponible."}
-                                </p>
-                                {selectedAGEBS.length > 0 && (
-                                    <p style={{ fontSize: "15px", fontWeight: "bold" }}>
-                                        El AGEB seleccionado tiene el siguiente promedio: {getAGEBMetric(selectedLayerData?.stat_type || "", selectedLayerData?.property || "income_pc")}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                        {selectedAGEBS.length > 0 && (
-                            <Button 
-                            size={"xs"}
-                            rounded={"full"}
-                            p={4}
-                            onClick={() => setSelectedAGEBS([])} 
-                            >
-                                <p style={{ fontSize: "15px" }}>Limpiar selección</p>
-                            </Button>
-                        )}
-                    </div>
-                )*/}
 
                 {selectedLayer && (
                     <LayerCard
@@ -172,11 +142,10 @@ const Visor = ()=> {
                         tematicaData={tematicaData}
                         color={sectionColor}
                     />
-                )}
-
-                
+                )}   
 
             </Box>
+            
             <div className="visor__mapContainer"> 
                 <DeckGL 
                     initialViewState={ viewState }
