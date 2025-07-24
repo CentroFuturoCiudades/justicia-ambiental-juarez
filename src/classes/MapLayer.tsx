@@ -45,7 +45,7 @@ export class MapLayer {
       return await data.json();
     }
 
-    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean ): GeoJsonLayer => {
+    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
       this.isLineLayer = true;
       var getColor: any;
 
@@ -123,6 +123,13 @@ export class MapLayer {
 
         getColor =
           (feature: any): [number, number, number] => {
+
+            const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); 
+            if (isSelected) {
+              return [250, 218, 94];
+            }
+
+
             const item = feature.properties[field];
             let rgbValue;
 
@@ -157,6 +164,7 @@ export class MapLayer {
             ];
           }
         }
+
       
         const geojsonLayer = new GeoJsonLayer({
           id: "geojson-layer",
@@ -168,6 +176,10 @@ export class MapLayer {
           getFillColor: !isLineLayer ? getColor : [255,255,255,200],
           getLineColor: isLineLayer ? getColor : [255, 255, 255, 200],
           getLineWidth: isLineLayer ? 100 : 16,
+          onClick: handleFeatureClick,
+          updateTriggers: {
+            getFillColor: [selectedAGEBS]
+          }
         });
     
         return geojsonLayer;

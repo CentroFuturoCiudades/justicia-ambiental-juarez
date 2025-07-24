@@ -18,6 +18,8 @@ interface AppContextI {
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
     zoomOut: () => void;
+    selectedAGEBS: string[];
+    setSelectedAGEBS: Dispatch<SetStateAction<string[]>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -47,6 +49,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
     const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
 
+    const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
+
     return (
         <AppContext.Provider value={{
             viewState,
@@ -59,6 +63,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setSelectedBaseLayers,
             zoomIn,
             zoomOut,
+            selectedAGEBS,
+            setSelectedAGEBS,
 
         }}
         >
