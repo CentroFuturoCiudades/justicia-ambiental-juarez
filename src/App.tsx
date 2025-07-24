@@ -3,15 +3,17 @@ import Landing from './components/Landing/Landing';
 import Visor from './components/Visor/Visor';
 import AppContextProvider from "./context/AppContext"
 import { Provider } from './components/ui/provider';
-
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 
   return (
     <Provider>
       <AppContextProvider>
-        <Landing></Landing>
-        <Visor></Visor>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/visor" element={<Visor />} />
+      </Routes>
       </AppContextProvider>
     </Provider>
   )
