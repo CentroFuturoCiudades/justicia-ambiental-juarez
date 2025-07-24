@@ -16,17 +16,228 @@ import { BitmapLayer } from "@deck.gl/layers";
 import { RasterLayer } from "../../classes/RasterLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
-import { downloadFileFromUrl } from "../../utils/downloadFile";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import type { Template } from '@pdfme/common';
+import { generate } from '@pdfme/generator';
+import { rectangle, text, image, table } from '@pdfme/schemas';
+import { useRef } from "react";
+
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
+const template: Template = {
+    // basePdf: BLANK_A4_PDF,
+    schemas: [
+        [
+            {
+                "name": "title",
+                "type": "text",
+                "content": "Indicadores Ambientales",
+                "position": { "x": 17.95, "y": 20 },
+                "width": 174.1, "height": 20.11, "rotate": 0, "alignment": "center", "verticalAlignment": "top", "fontSize": 40, "lineHeight": 1, "characterSpacing": 0, "fontColor": "#2d5534", "fontName": "Roboto", "backgroundColor": "", "opacity": 1, "strikethrough": false, "underline": false, "required": false, "readOnly": true
+            },
+            {
+                "name": "indicadores",
+                "type": "table",
+                "position": { "x": 30, "y": 50 },
+                "width": 150,
+                "height": 43.75920000000001,
+                "content": "[[\"{ind_name_1}\",\"{sel_val_1}\",\"{mun_val_1}\"],[\"{ind_name_2}\",\"{sel_val_2}\",\"{mun_val_2}\"]]",
+                "showHead": true,
+                "head": ["Indicador", "Puntaje", "Ciudad Juarez"],
+                "headWidthPercentages": [52.20067049782067, 24.22174329508776, 23.577586207091574],
+                "tableStyles": { "borderWidth": 0.1, "borderColor": "#4b5544" },
+                "headStyles": { "fontName": "Roboto", "fontSize": 13, "characterSpacing": 0, "alignment": "left", "verticalAlignment": "middle", "lineHeight": 1, "fontColor": "#ffffff", "borderColor": "", "backgroundColor": "#4b6648", "borderWidth": { "top": 0, "right": 0, "bottom": 0, "left": 0 }, "padding": { "top": 5, "right": 5, "bottom": 5, "left": 5 } },
+                "bodyStyles": { "fontName": "Roboto", "fontSize": 13, "characterSpacing": 0, "alignment": "left", "verticalAlignment": "middle", "lineHeight": 1, "fontColor": "#000000", "borderColor": "#888888", "backgroundColor": "", "alternateBackgroundColor": "#f5f5f5", "borderWidth": { "top": 0.1, "right": 0.1, "bottom": 0.1, "left": 0.1 }, "padding": { "top": 5, "right": 5, "bottom": 5, "left": 5 } },
+                "columnStyles": {}, "required": true, "readOnly": false
+            },
+            {
+                "name": "map_title",
+                "type": "text",
+                "content": "Mapas",
+                "position": { "x": 20, "y": 100 },
+                "width": 40,
+                "height": 15,
+                "rotate": 0,
+                "alignment": "left",
+                "verticalAlignment": "top",
+                "fontSize": 30,
+                "lineHeight": 1,
+                "characterSpacing": 0,
+                "fontColor": "#2d5534",
+                "fontName": "Roboto",
+                "backgroundColor": "",
+                "opacity": 1,
+                "strikethrough": false,
+                "underline": false,
+                "required": false,
+                "readOnly": true
+            }, {
+                "name": "map",
+                "type": "image",
+                "position": { "x": 20, "y": 110 },
+                "width": 160,
+                "height": 100,
+                "rotate": 0,
+                "opacity": 1,
+                "required": true,
+                "readOnly": false
+            }
+        ]
+    ],
+    basePdf: { "width": 210, "height": 297, "padding": [20, 10, 20, 10] },
+};
+
+const templateLegendColor = {
+    "type": "rectangle",
+    "width": 3,
+    "height": 3,
+    "rotate": 0,
+    "opacity": 1,
+    "borderWidth": 0,
+    "borderColor": "#000000",
+    "color": "#ff0000",
+    "readOnly": true,
+    "radius": 0,
+    "required": false
+};
+const templateLegendText = {
+    "type": "text",
+    "width": 30,
+    "height": 4,
+    "rotate": 0,
+    "alignment": "left",
+    "verticalAlignment": "top",
+    "fontSize": 10,
+    "lineHeight": 1,
+    "characterSpacing": 0,
+    "fontColor": "#000000",
+    "fontName": "Roboto",
+    "backgroundColor": "",
+    "opacity": 1,
+    "strikethrough": false,
+    "underline": false,
+    "required": false,
+    "readOnly": true
+}
+
+
+const generatePdfLegend = (ranges: any[][], colors: any[], position: { x: number, y: number }) => {
+    const legend: any[] = [];
+    ranges.forEach((range, index) => {
+        legend.push({
+            ...templateLegendColor,
+            "name": `field${index}Color`,
+            "position": { "x": position.x, "y": position.y + index * 5 + 0.5 },
+            "color": colors[index],
+        });
+        legend.push({
+            ...templateLegendText,
+            "name": `field${index}Text`,
+            "content": `${range[1].toFixed(2)} - ${range[0].toFixed(2)}`,
+            "position": { "x": position.x + 5, "y": position.y + index * 5 },
+        });
+    });
+    return legend;
+}
+
+
+
+const plugins = {
+    Rectangle: rectangle,
+    Text: text,
+    Image: image,
+    Table: table,
+};
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(blob);
+    });
+}
+
+const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer | RasterLayer | null) => {
+    const imageUrl = getMapImage(deck, map);
+    if (!imageUrl) {
+        console.error("No image URL found");
+        return;
+    }
+    const response = await fetch(imageUrl);
+    const blobImage = await response.blob();
+    const base64Image = await blobToBase64(blobImage);
+    const inputs = [
+        {
+            "indicadores": [
+                ['Islas de calor', '4.4 °C', '3.7 °C'],
+                ['Aire contaminado', '100 μg/m', '50 μg/m³'],
+            ],
+            "map": base64Image,
+        },
+    ];
+    const ranges = layerInstance?.getRanges();
+    const colors = layerInstance?.getColors(ranges?.length);
+    console.log(layerInstance, ranges, colors);
+    if (!ranges || !colors) {
+        console.error("No ranges or colors found");
+        return;
+    }
+    let newTemplate = { ...template };
+    newTemplate.schemas[0] = [
+        ...template.schemas[0],
+        ...generatePdfLegend(ranges, colors.reverse(), { x: 20, y: 180 }),
+    ];
+    const pdf = await generate({ template: newTemplate, inputs, plugins });
+
+    const blobPdf = new Blob([pdf.buffer], { type: 'application/pdf' });
+    window.open(URL.createObjectURL(blobPdf));
+}
+
+const getMapImage = (deck: any, map: any): string | undefined => {
+    const mapboxCanvas = map.getCanvas();
+    const deckglCanvas = deck.deck.canvas;
+    console.log(mapboxCanvas);
+    console.log(deckglCanvas);
+
+    deck.deck.redraw(true);
+
+    let merge = document.createElement("canvas");
+    merge.width = mapboxCanvas.width;
+    merge.height = mapboxCanvas.height;
+
+    var context = merge.getContext("2d");
+
+    if (!context) {
+        console.error("No context found");
+        return;
+    }
+
+    context.globalAlpha = 1.0;
+    context.drawImage(mapboxCanvas, 0, 0);
+    context.globalAlpha = 1.0;
+    context.drawImage(deckglCanvas as CanvasImageSource, 0, 0);
+
+    return merge.toDataURL();
+    /*merge.toBlob(blob => {
+        // download the blob
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+    });*/
+};
+
+
 const Visor = () => {
-
     const navigate = useNavigate();
-
+    const deck = useRef<any>(null);
+    const map = useRef<any>(null);
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
     const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS } = useAppContext();
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -36,7 +247,7 @@ const Visor = () => {
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
     const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
-    const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
+    const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
     const [tematicaData, setTematicaData] = useState<any>(null);
 
@@ -120,37 +331,37 @@ const Visor = () => {
                             getLineColor: [255, 255, 255, 180],
                         });
                         setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
-                })
+                    })
                     .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
-                }
-            });
+            }
+        });
     }, [selectedBaseLayers]);
 
     return (
         <div className="visor">
-            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh"> 
+            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
                 <div className="visor__title">
                     <p className="visor__titleItalic">visor de </p>
                     <p className="visor__titleBold"> indicadores ambientales</p>
                 </div>
                 <Tematica />
 
-                { !selectedLayer && (
+                {!selectedLayer && (
                     <div className="visor__summary">
-                    <b>¿Qué es este visor?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>¿Cómo funciona?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>Recomendaciones</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit ame
-                </div>
+                        <b>¿Qué es este visor?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>¿Cómo funciona?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>Recomendaciones</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit ame
+                    </div>
                 )}
 
                 {selectedLayer && (
@@ -160,30 +371,32 @@ const Visor = () => {
                         color={sectionColor}
                         mapLayerInstance={mapLayerInstance}
                     />
-                )}   
+                )}
 
             </Box>
-            
-            <div className="visor__mapContainer"> 
-                <DeckGL 
-                    initialViewState={ viewState }
-                    viewState={ viewState }
+
+            <div className="visor__mapContainer">
+                <DeckGL
+                    ref={deck}
+                    initialViewState={viewState}
+                    viewState={viewState}
                     onViewStateChange={({ viewState }) => {
                         const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
                         setViewState({ latitude, longitude, zoom });
                     }}
                     //layers={[...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean), ...selectedLayersMultiple.map(key => tematicaLayers[key]).filter(Boolean)]}
-                   layers={[
-                       ...(tematicaLayer ? [tematicaLayer] : []),
-                       ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                   ]}
-                    style={{ height: "100%", width: "100%", position: "relative"}}
-                    controller={ true }
+                    layers={[
+                        ...(tematicaLayer ? [tematicaLayer] : []),
+                        ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
+                    ]}
+                    style={{ height: "100%", width: "100%", position: "relative" }}
+                    controller={true}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
                         mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
+                        ref={map}
                         reuseMaps
                     />
                 </DeckGL>
@@ -208,8 +421,7 @@ const Visor = () => {
                 </div>
                 <div style={{ position: "absolute", top: "1.5rem", left: "5rem", display: "flex", gap: "0", background: COLORS.GLOBAL.backgroundDark, borderRadius: "20px" }}>
                     <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
-                        // onClick={downloadFileFromUrl.bind(null, selectedLayerData?.url || "", "data.geojson")}>
-                        onClick={() => downloadFileFromUrl("/public/placeholder-geodata.geojson", "data.geojson")}>
+                        onClick={() => downloadPdf(deck.current, map.current, mapLayerInstance)}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                         </svg>

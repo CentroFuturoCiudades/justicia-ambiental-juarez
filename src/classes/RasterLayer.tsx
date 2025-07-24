@@ -99,6 +99,10 @@ export class RasterLayer {
       .reverse(); // Reverse the order of the ranges
   };
 
+  getColors = (amountOfColors: number = this.amountOfColors) => {
+    return Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+  }
+
   getLegend(title: string) {
     if (!this.legend) return <></>;
     const ranges = this.getRanges();

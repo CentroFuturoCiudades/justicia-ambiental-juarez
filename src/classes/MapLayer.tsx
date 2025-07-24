@@ -1,5 +1,5 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
-import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
+import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  scaleLinear,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
@@ -44,6 +44,14 @@ export class MapLayer {
     async loadData(url: string) {
       const data = await fetch(url);
       return await data.json();
+    }
+
+    getColors = (amountOfColors: number = 5) => {
+      const ranges = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+      const colorMap = scaleLinear<string>().domain(ranges).range([this.positiveColor, this.neutralColor, this.negativeColor]);
+      const colors = ranges.map((range) => colorMap(range));
+      const validColors = colors.filter((color) => color !== undefined);
+      return validColors.map((color) => rgb(color).formatHex());
     }
 
     getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
