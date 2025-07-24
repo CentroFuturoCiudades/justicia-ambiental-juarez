@@ -12,6 +12,7 @@ export class MapLayer {
     minVal = 0;
     positiveAvg = 0;
     negativeAvg = 0;
+    colorScale?: ScaleQuantile<number,never>;
     colorScalePos?: ScaleQuantile<number,never>;
     colorScaleNeg?: ScaleQuantile<number,never>;
     isLineLayer?: boolean;
@@ -96,7 +97,7 @@ export class MapLayer {
         )
       
       
-        const colorScale = minVal < 0 
+        this.colorScale = minVal < 0 
           ? scaleQuantile()
               .domain( mappedData )
               .range([...Array(rangeSize * 2).keys()])
@@ -172,9 +173,9 @@ export class MapLayer {
         return geojsonLayer;
     }
 
-    getRanges = (colorScale: ScaleQuantile<number, never>, isPositive: boolean) => {
-      let minRange = isPositive ? (this.minVal > 0 ? this.minVal : 0) : (this.minVal < 0 ? this.minVal : 0);
-      let quantiles = [minRange, ...colorScale.quantiles(), isPositive ? this.maxVal : 0];
+    getRanges = () => {
+      if( !this.colorScale ) return [];
+      let quantiles = [this.minVal, ...this.colorScale.quantiles(), this.maxVal];
     
       return quantiles
         .slice(0, -1)
@@ -187,20 +188,11 @@ export class MapLayer {
       if( !this.colorScaleNeg || !this.colorScalePos )
         return <></>;
 
-      const Data = {
-        minVal: this.minVal,
-        maxVal: this.maxVal,
-        negativeAvg: this.negativeAvg,
-        positiveAvg: this.positiveAvg
-      }
-
       return <Legend
         title={ title } 
         colors={ [this.positiveColor, this.neutralColor] }
         legendColor={COLORS.GLOBAL.backgroundDark}
-        positiveRange={ this.getRanges( this.colorScalePos, true) }
-        negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
-        data={ Data }
+        ranges={ this.getRanges() }
         decimalPlaces={ this.isLineLayer ? 2 : 0 }
       />
     }

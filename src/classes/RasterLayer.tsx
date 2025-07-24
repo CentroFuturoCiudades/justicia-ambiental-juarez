@@ -1,5 +1,5 @@
 import { BitmapLayer } from "@deck.gl/layers";
-import { scaleLinear, type ScaleLinear, type ScaleQuantile } from "d3-scale";
+import { scaleLinear } from "d3-scale";
 import { rgb } from "d3-color";
 import { fromUrl } from "geotiff";
 import Legend from "../components/Legend/Legend";
@@ -15,11 +15,13 @@ export class RasterLayer {
   minVal: number = 0;
   maxVal: number = 0;
   title: string;
+  amountOfColors: number;
 
-  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer" }: { opacity?: number, colors?: string[], title?: string }) {
+  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer", amountOfColors = 6 }: { opacity?: number, colors?: string[], title?: string, amountOfColors?: number }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
+    this.amountOfColors = amountOfColors;
   }
 
   async loadRaster(url: string) {
@@ -86,10 +88,11 @@ export class RasterLayer {
     });
   }
 
-  getRanges = (colorScale: ScaleLinear<number, string>, isPositive: boolean) => {
-    let minRange = isPositive ? (this.minVal > 0 ? this.minVal : 0) : (this.minVal < 0 ? this.minVal : 0);
-    let quantiles = [minRange, ...colorScale.domain(), isPositive ? this.maxVal : 0];
-  
+  getRanges = () => {
+    const domain = Array.from({ length: this.amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / this.amountOfColors);
+    let quantiles = [this.minVal, ...domain, this.maxVal];
+    quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
+
     return quantiles
       .slice(0, -1)
       .map((num, i) => [num, quantiles[i + 1]])
@@ -98,14 +101,14 @@ export class RasterLayer {
 
   getLegend(title: string) {
     if (!this.legend) return <></>;
+    const ranges = this.getRanges();
+    const completeColors = ranges.map((range) => this.colorMap(range[1]));
     return (
       <Legend
         title={title}
-        colors={this.colors}
+        colors={completeColors}
         legendColor={COLORS.GLOBAL.backgroundDark}
-        positiveRange={this.getRanges(this.colorMap, true)}
-        negativeRange={this.minVal < 0 ? this.getRanges(this.colorMap, false) : []}
-        data={{ minVal: this.minVal, maxVal: this.maxVal }}
+        ranges={ranges}
         decimalPlaces={2}
         categorical={true}
       />
