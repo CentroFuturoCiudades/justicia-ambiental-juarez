@@ -1,6 +1,7 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
+import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
 
 export class MapLayer {
@@ -206,6 +207,29 @@ export class MapLayer {
         legendColor={COLORS.GLOBAL.backgroundDark}
         ranges={ this.getRanges() }
         decimalPlaces={ this.isLineLayer ? 2 : 0 }
+      />
+    }
+
+    getRangeGraph = (avg: number) => {
+      if( !this.colorScalePos || !this.colorScaleNeg )
+        return <></>;
+
+      const Data = {
+        minVal: this.minVal,
+        maxVal: this.maxVal,
+        negativeAvg: this.negativeAvg,
+        positiveAvg: this.positiveAvg
+      }
+
+      return <RangeGraph
+        startColor={ this.positiveColor } 
+        neutralColor= { this.neutralColor }
+        endColor={ this.negativeColor } 
+        positiveRange={ this.getRanges( this.colorScalePos, true) }
+        negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
+        data={ Data }
+        averageAGEB={ avg }
+        decimalPlaces={ 2 }
       />
     }
 }

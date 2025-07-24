@@ -8,10 +8,11 @@ type LayerCardProps = {
     selectedLayerData: any;
     tematicaData: { features: Feature[] };
     color: string;
+    mapLayerInstance: any;
 };
 
 
-const LayerCard = ({ selectedLayerData, tematicaData, color }: LayerCardProps) => {
+const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
 
     const { selectedAGEBS,setSelectedAGEBS } = useAppContext();
 
@@ -47,10 +48,13 @@ const LayerCard = ({ selectedLayerData, tematicaData, color }: LayerCardProps) =
                             {selectedLayerData?.description || "No hay descripción disponible."}
                         </p>
                     ) : (
-                        <p style={{ fontSize: "15px", fontWeight: "bold" }}>
-                            {/* texto fixed, ahorita todas van a decir promedio */}
-                            El AGEB seleccionado tiene el siguiente promedio: {getAGEBMetric(selectedLayerData.stat_type, selectedLayerData.property)}
-                        </p>
+                        <div>
+                            <p style={{ fontSize: "15px", fontWeight: "bold" }}>
+                                {/* texto fixed, ahorita todas van a decir promedio */}
+                                El AGEB seleccionado tiene el siguiente promedio: {getAGEBMetric(selectedLayerData.stat_type, selectedLayerData.property)}
+                            </p>
+                            {mapLayerInstance.getRangeGraph(getAGEBMetric(selectedLayerData.stat_type, selectedLayerData.property))}
+                        </div>
                     )}
                 </div>
             </div>
