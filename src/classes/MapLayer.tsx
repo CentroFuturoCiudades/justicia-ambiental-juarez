@@ -2,6 +2,7 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
+import { COLORS } from "../utils/constants";
 
 export class MapLayer {
     positiveColor: string;
@@ -12,6 +13,7 @@ export class MapLayer {
     minVal = 0;
     positiveAvg = 0;
     negativeAvg = 0;
+    colorScale?: ScaleQuantile<number,never>;
     colorScalePos?: ScaleQuantile<number,never>;
     colorScaleNeg?: ScaleQuantile<number,never>;
     isLineLayer?: boolean;
@@ -37,6 +39,11 @@ export class MapLayer {
       } );
     
       return filteredData;
+    }
+
+    async loadData(url: string) {
+      const data = await fetch(url);
+      return await data.json();
     }
 
     getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
@@ -91,7 +98,7 @@ export class MapLayer {
         )
       
       
-        const colorScale = minVal < 0 
+        this.colorScale = minVal < 0 
           ? scaleQuantile()
               .domain( mappedData )
               .range([...Array(rangeSize * 2).keys()])
@@ -179,9 +186,9 @@ export class MapLayer {
         return geojsonLayer;
     }
 
-    getRanges = (colorScale: ScaleQuantile<number, never>, isPositive: boolean) => {
-      let minRange = isPositive ? (this.minVal > 0 ? this.minVal : 0) : (this.minVal < 0 ? this.minVal : 0);
-      let quantiles = [minRange, ...colorScale.quantiles(), isPositive ? this.maxVal : 0];
+    getRanges = () => {
+      if( !this.colorScale ) return [];
+      let quantiles = [this.minVal, ...this.colorScale.quantiles(), this.maxVal];
     
       return quantiles
         .slice(0, -1)
@@ -194,21 +201,11 @@ export class MapLayer {
       if( !this.colorScaleNeg || !this.colorScalePos )
         return <></>;
 
-      const Data = {
-        minVal: this.minVal,
-        maxVal: this.maxVal,
-        negativeAvg: this.negativeAvg,
-        positiveAvg: this.positiveAvg
-      }
-
       return <Legend
         title={ title } 
-        startColor={ this.positiveColor } 
-        neutralColor= { this.neutralColor }
-        endColor={ this.negativeColor } 
-        positiveRange={ this.getRanges( this.colorScalePos, true) }
-        negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
-        data={ Data }
+        colors={ [this.positiveColor, this.neutralColor] }
+        legendColor={COLORS.GLOBAL.backgroundDark}
+        ranges={ this.getRanges() }
         decimalPlaces={ this.isLineLayer ? 2 : 0 }
       />
     }
