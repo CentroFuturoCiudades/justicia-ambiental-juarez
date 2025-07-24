@@ -141,6 +141,7 @@ const Visor = ()=> {
                         selectedLayerData={selectedLayerData}
                         tematicaData={tematicaData}
                         color={sectionColor}
+                        mapLayerInstance={mapLayerInstance}
                     />
                 )}   
 
