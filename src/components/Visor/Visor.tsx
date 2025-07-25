@@ -50,6 +50,7 @@ const Visor = () => {
     //una sola capa de TEMÁTICA
     useEffect(() => {
         (async () => {
+            
             if (!selectedLayer) {
                 setTematicaLayer(null);
                 setMapLayerInstance(null);
@@ -62,21 +63,16 @@ const Visor = () => {
                 return;
             }
             const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
-            const tematicaKey = layer.tematica as keyof typeof COLORS;
 
             if (layer.map_type === "geometry") {
-                // VECTOR
-                const colors = COLORS[tematicaKey as keyof typeof COLORS];
-                const positiveColor = colors?.positive || "#ffffff";
-                const negativeColor = colors?.negative || "#000000";
-                const neutralColor = colors?.primary || "#888888";
-                const mapLayer = new MapLayer(positiveColor, negativeColor, 0.7, neutralColor);
-                const jsonData = await mapLayer.loadData(urlBlob);
-                const geojsonLayer = mapLayer.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
+
+                const mapLayerInstance = new MapLayer(0.7);
+                const jsonData = await mapLayerInstance.loadData(urlBlob);
+                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
                 setTematicaLayer(geojsonLayer);
-                setMapLayerInstance(mapLayer);
+                setMapLayerInstance(mapLayerInstance);
             } else if (layer.map_type === "raster") {
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
@@ -125,6 +121,10 @@ const Visor = () => {
                 }
             });
     }, [selectedBaseLayers]);
+
+    useEffect(() => {
+        setSelectedAGEBS([]);
+    }, [selectedLayer]);
 
     return (
         <div className="visor">
@@ -182,7 +182,7 @@ const Visor = () => {
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
-                        mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
+                        mapStyle="mapbox://styles/speakablekhan/clx519y7m00yc01qobp826m5t/draft"
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
                         reuseMaps
                     />
@@ -192,6 +192,7 @@ const Visor = () => {
 
                 {/* CAPAS BASE */}
                 <CapasBase />
+                
                 {selectedLayer && mapLayerInstance && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}
