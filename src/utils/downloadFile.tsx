@@ -80,8 +80,8 @@ export const templateLegendColor = {
   "height": 3,
   "rotate": 0,
   "opacity": 1,
-  "borderWidth": 0,
-  "borderColor": "#000000",
+  "borderWidth": 0.1,
+  "borderColor": "#dbdbdb",
   "color": "#ff0000",
   "readOnly": true,
   "radius": 0,
@@ -184,7 +184,7 @@ export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer |
     console.error("No ranges or colors found");
     return;
   }
-  let newTemplate = { ...template };
+  let newTemplate = JSON.parse(JSON.stringify(template))
   newTemplate.schemas[0] = [
     ...template.schemas[0],
     ...generatePdfLegend(ranges, colors, { x: 20, y: 180 }),

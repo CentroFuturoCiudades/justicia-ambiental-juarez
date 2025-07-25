@@ -22,7 +22,7 @@ export class MapLayer {
   title: string;
 
 
-  constructor(opacity: 0.7, colors = ["#9fe3d6","#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title: "Map Layer", amountOfColors = 6) {
+  constructor(opacity: 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title: "Map Layer", amountOfColors = 6) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
@@ -139,7 +139,15 @@ export class MapLayer {
 
   getColors = (amountOfColors: number = 6) => {
     const ranges = this.getRanges(amountOfColors);
-    const colorMap = scaleLinear<string>().domain(ranges.map((range) => range[1])).range(this.colors);
+    const min = this.minVal;
+    const max = this.maxVal;
+    const domain = [
+      min,
+      ...Array.from({ length: this.colors.length - 2 },
+        (_, i) => min + (max - min) * (i + 1) / (this.colors.length - 1)),
+      max,
+    ];
+    const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
     const colors = ranges.map((range) => colorMap(range[1]));
     const validColors = colors.filter((color) => color !== undefined);
     return validColors.map((color) => rgb(color).formatHex());
