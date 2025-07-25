@@ -22,7 +22,12 @@ export class MapLayer {
   title: string;
 
 
-  constructor(opacity: 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title: "Map Layer", amountOfColors = 6) {
+  constructor({opacity= 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title= "Map Layer", amountOfColors = 6}: {
+    opacity?: number;
+    colors?: string[];
+    title?: string;
+    amountOfColors?: number;
+  }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
@@ -34,10 +39,10 @@ export class MapLayer {
     return await data.json();
   }
 
-    getLayer = ( data: any, field: string, isLineLayer: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
-      
-      this.isLineLayer = isLineLayer;
-      let getColor: any;
+  getLayer = (data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = []): GeoJsonLayer => {
+
+    this.isLineLayer = true;
+    var getColor: any;
 
     if (field) {
       var mappedData: number[] = data.features.map((item: any) => { return item.properties[field] });

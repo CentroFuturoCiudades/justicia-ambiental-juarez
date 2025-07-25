@@ -109,7 +109,7 @@ const Visor = () => {
                     title: layer.title
                 });
                 const jsonData = await mapLayerInstance.loadData(urlBlob);
-                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, handleSelectedAGEBS, selectedAGEBS);
+                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, true, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
 
