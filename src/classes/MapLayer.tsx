@@ -46,10 +46,10 @@ export class MapLayer {
       return await data.json();
     }
 
-    getColors = (amountOfColors: number = 5) => {
-      const ranges = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
-      const colorMap = scaleLinear<string>().domain(ranges).range([this.positiveColor, this.neutralColor, this.negativeColor]);
-      const colors = ranges.map((range) => colorMap(range));
+    getColors = (amountOfColors: number = 6) => {
+      const ranges = this.getRanges(amountOfColors);
+      const colorMap = scaleLinear<string>().domain(ranges.map((range) => range[1])).range([this.positiveColor, this.neutralColor]);
+      const colors = ranges.map((range) => colorMap(range[1]));
       const validColors = colors.filter((color) => color !== undefined);
       return validColors.map((color) => rgb(color).formatHex());
     }
@@ -60,6 +60,7 @@ export class MapLayer {
 
       if( field ){
         var mappedData: number[] = data.features.map((item: any)=>{ return item.properties[field] });
+        mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
         if( trimOutliers ){
           mappedData = this.trimOutliers( mappedData );
         }
@@ -194,10 +195,11 @@ export class MapLayer {
         return geojsonLayer;
     }
 
-    getRanges = () => {
+    getRanges = (amountOfColors: number = 6) => {
       if( !this.colorScale ) return [];
-      let quantiles = [this.minVal, ...this.colorScale.quantiles(), this.maxVal];
-    
+      const domain = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+      let quantiles = [this.minVal, ...domain, this.maxVal];
+      quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
       return quantiles
         .slice(0, -1)
         .map((num, i) => [num, quantiles[i + 1]])
@@ -209,11 +211,14 @@ export class MapLayer {
       if( !this.colorScaleNeg || !this.colorScalePos )
         return <></>;
 
+      const ranges = this.getRanges(6);
+      const colors = this.getColors(6);
+
       return <Legend
         title={ title } 
-        colors={ [this.positiveColor, this.neutralColor] }
+        colors={ colors }
         legendColor={COLORS.GLOBAL.backgroundDark}
-        ranges={ this.getRanges() }
+        ranges={ ranges }
         decimalPlaces={ this.isLineLayer ? 2 : 0 }
       />
     }
@@ -233,8 +238,8 @@ export class MapLayer {
         startColor={ this.positiveColor } 
         neutralColor= { this.neutralColor }
         endColor={ this.negativeColor } 
-        positiveRange={ this.getRanges( this.colorScalePos, true) }
-        negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
+        positiveRange={ this.getRanges() }
+        negativeRange={ this.minVal < 0 ? this.getRanges() : [] }
         data={ Data }
         averageAGEB={ avg }
         decimalPlaces={ 2 }

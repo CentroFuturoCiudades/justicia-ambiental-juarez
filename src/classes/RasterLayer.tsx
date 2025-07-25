@@ -4,6 +4,7 @@ import { rgb } from "d3-color";
 import { fromUrl } from "geotiff";
 import Legend from "../components/Legend/Legend";
 import { COLORS } from "../utils/constants";
+import RangeGraph from "../components/RangeGraph/RangeGraph";
 
 export class RasterLayer {
   opacity: number;
@@ -88,8 +89,8 @@ export class RasterLayer {
     });
   }
 
-  getRanges = () => {
-    const domain = Array.from({ length: this.amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / this.amountOfColors);
+  getRanges = (amountOfColors: number = this.amountOfColors) => {
+    const domain = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
     let quantiles = [this.minVal, ...domain, this.maxVal];
     quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
 
@@ -100,13 +101,15 @@ export class RasterLayer {
   };
 
   getColors = (amountOfColors: number = this.amountOfColors) => {
-    return Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+    const ranges = this.getRanges(amountOfColors);
+    const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    return completeColors.map((color) => rgb(color).formatHex());
   }
 
   getLegend(title: string) {
     if (!this.legend) return <></>;
     const ranges = this.getRanges();
-    const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    const completeColors = this.getColors();
     return (
       <Legend
         title={title}
@@ -126,5 +129,21 @@ export class RasterLayer {
       if (arr[i] > max) max = arr[i];
     }
     return { min, max };
+  }
+
+  getRangeGraph = (avg: number) => {
+    if (!this.colorMap) return <></>;
+    const ranges = this.getRanges();
+    const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    return <RangeGraph
+      startColor={completeColors[0]}
+      neutralColor={completeColors[1]}
+      endColor={completeColors[2]}
+      positiveRange={ranges}
+      negativeRange={[]}
+      data={{ minVal: this.minVal, maxVal: this.maxVal }}
+      averageAGEB={avg}
+      decimalPlaces={2}
+    />
   }
 }
