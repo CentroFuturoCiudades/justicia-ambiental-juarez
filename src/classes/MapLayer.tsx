@@ -19,13 +19,13 @@ export class MapLayer {
     amountOfColors: number;
     colorMap: any;
     legend: any = null;
-    title: string = "Map Layer";
+    title: string ;
     
 
-    constructor(  opacity: number, colors = ["#93c7ed", "#9fe3d6", "#ffdd75"], amountOfColors = 6 ) {
-
+    constructor( opacity: 0.7, colors = ["#93c7ed", "#9fe3d6", "#ffdd75"], title: "Map Layer", amountOfColors = 6 ) {
         this.opacity = opacity;
         this.colors = colors;
+        this.title = title;
         this.amountOfColors = amountOfColors;
     }
 
@@ -35,14 +35,16 @@ export class MapLayer {
     }
 
     getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
+      
       this.isLineLayer = true;
       var getColor: any;
 
       if( field ){
-        var mappedData: number[] = data.features.map((item: any)=>{ return item.properties[field] });
-        if( trimOutliers ){
+
+        const mappedData: number[] = data.features.map((item: any)=>{ return item.properties[field] });
+        /*if( trimOutliers ){
           mappedData = this.trimOutliers( mappedData );
-        }
+        }*/
         const minVal = Math.min(...mappedData) || 0;
         const maxVal = Math.max(...mappedData) || 0; 
         this.maxVal =  maxVal;
@@ -57,8 +59,7 @@ export class MapLayer {
         ];
 
         // color map
-        const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
-        this.colorMap = colorMap;
+        this.colorMap = scaleLinear<string>().domain(domain).range(this.colors);
         
 
         this.legend = {
@@ -83,7 +84,7 @@ export class MapLayer {
 
             const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); 
             if (isSelected) {
-              return [34, 139, 34];
+              return [34, 139, 34]; // green color for selected features
             }
 
             const item = feature.properties[field];
@@ -94,9 +95,8 @@ export class MapLayer {
         } else {
           getColor = (feature: any): [number, number, number] => {
             const bg = [255, 255, 255];
-            const { r, g, b } = rgb( this.colors[0] ); // Always returns RGBColor
-            if (!color) throw new Error("Invalid color");
-          
+            const [r, g, b] = [200,200,200]; // Always returns RGBColor
+
             return [
               Math.round((1 - this.opacity) * bg[0] + this.opacity * r),
               Math.round((1 - this.opacity) * bg[1] + this.opacity * g),
@@ -136,6 +136,7 @@ export class MapLayer {
         .map((num, i) => [num, quantiles[i + 1]])
         .reverse(); // Reverse the order of the ranges
     };
+    
 
     getLegend(title: string) {        
       if (!this.legend) return <></>;

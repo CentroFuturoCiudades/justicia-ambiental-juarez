@@ -83,7 +83,7 @@ const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph
 
 
         {/* DIVISIONES DE LA GRÁFICA */}
-        {colorsArray.map((color, idx) => ( 
+        {[...colorsArray].reverse().map((color, idx) => ( 
           <div
             key={idx}
             style={{
