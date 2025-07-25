@@ -8,21 +8,18 @@ import { scaleLinear } from "d3-scale";
 
 export class MapLayer {
     opacity: number;
+    colors: string[];
+    colorMap: any;
+    legend: any = null;
     maxVal = 0;
     minVal = 0;
+    title: string ;
+    amountOfColors: number;
+    isLineLayer?: boolean;
     positiveAvg = 0;
     negativeAvg = 0;
 
-    isLineLayer?: boolean;
-
-    colors: string[];
-    amountOfColors: number;
-    colorMap: any;
-    legend: any = null;
-    title: string ;
-    
-
-    constructor( opacity: 0.7, colors = ["#93c7ed", "#9fe3d6", "#ffdd75"], title: "Map Layer", amountOfColors = 6 ) {
+    constructor( {opacity = 0.7, colors = ["#93c7ed", "#9fe3d6", "#ffdd75", "#ff6f61", "#ff4c4c"], title= "Map Layer", amountOfColors = 6} : {opacity?: number, colors?: string[], title?: string, amountOfColors?: number} ) {
         this.opacity = opacity;
         this.colors = colors;
         this.title = title;
@@ -34,10 +31,10 @@ export class MapLayer {
       return await data.json();
     }
 
-    getLayer = ( data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
+    getLayer = ( data: any, field: string, isLineLayer: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [] ): GeoJsonLayer => {
       
-      this.isLineLayer = true;
-      var getColor: any;
+      this.isLineLayer = isLineLayer;
+      let getColor: any;
 
       if( field ){
 
@@ -50,7 +47,6 @@ export class MapLayer {
         this.maxVal =  maxVal;
         this.minVal = minVal;
 
-        //creas domain
         const domain = [
           minVal,
           ...Array.from({ length: this.colors.length - 2 },
@@ -58,10 +54,7 @@ export class MapLayer {
           maxVal,
         ];
 
-        // color map
         this.colorMap = scaleLinear<string>().domain(domain).range(this.colors);
-        
-
         this.legend = {
           title: this.title,
           categories: this.colors.map((color, i) => ({
@@ -73,25 +66,22 @@ export class MapLayer {
       
         const positiveAvg = mappedData.filter(n => n > 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n > 0).length;
         const negativeAvg = mappedData.filter(n => n < 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n < 0).length;
-      
         this.positiveAvg = positiveAvg;
         this.negativeAvg = negativeAvg;
 
 
-      
-        getColor =
-          (feature: any): [number, number, number] => {
 
-            const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); 
-            if (isSelected) {
-              return [34, 139, 34]; // green color for selected features
-            }
+        getColor = (feature: any): [number, number, number] => {
 
-            const item = feature.properties[field];
-            const rgbValue = color(this.colorMap(item))?.rgb();
-            return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
-
+          if (selectedAGEBS.includes(feature.properties.cvegeo)) {
+            return [34, 139, 34];
           }
+          const item = feature.properties[field];
+          const rgbValue = color(this.colorMap(item))?.rgb();
+          return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
+
+        }
+
         } else {
           getColor = (feature: any): [number, number, number] => {
             const bg = [255, 255, 255];
@@ -105,7 +95,6 @@ export class MapLayer {
           }
         }
 
-      
         const geojsonLayer = new GeoJsonLayer({
           id: "geojson-layer",
           data: data,

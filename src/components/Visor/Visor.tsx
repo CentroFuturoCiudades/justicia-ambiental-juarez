@@ -66,11 +66,15 @@ const Visor = () => {
 
             if (layer.map_type === "geometry") {
 
-                const mapLayerInstance = new MapLayer(0.7);
+                const mapLayerInstance = new MapLayer({
+                    opacity: 0.7,
+                    title: layer.title
+                });
                 const jsonData = await mapLayerInstance.loadData(urlBlob);
-                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
+                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
+
                 setTematicaLayer(geojsonLayer);
                 setMapLayerInstance(mapLayerInstance);
             } else if (layer.map_type === "raster") {
