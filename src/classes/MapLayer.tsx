@@ -15,17 +15,17 @@ export class MapLayer {
 
     isLineLayer?: boolean;
 
-    colorsArray: string[];
+    colors: string[];
     amountOfColors: number;
     colorMap: any;
     legend: any = null;
     title: string = "Map Layer";
     
 
-    constructor(  opacity: number, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75", "#faa864", "#ff7559"], amountOfColors = 6 ) {
+    constructor(  opacity: number, colors = ["#93c7ed", "#9fe3d6", "#ffdd75"], amountOfColors = 6 ) {
 
         this.opacity = opacity;
-        this.colorsArray = colorsArray;
+        this.colors = colors;
         this.amountOfColors = amountOfColors;
     }
 
@@ -51,19 +51,19 @@ export class MapLayer {
         //creas domain
         const domain = [
           minVal,
-          ...Array.from({ length: this.colorsArray.length - 2 },
-            (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colorsArray.length - 1)),
+          ...Array.from({ length: this.colors.length - 2 },
+            (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colors.length - 1)),
           maxVal,
         ];
 
         // color map
-        const colorMap = scaleLinear<string>().domain(domain).range(this.colorsArray);
+        const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
         this.colorMap = colorMap;
         
 
         this.legend = {
           title: this.title,
-          categories: this.colorsArray.map((color, i) => ({
+          categories: this.colors.map((color, i) => ({
             label: domain[i].toFixed(2),
             color,
             value: domain[i].toFixed(2)
@@ -94,7 +94,7 @@ export class MapLayer {
         } else {
           getColor = (feature: any): [number, number, number] => {
             const bg = [255, 255, 255];
-            const { r, g, b } = rgb( this.colorsArray[0] ); // Always returns RGBColor
+            const { r, g, b } = rgb( this.colors[0] ); // Always returns RGBColor
             if (!color) throw new Error("Invalid color");
           
             return [
@@ -155,6 +155,10 @@ export class MapLayer {
     }
 
     getRangeGraph = (avg: number) => {
+
+      const ranges = this.getRanges();
+      const completeColors = ranges.map((range) => this.colorMap(range[1]));
+
       const Data = {
         minVal: this.minVal,
         maxVal: this.maxVal,
@@ -166,7 +170,7 @@ export class MapLayer {
         data={ Data }
         averageAGEB={ avg }
         decimalPlaces={ 2 }
-        colorsArray={ this.colorsArray }
+        colorsArray={ completeColors }
       />
     }
 }
