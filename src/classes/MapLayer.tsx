@@ -1,5 +1,5 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
-import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize, rgb,  type ScaleQuantile, scaleQuantile } from "d3";
+import { ascending, color, rgb } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
@@ -22,24 +22,11 @@ export class MapLayer {
     title: string = "Map Layer";
     
 
-    constructor(  opacity: number, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75"], amountOfColors = 6 ) {
+    constructor(  opacity: number, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75", "#faa864", "#ff7559"], amountOfColors = 6 ) {
 
         this.opacity = opacity;
         this.colorsArray = colorsArray;
         this.amountOfColors = amountOfColors;
-    }
-
-    trimOutliers = (values: number[]) => {
-      const sorted = values.slice().filter( value => value != null ).sort(ascending);
-      
-      const p5 = quantileSorted(sorted, 0.05) ?? sorted[0];
-      const p99 = quantileSorted(sorted, 0.95) ?? sorted[sorted.length - 1];
-    
-      const filteredData = sorted.filter((value) => {
-        return value >= p5 && value <= p99;
-      } );
-    
-      return filteredData;
     }
 
     async loadData(url: string) {
@@ -96,11 +83,10 @@ export class MapLayer {
 
             const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo); 
             if (isSelected) {
-              return [250, 218, 94];
+              return [34, 139, 34];
             }
 
             const item = feature.properties[field];
-
             const rgbValue = color(this.colorMap(item))?.rgb();
             return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
 
