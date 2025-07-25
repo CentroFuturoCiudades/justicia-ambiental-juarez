@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import "./Visor.scss";
 import DeckGL from "deck.gl";
 import Map from "react-map-gl/mapbox";
-import { useAppContext } from "../../context/AppContext";
+import { defaultViewState, useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
@@ -16,17 +16,25 @@ import { BitmapLayer } from "@deck.gl/layers";
 import { RasterLayer } from "../../classes/RasterLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
-import { downloadFileFromUrl } from "../../utils/downloadFile";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { downloadPdf } from "../../utils/downloadFile";
+import { dissolve } from "@turf/dissolve";
+import { union, polygon, featureCollection } from "@turf/turf";
+import { flatten } from "@turf/flatten";
+import { PathStyleExtension } from '@deck.gl/extensions';
+
+
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
+
 const Visor = () => {
-
     const navigate = useNavigate();
-
+    const deck = useRef<any>(null);
+    const map = useRef<any>(null);
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
     const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS } = useAppContext();
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -36,7 +44,7 @@ const Visor = () => {
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
     const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
     //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
-    const [baseLayers, setBaseLayers] = useState<{[key: string]: GeoJsonLayer}>({});
+    const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
     const [tematicaData, setTematicaData] = useState<any>(null);
 
@@ -47,10 +55,40 @@ const Visor = () => {
         }
     };
 
+    let dissolvedLayer: GeoJsonLayer[] = [];
+
+    console.log(tematicaData);
+
+    // get geometries of selectedAGEBS
+    const selectedAGEBSGeometries = useMemo(() => {
+        const setAgebs = new Set(selectedAGEBS);
+        return tematicaData?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
+    }, [selectedAGEBS]);
+    console.log(selectedAGEBSGeometries);
+    if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
+        try {
+            const fc = featureCollection(selectedAGEBSGeometries);
+            const flattened = flatten(fc);
+            const dissolved = dissolve(flattened as any);
+            // create a new layer with the dissolved geometry
+            dissolvedLayer = [new GeoJsonLayer({
+                id: 'dissolved',
+                data: dissolved,
+                pickable: false,
+                filled: false,
+                getLineColor: [100, 100, 100, 255],
+                getLineWidth: 60,
+            })];
+        } catch (error) {
+            console.error('Error dissolving features:', error);
+        }
+    }
+
+
     //una sola capa de TEMÁTICA
     useEffect(() => {
         (async () => {
-            
+
             if (!selectedLayer) {
                 setTematicaLayer(null);
                 setMapLayerInstance(null);
@@ -120,10 +158,10 @@ const Visor = () => {
                             getLineColor: [255, 255, 255, 180],
                         });
                         setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
-                })
+                    })
                     .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
-                }
-            });
+            }
+        });
     }, [selectedBaseLayers]);
 
     useEffect(() => {
@@ -132,29 +170,29 @@ const Visor = () => {
 
     return (
         <div className="visor">
-            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh"> 
+            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
                 <div className="visor__title">
                     <p className="visor__titleItalic">visor de </p>
                     <p className="visor__titleBold"> indicadores ambientales</p>
                 </div>
                 <Tematica />
 
-                { !selectedLayer && (
+                {!selectedLayer && (
                     <div className="visor__summary">
-                    <b>¿Qué es este visor?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>¿Cómo funciona?</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit amet
-                    <br></br>
-                    <br></br>
-                    <b>Recomendaciones</b>
-                    <br></br>
-                    Lorem Ipsum dolor sit ame
-                </div>
+                        <b>¿Qué es este visor?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>¿Cómo funciona?</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit amet
+                        <br></br>
+                        <br></br>
+                        <b>Recomendaciones</b>
+                        <br></br>
+                        Lorem Ipsum dolor sit ame
+                    </div>
                 )}
 
                 {selectedLayer && (
@@ -164,30 +202,33 @@ const Visor = () => {
                         color={sectionColor}
                         mapLayerInstance={mapLayerInstance}
                     />
-                )}   
+                )}
 
             </Box>
-            
-            <div className="visor__mapContainer"> 
-                <DeckGL 
-                    initialViewState={ viewState }
-                    viewState={ viewState }
+
+            <div className="visor__mapContainer">
+                <DeckGL
+                    ref={deck}
+                    initialViewState={viewState}
+                    viewState={viewState}
                     onViewStateChange={({ viewState }) => {
                         const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
                         setViewState({ latitude, longitude, zoom });
                     }}
                     //layers={[...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean), ...selectedLayersMultiple.map(key => tematicaLayers[key]).filter(Boolean)]}
-                   layers={[
-                       ...(tematicaLayer ? [tematicaLayer] : []),
-                       ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                   ]}
-                    style={{ height: "100%", width: "100%", position: "relative"}}
-                    controller={ true }
+                    layers={[
+                        ...(tematicaLayer ? [tematicaLayer] : []),
+                        ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
+                        ...dissolvedLayer
+                    ]}
+                    style={{ height: "100%", width: "100%", position: "relative" }}
+                    controller={true}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
-                        mapStyle="mapbox://styles/speakablekhan/clx519y7m00yc01qobp826m5t/draft"
+                        mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
+                        ref={map}
                         reuseMaps
                     />
                 </DeckGL>
@@ -196,7 +237,7 @@ const Visor = () => {
 
                 {/* CAPAS BASE */}
                 <CapasBase />
-                
+
                 {selectedLayer && mapLayerInstance && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}
@@ -213,8 +254,15 @@ const Visor = () => {
                 </div>
                 <div style={{ position: "absolute", top: "1.5rem", left: "5rem", display: "flex", gap: "0", background: COLORS.GLOBAL.backgroundDark, borderRadius: "20px" }}>
                     <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
-                        // onClick={downloadFileFromUrl.bind(null, selectedLayerData?.url || "", "data.geojson")}>
-                        onClick={() => downloadFileFromUrl("/public/placeholder-geodata.geojson", "data.geojson")}>
+                        onClick={() => {
+                            setViewState({
+                                ...defaultViewState,
+                                transitionDuration: 0,
+                            } as any);
+                            setTimeout(() => {
+                                downloadPdf(deck.current, map.current, mapLayerInstance);
+                            }, 100);
+                        }}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
                         </svg>

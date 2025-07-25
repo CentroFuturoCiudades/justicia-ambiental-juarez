@@ -34,13 +34,15 @@ export const useAppContext = () => {
     return context;
 };
 
+export const defaultViewState = {
+    latitude: 31.66,
+    longitude: -106.4245,
+    zoom: 10.8,
+}
+
 
 const AppContextProvider = ({ children }: { children: any }) => {
-    const [viewState, setViewState] = useState<MapViewState>({
-        latitude: 31.6904,
-        longitude: -106.4245,
-        zoom: 11,
-    })
+    const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
     //varias capas
