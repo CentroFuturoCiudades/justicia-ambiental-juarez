@@ -222,7 +222,7 @@ const Visor = () => {
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
-                        mapStyle="mapbox://styles/speakablekhan/clx519y7m00yc01qobp826m5t/draft"
+                        mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
                         ref={map}
                         reuseMaps
