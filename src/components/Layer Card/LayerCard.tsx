@@ -16,6 +16,10 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
 
     const { selectedAGEBS,setSelectedAGEBS } = useAppContext();
 
+    if (!tematicaData || !tematicaData.features) {
+        return null; // o un mensaje de error
+    }
+
     // con base a los ID de agebs seleccionados busca en todos los features
     // lo dejo asi? o guardo de una los cvegeos y el property que quiero calcular?
     function getAverage(features: Feature[], cvegeos: string[], property: string): number {
@@ -27,15 +31,17 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
     }
 
     // SWITCH para obtener el "calculo" o metrica de AGEBS dependiendo de la propiedad stat_type de la layer (ahorita solo hay promedio)
-    const getAGEBMetric = (stat_type: string, property: string) : any => {
+    /*const getAGEBMetric = (stat_type: string, property: string) : any => {
         switch (stat_type) {
             case "promedio":
                 return getAverage(tematicaData.features, selectedAGEBS, property).toFixed(2);
             default:
                 return null;
         }
-    }
+    } */
 
+    const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property).toFixed(2)
+    
     return (
         <div>
             <div className="layerCard" style={{borderColor: color}}>
@@ -49,11 +55,12 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         </p>
                     ) : (
                         <div>
-                            <p style={{ fontSize: "15px", fontWeight: "bold" }}>
-                                {/* texto fixed, ahorita todas van a decir promedio */}
-                                El AGEB seleccionado tiene el siguiente promedio: {getAGEBMetric(selectedLayerData.stat_type, selectedLayerData.property)}
+                            {/* texto fixed, ahorita todas van a decir promedio */}
+                            <p style={{ fontSize: "15px"}}>
+                                El AGEB seleccionado tiene un <strong>{agebAverage}</strong> de {selectedLayerData.title}
+                                <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez
                             </p>
-                            {mapLayerInstance.getRangeGraph(getAGEBMetric(selectedLayerData.stat_type, selectedLayerData.property))}
+                            {mapLayerInstance.getRangeGraph(agebAverage)}
                         </div>
                     )}
                 </div>

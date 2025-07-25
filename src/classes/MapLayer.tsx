@@ -3,29 +3,37 @@ import { ascending, color, interpolateRgb, interpolateRgbBasis, quantileSorted, 
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
+import { scaleLinear } from "d3-scale";
+
 
 export class MapLayer {
-    positiveColor: string;
-    negativeColor: string;
-    neutralColor: string = "#7e5215";
+
+    neutralColor: string = "#7e5215"; //NO
     opacity: number;
     maxVal = 0;
     minVal = 0;
     positiveAvg = 0;
     negativeAvg = 0;
-    colorScale?: ScaleQuantile<number,never>;
-    colorScalePos?: ScaleQuantile<number,never>;
-    colorScaleNeg?: ScaleQuantile<number,never>;
+
     isLineLayer?: boolean;
 
-    constructor( positiveColor: string, negativeColor: string, opacity: number, neutralColor?: string){
-        this.positiveColor = positiveColor;
-        this.negativeColor = negativeColor;
-        this.opacity = opacity;
+    colorsArray: string[];
+    amountOfColors: number;
+    colorMap: any;
+    legend: any = null;
+    title: string = "Map Layer";
+    
+
+    constructor(  opacity: number, neutralColor?: string, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75", "#faa864", "#ff7559"], amountOfColors = 6 ) {
 
         if( neutralColor ) {
           this.neutralColor = neutralColor
         }
+
+        this.opacity = opacity;
+
+        this.colorsArray = colorsArray;
+        this.amountOfColors = amountOfColors;
     }
 
     trimOutliers = (values: number[]) => {
@@ -59,6 +67,24 @@ export class MapLayer {
         const maxVal = Math.max(...mappedData) || 0; 
         this.maxVal =  maxVal;
         this.minVal = minVal;
+
+        //logica de raster
+        const domain = [
+          minVal,
+          ...Array.from({ length: this.colorsArray.length - 2 },
+            (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colorsArray.length - 1)),
+          maxVal,
+        ];
+        this.colorMap = scaleLinear<string>().domain(domain).range(this.colorsArray);
+
+        this.legend = {
+          title: this.title,
+          categories: this.colorsArray.map((color, i) => ({
+            label: domain[i].toFixed(2),
+            color,
+            value: domain[i].toFixed(2)
+          }))
+        };
       
         const positiveAvg = mappedData.filter(n => n > 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n > 0).length;
         const negativeAvg = mappedData.filter(n => n < 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n < 0).length;
@@ -66,61 +92,10 @@ export class MapLayer {
         this.positiveAvg = positiveAvg;
         this.negativeAvg = negativeAvg;
 
-        const positiveValues =  mappedData.filter(n => n > 0);
-        const negativeValues =  mappedData.filter(n => n < 0);
+        //const positiveValues =  mappedData.filter(n => n > 0);
+        //const negativeValues =  mappedData.filter(n => n < 0);
       
-        const rangeSize = 3;
-      
-        const positiveColors = quantize(
-            interpolateRgb(
-                this.neutralColor,
-                this.positiveColor,
-            ),
-            rangeSize
-        );
-      
-        const negativeColors = quantize(
-          interpolateRgb(
-              this.negativeColor,
-              this.neutralColor
-          ),
-          rangeSize
-        );
-      
-        const generalColors = quantize(
-          interpolateRgbBasis(
-            [
-              this.negativeColor,
-              this.positiveColor
-            ]
-          ),
-          rangeSize * 2
-        )
-      
-      
-        this.colorScale = minVal < 0 
-          ? scaleQuantile()
-              .domain( mappedData )
-              .range([...Array(rangeSize * 2).keys()])
-          : scaleQuantile()
-              .domain( mappedData ) // Only consider positive range when no negatives
-              .range([...Array( rangeSize * 2 ).keys()]); 
-      
-        this.colorScalePos = minVal < 0  
-          ? scaleQuantile()
-              .domain( positiveValues )
-              .range([...Array( rangeSize ).keys()])
-          : scaleQuantile()
-              .domain( mappedData )
-              .range([...Array( rangeSize * 2 ).keys()]);
-      
-        this.colorScaleNeg = minVal < 0 
-          ? scaleQuantile() 
-              .domain( negativeValues )
-              .range([...Array( rangeSize ).keys()])
-          : scaleQuantile() 
-              .domain([ minVal, positiveAvg ])
-              .range([...Array( rangeSize ).keys()]);
+
 
         getColor =
           (feature: any): [number, number, number] => {
@@ -130,27 +105,11 @@ export class MapLayer {
               return [250, 218, 94];
             }
 
-
             const item = feature.properties[field];
-            let rgbValue;
-
-            if( this.colorScaleNeg != undefined && this.colorScalePos != undefined){
-
-              if( minVal >= 0 ){
-                const colorIndex = this.colorScalePos( item ) ;
-                rgbValue = color( generalColors[ colorIndex ])?.rgb();
-              } else {
-                if( item > 0 ){
-                  const colorIndex = this.colorScalePos(item);
-                  rgbValue = color(positiveColors[ colorIndex ])?.rgb();
-                } else {
-                  const colorIndex = this.colorScaleNeg(item);
-                  rgbValue = color(negativeColors[ colorIndex ])?.rgb();
-                }
-              }
-            }
-      
+            // Usa el colorMap para obtener el color: NUEVA LOGICA
+            const rgbValue = color(this.colorMap(item))?.rgb();
             return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
+
           }
         } else {
           getColor = (feature: any): [number, number, number] => {
@@ -186,33 +145,37 @@ export class MapLayer {
         return geojsonLayer;
     }
 
+
     getRanges = () => {
-      if( !this.colorScale ) return [];
-      let quantiles = [this.minVal, ...this.colorScale.quantiles(), this.maxVal];
-    
+      const domain = Array.from({ length: this.amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / this.amountOfColors);
+      let quantiles = [this.minVal, ...domain, this.maxVal];
+      quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
+
       return quantiles
         .slice(0, -1)
         .map((num, i) => [num, quantiles[i + 1]])
         .reverse(); // Reverse the order of the ranges
     };
 
-    getLegend = ( title: string ) => {
-
-      if( !this.colorScaleNeg || !this.colorScalePos )
-        return <></>;
-
-      return <Legend
-        title={ title } 
-        colors={ [this.positiveColor, this.neutralColor] }
-        legendColor={COLORS.GLOBAL.backgroundDark}
-        ranges={ this.getRanges() }
-        decimalPlaces={ this.isLineLayer ? 2 : 0 }
-      />
+    getLegend(title: string) {        
+      if (!this.legend) return <></>;
+      const ranges = this.getRanges();
+      const completeColors = ranges.map((range) => this.colorMap(range[1]));
+      
+      return (
+        <Legend
+          title={title}
+          colors={completeColors}
+          legendColor={COLORS.GLOBAL.backgroundDark}
+          ranges={ranges}
+          decimalPlaces={2}
+          categorical={false}
+        />
+      );
     }
 
     getRangeGraph = (avg: number) => {
-      if( !this.colorScalePos || !this.colorScaleNeg )
-        return <></>;
+
 
       const Data = {
         minVal: this.minVal,
@@ -222,14 +185,10 @@ export class MapLayer {
       }
 
       return <RangeGraph
-        startColor={ this.positiveColor } 
-        neutralColor= { this.neutralColor }
-        endColor={ this.negativeColor } 
-        positiveRange={ this.getRanges( this.colorScalePos, true) }
-        negativeRange={ this.minVal < 0 ? this.getRanges( this.colorScaleNeg, false ) : [] }
         data={ Data }
         averageAGEB={ avg }
         decimalPlaces={ 2 }
+        colorsArray={ this.colorsArray }
       />
     }
 }
