@@ -7,8 +7,6 @@ import { scaleLinear } from "d3-scale";
 
 
 export class MapLayer {
-
-    neutralColor: string = "#7e5215"; //NO
     opacity: number;
     maxVal = 0;
     minVal = 0;
@@ -24,14 +22,9 @@ export class MapLayer {
     title: string = "Map Layer";
     
 
-    constructor(  opacity: number, neutralColor?: string, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75", "#faa864", "#ff7559"], amountOfColors = 6 ) {
-
-        if( neutralColor ) {
-          this.neutralColor = neutralColor
-        }
+    constructor(  opacity: number, colorsArray = ["#93c7ed", "#9fe3d6", "#ffdd75"], amountOfColors = 6 ) {
 
         this.opacity = opacity;
-
         this.colorsArray = colorsArray;
         this.amountOfColors = amountOfColors;
     }
@@ -68,14 +61,18 @@ export class MapLayer {
         this.maxVal =  maxVal;
         this.minVal = minVal;
 
-        //logica de raster
+        //creas domain
         const domain = [
           minVal,
           ...Array.from({ length: this.colorsArray.length - 2 },
             (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colorsArray.length - 1)),
           maxVal,
         ];
-        this.colorMap = scaleLinear<string>().domain(domain).range(this.colorsArray);
+
+        // color map
+        const colorMap = scaleLinear<string>().domain(domain).range(this.colorsArray);
+        this.colorMap = colorMap;
+        
 
         this.legend = {
           title: this.title,
@@ -92,11 +89,8 @@ export class MapLayer {
         this.positiveAvg = positiveAvg;
         this.negativeAvg = negativeAvg;
 
-        //const positiveValues =  mappedData.filter(n => n > 0);
-        //const negativeValues =  mappedData.filter(n => n < 0);
+
       
-
-
         getColor =
           (feature: any): [number, number, number] => {
 
@@ -106,7 +100,7 @@ export class MapLayer {
             }
 
             const item = feature.properties[field];
-            // Usa el colorMap para obtener el color: NUEVA LOGICA
+
             const rgbValue = color(this.colorMap(item))?.rgb();
             return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
 
@@ -114,7 +108,7 @@ export class MapLayer {
         } else {
           getColor = (feature: any): [number, number, number] => {
             const bg = [255, 255, 255];
-            const { r, g, b } = rgb( this.neutralColor ); // Always returns RGBColor
+            const { r, g, b } = rgb( this.colorsArray[0] ); // Always returns RGBColor
             if (!color) throw new Error("Invalid color");
           
             return [
@@ -175,8 +169,6 @@ export class MapLayer {
     }
 
     getRangeGraph = (avg: number) => {
-
-
       const Data = {
         minVal: this.minVal,
         maxVal: this.maxVal,
