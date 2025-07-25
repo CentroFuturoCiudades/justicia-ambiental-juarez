@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import "./Visor.scss";
 import DeckGL from "deck.gl";
@@ -20,6 +20,11 @@ import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import { downloadPdf } from "../../utils/downloadFile";
+import { dissolve } from "@turf/dissolve";
+import { union, polygon, featureCollection } from "@turf/turf";
+import { flatten } from "@turf/flatten";
+import { PathStyleExtension } from '@deck.gl/extensions';
+
 
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -50,9 +55,40 @@ const Visor = () => {
         }
     };
 
+    let dissolvedLayer: GeoJsonLayer[] = [];
+
+    console.log(tematicaData);
+
+    // get geometries of selectedAGEBS
+    const selectedAGEBSGeometries = useMemo(() => {
+        const setAgebs = new Set(selectedAGEBS);
+        return tematicaData?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
+    }, [selectedAGEBS]);
+    console.log(selectedAGEBSGeometries);
+    if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
+        try {
+            const fc = featureCollection(selectedAGEBSGeometries);
+            const flattened = flatten(fc);
+            const dissolved = dissolve(flattened as any);
+            // create a new layer with the dissolved geometry
+            dissolvedLayer = [new GeoJsonLayer({
+                id: 'dissolved',
+                data: dissolved,
+                pickable: false,
+                filled: false,
+                getLineColor: [100, 100, 100, 255],
+                getLineWidth: 60,
+            })];
+        } catch (error) {
+            console.error('Error dissolving features:', error);
+        }
+    }
+
+
     //una sola capa de TEMÁTICA
     useEffect(() => {
         (async () => {
+
             if (!selectedLayer) {
                 setTematicaLayer(null);
                 setMapLayerInstance(null);
@@ -65,21 +101,16 @@ const Visor = () => {
                 return;
             }
             const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
-            const tematicaKey = layer.tematica as keyof typeof COLORS;
 
             if (layer.map_type === "geometry") {
-                // VECTOR
-                const colors = COLORS[tematicaKey as keyof typeof COLORS];
-                const positiveColor = colors?.positive || "#ffffff";
-                const negativeColor = colors?.negative || "#000000";
-                const neutralColor = colors?.primary || "#888888";
-                const mapLayer = new MapLayer(positiveColor, negativeColor, 0.7, neutralColor);
-                const jsonData = await mapLayer.loadData(urlBlob);
-                const geojsonLayer = mapLayer.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
+
+                const mapLayerInstance = new MapLayer(0.7);
+                const jsonData = await mapLayerInstance.loadData(urlBlob);
+                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
                 setTematicaLayer(geojsonLayer);
-                setMapLayerInstance(mapLayer);
+                setMapLayerInstance(mapLayerInstance);
             } else if (layer.map_type === "raster") {
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
@@ -128,6 +159,10 @@ const Visor = () => {
             }
         });
     }, [selectedBaseLayers]);
+
+    useEffect(() => {
+        setSelectedAGEBS([]);
+    }, [selectedLayer]);
 
     return (
         <div className="visor">
@@ -180,13 +215,14 @@ const Visor = () => {
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
+                        ...dissolvedLayer
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     controller={true}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
-                        mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
+                        mapStyle="mapbox://styles/speakablekhan/clx519y7m00yc01qobp826m5t/draft"
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
                         ref={map}
                         reuseMaps
@@ -197,6 +233,7 @@ const Visor = () => {
 
                 {/* CAPAS BASE */}
                 <CapasBase />
+
                 {selectedLayer && mapLayerInstance && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}

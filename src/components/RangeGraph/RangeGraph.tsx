@@ -1,54 +1,37 @@
 import "./RangeGraph.scss"
-import { interpolateRgb } from "d3-interpolate";
+//import { interpolateRgb } from "d3-interpolate";
 import { IoCaretDown } from "react-icons/io5";
 
 type RangeGraph = {
-    startColor: string;
-    neutralColor: string;
-    endColor: string;
-    positiveRange: number[][];
-    negativeRange: number[][];
     data: { [ key: string ]: number };
     averageAGEB: number;
     decimalPlaces?: number;
+    colorsArray: string[];
 
 };
 
-const RangeGraph = ({ 
-  startColor, neutralColor, endColor, positiveRange,
-  negativeRange, data, averageAGEB, decimalPlaces }: RangeGraph) => {
-    
-    const numberToString = ( value: number ) => {
-      if( value == undefined ) return ""
+const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph) => {
+  
+  const numberToString = ( value: number ) => {
+    if( value == undefined ) return ""
 
-      if( decimalPlaces == undefined ) {
-        decimalPlaces = 2;
-      }
-
-      if ( decimalPlaces == 0 ){
-        value = Math.trunc( value )
-      }
-
-      if( value < 0 ){
-        return `( ${ value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces }   ) })`
-      } else {
-        return value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces } )
-      }
+    if( decimalPlaces == undefined ) {
+      decimalPlaces = 2;
     }
 
-    const allRanges = [
-        ...(negativeRange || []),
-        ...(positiveRange || [])
-    ].slice().reverse();
+    if ( decimalPlaces == 0 ){
+      value = Math.trunc( value )
+    }
 
-    const getSegmentColor = (index: number) => {
-        const total = allRanges.length;
-        // empieza en endColor y termina en startColor
-        return interpolateRgb(endColor, startColor)(index / Math.max(total - 1, 1));
-    };
+    if( value < 0 ){
+      return `( ${ value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces }   ) })`
+    } else {
+      return value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces } )
+    }
+  }
 
   return (
-    <div className="rangeGraph" style={{ width: "100%", padding: "8px 0px" , position: "relative", marginTop: "25px", pointerEvents: "none"}}>
+    <div className="rangeGraph" style={{ width: "100%", padding: "8px" , position: "relative", marginTop: "25px", pointerEvents: "none"}}>
 
       {/* CONTENEDOR DE BARRA GRÁFICA */}
       <div className="rangeGraph__barContainer"
@@ -62,20 +45,15 @@ const RangeGraph = ({
         <div className="rangeGraph__agebLabel" style={{
           left: `${((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
           top: -17,
-          width: "max-content",
           position: "absolute",
           transform: "translateX(-50%)",
-          textAlign: "center",
-          padding: "0%",
           display: "flex",
           flexDirection: "column",
-          gap: "0px",
           alignItems: "center",
-          margin: "0px",
         }}>
-          <span style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
+          <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
             {numberToString(averageAGEB)}
-          </span>
+          </p>
           <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
         </div>
 
@@ -96,7 +74,7 @@ const RangeGraph = ({
             marginBottom: "4px",
           }}
           />
-          <div style={{fontSize: "10px", whiteSpace: "nowrap", alignContent: "center", textAlign: "center"}}> 
+          <div style={{fontSize: "10px", whiteSpace: "nowrap", alignContent: "center", textAlign: "center", fontWeight: "bold"}}> 
             {numberToString(data.positiveAvg)}
             <br />
             Ciudad Juárez
@@ -105,13 +83,12 @@ const RangeGraph = ({
 
 
         {/* DIVISIONES DE LA GRÁFICA */}
-        {allRanges.map((_, idx) => ( 
+        {[...colorsArray].reverse().map((color, idx) => ( 
           <div
             key={idx}
             style={{
               flex: 1,
-              background: getSegmentColor(idx),
-              borderRight: idx < allRanges.length - 1 ? `1px solid ${neutralColor}` : "none",
+              background: color,
               height: "100%",
             }}
           />     
@@ -127,11 +104,7 @@ const RangeGraph = ({
                 position: "absolute",
                 left: `${((value - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
                 transform: "translateX(-50%)",
-                width: "max-content",
                 fontSize: "10px",
-                color: "#333",
-                top: 0,
-                whiteSpace: "nowrap",
                 textAlign: "center",
             }}
             >

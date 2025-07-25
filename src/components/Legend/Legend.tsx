@@ -47,8 +47,8 @@ const Legend = ({
     </div>);
   }
 
-  const linearGradient = `linear-gradient(to top, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[i])} ${i * 100 / ranges.length}%`).join(", ")})`;
-
+  const linearGradient = `linear-gradient(to bottom, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[i])} ${i * 100 / ranges.length}%`).join(", ")})`;
+  //const linearGradient = `linear-gradient(to top, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[ranges.length - 1 - i])} ${i * 100 / ranges.length}%`).join(", ")})`;
 
   const gradientStyle: React.CSSProperties = {
     background: linearGradient,
