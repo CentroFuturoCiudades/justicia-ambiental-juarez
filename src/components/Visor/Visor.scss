@@ -57,4 +57,23 @@
         }
     }
 
+    &__topButtons {
+        position: absolute;
+        top: 1.5rem;
+        left: 2rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        max-width: 180px;
+    }
+
+    &__dropDowns {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
 }

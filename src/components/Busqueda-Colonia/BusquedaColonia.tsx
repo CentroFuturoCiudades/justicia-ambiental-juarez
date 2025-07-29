@@ -42,19 +42,20 @@ const BusquedaColonia = () => {
         );
 
         const seleccionadas = selectedColonias.filter((nombre: string) =>
-            filtradasBusqueda.includes(nombre)
+            filtradasBusqueda.includes(nombre))
+            .sort((a, b) => a.localeCompare(b)
         );
+
         const noSeleccionadas = filtradasBusqueda.filter((nombre: string) =>
             !seleccionadas.includes(nombre))
             .sort((a, b) => a.localeCompare(b));
 
-        /*return colonias
-            .filter((nombre: string) =>
-                nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())
-            )
-            .sort((a, b) => a.localeCompare(b));*/
         return [...seleccionadas, ...noSeleccionadas];
     }, [colonias, coloniaBuscada, selectedColonias]);
+
+    const seleccionadasCount = selectedColonias.filter((nombre: string) =>
+        coloniasFiltradas.includes(nombre)
+    ).length;
 
 
     return (
@@ -63,7 +64,7 @@ const BusquedaColonia = () => {
                 <Accordion.Item value="main">
                     <Accordion.ItemTrigger className="busqueda-colonia-container__main-trigger">
                         <Box className="busqueda-colonia-container__main-title">
-                            Búsqueda por Colonia
+                            búsqueda por colonia
                         </Box>
                         <Accordion.ItemIndicator className="busqueda-colonia-container__main-indicator" />
                     </Accordion.ItemTrigger>
@@ -97,6 +98,7 @@ const BusquedaColonia = () => {
                                 {({ index, style }: { index: number; style: any }) => {
                                     const colonia = coloniasFiltradas[index];
                                     const last = index === coloniasFiltradas.length - 1;
+                                    const isLastSeleccionada = index === seleccionadasCount - 1;
                                     return (
                                         <Box
                                             key={colonia}
@@ -108,8 +110,10 @@ const BusquedaColonia = () => {
                                             alignContent={"center"}
                                             padding={"0rem 0.5rem"}
                                             width="100%"
+                                            //backgroundColor={COLORS.GLOBAL.backgroundMedium}
+
                                         >
-                                            <Box display="flex" alignItems="center">
+                                            <Box display="flex" alignItems="center" width={"100%"} overflow={"hidden"}>
                                                 <Checkbox.Root
                                                     className="custom-green-checkbox"
                                                     cursor="pointer"
@@ -121,16 +125,23 @@ const BusquedaColonia = () => {
                                                         onChange={() => handleColoniaToggle(colonia)}
                                                     />
                                                     <Checkbox.Control />
-                                                    <Checkbox.Label style={{ fontSize: "0.7rem" }}>
+                                                    <Checkbox.Label style={{ fontSize: "0.6rem", whiteSpace: "normal", wordBreak: "break-word", maxWidth: "100%", display: "block"}}>
                                                         {colonia}
                                                     </Checkbox.Label>
                                                 </Checkbox.Root>
                                             </Box>
-                                            {!last && (
+                                            {!last && !isLastSeleccionada && (
                                                 <Box
                                                     width="100%"
                                                     borderBottom="1px solid #ccc"
-                                                    marginTop={"0.25rem"}
+                                                    marginTop={"0.15rem"}
+                                                />
+                                            )}
+                                            {isLastSeleccionada && (
+                                                <Box
+                                                    width="100%"
+                                                    borderBottom={`2px solid ${COLORS.GLOBAL.backgroundDark}`}
+                                                    marginTop={"0.15rem"}
                                                 />
                                             )}
                                         </Box>
