@@ -8,19 +8,25 @@ const ZoomControls = () => {
     return (
         <div >
             <Button 
-                size={"sm"} 
-                p={0} 
+                rounded={"lg"}
+                //size={"sm"} 
+                p={2} 
                 background={COLORS.GLOBAL.backgroundDark} 
-                borderRadius={"0.1rem"}
+                //borderRadius={"0.1rem"}
+                borderTopRightRadius={"0.1rem"}
+                borderBottomRightRadius={"0.1rem"}
                 onClick={zoomIn}
             >
                 +
             </Button>
             <Button 
-                size={"sm"} 
-                p={0}
+                rounded={"lg"}
+                //size={"sm"} 
+                p={2}
                 background={COLORS.GLOBAL.backgroundDark} 
-                borderRadius={"0.1rem"}
+                //borderRadius={"0.1rem"}
+                borderTopLeftRadius={"0.1rem"}
+                borderBottomLeftRadius={"0.1rem"}
                 onClick={zoomOut}
             >
                 -

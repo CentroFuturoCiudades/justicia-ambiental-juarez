@@ -22,7 +22,12 @@ export class MapLayer {
   title: string;
 
 
-  constructor(opacity: 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title: "Map Layer", amountOfColors = 6) {
+  constructor({opacity= 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title= "Map Layer", amountOfColors = 6}: {
+    opacity?: number;
+    colors?: string[];
+    title?: string;
+    amountOfColors?: number;
+  }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;

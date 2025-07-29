@@ -1,17 +1,18 @@
-import { Accordion, Box, Checkbox } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Accordion, Box, Checkbox, Input } from "@chakra-ui/react";
+import { useEffect, useMemo, useState } from "react";
 import "./BusquedaColonia.scss";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
+import { FixedSizeList as List } from "react-window";
 
 
 const BusquedaColonia = () => {
     const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     const endpoint = 'https://justiciaambientalstore.blob.core.windows.net/data/colonias.geojson';
     const url = `${endpoint}?${REACT_APP_SAS_TOKEN}`;
-
     const [colonias, setColonias] = useState<string[]>([]);
-    const { selectedColonias, setSelectedColonias } = useAppContext();
+    const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
+    const { selectedColonias, setSelectedColonias, setColoniasData } = useAppContext();
 
     const handleColoniaToggle = (colonia: string) => {
         setSelectedColonias(prev =>
@@ -23,20 +24,42 @@ const BusquedaColonia = () => {
         fetch(url)
             .then(res => res.json())
             .then(data => {
-                console.log("Colonias data:", data);
                 if (!data || !data.features) { 
                     console.error("Invalid colonias data");
                     return;
                 }
                 const nombres = data.features.map((f: any) => f.properties.NOMBRE);
-                setColonias(nombres.sort());
+                setColonias(nombres);
+                setColoniasData(data);
             })
             .catch(err => console.error("Error fetching colonias:", err));
     }, [url]);
 
+    const coloniasFiltradas = useMemo(() => {
+
+        const filtradasBusqueda = colonias.filter((nombre: string) =>
+            nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())
+        );
+
+        const seleccionadas = selectedColonias.filter((nombre: string) =>
+            filtradasBusqueda.includes(nombre)
+        );
+        const noSeleccionadas = filtradasBusqueda.filter((nombre: string) =>
+            !seleccionadas.includes(nombre))
+            .sort((a, b) => a.localeCompare(b));
+
+        /*return colonias
+            .filter((nombre: string) =>
+                nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())
+            )
+            .sort((a, b) => a.localeCompare(b));*/
+        return [...seleccionadas, ...noSeleccionadas];
+    }, [colonias, coloniaBuscada, selectedColonias]);
+
+
     return (
         <div className="busqueda-colonia-container">
-            <Accordion.Root collapsible variant={"enclosed"} style={{ border: "none", borderRadius: "0rem", background: COLORS.GLOBAL.backgroundMedium }}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{ borderColor: "gray", borderRadius: "0rem", background: COLORS.GLOBAL.backgroundLight }}>
                 <Accordion.Item value="main">
                     <Accordion.ItemTrigger className="busqueda-colonia-container__main-trigger">
                         <Box className="busqueda-colonia-container__main-title">
@@ -45,33 +68,75 @@ const BusquedaColonia = () => {
                         <Accordion.ItemIndicator className="busqueda-colonia-container__main-indicator" />
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="busqueda-colonia-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundMedium }}>
+                    <Accordion.ItemContent className="busqueda-colonia-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundLight }}>
+                        {/* buscador de colonias */}
+                        <Box  background={"#f5f5f5"}>
+                            <Input 
+                                placeholder="Buscar colonia..."
+                                value={coloniaBuscada}
+                                onChange={(e) => setColoniaBuscada(e.target.value)}
+                                padding={"0.25rem 1rem"}
+                                borderRadius={"0rem"}
+                                size={"sm"}
+                                style={{ fontSize: "0.8rem" }}
+                            />
+                        </Box>
                         <Accordion.ItemBody
                             className="busqueda-colonia-container__itemBody"
                             style={{
-                                maxHeight: "9rem",
                                 overflowY: "auto",
-                                paddingRight: "0.5rem"
+                                padding: "0rem"
                             }}
                         >
-                            {colonias.slice(0, 5).map((colonia) => (
-                                <Box key={colonia} display="flex" alignItems="center" width={"100%"} p={0}>
-                                    <Checkbox.Root
-                                        className="busqueda-colonia-container__checkbox"
-                                        cursor="pointer"
-                                        variant={"solid"}
-                                        colorPalette={"green"}
-                                        size={"sm"}
-                                    >
-                                        <Checkbox.HiddenInput
-                                            checked={selectedColonias.includes(colonia)}
-                                            onChange={() => handleColoniaToggle(colonia)}
-                                        />
-                                        <Checkbox.Control />
-                                        <Checkbox.Label style={{ fontSize: "0.7rem" }}>{colonia}</Checkbox.Label>
-                                    </Checkbox.Root>
-                                </Box>
-                            ))}
+                            {/* Lista de colonias filtradas */}
+                            <List
+                                height={90}
+                                itemCount={coloniasFiltradas.length}
+                                itemSize={35}
+                            >
+                                {({ index, style }: { index: number; style: any }) => {
+                                    const colonia = coloniasFiltradas[index];
+                                    const last = index === coloniasFiltradas.length - 1;
+                                    return (
+                                        <Box
+                                            key={colonia}
+                                            style={style}
+                                            display="flex"
+                                            flexDirection="column"
+                                            justifyContent={"center"}
+                                            alignItems="flex-start"
+                                            alignContent={"center"}
+                                            padding={"0rem 0.5rem"}
+                                            width="100%"
+                                        >
+                                            <Box display="flex" alignItems="center">
+                                                <Checkbox.Root
+                                                    className="custom-green-checkbox"
+                                                    cursor="pointer"
+                                                    variant="solid"
+                                                    size="sm"
+                                                    checked={selectedColonias.includes(colonia)}
+                                                >
+                                                    <Checkbox.HiddenInput
+                                                        onChange={() => handleColoniaToggle(colonia)}
+                                                    />
+                                                    <Checkbox.Control />
+                                                    <Checkbox.Label style={{ fontSize: "0.7rem" }}>
+                                                        {colonia}
+                                                    </Checkbox.Label>
+                                                </Checkbox.Root>
+                                            </Box>
+                                            {!last && (
+                                                <Box
+                                                    width="100%"
+                                                    borderBottom="1px solid #ccc"
+                                                    marginTop={"0.25rem"}
+                                                />
+                                            )}
+                                        </Box>
+                                    );
+                                }}
+                            </List>
                         </Accordion.ItemBody>
                     </Accordion.ItemContent>
                 </Accordion.Item>

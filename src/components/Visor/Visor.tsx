@@ -24,7 +24,8 @@ import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
-
+import booleanContains from "@turf/boolean-contains";
+import  booleanIntersects  from "@turf/boolean-intersects";
 
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -36,14 +37,14 @@ const Visor = () => {
     const deck = useRef<any>(null);
     const map = useRef<any>(null);
     /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
-    const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS } = useAppContext();
+    const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, coloniasData } = useAppContext();
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
     const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
-    //guarda las capas geojson ya descargadas (para no hacer fetch de todas las selectedBaseLayers siempre que se agrega una)
+    const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
     const [tematicaData, setTematicaData] = useState<any>(null);
@@ -57,14 +58,40 @@ const Visor = () => {
 
     let dissolvedLayer: GeoJsonLayer[] = [];
 
-    console.log(tematicaData);
+    //console.log(tematicaData);
 
     // get geometries of selectedAGEBS
     const selectedAGEBSGeometries = useMemo(() => {
         const setAgebs = new Set(selectedAGEBS);
         return tematicaData?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
     }, [selectedAGEBS]);
-    console.log(selectedAGEBSGeometries);
+
+    //las colonias seleccionadas como SET
+    const selectedColoniasGeometries = useMemo(() => {
+        const setColonias = new Set(selectedColonias);
+        return coloniasData?.features?.filter((feature: any) => setColonias.has(feature.properties.NOMBRE));
+    }, [selectedColonias]);
+
+    //console.log(selectedAGEBSGeometries);
+
+    const AGEBS_colonias = useMemo(() => {
+        if (!selectedColoniasGeometries || !tematicaData) return [];
+
+        return tematicaData.features
+            .filter((ageb: any) => 
+                selectedColoniasGeometries.some((colonia: any) =>
+                    booleanIntersects(ageb.geometry, colonia.geometry) ||
+                    booleanContains(ageb.geometry, colonia.geometry)
+                )
+            )
+            .map((ageb: any) => ageb.properties.cvegeo);
+    }, [selectedColoniasGeometries]);
+
+    //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs
+    useEffect(() => {        
+        setSelectedAGEBS(AGEBS_colonias);
+    }, [AGEBS_colonias]);
+
     if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
         try {
             const fc = featureCollection(selectedAGEBSGeometries);
@@ -103,10 +130,14 @@ const Visor = () => {
             const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
 
             if (layer.map_type === "geometry") {
+                //console.log("este siempre se llama")
 
-                const mapLayerInstance = new MapLayer(0.7);
+                const mapLayerInstance = new MapLayer({
+                    opacity: 0.7,
+                    title: layer.title
+                });
                 const jsonData = await mapLayerInstance.loadData(urlBlob);
-                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, false, handleSelectedAGEBS, selectedAGEBS);
+                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, true, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
                 setTematicaLayer(geojsonLayer);
@@ -160,9 +191,40 @@ const Visor = () => {
         });
     }, [selectedBaseLayers]);
 
+    //reset
     useEffect(() => {
         setSelectedAGEBS([]);
+        setSelectedColonias([]);
     }, [selectedLayer]);
+
+
+    //varias colonias
+    //cada que haya un cambio en selectedColonias
+    useEffect(() => {
+        if(selectedColonias.length === 0) {
+            setColoniasLayer(null);
+            return;
+        }
+
+        const filteredColonias = {
+            ...coloniasData,
+            features: coloniasData.features.filter(
+                (f: any) => selectedColonias.includes(f.properties.NOMBRE)
+            )
+        }
+
+        const newLayer = new GeoJsonLayer({
+            id: 'colonias_seleccionadas',
+            data: filteredColonias,
+            pickable: true,
+            filled: true,
+            getFillColor: [0, 0, 0, 255],
+            getLineColor: [0, 0, 0, 255],
+        });
+
+        setColoniasLayer(newLayer);
+
+    }, [selectedColonias, coloniasData]);
 
     return (
         <div className="visor">
@@ -211,11 +273,11 @@ const Visor = () => {
                         const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
                         setViewState({ latitude, longitude, zoom });
                     }}
-                    //layers={[...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean), ...selectedLayersMultiple.map(key => tematicaLayers[key]).filter(Boolean)]}
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                        ...dissolvedLayer
+                        ...dissolvedLayer,
+                        ...(coloniasLayer ? [coloniasLayer] : []),
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     controller={true}
