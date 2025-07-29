@@ -1,7 +1,7 @@
 .landing {
     width: auto;
     height: calc( 100vh );
-    padding: 2rem;
+    padding: 2rem 2rem 0 2rem; ;
     
     display: flex;
     flex-direction: column;
@@ -17,6 +17,6 @@
     }
 
     &__footer {
-        height: auto;
+        width: 100%;
     }
 }

@@ -8,6 +8,7 @@ import AccordionComponent from "./Body-Accordion/AccordionComponent";
 const Landing = () => {
 
     return (
+        <div>
         <div className="landing">
             <div className="landing__header">
                 <PageHeader />
@@ -16,12 +17,12 @@ const Landing = () => {
             <div className="landing__body">
                 <AccordionComponent />
             </div>
-            <div className="landing__footer">
-                {/* FOOTER COMPONENT */}
+            <div className="footer">
                 <PageFooter />
             </div>
         </div>
-    )
+    </div>
+)
 }
 
 export default Landing;
