@@ -90,7 +90,7 @@ const BusquedaColonia = () => {
                         >
                             {/* Lista de colonias filtradas */}
                             <List
-                                height={80}
+                                height={90}
                                 itemCount={coloniasFiltradas.length}
                                 itemSize={35}
                             >
