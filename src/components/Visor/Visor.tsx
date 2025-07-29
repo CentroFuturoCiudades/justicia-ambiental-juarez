@@ -256,7 +256,7 @@ const Visor = () => {
                     </div>
                 )}
 
-                {selectedLayer && (
+                {selectedLayer && tematicaData && mapLayerInstance && (
                     <LayerCard
                         selectedLayerData={selectedLayerData}
                         tematicaData={tematicaData}

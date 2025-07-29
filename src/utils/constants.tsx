@@ -386,7 +386,7 @@ export const LAYERS = {
         year: null,
         graphs: [],
         metrics: [],
-        colors: ['#D0FFD6', '#90EE90', '#43A047', '#2E7D32', '#145A23']
+        colors: ['#B7E4B0', '#8FE38F', '#43A047', '#2E7D32', '#145A23']
     },
     porcentaje_pob_0a5: {
         title: "Porcentaje de población de 0 a 5 años",
