@@ -52,7 +52,7 @@ const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph
           alignItems: "center",
         }}>
           <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
-            {numberToString(averageAGEB)}
+            {averageAGEB}
           </p>
           <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
         </div>

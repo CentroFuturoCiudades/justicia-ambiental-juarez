@@ -1,5 +1,6 @@
 import { type MapViewState } from "deck.gl";
 import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
+import type { FeatureCollection } from "geojson";
 
 type ViewState = {
     latitude: number;
@@ -22,6 +23,10 @@ interface AppContextI {
     setSelectedAGEBS: Dispatch<SetStateAction<string[]>>;
     selectedColonias: string[];
     setSelectedColonias: Dispatch<SetStateAction<string[]>>;
+    selectedColonias_SET: Set<string>;
+    setSelectedColonias_SET: Dispatch<SetStateAction<Set<string>>>;
+    coloniasData: FeatureCollection;
+    setColoniasData: Dispatch<SetStateAction<FeatureCollection>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -55,6 +60,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
+    const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
+    const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
 
     return (
         <AppContext.Provider value={{
@@ -72,6 +79,10 @@ const AppContextProvider = ({ children }: { children: any }) => {
             zoomOut,
             selectedAGEBS,
             setSelectedAGEBS,
+            selectedColonias_SET,
+            setSelectedColonias_SET,
+            coloniasData,
+            setColoniasData
 
         }}
         >

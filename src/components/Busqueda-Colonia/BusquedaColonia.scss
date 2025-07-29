@@ -33,13 +33,14 @@
     background-color: #f5f5f5;
     padding: 0rem;
     border-radius: 0%;
+    //height: 7.9rem;
   }
 
   &__itemBody {
-    padding: 10px;
+    //padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    //gap: 2px;
   }
 
   &__checkbox {
@@ -54,4 +55,20 @@
 .busqueda-colonia-container__main-trigger:hover {
   background: #363636 !important;
   cursor: pointer;
+  border-color: #363636;
+}
+
+.custom-green-checkbox .chakra-checkbox__control[data-state="checked"] {
+  background: #a2b687;
+  border-color: #a2b687;
+}
+
+.busqueda-colonia-container__itemBody {
+  scrollbar-width:thin; 
+  scrollbar-color: #b2b2b2 ; 
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background: #f5f5f5;
+  }
 }
