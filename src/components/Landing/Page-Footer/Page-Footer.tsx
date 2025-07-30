@@ -31,6 +31,6 @@ const PageFooter = () => {
       </div>
     </footer>
   );
-}
+};
 
 export default PageFooter;
