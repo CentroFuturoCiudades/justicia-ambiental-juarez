@@ -103,8 +103,8 @@ const Visor = () => {
                 data: dissolved,
                 pickable: false,
                 filled: false,
-                getLineColor: [100, 100, 100, 255],
-                getLineWidth: 60,
+                getLineColor: [250, 200, 0, 255],
+                getLineWidth: 70,
             })];
         } catch (error) {
             console.error('Error dissolving features:', error);
@@ -133,10 +133,14 @@ const Visor = () => {
                 //console.log("este siempre se llama")
 
                 const mapLayerInstance = new MapLayer({
-                    opacity: 0.7,
-                    title: layer.title
+                    opacity: 1,
+                    title: layer.title,
+                    formatValue: layer.formatValue
                 });
-                const jsonData = await mapLayerInstance.loadData(urlBlob);
+                let jsonData = await mapLayerInstance.loadData(urlBlob);
+                if (layer.dataProcesssing) {
+                    jsonData = layer.dataProcesssing(jsonData);
+                }
                 const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, true, handleSelectedAGEBS, selectedAGEBS);
 
                 setTematicaData(jsonData);
@@ -145,7 +149,8 @@ const Visor = () => {
             } else if (layer.map_type === "raster") {
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
-                    title: layer.title
+                    title: layer.title,
+                    formatValue: layer.formatValue
                 });
                 await rasterLayerInstance.loadRaster(urlBlob);
                 setTematicaLayer(rasterLayerInstance.getBitmapLayer());

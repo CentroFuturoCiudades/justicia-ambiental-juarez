@@ -5,6 +5,7 @@ import { fromUrl } from "geotiff";
 import Legend from "../components/Legend/Legend";
 import { COLORS } from "../utils/constants";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
+import { formatNumber } from "../utils/utils";
 
 export class RasterLayer {
   opacity: number;
@@ -17,12 +18,14 @@ export class RasterLayer {
   maxVal: number = 0;
   title: string;
   amountOfColors: number;
+  formatValue: (value: number) => string;
 
-  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer", amountOfColors = 6 }: { opacity?: number, colors?: string[], title?: string, amountOfColors?: number }) {
+  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer", amountOfColors = 6, formatValue }: { opacity?: number, colors?: string[], title?: string, amountOfColors?: number, formatValue?: (value: number) => string }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
     this.amountOfColors = amountOfColors;
+    this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
   }
 
   async loadRaster(url: string) {
@@ -114,9 +117,8 @@ export class RasterLayer {
       <Legend
         title={title}
         colors={completeColors}
-        legendColor={COLORS.GLOBAL.backgroundDark}
         ranges={ranges}
-        decimalPlaces={2}
+        formatValue={this.formatValue}
         categorical={true}
       />
     );
@@ -136,14 +138,10 @@ export class RasterLayer {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
     return <RangeGraph
-      startColor={completeColors[0]}
-      neutralColor={completeColors[1]}
-      endColor={completeColors[2]}
-      positiveRange={ranges}
-      negativeRange={[]}
+      colorsArray={completeColors}
       data={{ minVal: this.minVal, maxVal: this.maxVal }}
       averageAGEB={avg}
-      decimalPlaces={2}
+      formatValue={this.formatValue}
     />
   }
 }

@@ -1,46 +1,33 @@
 import React from "react"
 import "./Legend.scss"
 import { scaleLinear } from "d3-scale";
+import { COLORS, LAYERS } from "../../utils/constants";
+import { useAppContext } from "../../context/AppContext";
 
 type LegendProps = {
   title: string;
   colors: string[];
   decimalPlaces?: number;
-  legendColor: string;
   categorical?: boolean;
   ranges: number[][];
+  formatValue: (value: number) => string;
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
 const Legend = ({
-  ranges, title, colors, decimalPlaces, legendColor, categorical }: LegendProps) => {
+  ranges, title, colors, formatValue, categorical }: LegendProps) => {
+
+  const { selectedLayer } = useAppContext();
+  const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
+  const color = selectedLayerData?.tematica ? COLORS[selectedLayerData.tematica as keyof typeof COLORS].primary : COLORS.GLOBAL.backgroundDark;
 
   // construct the amount of colors based on the colors provided
   const domain = ranges.map((range) => range[1]);
   const colorMap = scaleLinear<string>().domain(domain).range(colors);
 
-  const numberToString = (value: number) => {
-
-    if (value == undefined) return ""
-
-    if (decimalPlaces == undefined) {
-      decimalPlaces = 2;
-    }
-
-    if (decimalPlaces == 0) {
-      value = Math.trunc(value)
-    }
-
-    if (value < 0) {
-      return `( ${value.toLocaleString("es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces })})`
-    } else {
-      return value.toLocaleString("es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces })
-    }
-  }
-
   const renderLegeindItem = (value: number[], index: number,) => {
 
-    const rangeText = `${numberToString(value[1])} - ${numberToString(value[0])}`;
+    const rangeText = `${formatValue(value[1])} - ${formatValue(value[0])}`;
 
     return (<div key={index} className="legend-item" >
       <div className="legend-text" >{rangeText}</div>
@@ -59,8 +46,8 @@ const Legend = ({
   };
 
   return (
-    <div className="legend-container" style={{ border: `1px solid ${legendColor}` }}>
-      <div className="legend__title-container" style={{ backgroundColor: legendColor }}>
+    <div className="legend-container" style={{ border: `1px solid ${color}` }}>
+      <div className="legend__title-container" style={{ backgroundColor: color }}>
         <h6 className="legend__title">{title}</h6>
       </div>
       <div className="legend-body" >
