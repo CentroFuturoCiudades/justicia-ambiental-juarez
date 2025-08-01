@@ -7,7 +7,7 @@ import ScrollBar from "../../../assets/SLIDER.png";
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
 import './AC.scss';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type AccordionItemType = {
   id: string;                      // Unique identifier
@@ -22,42 +22,45 @@ const items: AccordionItemType[] = [
     id: "lupa",
     title: "¿qué es la evaluación ambiental?",
     content: (
-      <div style={{ height: "100%", display: "flex", flexDirection: "column", gap: "2rem" , overflowY: "auto", border: "1px solid blue"}}>
-        <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
-          <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|objetivo|</p>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-            when an unknown printer took a galley of type and scrambled it to make a type 
-            specimen book. It has survived not only five centuries, but also the leap into 
-            electronic typesetting, remaining essentially unchanged. It was popularised in 
-            the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-            and more recently with desktop publishing software like Aldus PageMaker including 
-            versions of Lorem Ipsum.
-          </p>
-        </div>
-        <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
-          <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|justicia ambiental|</p>
-          <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-            when an unknown printer took a galley of type and scrambled it to make a type 
-            specimen book. It has survived not only five centuries, but also the leap into 
-            electronic typesetting, remaining essentially unchanged. It was popularised in 
-            the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-            and more recently with desktop publishing software like Aldus PageMaker including 
-            versions of Lorem Ipsum.
-          </p>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "1rem", width: "100%" }}>
-            <p style={{ width: "50%"}}>
-              sjsjjsjsjsjsjsjjsjsjssssssssssssssssssssssssssssssssss
-              sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
-              sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
-              sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
-              sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
+      <div  style={{ height: "100%", display: "flex", flexDirection: "column" , overflowY: "auto", padding: "1rem 0rem"}}>
+        <div className="scrollable" style={{ overflowY: "auto", paddingRight: "1rem", gap: "2rem", display: "flex", flexDirection: "column"}}>
+          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
+            <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|objetivo|</p>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+              when an unknown printer took a galley of type and scrambled it to make a type 
+              specimen book. It has survived not only five centuries, but also the leap into 
+              electronic typesetting, remaining essentially unchanged. It was popularised in 
+              the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+              and more recently with desktop publishing software like Aldus PageMaker including 
+              versions of Lorem Ipsum.
             </p>
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" alt="Descripción de la imagen"></img>
-        </div>
+          </div>
+          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
+            
+            <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|justicia ambiental|</p>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+              when an unknown printer took a galley of type and scrambled it to make a type 
+              specimen book. It has survived not only five centuries, but also the leap into 
+              electronic typesetting, remaining essentially unchanged. It was popularised in 
+              the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+              and more recently with desktop publishing software like Aldus PageMaker including 
+              versions of Lorem Ipsum.
+            </p>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "1rem", width: "100%" }}>
+              <p style={{ width: "50%"}}>
+                sjsjjsjsjsjsjsjjsjsjssssssssssssssssssssssssssssssssss
+                sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
+                sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
+                sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
+                sjsjjsjsjsjsjsjjsjsjsssssssssssssssssssssssssssssssssss
+              </p>
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" alt="Descripción de la imagen"></img>
+            </div>
+          </div>
         </div>
       </div>
     ),
@@ -68,7 +71,9 @@ const items: AccordionItemType[] = [
     id: "hoja",
     title: "uso de la herramienta",
     content: (
-      <div style={{ display: "flex", flexDirection: "column", gap: "2rem", border: "1px solid blue", overflowY: "auto", height: "100%", width: "100%" }}>
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" , overflowY: "auto", padding: "1rem 0rem"}}>
+          <div className="scrollable" style={{ overflowY: "auto", paddingRight: "1rem", gap: "2rem", display: "flex", flexDirection: "column"}}>
+
         <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|metodología|</p>
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -81,8 +86,8 @@ const items: AccordionItemType[] = [
           versions of Lorem Ipsum.
         </p>
 
-        <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between",  gap: "1rem", border: "1px solid red", alignItems: "flex-start"}}>
-          <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: "1rem", border: "1px solid red",  }}>
+        <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between",  gap: "1rem", alignItems: "flex-start"}}>
+          <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: "1rem",  }}>
             <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|visualiza, compara y toma decisiones informadas|</p>
             <p>
               Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -98,6 +103,7 @@ const items: AccordionItemType[] = [
           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}></img>
 
         </div>
+        </div>
       </div>
     ),
     images: ["https://via.placeholder.com/150x100"],
@@ -107,7 +113,9 @@ const items: AccordionItemType[] = [
     id: "rompecabezas",
     title: "4 ejes temáticos",
     content: (
-      <div style={{ height: "100%", display: "flex", flexDirection: "column", gap: "2rem" , overflowY: "auto", border: "1px solid blue"}}>
+      <div style={{ height: "100%", display: "flex", flexDirection: "column" , overflowY: "auto", padding: "1rem 0rem"}}>
+        <div className="scrollable" style={{ overflowY: "auto", paddingRight: "1rem", gap: "2rem", display: "flex", flexDirection: "column"}}>
+
         <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|datos|</p>
         <p>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -151,6 +159,7 @@ const items: AccordionItemType[] = [
         ]}
       />
       </div>
+      </div>
     ),
     images: [],
     icon: RompecabezasIcono,
@@ -166,6 +175,9 @@ const Accordion = () => {
             setSelectedItem(item);
         }
     };
+    useEffect(() => {
+      console.log("selectedItem", selectedItem);
+    }, [selectedItem]);
 
     return (
       <div className="body">
@@ -190,11 +202,32 @@ const Accordion = () => {
         {/* Info box derecha */}
         <div className="body__derecha">
           { selectedItem && (
-          <Box bg={COLORS.GLOBAL.fondo} height={"100%"} border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} display="flex" flexDirection="column" position={"relative"}>
-            <div style={{ height: "100%", width: "100%", padding: "2rem", border: '1px solid red' }}>
+          <Box marginRight={"1rem"} bg={COLORS.GLOBAL.fondo} height={"100%"}  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} display="flex" flexDirection="column" position={"relative"}>
+            <div className="scrollable" style={{ height: "100%", width: "100%", padding: "2rem 1.5rem 1rem 1.5rem" }}>
               {selectedItem.content}
             </div>
-            <img src={CloseIcon} alt="Cerrar" style={{ height: "40px", position: "absolute", right: "8px", top: "10px" }} />
+            <button
+            type="button"
+            style={{
+                cursor: "pointer",
+                zIndex: 3,
+                backgroundColor: "transparent",
+               // border: "1px solid red",
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                height: "40px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: "100%",
+                padding: "0",
+                overflow: "hidden",
+              }}
+              onClick={() => setSelectedItem(null)}
+            >
+              <img src={CloseIcon} alt="Cerrar" style={{ height: "40px",  }} />
+            </button>
           </Box>
           )}
         </div>

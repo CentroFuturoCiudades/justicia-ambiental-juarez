@@ -33,7 +33,7 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
-            <section className="quadrant-menu" style={{ border: "3px solid black"}}>
+            <section className="quadrant-menu" >
                 <header className="quadrant-menu__header">
                     <h2>{mainHeader}</h2>
                 </header>
@@ -49,7 +49,7 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
                                 className="quadrant-menu__item"
                                 aria-expanded={activeIndex === index}
                             >
-                                {item.title}
+                                <p className="quadrant-menu__item-title">{item.title}</p>
                             </button>
 
                         </div>
@@ -57,7 +57,7 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
                 </div>
             </section>
             {activeItem && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", border: "3px solid black"}}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem"}}>
                     <p className={`quadrant-title--${activeIndex}`} style={{ fontWeight: 'bold', fontSize: "20px" }}>{activeItem.title}</p>
                     <p>
                         {activeItem.description}
