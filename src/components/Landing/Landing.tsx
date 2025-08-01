@@ -17,7 +17,7 @@ const Landing = () => {
     return (
         <div className="landing">
                 
-            <div className="landing__header" style={{ zIndex: 0, width: "100%",}}>
+            <div className="landing__header">
                 <PageHeader />
             </div>
 

@@ -195,14 +195,14 @@ const Accordion = () => {
                 >
                   <p className="body__buttonText">{item.title}</p>
                   <img src={item.icon} className="body__buttonIcon" style={{ background: `${COLORS.GLOBAL.fondo}`}} />
-
                 </Button>
             ))}
         </div>
+
         {/* Info box derecha */}
         <div className="body__derecha">
           { selectedItem && (
-          <Box marginRight={"1rem"} bg={COLORS.GLOBAL.fondo} height={"100%"}  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} display="flex" flexDirection="column" position={"relative"}>
+          <Box className="body__box" bg={COLORS.GLOBAL.fondo} border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} >
             <div className="scrollable" style={{ height: "100%", width: "100%", padding: "2rem 1.5rem 1rem 1.5rem" }}>
               {selectedItem.content}
             </div>
