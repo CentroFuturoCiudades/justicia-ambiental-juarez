@@ -110,7 +110,7 @@ export default function AccordionComponent({ content }: AccordionComponentProps)
   };
 
   return (
-    <div className="accordion-wrapper">
+    <div className="accordion-wrapper" style={{border: "1px solid red"}}>
       {/* Render all items if none is selected, otherwise show only the selected item */}
       {openIds.length === 0
         ? items.map(({ id, title, content, images, icon }) => (
