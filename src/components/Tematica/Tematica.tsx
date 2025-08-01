@@ -56,6 +56,7 @@ const Tematica = () => {
                                                         className="custom-green-checkbox"
                                                         checked={selectedLayer === layerKey}
                                                         onCheckedChange={() => handleLayerToggle(layerKey)}
+                                                        disabled={!LAYERS[layerKey]?.enabled}
                                                     >
                                                         <Checkbox.HiddenInput />
                                                         <Checkbox.Control />

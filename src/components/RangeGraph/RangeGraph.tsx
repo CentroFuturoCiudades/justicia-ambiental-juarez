@@ -1,3 +1,4 @@
+import { formatNumber } from "../../utils/utils";
 import "./RangeGraph.scss"
 //import { interpolateRgb } from "d3-interpolate";
 import { IoCaretDown } from "react-icons/io5";
@@ -5,30 +6,12 @@ import { IoCaretDown } from "react-icons/io5";
 type RangeGraph = {
     data: { [ key: string ]: number };
     averageAGEB: number;
-    decimalPlaces?: number;
+    formatValue: (value: number) => string;
     colorsArray: string[];
 
 };
 
-const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph) => {
-  
-  const numberToString = ( value: number ) => {
-    if( value == undefined ) return ""
-
-    if( decimalPlaces == undefined ) {
-      decimalPlaces = 2;
-    }
-
-    if ( decimalPlaces == 0 ){
-      value = Math.trunc( value )
-    }
-
-    if( value < 0 ){
-      return `( ${ value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces }   ) })`
-    } else {
-      return value.toLocaleString( "es-MX", { maximumFractionDigits: decimalPlaces, minimumFractionDigits: decimalPlaces } )
-    }
-  }
+const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) => {
 
   return (
     <div className="rangeGraph" style={{ width: "100%", padding: "8px" , position: "relative", marginTop: "25px", pointerEvents: "none"}}>
@@ -52,7 +35,7 @@ const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph
           alignItems: "center",
         }}>
           <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
-            {averageAGEB}
+            {formatValue(averageAGEB)}
           </p>
           <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
         </div>
@@ -75,7 +58,7 @@ const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph
           }}
           />
           <div style={{fontSize: "10px", whiteSpace: "nowrap", alignContent: "center", textAlign: "center", fontWeight: "bold"}}> 
-            {numberToString(data.positiveAvg)}
+            {formatValue(data.positiveAvg)}
             <br />
             Ciudad Juárez
           </div>
@@ -108,7 +91,7 @@ const RangeGraph = ({ data, averageAGEB, decimalPlaces, colorsArray}: RangeGraph
                 textAlign: "center",
             }}
             >
-            {numberToString(value)}
+            {formatValue(value)}
             <br />
             {(index === 0 ? "Menor" : "Mayor")}            
             </div>

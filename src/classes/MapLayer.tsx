@@ -4,6 +4,7 @@ import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
 import { scaleLinear } from "d3-scale";
+import { formatNumber } from "../utils/utils";
 
 
 export class MapLayer {
@@ -14,6 +15,7 @@ export class MapLayer {
   negativeAvg = 0;
 
   isLineLayer?: boolean;
+  formatValue: (value: number) => string;
 
   colors: string[];
   amountOfColors: number;
@@ -22,16 +24,18 @@ export class MapLayer {
   title: string;
 
 
-  constructor({opacity= 0.7, colors = ["blue", "#93c7ed", "#ffdd75", "#ff9999", "#ff0000"], title= "Map Layer", amountOfColors = 6}: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue }: {
     opacity?: number;
     colors?: string[];
     title?: string;
     amountOfColors?: number;
+    formatValue?: (value: number) => string;
   }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
     this.amountOfColors = amountOfColors;
+    this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
   }
 
   async loadData(url: string) {
@@ -119,8 +123,8 @@ export class MapLayer {
       opacity: this.opacity,
       getFillColor: getColor,
       autoHighlight: true,
-      highlightColor: [100, 100, 100, 100],
-      getLineColor: [255, 255, 255, 100],
+      highlightColor: [250, 200, 0, 100],
+      getLineColor: [255, 255, 255, 255],
       getLineWidth: 20,
       onClick: handleFeatureClick,
       updateTriggers: {
@@ -168,7 +172,7 @@ export class MapLayer {
       colors={completeColors}
       legendColor={COLORS.GLOBAL.backgroundDark}
       ranges={ranges}
-      decimalPlaces={2}
+      formatValue={this.formatValue || ((value: number) => value.toString())}
       categorical={false}
     />
   }
@@ -187,7 +191,7 @@ export class MapLayer {
     return <RangeGraph
       data={Data}
       averageAGEB={avg}
-      decimalPlaces={2}
+      formatValue={this.formatValue || ((value: number) => value.toString())}
       colorsArray={completeColors}
     />
   }

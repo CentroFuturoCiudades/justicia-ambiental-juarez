@@ -1,5 +1,7 @@
 //import { geoAlbers, lab } from "d3"
 
+import { formatNumber } from "./utils";
+
 export const COLORS = {
     GLOBAL: {
         primary: "",
@@ -83,7 +85,7 @@ export const SECTIONS = {
     }
 }
 
-export const LAYERS = {
+export const LAYERS: any = {
     vulnerabilidad_ambiental: {
         title: "Indice de Vulnerabilidad Ambiental",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
@@ -109,6 +111,10 @@ export const LAYERS = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
+        enabled: true,
+        formatValue: (x: number) => {
+            return formatNumber(x, 1) + " °C"
+        },
         metric: "grados_centigrados",
         stat_type: "promedio",
         visualization_type: "Semaforo",
@@ -127,6 +133,10 @@ export const LAYERS = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
+        enabled: true,
+        formatValue: (x: number) => {
+            return formatNumber(x, 2) + " ppm"
+        },
         metric: "indice_calidad_del_aire", //Varía dependiendo del contaminante
         stat_type: "promedio",
         visualization_type: "Mapa",
@@ -379,6 +389,17 @@ export const LAYERS = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.income_pc > 0);
+            data.features.forEach((feature: any) => {
+                feature.properties.income_pc = Math.round(feature.properties.income_pc * 19 * 1000 / 12);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return '$' + formatNumber(x, 0)
+        },
         metric: "ingreso_promedio", //(Alto, Medio, Bajo)
         stat_type: "promedio",
         visualization_type: "Semaforo",

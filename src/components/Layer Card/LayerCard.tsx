@@ -3,6 +3,7 @@ import { useAppContext } from "../../context/AppContext";
 import { COLORS } from "../../utils/constants";
 import type {Feature} from "geojson";
 import "./LayerCard.scss";
+import { formatNumber } from "../../utils/utils";
 
 type LayerCardProps = {
     selectedLayerData: any;
@@ -35,7 +36,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
     }
 
 
-    const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property).toFixed(2)
+    const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
     
     return (
         <div>
@@ -56,7 +57,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                El AGEB seleccionado tiene un <strong>{agebAverage}</strong> de {selectedLayerData.title}
+                                El AGEB seleccionado tiene un <strong>{selectedLayerData.formatValue(agebAverage, selectedLayerData.decimalPlaces)}</strong> de {selectedLayerData.title}
                                 <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez
                             </p>
                         )}
