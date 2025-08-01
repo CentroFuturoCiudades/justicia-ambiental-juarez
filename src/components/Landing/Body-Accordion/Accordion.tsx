@@ -168,6 +168,7 @@ const items: AccordionItemType[] = [
 
 const Accordion = () => {
     const [selectedItem, setSelectedItem] = useState<AccordionItemType | null>(null);
+    
     const handleItemClick = (item: AccordionItemType) => {
         if (selectedItem && selectedItem.id === item.id) {
             setSelectedItem(null); // Close the item if it's already open
@@ -175,9 +176,6 @@ const Accordion = () => {
             setSelectedItem(item);
         }
     };
-    useEffect(() => {
-      console.log("selectedItem", selectedItem);
-    }, [selectedItem]);
 
     return (
       <div className="body">
@@ -206,26 +204,7 @@ const Accordion = () => {
             <div className="scrollable" style={{ height: "100%", width: "100%", padding: "2rem 1.5rem 1rem 1.5rem" }}>
               {selectedItem.content}
             </div>
-            <button
-            type="button"
-            style={{
-                cursor: "pointer",
-                zIndex: 3,
-                backgroundColor: "transparent",
-               // border: "1px solid red",
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                height: "40px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: "100%",
-                padding: "0",
-                overflow: "hidden",
-              }}
-              onClick={() => setSelectedItem(null)}
-            >
+            <button type="button" className="body__closeButton" onClick={() => setSelectedItem(null)} >
               <img src={CloseIcon} alt="Cerrar" style={{ height: "40px",  }} />
             </button>
           </Box>
