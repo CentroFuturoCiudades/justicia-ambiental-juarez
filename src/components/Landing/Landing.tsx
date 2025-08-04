@@ -4,7 +4,7 @@ import PageHeader from "./Page-Header/PageHeader";
 import PageFooter from "./Page-Footer/Page-Footer";
 import "./Body-Accordion/AccordionComponent";
 //import AccordionComponent from "./Body-Accordion/AccordionComponent";
-import LandingBackground from "../../assets/Fondo.jpg";
+import LandingBackground from "../../../public/assets/Fondo.jpg";
 import Accordion from "./Body-Accordion/Accordion";
 
 const Landing = () => {
