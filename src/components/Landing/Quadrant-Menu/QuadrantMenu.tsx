@@ -18,55 +18,53 @@ interface QuadrantMenuProps {
 
 export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
+    const [activeItem, setActiveItem] = useState<QuadrantMenuItem | null>(null);
 
-    const toggleIndex = (index: number) =>
-        setActiveIndex(prev => (prev === index ? null : index));
+    const toggleIndex = (item: QuadrantMenuItem, index: number) => {
+        if(activeItem && activeItem.title === item.title) {
+            setActiveItem(null);
+            setActiveIndex(null);
+        } else {
+            setActiveItem(item);
+            setActiveIndex(index);
+        }
+    }
+        //setActiveIndex(prev => (prev === index ? null : index));
 
     return (
-        <section className="quadrant-menu">
-            <header className="quadrant-menu__header">
-                <h2>{mainHeader}</h2>
-            </header>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
+            <section className="quadrant-menu" >
+                <header className="quadrant-menu__header">
+                    <h2>{mainHeader}</h2>
+                </header>
 
-            <div className="quadrant-menu__grid">
-                {items.map(({ title, description, iconUrl, url }, index) => (
-                    <article
-                        className={`quadrant-menu__grid-item quadrant-menu__item-${index}`}
-                        key={index}
-                    >
-                        <button
-                            onClick={() => toggleIndex(index)}
-                            className="quadrant-menu__item"
-                            aria-expanded={activeIndex === index}
+                <div className="quadrant-menu__grid">
+                    {items.map((item, index) => (
+                        <div
+                            className={`quadrant-menu__grid-item quadrant-menu__item-${index}`}
+                            key={index}
                         >
-                            {title}
-                        </button>
+                            <button
+                                onClick={() => toggleIndex(item, index)}
+                                className="quadrant-menu__item"
+                                aria-expanded={activeIndex === index}
+                            >
+                                <p className="quadrant-menu__item-title">{item.title}</p>
+                            </button>
 
-                        {activeIndex === index && (
-                            <div className="quadrant-menu__item-details">
-                                <h3 className={`quadrant-menu__item-title quadrant-title--${index}`}>
-                                    {title}
-                                </h3>
+                        </div>
+                    ))}
+                </div>
+            </section>
+            {activeItem && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem"}}>
+                    <p className={`quadrant-title--${activeIndex}`} style={{ fontWeight: 'bold', fontSize: "20px" }}>{activeItem.title}</p>
+                    <p>
+                        {activeItem.description}
+                    </p>
+                </div>
+            )}
+        </div>
 
-                                <p className="quadrant-menu__item-description">{description}</p>
-                                <img
-                                    src={iconUrl}
-                                    alt={title ? `${title} icon` : "Icon"}
-                                    className="quadrant-menu__item-icon"
-                                />
-                                <a
-                                    href={url}
-                                    target="_blank"
-                                    className="quadrant-menu__item-link"
-                                >
-                                    <br />
-                                    Learn more
-                                </a>
-                            </div>
-                        )}
-                    </article>
-                ))}
-            </div>
-        </section>
     );
 }

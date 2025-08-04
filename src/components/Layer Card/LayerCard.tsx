@@ -21,9 +21,13 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
         return null; // o un mensaje de error
     }
 
-    // con base a los ID de agebs seleccionados busca en todos los features
-    // lo dejo asi? o guardo de una los cvegeos y el property que quiero calcular?
+    // con base a los ID de agebs seleccionados busca en todos los features para sacar el promedio
+    //si no hay agebs seleccionados, saca el promedio de todos los features
     function getAverage(features: Feature[], cvegeos: string[], property: string): number {
+        if (!tematicaData) return 0;
+        if (selectedAGEBS.length === 0) {
+            return mapLayerInstance.positiveAvg;
+        }
         const values = features
         .filter((f: Feature) => cvegeos.includes((f.properties as { cvegeo: string }).cvegeo))
         .map(f => f.properties?.[property])
@@ -31,15 +35,6 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
         return values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
     }
 
-    // SWITCH para obtener el "calculo" o metrica de AGEBS dependiendo de la propiedad stat_type de la layer (ahorita solo hay promedio)
-    /*const getAGEBMetric = (stat_type: string, property: string) : any => {
-        switch (stat_type) {
-            case "promedio":
-                return getAverage(tematicaData.features, selectedAGEBS, property).toFixed(2);
-            default:
-                return null;
-        }
-    } */
 
     const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
     
@@ -50,20 +45,24 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                     <p className="layerCard__layerTitle">{selectedLayerData?.title}</p>
                 </div>
                 <div className="layerCard__layerCardBody">
-                    { selectedAGEBS.length == 0 ? (
-                        <p className="layerCard__layerDescription">
-                            {selectedLayerData?.description || "No hay descripción disponible."}
-                        </p>
-                    ) : (
-                        <div>
-                            {/* texto fixed, ahorita todas van a decir promedio */}
+                    <div>
+                        { selectedAGEBS.length === 0 ? (
+                            <div>
+                                <p className="layerCard__layerDescription">
+                                    {selectedLayerData?.description || "No hay descripción disponible."}
+                                </p>
+                                <p style={{ fontSize: "15px"}}>
+                                    Ciudad Juárez tiene un promedio de <strong> {agebAverage} </strong> de {selectedLayerData.title}
+                                </p>
+                            </div>
+                        ): (
                             <p style={{ fontSize: "15px"}}>
                                 El AGEB seleccionado tiene un <strong>{selectedLayerData.formatValue(agebAverage, selectedLayerData.decimalPlaces)}</strong> de {selectedLayerData.title}
                                 <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez
                             </p>
-                            {mapLayerInstance.getRangeGraph(agebAverage)}
-                        </div>
-                    )}
+                        )}
+                        {mapLayerInstance.getRangeGraph(agebAverage)}
+                    </div>
                 </div>
             </div>
             {selectedAGEBS.length > 0 && (
