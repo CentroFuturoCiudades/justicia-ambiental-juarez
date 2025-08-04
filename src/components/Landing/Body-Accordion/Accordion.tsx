@@ -3,11 +3,13 @@ import HojaIcono from "../../../assets/Icono HOJA.png";
 import LupaIcono from "../../../assets/Icono LUPA.png";
 import RompecabezasIcono from "../../../assets/Icono ROMPECABEZAS.png";
 import CloseIcon from "../../../assets/Icono CERRAR.png"
-import ScrollBar from "../../../assets/SLIDER.png";
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
 import './AC.scss';
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import VisorIcon from "../../../assets/Icono MAPA IR AL VISOR.png";
+import ContactIcon from "../../../assets/Icono CONTACTO.png";
+import MoreIcon from "../../../assets/Icono MAS_EQUIPO.png";
 
 type AccordionItemType = {
   id: string;                      // Unique identifier
@@ -22,7 +24,7 @@ const items: AccordionItemType[] = [
     id: "lupa",
     title: "¿qué es la evaluación ambiental?",
     content: (
-      <div  style={{ height: "100%", display: "flex", flexDirection: "column" , overflowY: "auto", padding: "1rem 0rem"}}>
+      <div  style={{ height: "100%", display: "flex", flexDirection: "column" , overflowY: "auto", padding: "1rem 0rem"}} >
         <div className="scrollable" style={{ overflowY: "auto", paddingRight: "1rem", gap: "2rem", display: "flex", flexDirection: "column"}}>
           <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
             <p style={{ fontWeight: "bold", textAlign: "left" , fontSize: "20px"}}>|objetivo|</p>
@@ -168,7 +170,7 @@ const items: AccordionItemType[] = [
 
 const Accordion = () => {
     const [selectedItem, setSelectedItem] = useState<AccordionItemType | null>(null);
-    
+
     const handleItemClick = (item: AccordionItemType) => {
         if (selectedItem && selectedItem.id === item.id) {
             setSelectedItem(null); // Close the item if it's already open
@@ -179,16 +181,45 @@ const Accordion = () => {
 
     return (
       <div className="body">
+
+        <div className="speed-dial">
+          <div className="speed-dial__item">
+              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+                  <span className="icon">
+                      <img src={VisorIcon} alt="Visor Icon" style={{ height: '50px' }} />
+                  </span>
+              </button>
+          </div>
+          <div className="speed-dial__item">
+              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+                  { !selectedItem && <span className="button-text">contacto</span> }
+                  <span className="icon">
+                      <img src={ContactIcon} alt="Contact Icon" style={{ height: '50px' }} />
+                  </span>
+              </button>
+          </div>
+          <div className="speed-dial__item">
+              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+                  { !selectedItem && <span className="button-text">equipo</span> }
+                  <span className="icon">
+                      <img src={MoreIcon} alt="More Icon" style={{ height: '50px' }} />
+                  </span>
+              </button>
+          </div>
+        </div>
+
         <div className="body__content">
 
         {/* Botones Izquierda */}
         <div className="body__buttonColumn" >
             {items.map((item, index) => (
                 <Button 
-                  className="body__button"
+                  //className="body__button"
+                  className={`body__button${selectedItem?.id === item.id ? " body__button--selected" : ""}`}
                   key={index} 
                   bg={COLORS.GLOBAL.fondo} 
-                  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} 
+                  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
+                  //border={selectedItem?.id === item.id ? "3px solid black": `1px solid ${COLORS.GLOBAL.backgroundMedium}`} 
                   onClick={() => handleItemClick(item)}
                 >
                   <p className="body__buttonText">{item.title}</p>

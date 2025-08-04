@@ -92,7 +92,7 @@ const BusquedaColonia = () => {
                         >
                             {/* colonias filtradas */}
                             <List
-                                height={90}
+                                height={155}
                                 itemCount={coloniasFiltradas.length}
                                 itemSize={35}
                             >
@@ -100,6 +100,7 @@ const BusquedaColonia = () => {
                                     const colonia = coloniasFiltradas[index];
                                     const last = index === coloniasFiltradas.length - 1;
                                     //const isLastSeleccionada = index <= seleccionadasCount - 1;
+                                    const isSelected = selectedColonias.includes(colonia);
                                     const isLastSeleccionada = selectedColonias.includes(colonia) && index === seleccionadasCount - 1;
                                     return (
                                         <Box
@@ -107,6 +108,7 @@ const BusquedaColonia = () => {
                                             style={style}
                                             padding={"0rem 0.5rem 0rem 0.5rem"}
                                             width="100%"
+                                            backgroundColor={isSelected ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
                                             //backgroundColor= {isLastSeleccionada ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
                                             borderBottom={ isLastSeleccionada ? `3px solid ${COLORS.GLOBAL.backgroundMedium}` : "none"}
                                         >

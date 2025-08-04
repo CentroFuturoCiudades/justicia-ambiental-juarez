@@ -239,25 +239,10 @@ const Visor = () => {
                     <p className="visor__titleItalic">visor de </p>
                     <p className="visor__titleBold"> indicadores ambientales</p>
                 </div>
+                <div style={{ fontWeight: "600", fontSize: "17px", lineHeight: "1.2", textAlign: "justify",marginBottom: "1rem" }}>
+                    <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
+                </div>
                 <Tematica />
-
-                {!selectedLayer && (
-                    <div className="visor__summary">
-                        <b>¿Qué es este visor?</b>
-                        <br></br>
-                        Lorem Ipsum dolor sit amet
-                        <br></br>
-                        <br></br>
-                        <b>¿Cómo funciona?</b>
-                        <br></br>
-                        Lorem Ipsum dolor sit amet
-                        <br></br>
-                        <br></br>
-                        <b>Recomendaciones</b>
-                        <br></br>
-                        Lorem Ipsum dolor sit ame
-                    </div>
-                )}
 
                 {selectedLayer && tematicaData && mapLayerInstance && (
                     <LayerCard
@@ -298,8 +283,8 @@ const Visor = () => {
                 </DeckGL>
 
                 <div className="visor__dropDowns">
-                    <BusquedaColonia />
                     <CapasBase />
+                    <BusquedaColonia />
                 </div>
 
                 {selectedLayer && mapLayerInstance && (
@@ -309,11 +294,11 @@ const Visor = () => {
                 )}
 
                 <div className="visor__topButtons">
-                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
+                    <Button className="visor__button" rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
                         onClick={() => navigate("/")}>
                         <RiHome2Line/>
                     </Button>
-                    <Button rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
+                    <Button className="visor__button" rounded={"lg"} p={2} background={COLORS.GLOBAL.backgroundDark}
                         onClick={() => {
                             setViewState({
                                 ...defaultViewState,
