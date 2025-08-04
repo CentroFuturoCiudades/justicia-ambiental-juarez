@@ -383,7 +383,7 @@ export const LAYERS: any = {
         metrics: [],
     },
     ingreso: {
-        title: "Ingreso Promedio Mensual",
+        title: "ingreso promedio mensual",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson",
         map_type: "geometry",
         property: "ingreso",
@@ -508,14 +508,17 @@ export const CAPAS_BASE = {
     capa1: {
         title: "hidrografía",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+        enabled: false,
     },
     capa2: {
         title: "equipamientos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+        enabled: false,
     },
     capa3: {
         title: "parques industriales",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+        enabled: true,
     },
 }
 

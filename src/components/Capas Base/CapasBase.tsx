@@ -29,7 +29,7 @@ const CapasBase = () => {
                             {Object.entries(CAPAS_BASE).map(([key, value]) => (
                                 <>
                                 <Box key={key} p={0} display="flex" alignItems="center" width={"100%"}>
-                                    <Checkbox.Root key={key} className="custom-green-checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"}>
+                                    <Checkbox.Root key={key} className="custom-green-checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"} disabled={!value.enabled}>
                                         <Checkbox.HiddenInput 
                                             checked={selectedBaseLayers.includes(key)}
                                             onChange={() => handleBaseLayerToggle(key)}
