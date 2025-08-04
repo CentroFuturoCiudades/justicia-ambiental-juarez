@@ -86,15 +86,23 @@
 
 }
 .scrollable {
-    //overflow-y: auto;
     z-index: 3;
     //nuevo 
-    overflow-y: auto;
-    padding-right: 1rem;
-    gap: 2rem;
-    display: flex;
-    flex-direction: column;
+    padding-top: 1rem; //*
+    overflow-y: auto; //*
+    padding-right: 1rem; //*
+    padding-left: 1rem; //* 
+    //border: 1px solid green;
+    //padding-right: clamp(1rem, 4vw, 2rem);
+    //padding-left: clamp(1rem, 4vw, 2rem);
+    gap: 2rem; //*
+    display: flex; //*
+    flex-direction: column; //*
+    //height: calc(100% - 1.5rem); //*
+    height: 100%;
+    
 }
+
 .scrollable::-webkit-scrollbar {
     width: 20px;
     //height: 10px;
@@ -265,4 +273,45 @@
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+
+//estilos de tarjetas
+.card {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding-right: 1.5rem;
+  //padding-left: 1.5rem;
+  padding-bottom: 1.5rem;
+  //padding-top: 3.5rem;
+  border: 1px solid black;
+}
+
+.space-top {
+  padding-top: 2.7rem;
+  //padding-left: 1.5rem;
+  //border: 1px solid blue;
+}
+
+@media (min-width: 1150px) and (max-width: 1399px) {
+  .scrollable {
+    padding-right: 2rem;
+    padding-left: 2rem;
+    //padding-top: 1rem;
+  }
+}
+@media (min-width: 1400px) and (max-width: 1600px) {
+  .scrollable {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+}
+@media (min-width: 1601px) {
+  .scrollable {
+    padding-right: 4rem;
+    padding-left: 4rem;
+  }
+
 }
