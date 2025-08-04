@@ -1,7 +1,4 @@
 import "./PageHeader.scss";
-import { LuMailPlus } from "react-icons/lu";
-import {GoPlus } from "react-icons/go";
-import { BiGlobe } from "react-icons/bi";
 
 export default function PageHeader() {
     return (

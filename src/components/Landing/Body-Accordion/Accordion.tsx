@@ -1,15 +1,15 @@
 import { Box, Button } from "@chakra-ui/react";
-import HojaIcono from "../../../../public/assets/Icono HOJA.png";
-import LupaIcono from "../../../../public/assets/Icono LUPA.png";
-import RompecabezasIcono from "../../../../public/assets/Icono ROMPECABEZAS.png";
-import CloseIcon from "../../../../public/assets/Icono CERRAR.png"
+import HojaIcono from "/assets/Icono HOJA.png";
+import LupaIcono from "/assets/Icono LUPA.png";
+import RompecabezasIcono from "/assets/Icono ROMPECABEZAS.png";
+import CloseIcon from "/assets/Icono CERRAR.png"
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
 import './AC.scss';
 import { useState } from "react";
-import VisorIcon from "../../../../public/assets/Icono MAPA IR AL VISOR.png";
-import ContactIcon from "../../../../public/assets/Icono CONTACTO.png";
-import MoreIcon from "../../../../public/assets/Icono MAS_EQUIPO.png";
+import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
+import ContactIcon from "/assets/Icono CONTACTO.png";
+import MoreIcon from "/assets/Icono MAS_EQUIPO.png";
 
 type AccordionItemType = {
   id: string;                      // Unique identifier
