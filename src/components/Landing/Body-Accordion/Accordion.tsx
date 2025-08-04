@@ -1,15 +1,15 @@
 import { Box, Button } from "@chakra-ui/react";
-import HojaIcono from "../../../assets/Icono HOJA.png";
-import LupaIcono from "../../../assets/Icono LUPA.png";
-import RompecabezasIcono from "../../../assets/Icono ROMPECABEZAS.png";
-import CloseIcon from "../../../assets/Icono CERRAR.png"
+import HojaIcono from "/assets/Icono HOJA.png";
+import LupaIcono from "/assets/Icono LUPA.png";
+import RompecabezasIcono from "/assets/Icono ROMPECABEZAS.png";
+import CloseIcon from "/assets/Icono CERRAR.png"
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
 import './AC.scss';
 import { useState } from "react";
-import VisorIcon from "../../../assets/Icono MAPA IR AL VISOR.png";
-import ContactIcon from "../../../assets/Icono CONTACTO.png";
-import MoreIcon from "../../../assets/Icono MAS_EQUIPO.png";
+import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
+import ContactIcon from "/assets/Icono CONTACTO.png";
+import MoreIcon from "/assets/Icono MAS_EQUIPO.png";
 
 type AccordionItemType = {
   id: string;                      // Unique identifier
@@ -182,6 +182,7 @@ const Accordion = () => {
     return (
       <div className="body">
 
+        {/* botones flotantes */}
         <div className="speed-dial">
           <div className="speed-dial__item">
               <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
@@ -218,7 +219,7 @@ const Accordion = () => {
                   className={`body__button${selectedItem?.id === item.id ? " body__button--selected" : ""}`}
                   key={index} 
                   bg={COLORS.GLOBAL.fondo} 
-                  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
+                  //border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
                   //border={selectedItem?.id === item.id ? "3px solid black": `1px solid ${COLORS.GLOBAL.backgroundMedium}`} 
                   onClick={() => handleItemClick(item)}
                 >

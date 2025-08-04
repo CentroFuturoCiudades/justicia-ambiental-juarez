@@ -1,7 +1,7 @@
-import natBankLogo from "../../../assets/LOGO NATBANK.png";
-import riceLogo from "../../../assets/LOGO RICE.png";
-import cfcLogo from "../../../assets/LOGO TEC CFC.png";
-import footerBackground from "../../../assets/BANNER LOGOS.png"
+import natBankLogo from "/assets/LOGO NATBANK.png";
+import riceLogo from "/assets/LOGO RICE.png";
+import cfcLogo from "/assets/LOGO TEC CFC.png";
+import footerBackground from "/assets/BANNER LOGOS.png"
 
 const PageFooter = () => {
   const logos = [natBankLogo, riceLogo, cfcLogo];

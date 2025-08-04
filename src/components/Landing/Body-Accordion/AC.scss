@@ -20,6 +20,7 @@
     flex-direction: column;
     justify-content: space-between;
     //border: 1px solid blue;
+    //padding: 3rem;
     //height: 100%;
     //overflow: hidden;
   }
@@ -31,6 +32,8 @@
     align-content: center;
     display: flex;
     align-items: center;
+    border: 1px solid #c4c4c4;
+    //border: 2px solid #f5ede3; // siempre 3px
   }
 
   &__buttonText {
@@ -106,16 +109,10 @@
     border:1px solid transparent;
     background-clip: content-box;
 }
-/*.scrollable::-webkit-scrollbar-button {
-  display: block;
-  background: #9f5548;
-  border: 1px solid #333;
-  height: 20px;
-  width: 20px;
-}*/
+
 /* Flecha arriba */
 .scrollable::-webkit-scrollbar-button:vertical:start:decrement {
-  background: url('../../../assets/ARROW_UP.png') center center no-repeat;
+  background: url('/assets/ARROW_UP.png') center center no-repeat;
   background-size: 20px 20px;
   height: 20px;
   border: 1px solid #333;
@@ -123,7 +120,7 @@
 
 /* Flecha abajo */
 .scrollable::-webkit-scrollbar-button:single-button:vertical:increment {
-  background: url('../../../assets/ARROW_DOWN.png') center center no-repeat;
+  background: url('/assets/ARROW_DOWN.png') center center no-repeat;
   background-size: 20px 20px;
   border: 1px solid #333;
   height: 20px;
@@ -139,10 +136,15 @@
 
 .body__button:hover {
   border: 1px solid #c4c4c4;
+  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.1);
 }
-
+.body__button--selected{
+  border: 1px solid black;
+  box-shadow: 0 0 0 2px black;
+}
 .body__button--selected:hover {
-  border: 2px solid black;
+  border: 1px solid black;
+  box-shadow: 0 0 0 2px black;
 }
 
 .body__closeButton:hover,
@@ -165,8 +167,6 @@
   //border-color: transparent !important;
 }
 
-////
-/// 
 .speed-dial {
     //border: 1px solid green;
     display: flex;
@@ -174,7 +174,7 @@
     align-items: flex-end;
     //justify-content: center;
     gap: 1.5rem;
-    top: 7.5rem;
+    top: 5.5rem;
     right: 2rem;
     position: absolute;
     //z-index: 5;
