@@ -116,7 +116,7 @@
 }*/
 /* Flecha arriba */
 .scrollable::-webkit-scrollbar-button:vertical:start:decrement {
-  background: url('../../../assets/ARROW_UP.png') center center no-repeat;
+  background: url('../../../../assets/ARROW_UP.png') center center no-repeat;
   background-size: 20px 20px;
   height: 20px;
   border: 1px solid #333;
@@ -124,7 +124,7 @@
 
 /* Flecha abajo */
 .scrollable::-webkit-scrollbar-button:single-button:vertical:increment {
-  background: url('../../../assets/ARROW_DOWN.png') center center no-repeat;
+  background: url('../../../../assets/ARROW_DOWN.png') center center no-repeat;
   background-size: 20px 20px;
   border: 1px solid #333;
   height: 20px;
