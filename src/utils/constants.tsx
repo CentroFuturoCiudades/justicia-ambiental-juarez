@@ -384,16 +384,16 @@ export const LAYERS: any = {
     },
     ingreso: {
         title: "Ingreso Promedio",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson",
         map_type: "geometry",
-        property: "income_pc",
+        property: "ingreso",
         is_lineLayer: false,
         type: "Continua",
         enabled: true,
         dataProcesssing: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.income_pc > 0);
+            data.features = data.features.filter((feature: any) => feature.properties.ingreso > 0);
             data.features.forEach((feature: any) => {
-                feature.properties.income_pc = Math.round(feature.properties.income_pc * 19 * 1000 / 12);
+                feature.properties.ingreso = Math.round(feature.properties.ingreso * 19 * 1000 / 12);
             });
             return data;
         },
