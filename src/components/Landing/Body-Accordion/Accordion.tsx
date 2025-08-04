@@ -218,7 +218,7 @@ const Accordion = () => {
                   className={`body__button${selectedItem?.id === item.id ? " body__button--selected" : ""}`}
                   key={index} 
                   bg={COLORS.GLOBAL.fondo} 
-                  border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
+                  //border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
                   //border={selectedItem?.id === item.id ? "3px solid black": `1px solid ${COLORS.GLOBAL.backgroundMedium}`} 
                   onClick={() => handleItemClick(item)}
                 >

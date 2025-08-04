@@ -31,6 +31,7 @@
     align-content: center;
     display: flex;
     align-items: center;
+    border: 1px solid #c4c4c4
   }
 
   &__buttonText {
@@ -140,7 +141,9 @@
 .body__button:hover {
   border: 1px solid #c4c4c4;
 }
-
+.body__button--selected{
+  border: 2px solid black;
+}
 .body__button--selected:hover {
   border: 2px solid black;
 }
