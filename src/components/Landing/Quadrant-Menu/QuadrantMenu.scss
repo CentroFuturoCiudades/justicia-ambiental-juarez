@@ -15,6 +15,7 @@
   //background-color: #f9f9f9; 
   background-color: transparent;
   width: 100%;
+  //padding: 0.5rem;
 }
 
 
@@ -86,19 +87,26 @@
 .quadrant-menu__item-0 .quadrant-menu__item {
   background-color: var(--first-quadrant-color);
   border-top-right-radius: 40% 50%;
-  //text-align: left;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
 }
 .quadrant-menu__item-1 .quadrant-menu__item {
   background-color: var(--second-quadrant-color);
   border-top-left-radius: 40% 50%;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
 }
 .quadrant-menu__item-2 .quadrant-menu__item {
   background-color: var(--third-quadrant-color);
   border-bottom-right-radius: 40% 50%;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
 }
 .quadrant-menu__item-3 .quadrant-menu__item {
   background-color: var(--fourth-quadrant-color);
   border-bottom-left-radius: 40% 50%;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
 }
 
 /* Text alignment */
@@ -129,7 +137,7 @@
 .quadrant-menu__item-details {
   // border: 1px solid #ccc;
   // border-radius: 8px;
-  border: 2px solid red;
+  //border: 2px solid red;
   position: absolute;
   // background-color: rgba(112, 10, 10, 0.9);
   //top: 420px; // position below the circle
@@ -154,4 +162,20 @@
 }
 .quadrant-title--3 {
   color: var(--fourth-quadrant-color);
+}
+.quadrant-menu__item:hover {
+  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
+  border: none !important;
+  outline: none !important;
+  border-color: transparent !important;
+}
+
+.quadrant-menu__item:focus, 
+.quadrant-menu__item:focus-visible {
+  outline: none !important;
+  border: none !important;
+  //box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.1);
+  //box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+  //transform: scale(1.05);
+  //transition: transform 0.3s ease;
 }
