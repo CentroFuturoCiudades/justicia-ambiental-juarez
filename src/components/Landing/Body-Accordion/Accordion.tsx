@@ -182,6 +182,7 @@ const Accordion = () => {
     return (
       <div className="body">
 
+        {/* botones flotantes */}
         <div className="speed-dial">
           <div className="speed-dial__item">
               <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
