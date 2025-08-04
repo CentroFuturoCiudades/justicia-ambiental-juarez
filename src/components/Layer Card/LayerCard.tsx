@@ -36,7 +36,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
     }
 
 
-    const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
+    const agebAverage = selectedLayerData.formatValue(getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property));
     
     return (
         <div>
@@ -52,12 +52,12 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                                     {selectedLayerData?.description || "No hay descripción disponible."}
                                 </p>
                                 <p style={{ fontSize: "15px"}}>
-                                    Ciudad Juárez tiene un promedio de <strong> {agebAverage} </strong> de {selectedLayerData.title}
+                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong> {agebAverage} </strong>
                                 </p>
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                El AGEB seleccionado tiene un <strong>{selectedLayerData.formatValue(agebAverage, selectedLayerData.decimalPlaces)}</strong> de {selectedLayerData.title}
+                                {selectedAGEBS.length == 1 ? "El AGEB seleccionado tiene" : "Los AGEBs seleccionados tienen"} un <strong>{selectedLayerData.formatValue(agebAverage, selectedLayerData.decimalPlaces)}</strong> de {selectedLayerData.title}
                                 <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez
                             </p>
                         )}

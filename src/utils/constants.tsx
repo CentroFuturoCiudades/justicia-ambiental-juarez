@@ -383,7 +383,7 @@ export const LAYERS: any = {
         metrics: [],
     },
     ingreso: {
-        title: "Ingreso Promedio",
+        title: "Ingreso Promedio Mensual",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson",
         map_type: "geometry",
         property: "ingreso",
