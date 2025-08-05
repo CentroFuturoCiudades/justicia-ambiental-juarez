@@ -42,7 +42,7 @@ const items: AccordionItemType[] = [
             </div>
           </div>
 
-          <div style={{ gap: "1rem", display: "flex", flexDirection: "column", alignContent: "center"}}>
+          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
             <p className="subtitle-card">
               |justicia ambiental|
             </p>
@@ -56,18 +56,15 @@ const items: AccordionItemType[] = [
               and more recently with desktop publishing software like Aldus PageMaker including 
               versions of Lorem Ipsum.
             </p>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "1rem", width: "100%" }}>
-              <p className="bodytext-card"style={{ width: "50%"}}>
+            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "2rem", width: "100%" }}>
+              <p className="bodytext-card">
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
                 Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                when an unknown printer took a galley of type and scrambled it to make a type 
-                specimen book. It has survived not only five centuries, but also the leap into 
                 electronic typesetting, remaining essentially unchanged. It was popularised in 
-                the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
                 and more recently with desktop publishing software like Aldus PageMaker including 
                 versions of Lorem Ipsum.
               </p>
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" alt="Descripción de la imagen"></img>
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" ></img>
             </div>
           </div>
         </div>
@@ -82,27 +79,9 @@ const items: AccordionItemType[] = [
     content: (
       <div className="card">
         <div className="scrollable" >
-
-        <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
-          <p className="subtitle-card">
-            |metodología|
-          </p>
-          <p className="bodytext-card">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-            Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-            when an unknown printer took a galley of type and scrambled it to make a type 
-            specimen book. It has survived not only five centuries, but also the leap into 
-            electronic typesetting, remaining essentially unchanged. It was popularised in 
-            the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-            and more recently with desktop publishing software like Aldus PageMaker including 
-            versions of Lorem Ipsum.
-          </p>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between",  gap: "1rem", alignItems: "flex-start"}}>
-          <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: "1rem",  }}>
+          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
             <p className="subtitle-card">
-              |visualiza, compara y toma decisiones informadas|
+              |metodología|
             </p>
             <p className="bodytext-card">
               Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -115,9 +94,45 @@ const items: AccordionItemType[] = [
               versions of Lorem Ipsum.
             </p>
           </div>
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}></img>
 
-        </div>
+          <div style={{ display: "flex", flexDirection: "row", width: "100%", alignItems: "flex-start" }}>
+            <div style={{ display: "flex", flexDirection: "column", flex: "0 0 60%", maxWidth: "60%", gap: "1rem" }}>
+              <p className="subtitle-card" style={{ textAlign: "left" }}>
+                |visualiza, compara y toma decisiones informadas|
+              </p>
+              <p className="bodytext-card">
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type
+                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                when an unknown printer took a galley of type and scrambled it to make a type 
+                and more recently with desktop publishing software like Aldus PageMaker including 
+                versions of Lorem Ipsum.
+              </p>
+            </div>
+            <div style={{  maxWidth: "40%", display: "flex", flex: "0 0 40%", gap: "2rem", flexDirection: "row", alignItems: "flex-start", position: "relative" }}>
+              <div style={{
+                width: "120px",
+                height: "120px",
+                borderRadius: "50%",
+                background: "#f4cdd3",
+                position: "absolute",
+                right: "0",
+              }} />
+              <div style={{
+                width: "120px",
+                height: "120px",
+                borderRadius: "50%",
+                background: "#eeb0ba",
+                position: "absolute",
+                top: "7rem",
+                left: "10%",
+              }} />
+            </div>
+
+          </div>
         </div>
       </div>
     ),
