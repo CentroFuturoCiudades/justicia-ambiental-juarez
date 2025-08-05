@@ -25,7 +25,6 @@ const items: AccordionItemType[] = [
     title: "¿qué es la evaluación ambiental?",
     content: (
       <div className="card" >
-        <div className="space-top"/>
         <div className="scrollable" >
           <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
             <div className="subtitle-card">
@@ -82,7 +81,6 @@ const items: AccordionItemType[] = [
     title: "uso de la herramienta",
     content: (
       <div className="card">
-        <div className="space-top"/>
         <div className="scrollable" >
 
         <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
@@ -131,7 +129,6 @@ const items: AccordionItemType[] = [
     title: "4 ejes temáticos",
     content: (
       <div className="card" >
-        <div className="space-top"/>
         <div className="scrollable">
         <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
           <p className="subtitle-card">
