@@ -216,7 +216,7 @@
 }
 @media (min-width: 1400px) and (max-width: 1600px) {
   .quadrant-menu__grid {
-    height: 420px;
+    height: 400px;
   }
   .quadrant-menu__item-title {
     font-size: 22px;
@@ -228,6 +228,25 @@
   }
 }
 @media (min-width: 1601px) {
+  .quadrant-menu__grid {
+    height: 450px;
+  }
+  .quadrant-menu__item-title {
+    font-size: 24px;
+  }
+  .quadrant-menu__header {
+    width: 300px;         
+    height: 300px;
+    font-size: 24px;
+  }
+  .quadrant-title--0,
+  .quadrant-title--1,
+  .quadrant-title--2,
+  .quadrant-title--3 {
+    font-size: 24px;
+  }
+}
+@media (min-width: 1801px) {
   .quadrant-menu__grid {
     height: 500px;
   }
