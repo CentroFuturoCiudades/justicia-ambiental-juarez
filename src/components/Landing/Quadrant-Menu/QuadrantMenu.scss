@@ -208,13 +208,17 @@
   font-weight: bold;
 }
 
+.quadrant-description {
+  font-size: 14px;
+}
 
-@media (min-width: 1150px) and (max-width: 1399px) {
+
+@media (min-width: 1150px) {
   .quadrant-menu__grid {
     height: 320px;
   }
 }
-@media (min-width: 1400px) and (max-width: 1600px) {
+@media (min-width: 1400px) {
   .quadrant-menu__grid {
     height: 400px;
   }
@@ -226,8 +230,11 @@
     height: 250px;
     font-size: 22px;
   }
+  .quadrant-description {
+    font-size: 18px;
+  }
 }
-@media (min-width: 1601px) {
+@media (min-width: 1600px) {
   .quadrant-menu__grid {
     height: 450px;
   }

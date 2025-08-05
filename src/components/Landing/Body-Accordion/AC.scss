@@ -1,44 +1,39 @@
 .body {
   width: 100%;
   height: 100%;
-  //padding: 0rem 6rem 0rem 3rem;
   font-family: monospace;
-
-  &__content {
-    display: flex;
-    flex-direction: row;
-    //border: 1px solid red;
-    justify-content: space-between;
-    height: 100%;
-    //padding: 1rem 0rem;
-    padding: 1rem 6rem 1rem 3rem;
-    gap: 5rem;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem 6rem 1rem 3rem;
+  gap: 5rem;
+  //border: 1px solid red;
 
   &__buttonColumn {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    //border: 1px solid blue;
-    //padding: 3rem;
-    //height: 100%;
-    //overflow: hidden;
+    //border: 2px solid green;
+    width: 500px; // ancho fijo
   }
 
   &__button {
+    width: 100%; //ocupa todo el ancho del buttonColumn
+    box-sizing: border-box; //padding no crece el boton fuera de buttonColumn
+    white-space: normal; //permite el wrap de texto
+    word-break: break-word; //fuerza el salto
     border-radius: 0.2rem;
     padding: 3rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); //CHECAR ESTO HACERLO MAS BONITO
     align-content: center;
     display: flex;
     align-items: center;
-    border: 1px solid #c4c4c4;
-    //border: 2px solid #f5ede3; // siempre 3px
+    border: 1px solid #c4c4c4; //CHECAR ESTO HACERLO MAS BONITO
+    font-size: 18px;
   }
 
   &__buttonText {
     font-weight: bold;
-    font-size: 18px;
     color: black;
   }
 
@@ -56,66 +51,120 @@
   &__derecha {
     width: 100%;
     height: 100%;
+    //border: 1px solid green;
   }
 
   &__box {
-    margin-right: 1rem;
+    margin-right: 1rem; //para que el borde de la sombre este alineado con la raya del header
     height: 100%;
-    display: flex;
-    flex-direction: column;
     position: relative;
   }
 
   &__closeButton {
     cursor: pointer;
-    z-index: 3  ;
+    //z-index: 3  ;
     background-color: transparent;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    height: 40px;
+    top: -5px;
+    right: 5px;
+    height: 60px;
+    width: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 100%;
     padding: 0;
-    overflow: hidden;
     border: none;
+  }
 
+  &__closeIcon {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+  }
+
+
+  //responsiveness
+  @media (min-width: 1024px) {
+    &__buttonColumn {
+      width: 700px;
+    }
+    &__button {
+      padding: 3rem 3rem;
+      font-size: 18px;
+    }
+  }
+  @media (min-width:1280px) {
+    &__buttonColumn {
+      width: 700px;
+    }
+    &__button {
+      padding: 3.5rem 3rem;
+      //font-size: 18px;
+    }
+  }
+  @media (min-width: 1600px) {
+    &__buttonColumn {
+      width: 770px;
+    }
+    &__button {
+      padding: 4rem 3.5rem;
+      font-size: 24px;
+    }
+    &__buttonIcon {
+      height: 70px;
+      right: -40px;
+    }
   }
 
 }
-.scrollable {
-    z-index: 3;
-    //nuevo 
-    padding-top: 1rem; //*
-    overflow-y: auto; //*
-    padding-right: 1rem; //*
-    padding-left: 1rem; //* 
-    //border: 1px solid green;
-    //padding-right: clamp(1rem, 4vw, 2rem);
-    //padding-left: clamp(1rem, 4vw, 2rem);
-    gap: 2rem; //*
-    display: flex; //*
-    flex-direction: column; //*
-    //height: calc(100% - 1.5rem); //*
-    height: 100%;
-    
+
+@media (min-width: 1024px) {
+  .body {
+    padding: 2rem 6rem 2rem 3rem;
+  }
+}
+@media (min-width: 1280px) {
+  .body {
+    padding: 3rem 6rem 3rem 3rem;
+  }
 }
 
-.scrollable::-webkit-scrollbar {
-    width: 20px;
-    //height: 10px;
+.subtitle-card {
+  font-weight: bold;
+  font-size: 20px;
 }
+.bodytext-card {
+  font-size: 14px;
+}
+.scrollable {
+  z-index: 3;
+  //nuevo 
+  //padding-top: 1rem; //*
+  overflow-y: auto; //*
+  padding-right: 1rem; //*
+  padding-left: 1rem; //* 
+  gap: 2rem; //*
+  display: flex; //*
+  flex-direction: column; //*
+  height: 100%;
+  //border: 2px solid blue;
+  text-align: left;
+}
+
+/* SCROLLBAR STYLES */
+.scrollable::-webkit-scrollbar {
+  width: 20px;
+}
+
 .scrollable::-webkit-scrollbar-track {
-    background: transparent;
-    border: 1px solid black;
+  background: transparent;
+  border: 1px solid black;
 }
 .scrollable::-webkit-scrollbar-thumb {
-    background: #9f5548;
-    //border-radius: 10px;
-    border:1px solid transparent;
-    background-clip: content-box;
+  background: #9f5548;
+  border:1px solid transparent;
+  background-clip: content-box;
 }
 
 /* Flecha arriba */
@@ -133,6 +182,7 @@
   border: 1px solid #333;
   height: 20px;
 }
+
 
 .card_content_container {
   height: 100%;
@@ -157,9 +207,9 @@
 
 .body__closeButton:hover,
 .body__closeButton:active {
-  border-color: transparent;
-  border: none;
-  background-color: transparent;
+  border-color: transparent !important;
+  border: none !important;
+  background-color: transparent !important;
 }
 
 .body__closeButton:focus,
@@ -167,6 +217,11 @@
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+.body__closeIcon:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
 }
 
 .body__button:focus,
@@ -276,7 +331,7 @@
 }
 
 
-//estilos de tarjetas
+/* CONTENIDO DE TARJETAS */
 .card {
   height: 100%;
   width: 100%;
@@ -286,7 +341,7 @@
   //padding-left: 1.5rem;
   padding-bottom: 1.5rem;
   //padding-top: 3.5rem;
-  border: 1px solid black;
+  //border: 3px solid black;
 }
 
 .space-top {
@@ -295,20 +350,26 @@
   //border: 1px solid blue;
 }
 
-@media (min-width: 1150px) and (max-width: 1399px) {
+@media (min-width: 1150px) {
   .scrollable {
     padding-right: 2rem;
     padding-left: 2rem;
     //padding-top: 1rem;
   }
 }
-@media (min-width: 1400px) and (max-width: 1600px) {
+@media (min-width: 1400px)  {
   .scrollable {
     padding-right: 3rem;
     padding-left: 3rem;
   }
+  .subtitle-card {
+    font-size: 24px;
+  }
+  .bodytext-card {
+    font-size: 18px;
+  }
 }
-@media (min-width: 1601px) {
+@media (min-width: 1600px) {
   .scrollable {
     padding-right: 4rem;
     padding-left: 4rem;
