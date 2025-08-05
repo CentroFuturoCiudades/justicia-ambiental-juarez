@@ -46,7 +46,8 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
                         >
                             <button
                                 onClick={() => toggleIndex(item, index)}
-                                className="quadrant-menu__item"
+                                //className="quadrant-menu__item"
+                                className={`quadrant-menu__item${activeIndex === index ? " quadrant-menu__item--selected" : ""}`}
                                 aria-expanded={activeIndex === index}
                             >
                                 <p className="quadrant-menu__item-title">{item.title}</p>
@@ -57,9 +58,9 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
                 </div>
             </section>
             {activeItem && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem"}}>
-                    <p className={`quadrant-title--${activeIndex}`} style={{ fontWeight: 'bold', fontSize: "20px" }}>{activeItem.title}</p>
-                    <p>
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%"}}>
+                    <p className={`quadrant-title--${activeIndex}`} >{activeItem.title}</p>
+                    <p className='quadrant-description'>
                         {activeItem.description}
                     </p>
                 </div>
