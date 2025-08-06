@@ -111,6 +111,7 @@ export class MapLayer {
           Math.round((1 - this.opacity) * bg[1] + this.opacity * g),
           Math.round((1 - this.opacity) * bg[2] + this.opacity * b)
         ];
+        //return [240, 240, 240]; 
       }
     }
 
