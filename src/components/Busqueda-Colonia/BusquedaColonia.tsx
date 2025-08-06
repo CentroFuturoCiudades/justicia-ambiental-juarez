@@ -118,6 +118,7 @@ const BusquedaColonia = () => {
                                                     cursor="pointer"
                                                     variant="solid"
                                                     size="sm"
+                                                    disabled
                                                     checked={selectedColonias.includes(colonia)}
                                                 >
                                                     <Checkbox.HiddenInput

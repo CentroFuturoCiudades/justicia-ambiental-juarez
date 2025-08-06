@@ -19,7 +19,7 @@ import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downloadPdf } from "../../utils/downloadFile";
+import { downloadPdf, downlaodFile } from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
@@ -534,7 +534,8 @@ const Visor = () => {
                                 transitionDuration: 0,
                             } as any);
                             setTimeout(() => {
-                                downloadPdf(deck.current, map.current, mapLayerInstance);
+                                // downloadPdf(deck.current, map.current, mapLayerInstance);
+                                downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>
                         <RiDownloadLine />

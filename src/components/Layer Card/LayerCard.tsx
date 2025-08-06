@@ -37,6 +37,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
 
 
     const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
+    const agebAverageFormatted = selectedLayerData.formatValue(agebAverage);
     
     return (
         <div>
@@ -48,20 +49,17 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                     <div>
                         { selectedAGEBS.length === 0 ? (
                             <div>
-                                <p className="layerCard__layerDescription">
-                                    {selectedLayerData?.description || "No hay descripción disponible."}
-                                </p>
                                 <p style={{ fontSize: "15px"}}>
-                                    Ciudad Juárez tiene un promedio de <strong> {agebAverage} </strong> de {selectedLayerData.title}
+                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{agebAverageFormatted}</strong>.
                                 </p>
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                El AGEB seleccionado tiene un <strong>{selectedLayerData.formatValue(agebAverage, selectedLayerData.decimalPlaces)}</strong> de {selectedLayerData.title}
-                                <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez
+                                {selectedAGEBS.length == 1 ? "El AGEB seleccionado tiene" : "Los AGEBs seleccionados tienen"} un {selectedLayerData.title} de <strong>{agebAverageFormatted}</strong>; por
+                                <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
                             </p>
                         )}
-                        {mapLayerInstance.getRangeGraph(agebAverage)}
+                        {mapLayerInstance.getRangeGraph(selectedAGEBS.length > 0 ? agebAverage : undefined)}
                     </div>
                 </div>
             </div>

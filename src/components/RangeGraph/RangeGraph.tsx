@@ -25,7 +25,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         }}
       >
         {/* PROMEDIO DE AGEB INDICADOR */}
-        <div className="rangeGraph__agebLabel" style={{
+        {averageAGEB && !isNaN(averageAGEB) && <div className="rangeGraph__agebLabel" style={{
           left: `${((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
           top: -17,
           position: "absolute",
@@ -38,7 +38,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
             {formatValue(averageAGEB)}
           </p>
           <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
-        </div>
+        </div>}
 
         {/* PROMEDIO CIUDAD JUAREZ */}
         <div className="rangeGraph__average" style={{

@@ -194,3 +194,12 @@ export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer |
   const blobPdf = new Blob([pdf.buffer], { type: 'application/pdf' });
   window.open(URL.createObjectURL(blobPdf));
 }
+
+
+export const downlaodFile = (url: string, filename: string) => {
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
