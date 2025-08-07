@@ -29,8 +29,7 @@ import  booleanIntersects  from "@turf/boolean-intersects";     //para ver inter
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
-import { active } from "d3";
-
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -421,6 +420,9 @@ const Visor = () => {
                     </Button>
                     <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
                         <PiIntersectSquareFill />
+                    </Button>
+                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias_geojson([])}>
+                        <FaRegTrashCan />
                     </Button>
                 </div>
             </div>
