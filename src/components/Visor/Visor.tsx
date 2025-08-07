@@ -29,6 +29,7 @@ import  booleanIntersects  from "@turf/boolean-intersects";
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
+import { active } from "d3";
 
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -46,8 +47,9 @@ const Visor = () => {
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
-    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
     const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
+    //const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
     const [tematicaData, setTematicaData] = useState<any>(null);
@@ -68,8 +70,15 @@ const Visor = () => {
         }
     };
 
+    const handleSelectedColonias = (info: any) => {
+        if (info) {
+            const nombre = info.object.properties.NOMBRE as string;
+            setSelectedColonias(prev => prev.includes(nombre) ? prev.filter(key => key !== nombre) : [...prev, nombre]);
+        }
+    };
+
     // por que es mejor con callback??
-    const handleSelectedAGEBS2 = useCallback((info: any) => {
+    /*const handleSelectedAGEBS2 = useCallback((info: any) => {
         if (info) {
             const cvegeo = info.object.properties.cvegeo as string;
             setSelectedAGEBS(prev => prev.includes(cvegeo) ? prev.filter(key => key !== cvegeo) : [...prev, cvegeo]);
@@ -81,7 +90,7 @@ const Visor = () => {
             const nombre = info.object.properties.NOMBRE as string;
             setSelectedColonias_geojson(prev => prev.includes(nombre) ? prev.filter(key => key !== nombre) : [...prev, nombre]);
         }
-    }, [setSelectedColonias_geojson]);
+    }, [setSelectedColonias_geojson]);*/
 
     let dissolvedLayer: GeoJsonLayer[] = [];
 
@@ -113,10 +122,9 @@ const Visor = () => {
             .map((ageb: any) => ageb.properties.cvegeo);
     }, [selectedColoniasGeometries]);
 
-    //useEffect inicial: hace un unico fetch de geojson de agebs y colonias
+    //useEffect inicial: hace un unico fetch de files geojson de agebs y colonias
     useEffect(() => {
         const agebEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson";
-        //https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson
         const coloniaEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/neighborhoods.geojson";
 
         (async () => {
@@ -220,9 +228,9 @@ const Visor = () => {
         })();
     }, [selectedLayer, selectedAGEBS]);
 
-    //nuevo useeffect sin fetch para reemplazar todo el pedo de usememos
+    //nuevo useeffect: cada que cambia la selectedLayer o selectedAGEBS, se crea una nueva capa de agebs Y colonias
     useEffect(() => {
-        if (!selectedLayer || !mapLayerInstance_AGEB || !agebsGeoJson) {
+        if (!selectedLayer || !mapLayerInstance_AGEB || !agebsGeoJson || !mapLayerInstance_COLONIA) {
             setTematicaData(null);
             setTematicaLayer(null);
             return;
@@ -245,128 +253,105 @@ const Visor = () => {
             formatValue: layer.formatValue
         });*/
 
-        //json data ahora es una copia de agebsGeoJson
-        //let jsonData = agebsGeoJson; //que se fetcheo al inicio
-        let jsonData = JSON.parse(JSON.stringify(agebsGeoJson)); // Clona profundo
+        let jsonData = JSON.parse(JSON.stringify(agebsGeoJson)); //copia del geojson universal de agebs
 
         if (layer.dataProcesssing) {
             jsonData = layer.dataProcesssing(jsonData);
-            //console.log("USEFFECT2 - jsonData features after processing:", jsonData);
         }
-        //console.log("jsonData features:", jsonData.features);
-        //crea la capa 
-        const geojsonLayer = mapLayerInstance_AGEB.getLayer(
+
+        //crea la capa de agebs
+        /*const geojsonLayer = mapLayerInstance_AGEB.getLayer(
             jsonData, 
             layer.property, 
             layer.is_lineLayer, 
             true, 
             handleSelectedAGEBS, 
             selectedAGEBS
-        );
+        );*/
+        //crea la capa de colonias
+        /*const geojsonLayer_colonias = mapLayerInstance_COLONIA.getLayer(
+            agebsGeoJson,           //puede ser como jsonData, depende de si se procesa o no
+            "porcentaje_pob_60",    //seria layer.property, pero por ahora es fijo
+            false,
+            true,
+            handleSelectedAGEBS,
+            selectedAGEBS,
+        );*/
         //actualiza el estado
-        setTematicaData(jsonData);
-        setTematicaLayer(geojsonLayer);
+        setTematicaData(jsonData);              // data que va a ir en la layerCard
+        //setTematicaLayer(geojsonLayer);       // layer agebs que se va a renderizar en el visor
+        //setColoniasLayer(geojsonLayer_colonias); // layer colonias que se va a renderizar en el visor
 
     }, [selectedLayer, selectedAGEBS]);
 
-    useEffect(() => {
-        console.log("selectedlayeDATA:", selectedLayerData);
-    }, [selectedLayerData]);
 
-    /*const processedAGEBSData = useMemo(() => {
-        if (!agebsGeoJson || !mapLayerInstance_AGEB) return null;
-        if(selectedLayerData?.formatValue) {
-            mapLayerInstance_AGEB.formatValue = selectedLayerData.formatValue;
+    /*
+        la capa de geojson se deberia crear cada vez que cambie alguna de las dependencias,
+        si se guarda en un useState, como lo hice arriba dentro del useEffect,
+        al quitar y poner la capa, se pierde y dice que no puede renderizar un destroyed object
+        por eso se usa useMemo, para que se vuelva a crear la capa cada vez que cambien las dependencias.
+    */
+    const agebsLayer = useMemo(() => {
+        if ( !mapLayerInstance_AGEB) return null;
+
+        //si hay selectedLayer, hacer la capa con la property de la selectedLayer
+        if (selectedLayer && tematicaData ) {
+            return mapLayerInstance_AGEB.getLayer(
+                tematicaData,
+                selectedLayerData?.property || "",
+                selectedLayerData?.is_lineLayer || false,
+                true,
+                handleSelectedAGEBS,
+                selectedAGEBS,
+            );
         }
-        if (selectedLayer && selectedLayerData?.dataProcesssing) {
-            return selectedLayerData.dataProcesssing(agebsGeoJson);
-        }
-        return agebsGeoJson;
-    }, [agebsGeoJson, selectedLayer, selectedLayerData]);
-
-    //se crea una capa de agebs: solo devuelve la capa
-    const agebLayer = useMemo(() => {
-        if (!agebsGeoJson || !mapLayerInstance_AGEB || !processedAGEBSData) return null;
-        //let jsonData = agebsGeoJson;
-
-        //si hay selectedlayer
-        if ( selectedLayer) {
-            if( selectedLayerData.map_type === "geometry"  ) {
-                console.log("entro al nuevo memo de agebLayer");
-
-
-                return mapLayerInstance_AGEB.getLayer(
-                    //jsonData,
-                    processedAGEBSData,
-                    selectedLayerData.property,
-                    false,
-                    true,
-                    handleSelectedAGEBS,
-                    selectedAGEBS,
-                );
-            }
-        }
-
-        //si no hay selectedlayer, son los agebs de juarez
+        //si no hay selectedLayer, son los agebs de juarez
         return mapLayerInstance_AGEB.getLayer(
             agebsGeoJson,
-            "",
+            "",     //sin indicador/property
             false,
             true,
-            handleSelectedAGEBS2,
+            handleSelectedAGEBS,
             selectedAGEBS,
         );
 
-    }, [ agebsGeoJson, selectedAGEBS, selectedLayer, activeLayerKey, processedAGEBSData]);
+    }, [agebsGeoJson, selectedAGEBS, selectedLayerData, activeLayerKey]);
 
-    //se crea la data procesada de la tematica seleccionada
-    /*useEffect(() => {
-        if (!selectedLayer || !agebsGeoJson || !mapLayerInstance_AGEB) return;
-        if(selectedLayerData?.formatValue) {
-            mapLayerInstance_AGEB.formatValue = selectedLayerData.formatValue;
+    //se crea la capa de colonias
+    const coloniaLayer = useMemo(() => {
+        if (!coloniasGeoJson || !mapLayerInstance_COLONIA) return null;
+
+        //si hay selectedLayer, hacer la capa con la property de la selectedLayer
+        if ( selectedLayer ) {
+            return mapLayerInstance_COLONIA.getLayer(
+                coloniasGeoJson,        //puede ser como tematicaData, depende de si se procesa o no
+                "porcentaje_pob_60",    //seria layer.property, pero por ahora es fijo
+                false,
+                true,
+                handleSelectedColonias,
+                selectedColonias_geojson,
+            );
         }
-        
-        if (selectedLayerData?.dataProcesssing) {
-            //console.log("entro al useEffect de dataProcesssing");
-            const processedData = selectedLayerData.dataProcesssing(agebsGeoJson);
-            setTematicaData(processedData);
-        } else {
-            setTematicaData(agebsGeoJson);
-        }
-    }, [selectedLayer, selectedAGEBS]);
 
-    useEffect(() => {
-        setTematicaData(processedAGEBSData);
-    }, [processedAGEBSData]);*/
-
-    /*useEffect(() => {
-        console.log("tematicaData features sobre los que se calcula el average:", tematicaData?.features);
-    }, [tematicaData]);*/
-
-
-    /*const coloniaLayer = useMemo(() => {
-        if (!coloniasGeoJson ) return null;
-        console.log("entro al nuevo memo de coloniaLayer");
-        const coloniaMapLayerInstance = new MapLayer({ opacity: 1, title: "colonias" });
-        //usar la misma getlayer?? o hacer una nueva funcion??
-        
-        return coloniaMapLayerInstance.getLayer(
+        //si no hay selectedLayer, son las colonias de juarez
+        return mapLayerInstance_COLONIA.getLayer(
             coloniasGeoJson,
-            "porcentaje_pob_60",
+            "",     //sin indicador/property
             false,
             true,
             handleSelectedColonias,
             selectedColonias_geojson,
         );
-    }, [coloniasGeoJson, handleSelectedColonias, selectedColonias_geojson]);
+    }, [coloniasGeoJson, selectedColonias_geojson, activeLayerKey]);
 
-    /*const layer = useMemo(() => {
-        if (activeLayerKey === "agebs"){
-            return agebLayer;
-        } 
+
+    const layer = useMemo(() => {
+        //if (activeLayerKey === "agebs") return agebLayer;
+        //if (activeLayerKey === "colonias") return coloniaLayer;
+        if (activeLayerKey === "agebs") return agebsLayer;
         if (activeLayerKey === "colonias") return coloniaLayer;
         return null;
-    }, [activeLayerKey]);*/
+    }, [activeLayerKey]);
 
     // cambio de layer activa (botones arriba)
     const handleLayerToggle = (layerKey: string) => {
@@ -492,10 +477,10 @@ const Visor = () => {
                     }}
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
-                        //...(layer ? [layer] : []), // juarez, agebs, colonias 
+                        ...(layer ? [layer] : []), // juarez, agebs, colonias 
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
                         //...dissolvedLayer,
-                        ...(coloniasLayer ? [coloniasLayer] : []),
+                        //...(coloniasLayer ? [coloniasLayer] : []),
                         ...dissolvedLayer,
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
@@ -542,13 +527,13 @@ const Visor = () => {
                     </Button>
             
                     <ZoomControls />
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={() => handleLayerToggle("juarez")}>
+                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
                         <LuSquareDashed />
                     </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={() => handleLayerToggle("agebs")}>
+                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
                         <PiIntersectSquareDuotone />
                     </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={() => handleLayerToggle("colonias")}>
+                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
                         <PiIntersectSquareFill />
                     </Button>
                 </div>
