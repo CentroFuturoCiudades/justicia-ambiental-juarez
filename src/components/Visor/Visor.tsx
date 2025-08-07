@@ -42,7 +42,7 @@ const Visor = () => {
         selectedLayer, 
         selectedBaseLayers, 
         selectedAGEBS, setSelectedAGEBS, 
-         selectedColonias, setSelectedColonias, 
+        selectedColonias, setSelectedColonias, 
         // coloniasData, 
         activeLayerKey, setActiveLayerKey                       // ahora es context variable
     } = useAppContext();
@@ -168,8 +168,8 @@ const Visor = () => {
         //crea la capa geojson
         const geoJsonLayer = mapLayerInstance.getLayer(
             jsonData,
-            selectedLayerData?.property || "",
-            selectedLayerData?.is_lineLayer || false,
+            layer?.property || "",
+            layer?.is_lineLayer || false,
             true,
             activeLayerKey === "agebs" ? handleSelectedAGEBS : handleSelectedColonias,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
