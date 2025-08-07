@@ -1,53 +1,48 @@
 .body {
   width: 100%;
   height: 100%;
-  //padding: 0rem 6rem 0rem 3rem;
-  font-family: monospace;
-
-  &__content {
-    display: flex;
-    flex-direction: row;
-    //border: 1px solid red;
-    justify-content: space-between;
-    height: 100%;
-    //padding: 1rem 0rem;
-    padding: 1rem 6rem 1rem 3rem;
-    gap: 5rem;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 2em 8vw 2em 4vw;
+  gap: 6vw;
 
   &__buttonColumn {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    //border: 1px solid blue;
-    //padding: 3rem;
-    //height: 100%;
-    //overflow: hidden;
+    width: 55vw;
+    font-family: monospace;
+    min-width: 30em;
   }
 
   &__button {
-    border-radius: 0.2rem;
-    padding: 3rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    height: 14vh;
+    box-sizing: border-box; //padding no crece el boton fuera de buttonColumn
+    white-space: normal; //permite el wrap de texto
+    word-break: break-word; //fuerza el salto
+    border-radius: 0.5em;
+    padding: 0em 1.5em;
+    box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
     align-content: center;
     display: flex;
     align-items: center;
-    border: 1px solid #c4c4c4;
-    //border: 2px solid #f5ede3; // siempre 3px
+    border: 0.08em solid #c4c4c4;
+    font-size: 1.4em;
   }
 
   &__buttonText {
     font-weight: bold;
-    font-size: 18px;
     color: black;
   }
 
   &__buttonIcon {
     position: absolute;
-    right: -30px;
+    right: -1.7em;
     top: 50%;
     transform: translateY(-50%);
-    height: 56px;
+    height: 3.5em;
     border-radius: 50%;
   }
 
@@ -59,107 +54,69 @@
   }
 
   &__box {
-    margin-right: 1rem;
+    margin-right: 1em;
     height: 100%;
-    display: flex;
-    flex-direction: column;
     position: relative;
   }
 
   &__closeButton {
     cursor: pointer;
-    z-index: 3  ;
     background-color: transparent;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    height: 40px;
+    top: -0.3em;
+    right: 0.3em;
+    height: 3.75em;
+    width: 3.75em;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 100%;
     padding: 0;
-    overflow: hidden;
     border: none;
+  }
 
+  &__closeIcon {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
   }
 
 }
-.scrollable {
-    z-index: 3;
-    //nuevo 
-    padding-top: 1rem; //*
-    overflow-y: auto; //*
-    padding-right: 1rem; //*
-    padding-left: 1rem; //* 
-    //border: 1px solid green;
-    //padding-right: clamp(1rem, 4vw, 2rem);
-    //padding-left: clamp(1rem, 4vw, 2rem);
-    gap: 2rem; //*
-    display: flex; //*
-    flex-direction: column; //*
-    //height: calc(100% - 1.5rem); //*
-    height: 100%;
-    
+
+.subtitle-card {
+  font-weight: bold;
+  font-size: 1.5em;
+  font-family: monospace;
+}
+.bodytext-card {
+  font-size: 1em;
+  font-family: 'Playfair Display', serif;
 }
 
-.scrollable::-webkit-scrollbar {
-    width: 20px;
-    //height: 10px;
-}
-.scrollable::-webkit-scrollbar-track {
-    background: transparent;
-    border: 1px solid black;
-}
-.scrollable::-webkit-scrollbar-thumb {
-    background: #9f5548;
-    //border-radius: 10px;
-    border:1px solid transparent;
-    background-clip: content-box;
-}
 
-/* Flecha arriba */
-.scrollable::-webkit-scrollbar-button:vertical:start:decrement {
-  background: url('/assets/ARROW_UP.png') center center no-repeat;
-  background-size: 20px 20px;
-  height: 20px;
-  border: 1px solid #333;
-}
-
-/* Flecha abajo */
-.scrollable::-webkit-scrollbar-button:single-button:vertical:increment {
-  background: url('/assets/ARROW_DOWN.png') center center no-repeat;
-  background-size: 20px 20px;
-  border: 1px solid #333;
-  height: 20px;
-}
 
 .card_content_container {
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 1rem 0rem;
+  padding: 1em 0;
 }
 
 .body__button:hover {
-  border: 1px solid #c4c4c4;
-  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.1);
+  border: 0.08em solid #c4c4c4;
+  box-shadow: 0px 0.25em 0.125em rgba(0, 0, 0, 0.1);
 }
-.body__button--selected{
-  border: 1px solid black;
-  box-shadow: 0 0 0 2px black;
-}
+.body__button--selected,
 .body__button--selected:hover {
-  border: 1px solid black;
-  box-shadow: 0 0 0 2px black;
+  box-shadow: 0 0.25em 0.125em rgba(0, 0, 0, 0.1);
 }
 
 .body__closeButton:hover,
 .body__closeButton:active {
-  border-color: transparent;
-  border: none;
-  background-color: transparent;
+  border-color: transparent !important;
+  border: none !important;
+  background-color: transparent !important;
 }
 
 .body__closeButton:focus,
@@ -167,6 +124,11 @@
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+.body__closeIcon:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
 }
 
 .body__button:focus,
@@ -181,9 +143,12 @@
     flex-direction: column;
     align-items: flex-end;
     //justify-content: center;
-    gap: 1.5rem;
-    top: 5.5rem;
-    right: 2rem;
+    //gap: 1.5rem;
+    gap: 2em;
+    //top: 5.5rem;
+    top: 6em;
+    //right: 2rem;
+    right: 2em;
     position: absolute;
     //z-index: 5;
 
@@ -276,42 +241,67 @@
 }
 
 
-//estilos de tarjetas
+/* CONTENIDO DE TARJETAS */
 .card {
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding-right: 1.5rem;
+  //padding-right: 1.5rem;
+  padding-right: 1.5em;
   //padding-left: 1.5rem;
-  padding-bottom: 1.5rem;
-  //padding-top: 3.5rem;
-  border: 1px solid black;
+  padding-left: 1.5em;
+  //padding-top: 2.7rem;
+  padding-top: 2.5em;
+  //padding-bottom: 1.5rem;
+  padding-bottom: 1.5em;
+  //border: 3px solid black;
 }
 
-.space-top {
-  padding-top: 2.7rem;
-  //padding-left: 1.5rem;
-  //border: 1px solid blue;
+.scrollable {
+  width: 100%;
+  z-index: 3;
+  overflow-y: auto; 
+  //padding-right: 1rem; 
+  padding-right: 1em;
+  //padding-left: 1rem; 
+  padding-left: 0.5em;
+  gap: 2em; 
+  display: flex; 
+  flex-direction: column; 
+  height: 100%;
+  //border: 2px solid blue;
+  text-align: justify;
 }
 
-@media (min-width: 1150px) and (max-width: 1399px) {
-  .scrollable {
-    padding-right: 2rem;
-    padding-left: 2rem;
-    //padding-top: 1rem;
-  }
+/* SCROLLBAR STYLES */
+.scrollable::-webkit-scrollbar {
+  //width: 20px;
+  width: 1.25em;
 }
-@media (min-width: 1400px) and (max-width: 1600px) {
-  .scrollable {
-    padding-right: 3rem;
-    padding-left: 3rem;
-  }
-}
-@media (min-width: 1601px) {
-  .scrollable {
-    padding-right: 4rem;
-    padding-left: 4rem;
-  }
 
+.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+  border: 0.08em solid black;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: #9f5548;
+  border: 0.08em solid transparent;
+  background-clip: content-box;
+}
+
+/* Flecha arriba */
+.scrollable::-webkit-scrollbar-button:vertical:start:decrement {
+  background: url('/assets/ARROW_UP.png') center center no-repeat;
+  background-size: 20px 20px;
+  height: 20px;
+  border: 1px solid #333;
+}
+
+/* Flecha abajo */
+.scrollable::-webkit-scrollbar-button:single-button:vertical:increment {
+  background: url('/assets/ARROW_DOWN.png') center center no-repeat;
+  background-size: 20px 20px;
+  border: 1px solid #333;
+  height: 20px;
 }

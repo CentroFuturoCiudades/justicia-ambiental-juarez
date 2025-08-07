@@ -13,8 +13,8 @@ interface AppContextI {
     setViewState: Dispatch<SetStateAction<ViewState>>;
     selectedLayer: string;
     setSelectedLayer: Dispatch<SetStateAction<string>>;
-    //selectedLayersMultiple: string[];
-    //setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
+    activeLayerKey: string;
+    setActiveLayerKey: Dispatch<SetStateAction<string>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -23,6 +23,7 @@ interface AppContextI {
     setSelectedAGEBS: Dispatch<SetStateAction<string[]>>;
     selectedColonias: string[];
     setSelectedColonias: Dispatch<SetStateAction<string[]>>;
+    //
     selectedColonias_SET: Set<string>;
     setSelectedColonias_SET: Dispatch<SetStateAction<Set<string>>>;
     coloniasData: FeatureCollection;
@@ -50,8 +51,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
-    //varias capas
-    //const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
+    const [activeLayerKey, setActiveLayerKey] = useState<string>("juarez");
+
+    //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
 
     //zoom
@@ -60,6 +62,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
+    //
     const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
     const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
 
@@ -69,16 +72,16 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setViewState,
             selectedLayer, 
             setSelectedLayer, 
-            //selectedLayersMultiple,
-            //setSelectedLayersMultiple,
+            activeLayerKey,
+            setActiveLayerKey,
             selectedBaseLayers,
             setSelectedBaseLayers,
-            selectedColonias,
-            setSelectedColonias,
             zoomIn,
             zoomOut,
             selectedAGEBS,
             setSelectedAGEBS,
+            selectedColonias,
+            setSelectedColonias,
             selectedColonias_SET,
             setSelectedColonias_SET,
             coloniasData,

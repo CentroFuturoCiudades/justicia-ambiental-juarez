@@ -5,20 +5,12 @@ import "./Tematica.scss";
 
 const Tematica = () => {
 
-    const { selectedLayer, setSelectedLayer } = useAppContext();
-    //const { selectedLayersMultiple, setSelectedLayersMultiple } = useAppContext();
+    const { selectedLayer, setSelectedLayer, setActiveLayerKey } = useAppContext();
 
-    //una sola capa seleccionada a la vez
     const handleLayerToggle = (layerKey: string) => {
         setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
+        setActiveLayerKey( layerKey === selectedLayer ? "juarez" : "agebs");
     }
-
-    //varias capas seleccionadas
-    /*const handleMultipleLayerToggle = (layerKey: string) => {
-        setSelectedLayersMultiple(prev => 
-            prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
-        );
-    };*/
  
     return (
         <div className="tematica-container">

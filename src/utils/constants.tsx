@@ -111,7 +111,7 @@ export const LAYERS: any = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
-        enabled: true,
+        enabled: false,
         formatValue: (x: number) => {
             return formatNumber(x, 1) + " °C"
         },
@@ -133,7 +133,7 @@ export const LAYERS: any = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
-        enabled: true,
+        enabled: false,
         formatValue: (x: number) => {
             return formatNumber(x, 2) + " ppm"
         },
@@ -434,9 +434,21 @@ export const LAYERS: any = {
         title: "Porcentaje de población de 60+",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/ingresos_por_ageb.geojson",
         map_type: "geometry",
-        property: "income_pc",
+        property: "porcentaje_pob_60",
         is_lineLayer: false,
         type: "Continua",
+        enabled: true,
+        // lo multiplique por 100 para que sea un porcentaje
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_60 !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_pob_60 = Math.round(feature.properties.porcentaje_pob_60 * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 2) + "%"
+        },
         metric: "porcentaje", //0% a 10%
         stat_type: "promedio",
         visualization_type: "Velocimetro",
@@ -447,6 +459,7 @@ export const LAYERS: any = {
         year: null,
         graphs: [],
         metrics: [],
+        colors: ['#B7E4B0', '#8FE38F', '#43A047', '#2E7D32', '#145A23']
     },
     porcentaje_escolaridad: {
         title: "Grado promedio de escolaridad",
