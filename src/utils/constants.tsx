@@ -111,7 +111,7 @@ export const LAYERS: any = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
-        enabled: true,
+        enabled: false,
         formatValue: (x: number) => {
             return formatNumber(x, 1) + " °C"
         },
@@ -133,7 +133,7 @@ export const LAYERS: any = {
         property: "income_pc",
         is_lineLayer: false,
         type: "Continua",
-        enabled: true,
+        enabled: false,
         formatValue: (x: number) => {
             return formatNumber(x, 2) + " ppm"
         },

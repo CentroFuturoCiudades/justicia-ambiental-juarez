@@ -12,8 +12,6 @@ import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
-import { BitmapLayer } from "@deck.gl/layers";
-import { RasterLayer } from "../../classes/RasterLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
@@ -24,8 +22,8 @@ import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
-import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
-import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
+//import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
+//import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
@@ -44,9 +42,8 @@ const Visor = () => {
         selectedLayer, 
         selectedBaseLayers, 
         selectedAGEBS, setSelectedAGEBS, 
-        // selectedColonias, setSelectedColonias, 
+         selectedColonias, setSelectedColonias, 
         // coloniasData, 
-        selectedColonias_geojson, setSelectedColonias_geojson, 
         activeLayerKey, setActiveLayerKey                       // ahora es context variable
     } = useAppContext();
 
@@ -54,8 +51,8 @@ const Visor = () => {
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
-    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
-    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
+    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | null>(null);
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | null>(null);
     const [tematicaData, setTematicaData] = useState<any>(null);                                        // data que va a ir en la layerCard
 
     //const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
@@ -77,9 +74,9 @@ const Visor = () => {
 
     //get geometries of selectedColonias
     const selectedColoniasGeometries = useMemo(() => {
-        const setColonias = new Set(selectedColonias_geojson);
+        const setColonias = new Set(selectedColonias);
         return coloniasGeoJson?.features?.filter((feature: any) => setColonias.has(feature.properties.name));
-    }, [selectedColonias_geojson]);
+    }, [selectedColonias]);
 
 
     const handleSelectedAGEBS = (info: any) => {
@@ -92,7 +89,7 @@ const Visor = () => {
     const handleSelectedColonias = (info: any) => {
         if (info) {
             const name = info.object.properties.name as string;
-            setSelectedColonias_geojson(prev => prev.includes(name) ? prev.filter(key => key !== name) : [...prev, name]);
+            setSelectedColonias(prev => prev.includes(name) ? prev.filter(key => key !== name) : [...prev, name]);
         }
     };
 
@@ -169,7 +166,7 @@ const Visor = () => {
             selectedLayerData?.is_lineLayer || false,
             true,
             activeLayerKey === "agebs" ? handleSelectedAGEBS : handleSelectedColonias,
-            activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias_geojson,
+            activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
         );
         setTematicaLayer(geoJsonLayer);
         setMapLayerInstance(mapLayerInstance);
@@ -230,37 +227,6 @@ const Visor = () => {
             console.error('Error dissolving features:', error);
         }
     }
-
-
-    // para que se vea el raster (islas y calidad del aire)
-    useEffect(() => {
-        (async () => {
-
-            if (!selectedLayer) {
-                //setTematicaLayer(null);
-                //setMapLayerInstance(null);
-                return;
-            }
-
-            const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-            if (!layer?.url) {
-                console.error(`No URL for layer: ${selectedLayer}`);
-                return;
-            }
-            const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
-            //raster layer (se va a quitar)
-            if (layer.map_type === "raster") {
-                const rasterLayerInstance = new RasterLayer({
-                    opacity: 0.7,
-                    title: layer.title,
-                    formatValue: layer.formatValue
-                });
-                await rasterLayerInstance.loadRaster(urlBlob);
-                setTematicaLayer(rasterLayerInstance.getBitmapLayer());
-                setMapLayerInstance(rasterLayerInstance);
-            }
-        })();
-    }, [selectedLayer, selectedAGEBS]);
 
     //varias capas de BASE??
     useEffect(() => {
@@ -421,7 +387,7 @@ const Visor = () => {
                     <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
                         <PiIntersectSquareFill />
                     </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias_geojson([])}>
+                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
                         <FaRegTrashCan />
                     </Button>
                 </div>

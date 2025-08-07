@@ -21,12 +21,9 @@ interface AppContextI {
     zoomOut: () => void;
     selectedAGEBS: string[];
     setSelectedAGEBS: Dispatch<SetStateAction<string[]>>;
-    //selectedcolonias para manejar en el geojson
-    selectedColonias_geojson: string[];
-    setSelectedColonias_geojson: Dispatch<SetStateAction<string[]>>;
-    ///
     selectedColonias: string[];
     setSelectedColonias: Dispatch<SetStateAction<string[]>>;
+    //
     selectedColonias_SET: Set<string>;
     setSelectedColonias_SET: Dispatch<SetStateAction<Set<string>>>;
     coloniasData: FeatureCollection;
@@ -64,9 +61,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
-    const [selectedColonias_geojson, setSelectedColonias_geojson] = useState<string[]>([]);
-    ///
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
+    //
     const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
     const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
 
@@ -80,14 +76,12 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setActiveLayerKey,
             selectedBaseLayers,
             setSelectedBaseLayers,
-            selectedColonias,
-            setSelectedColonias,
             zoomIn,
             zoomOut,
             selectedAGEBS,
             setSelectedAGEBS,
-            selectedColonias_geojson,
-            setSelectedColonias_geojson,
+            selectedColonias,
+            setSelectedColonias,
             selectedColonias_SET,
             setSelectedColonias_SET,
             coloniasData,
