@@ -64,7 +64,7 @@ const items: AccordionItemType[] = [
                 and more recently with desktop publishing software like Aldus PageMaker including 
                 versions of Lorem Ipsum.
               </p>
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" ></img>
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}></img>
             </div>
           </div>
         </div>

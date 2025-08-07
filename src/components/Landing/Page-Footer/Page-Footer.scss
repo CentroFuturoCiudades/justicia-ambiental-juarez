@@ -8,7 +8,7 @@
 
     &__background {
         position: absolute;
-        height: 120px;
+        height: 20vh;
         transform: translateX(25%);
         z-index: 1;
 
@@ -20,21 +20,10 @@
         z-index: 1;
     }
     &__image {
-        height: 90px;
+        height: 13vh;
         object-fit: contain;
+        max-width: 20vw;;
     }
 
-
-    @media (min-width: 1600px) {
-        &__image {
-            height: 100px;
-        }
-    }
-    @media (min-width: 1920px) {
-        &__image {
-            height: 120px;
-        }
-        
-    }
 }
 

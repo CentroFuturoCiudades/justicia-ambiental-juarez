@@ -1,19 +1,18 @@
 .page-header {
   width: 100%;
-  padding: 0rem 7rem 0rem 3rem;
+  padding: 0 9vw 0 4vw;
   height: min-content;
 
   &__logo {
-    padding: 1.5rem 0rem;
-    margin-left: 0rem;
-    border-bottom: 2px solid black;
+    padding: 1.5em 0;
+    margin-left: 0;
+    border-bottom: 0.125em solid black;;
     width: 100%;
   }
 
   &__title {
-    font-size: var(--font-size-header);
+    font-size: 2em;
     line-height: 1.2;
-    //margin-bottom: 1rem;
   }
 
   &__titleItalic {
@@ -28,7 +27,6 @@
 
   &__line {
     width: 80vw;
-    //height: 1px;
     background-color: var(--border-color, gray);
   }
 
@@ -36,26 +34,4 @@
     box-sizing: border-box;
   }
 
-  @media (max-width: 768px) {
-    &__content {
-      flex-direction: column;
-      align-items: center;
-    }
-
-    &__speed-dial {
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-    }
-
-    &__speed-dial-item .button-text {
-      display: none;
-    }
-  }
-
-  @media (min-width: 1600px) {
-    &__title {
-      font-size: 40px;
-    }
-  }
 }
