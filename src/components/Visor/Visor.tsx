@@ -151,10 +151,16 @@ const Visor = () => {
             formatValue: layer ? layer.formatValue : ""
         });
 
-        //procesa la data que va en layerCard
         let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson)); //copia del geojson universal de agebs/colonias
-
-        if ( layer && layer.dataProcesssing ) { 
+        if (layer?.property && !jsonData.features?.some((f: any) => layer.property in f.properties)) {
+            setTematicaLayer(null);
+            setMapLayerInstance(null);
+            setTematicaData(null);
+            return;
+        }
+        
+        //procesa la data que va en layerCard
+        if ( layer?.dataProcesssing ) { 
             jsonData = layer.dataProcesssing(jsonData);
         }
         setTematicaData(jsonData);
@@ -202,7 +208,6 @@ const Visor = () => {
                 getLineColor: [250, 200, 0, 255],
                 getLineWidth: 70,
             })];
-            console.log("Dissolved features:", dissolved);
         } catch (error) {
             console.error('Error dissolving features:', error);
         }
@@ -222,7 +227,6 @@ const Visor = () => {
                 getLineColor: [250, 200, 0, 255],
                 getLineWidth: 70,
             })];
-            console.log("Dissolved features:", dissolved);
         } catch (error) {
             console.error('Error dissolving features:', error);
         }
