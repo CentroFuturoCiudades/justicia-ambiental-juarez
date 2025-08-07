@@ -13,8 +13,8 @@ interface AppContextI {
     setViewState: Dispatch<SetStateAction<ViewState>>;
     selectedLayer: string;
     setSelectedLayer: Dispatch<SetStateAction<string>>;
-    //selectedLayersMultiple: string[];
-    //setSelectedLayersMultiple: Dispatch<SetStateAction<string[]>>;
+    activeLayerKey: string;
+    setActiveLayerKey: Dispatch<SetStateAction<string>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -54,8 +54,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
-    //varias capas
-    //const [selectedLayersMultiple, setSelectedLayersMultiple] = useState<string[]>([]);
+    const [activeLayerKey, setActiveLayerKey] = useState<string>("juarez");
+
+    //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
 
     //zoom
@@ -63,7 +64,6 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
-    ////
     const [selectedColonias_geojson, setSelectedColonias_geojson] = useState<string[]>([]);
     ///
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
@@ -76,8 +76,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setViewState,
             selectedLayer, 
             setSelectedLayer, 
-            //selectedLayersMultiple,
-            //setSelectedLayersMultiple,
+            activeLayerKey,
+            setActiveLayerKey,
             selectedBaseLayers,
             setSelectedBaseLayers,
             selectedColonias,

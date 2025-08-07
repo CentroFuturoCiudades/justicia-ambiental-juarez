@@ -24,8 +24,8 @@ import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
-import booleanContains from "@turf/boolean-contains";
-import  booleanIntersects  from "@turf/boolean-intersects";
+import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
+import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
@@ -40,28 +40,48 @@ const Visor = () => {
     const navigate = useNavigate();
     const deck = useRef<any>(null);
     const map = useRef<any>(null);
-    /* UNA SOLA CAPA SELECCIONADA A LA VEZ */
-    const { viewState, setViewState, selectedLayer, selectedBaseLayers, selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, coloniasData, selectedColonias_geojson, setSelectedColonias_geojson } = useAppContext();
+    const { 
+        viewState, setViewState, 
+        selectedLayer, 
+        selectedBaseLayers, 
+        selectedAGEBS, setSelectedAGEBS, 
+        // selectedColonias, setSelectedColonias, 
+        // coloniasData, 
+        selectedColonias_geojson, setSelectedColonias_geojson, 
+        activeLayerKey, setActiveLayerKey                       // ahora es context variable
+    } = useAppContext();
+
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
     const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
     const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | BitmapLayer | null>(null);
-    const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
     const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
+    const [tematicaData, setTematicaData] = useState<any>(null);                                        // data que va a ir en la layerCard
+
     //const [coloniasLayer, setColoniasLayer] = useState<GeoJsonLayer | null>(null);
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
 
-    const [tematicaData, setTematicaData] = useState<any>(null);
-
-    const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
-    const [mapLayerInstance_AGEB, setMapLayerInstance_AGEB] = useState<MapLayer | null>(null);
-    const [mapLayerInstance_COLONIA, setMapLayerInstance_COLONIA] = useState<MapLayer | null>(null);
+    const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
+    const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
 
 
-    const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);
-    const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);
-    
+    let dissolvedLayer: GeoJsonLayer[] = [];
+    let dissolvedLayer_Colonias: GeoJsonLayer[] = [];
+
+    // get geometries of selectedAGEBS
+    const selectedAGEBSGeometries = useMemo(() => {
+        const setAgebs = new Set(selectedAGEBS);
+        // en vez de agebsGeoJson o tematicaData 
+        return agebsGeoJson?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
+    }, [selectedAGEBS]);
+
+    //get geometries of selectedColonias
+    const selectedColoniasGeometries = useMemo(() => {
+        const setColonias = new Set(selectedColonias_geojson);
+        return coloniasGeoJson?.features?.filter((feature: any) => setColonias.has(feature.properties.name));
+    }, [selectedColonias_geojson]);
+
 
     const handleSelectedAGEBS = (info: any) => {
         if (info) {
@@ -72,44 +92,13 @@ const Visor = () => {
 
     const handleSelectedColonias = (info: any) => {
         if (info) {
-            const nombre = info.object.properties.NOMBRE as string;
-            setSelectedColonias(prev => prev.includes(nombre) ? prev.filter(key => key !== nombre) : [...prev, nombre]);
+            const name = info.object.properties.name as string;
+            setSelectedColonias_geojson(prev => prev.includes(name) ? prev.filter(key => key !== name) : [...prev, name]);
         }
     };
 
-    // por que es mejor con callback??
-    /*const handleSelectedAGEBS2 = useCallback((info: any) => {
-        if (info) {
-            const cvegeo = info.object.properties.cvegeo as string;
-            setSelectedAGEBS(prev => prev.includes(cvegeo) ? prev.filter(key => key !== cvegeo) : [...prev, cvegeo]);
-        }
-    }, [setSelectedAGEBS]);
-
-    const handleSelectedColonias = useCallback((info: any) => {
-        if (info) {
-            const nombre = info.object.properties.NOMBRE as string;
-            setSelectedColonias_geojson(prev => prev.includes(nombre) ? prev.filter(key => key !== nombre) : [...prev, nombre]);
-        }
-    }, [setSelectedColonias_geojson]);*/
-
-    let dissolvedLayer: GeoJsonLayer[] = [];
-
-    // get geometries of selectedAGEBS
-    const selectedAGEBSGeometries = useMemo(() => {
-        const setAgebs = new Set(selectedAGEBS);
-        // en vez de agebsGeoJson o tematicaData 
-        return agebsGeoJson?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
-    }, [selectedAGEBS]);
-
-    //las colonias seleccionadas como SET
-    const selectedColoniasGeometries = useMemo(() => {
-        const setColonias = new Set(selectedColonias);
-        return coloniasData?.features?.filter((feature: any) => setColonias.has(feature.properties.NOMBRE));
-    }, [selectedColonias]);
-
-    //console.log(selectedAGEBSGeometries);
-
-    const AGEBS_colonias = useMemo(() => {
+    // INTERSECCION (no se usa por el momento)
+    /*const AGEBS_colonias = useMemo(() => {
         if (!selectedColoniasGeometries || !tematicaData) return [];
 
         return tematicaData.features
@@ -120,40 +109,89 @@ const Visor = () => {
                 )
             )
             .map((ageb: any) => ageb.properties.cvegeo);
-    }, [selectedColoniasGeometries]);
+    }, [selectedColoniasGeometries]);*/
 
-    //useEffect inicial: hace un unico fetch de files geojson de agebs y colonias
+    //FETCH AGEBS
     useEffect(() => {
         const agebEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/agebs.geojson";
-        const coloniaEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/neighborhoods.geojson";
 
         (async () => {
-            //datos agebs
-            const ageb_MapLayerInstance = new MapLayer({
-                opacity: 1,
-                title: "agebs",
-            });
-            const ageb_jsonData = await ageb_MapLayerInstance.loadData(`${agebEndpoint}?${REACT_APP_SAS_TOKEN}`);
-            //console.log("USEEFFECT INICIAL:", ageb_jsonData.features);
-            setAgebsGeoJson(ageb_jsonData);
-            setMapLayerInstance_AGEB(ageb_MapLayerInstance);
-
-            //datos colonias
-            const colonia_MapLayerInstance = new MapLayer({
-                opacity: 1,
-                title: "colonias",
-            });
-            const colonia_jsonData = await colonia_MapLayerInstance.loadData(`${coloniaEndpoint}?${REACT_APP_SAS_TOKEN}`);
-            setColoniasGeoJson(colonia_jsonData);
-            setMapLayerInstance_COLONIA(colonia_MapLayerInstance);
+            const data = await fetch(`${agebEndpoint}?${REACT_APP_SAS_TOKEN}`);
+            const json = await data.json();
+            setAgebsGeoJson(json);
         })();
     }, []);
 
-    //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs
-    useEffect(() => {        
-        setSelectedAGEBS(AGEBS_colonias);
-    }, [AGEBS_colonias]);
+    //FETCH COLONIAS
+    useEffect(() => {
+        const coloniaEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/neighborhoods.geojson";
 
+        (async () => {
+            const data = await fetch(`${coloniaEndpoint}?${REACT_APP_SAS_TOKEN}`);
+            const json = await data.json();
+            setColoniasGeoJson(json);
+        })();
+    }, []);
+
+    //crear mapLayerInstance, geojsonLayer y la data
+    useEffect(() => {
+
+        if(activeLayerKey === "juarez") {
+            setTematicaLayer(null);
+            setMapLayerInstance(null);
+            setTematicaData(null);
+            return;
+        };
+
+        let layer;
+        if(selectedLayer) {
+            layer = LAYERS[selectedLayer as keyof typeof LAYERS];
+        }
+
+        //crea instancia
+        const mapLayerInstance = new MapLayer({
+            opacity: 1,
+            title: layer ? layer.title : "initial",
+            formatValue: layer ? layer.formatValue : ""
+        });
+
+        //procesa la data que va en layerCard
+        let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson)); //copia del geojson universal de agebs/colonias
+
+        if ( layer && layer.dataProcesssing ) { 
+            jsonData = layer.dataProcesssing(jsonData);
+        }
+        setTematicaData(jsonData);
+
+        //crea la capa geojson
+        const geoJsonLayer = mapLayerInstance.getLayer(
+            jsonData,
+            selectedLayerData?.property || "",
+            selectedLayerData?.is_lineLayer || false,
+            true,
+            activeLayerKey === "agebs" ? handleSelectedAGEBS : handleSelectedColonias,
+            activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias_geojson,
+        );
+        setTematicaLayer(geoJsonLayer);
+        setMapLayerInstance(mapLayerInstance);
+
+    }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson]);
+
+    // cambio de layer activa (botones arriba)
+    const handleLayerToggle = (layerKey: string) => {
+        if(layerKey === activeLayerKey) {
+            setActiveLayerKey("juarez");
+        } else {
+            setActiveLayerKey(layerKey);
+        }
+    };
+
+    //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs (INTERSECCION, ya no se usa por el momento)
+    /*useEffect(() => {        
+        setSelectedAGEBS(AGEBS_colonias);
+    }, [AGEBS_colonias]);*/
+
+    //dissolve de agebs y colonias
     if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
         try {
             const fc = featureCollection(selectedAGEBSGeometries);
@@ -174,14 +212,34 @@ const Visor = () => {
         }
     }
 
+    if (selectedColoniasGeometries && selectedColoniasGeometries.length > 0) {
+        try {
+            const fc = featureCollection(selectedColoniasGeometries);
+            const flattened = flatten(fc);
+            const dissolved = dissolve(flattened as any);
+            // create a new layer with the dissolved geometry
+            dissolvedLayer_Colonias = [new GeoJsonLayer({
+                id: 'dissolved_colonias',
+                data: dissolved,
+                pickable: false,
+                filled: false,
+                getLineColor: [250, 200, 0, 255],
+                getLineWidth: 70,
+            })];
+            console.log("Dissolved features:", dissolved);
+        } catch (error) {
+            console.error('Error dissolving features:', error);
+        }
+    }
 
-    //una sola capa de TEMÁTICA
+
+    // para que se vea el raster (islas y calidad del aire)
     useEffect(() => {
         (async () => {
 
             if (!selectedLayer) {
-                setTematicaLayer(null);
-                setMapLayerInstance(null);
+                //setTematicaLayer(null);
+                //setMapLayerInstance(null);
                 return;
             }
 
@@ -191,30 +249,7 @@ const Visor = () => {
                 return;
             }
             const urlBlob = `${layer.url}?${REACT_APP_SAS_TOKEN}`;
-
-            /*if (layer.map_type === "geometry") {
-                //console.log("este siempre se llama")
-
-                const mapLayerInstance = new MapLayer({
-                    opacity: 1,
-                    title: layer.title,
-                    formatValue: layer.formatValue
-                });
-                let jsonData = await mapLayerInstance.loadData(urlBlob);
-                //console.log("USEFFECT1- jsonData features:", jsonData.features);
-
-                //justo despues del fetch procesa con dataProcesssing de la layer
-                if (layer.dataProcesssing) {
-                    jsonData = layer.dataProcesssing(jsonData);
-                    console.log("USEEFFECT1 - jsonData features after processing:", jsonData);
-                }
-                //console.log("jsonData features:", jsonData.features);
-                const geojsonLayer = mapLayerInstance.getLayer(jsonData, layer.property, layer.is_lineLayer, true, handleSelectedAGEBS, selectedAGEBS);
-                setTematicaData(jsonData);
-                setTematicaLayer(geojsonLayer);
-                setMapLayerInstance(mapLayerInstance);
-            } */
-            //else if (layer.map_type === "raster") {
+            //raster layer (se va a quitar)
             if (layer.map_type === "raster") {
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
@@ -227,141 +262,6 @@ const Visor = () => {
             }
         })();
     }, [selectedLayer, selectedAGEBS]);
-
-    //nuevo useeffect: cada que cambia la selectedLayer o selectedAGEBS, se crea una nueva capa de agebs Y colonias
-    useEffect(() => {
-        if (!selectedLayer || !mapLayerInstance_AGEB || !agebsGeoJson || !mapLayerInstance_COLONIA) {
-            setTematicaData(null);
-            setTematicaLayer(null);
-            return;
-        }
-
-        const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-
-        if (layer.map_type !== "geometry" ) {
-            setTematicaData(null);
-            setTematicaLayer(null);
-            return;
-        }
-
-        //actualizar properties del mapLayerInstance_AGEB que se creo al inicio
-        mapLayerInstance_AGEB.title = layer.title;
-        mapLayerInstance_AGEB.formatValue = layer.formatValue;
-        /*const mapLayerInstance = new MapLayer({
-            opacity: 1,
-            title: layer.title,
-            formatValue: layer.formatValue
-        });*/
-
-        let jsonData = JSON.parse(JSON.stringify(agebsGeoJson)); //copia del geojson universal de agebs
-
-        if (layer.dataProcesssing) {
-            jsonData = layer.dataProcesssing(jsonData);
-        }
-
-        //crea la capa de agebs
-        /*const geojsonLayer = mapLayerInstance_AGEB.getLayer(
-            jsonData, 
-            layer.property, 
-            layer.is_lineLayer, 
-            true, 
-            handleSelectedAGEBS, 
-            selectedAGEBS
-        );*/
-        //crea la capa de colonias
-        /*const geojsonLayer_colonias = mapLayerInstance_COLONIA.getLayer(
-            agebsGeoJson,           //puede ser como jsonData, depende de si se procesa o no
-            "porcentaje_pob_60",    //seria layer.property, pero por ahora es fijo
-            false,
-            true,
-            handleSelectedAGEBS,
-            selectedAGEBS,
-        );*/
-        //actualiza el estado
-        setTematicaData(jsonData);              // data que va a ir en la layerCard
-        //setTematicaLayer(geojsonLayer);       // layer agebs que se va a renderizar en el visor
-        //setColoniasLayer(geojsonLayer_colonias); // layer colonias que se va a renderizar en el visor
-
-    }, [selectedLayer, selectedAGEBS]);
-
-
-    /*
-        la capa de geojson se deberia crear cada vez que cambie alguna de las dependencias,
-        si se guarda en un useState, como lo hice arriba dentro del useEffect,
-        al quitar y poner la capa, se pierde y dice que no puede renderizar un destroyed object
-        por eso se usa useMemo, para que se vuelva a crear la capa cada vez que cambien las dependencias.
-    */
-    const agebsLayer = useMemo(() => {
-        if ( !mapLayerInstance_AGEB) return null;
-
-        //si hay selectedLayer, hacer la capa con la property de la selectedLayer
-        if (selectedLayer && tematicaData ) {
-            return mapLayerInstance_AGEB.getLayer(
-                tematicaData,
-                selectedLayerData?.property || "",
-                selectedLayerData?.is_lineLayer || false,
-                true,
-                handleSelectedAGEBS,
-                selectedAGEBS,
-            );
-        }
-        //si no hay selectedLayer, son los agebs de juarez
-        return mapLayerInstance_AGEB.getLayer(
-            agebsGeoJson,
-            "",     //sin indicador/property
-            false,
-            true,
-            handleSelectedAGEBS,
-            selectedAGEBS,
-        );
-
-    }, [agebsGeoJson, selectedAGEBS, selectedLayerData, activeLayerKey]);
-
-    //se crea la capa de colonias
-    const coloniaLayer = useMemo(() => {
-        if (!coloniasGeoJson || !mapLayerInstance_COLONIA) return null;
-
-        //si hay selectedLayer, hacer la capa con la property de la selectedLayer
-        if ( selectedLayer ) {
-            return mapLayerInstance_COLONIA.getLayer(
-                coloniasGeoJson,        //puede ser como tematicaData, depende de si se procesa o no
-                "porcentaje_pob_60",    //seria layer.property, pero por ahora es fijo
-                false,
-                true,
-                handleSelectedColonias,
-                selectedColonias_geojson,
-            );
-        }
-
-        //si no hay selectedLayer, son las colonias de juarez
-        return mapLayerInstance_COLONIA.getLayer(
-            coloniasGeoJson,
-            "",     //sin indicador/property
-            false,
-            true,
-            handleSelectedColonias,
-            selectedColonias_geojson,
-        );
-    }, [coloniasGeoJson, selectedColonias_geojson, activeLayerKey]);
-
-
-    const layer = useMemo(() => {
-        //if (activeLayerKey === "agebs") return agebLayer;
-        //if (activeLayerKey === "colonias") return coloniaLayer;
-        if (activeLayerKey === "agebs") return agebsLayer;
-        if (activeLayerKey === "colonias") return coloniaLayer;
-        return null;
-    }, [activeLayerKey]);
-
-    // cambio de layer activa (botones arriba)
-    const handleLayerToggle = (layerKey: string) => {
-        if(layerKey === activeLayerKey) {
-            setActiveLayerKey(null);
-        } else {
-            setActiveLayerKey(layerKey);
-        }
-    };
-
 
     //varias capas de BASE??
     useEffect(() => {
@@ -399,17 +299,11 @@ const Visor = () => {
         });
     }, [selectedBaseLayers]);
 
-    //reset
-    useEffect(() => {
-        setSelectedAGEBS([]);
-        setSelectedColonias([]);
-        setActiveLayerKey(null);
-    }, [selectedLayer]);
 
 
     //varias colonias
     //cada que haya un cambio en selectedColonias
-    useEffect(() => {
+    /*useEffect(() => {
         if(selectedColonias.length === 0) {
             setColoniasLayer(null);
             return;
@@ -433,7 +327,7 @@ const Visor = () => {
 
         setColoniasLayer(newLayer);
 
-    }, [selectedColonias, coloniasData]);
+    }, [selectedColonias, coloniasData]);*/
 
     return (
         <div className="visor">
@@ -447,20 +341,12 @@ const Visor = () => {
                 </div>
                 <Tematica />
 
-                {/*selectedLayer && tematicaData && mapLayerInstance && (
+                {selectedLayer && tematicaData && mapLayerInstance && (
                     <LayerCard
                         selectedLayerData={selectedLayerData}
                         tematicaData={tematicaData}
                         color={sectionColor}
                         mapLayerInstance={mapLayerInstance}
-                    />
-                )*/}
-                {selectedLayer && tematicaData && mapLayerInstance_AGEB && (
-                    <LayerCard
-                        selectedLayerData={selectedLayerData}
-                        tematicaData={tematicaData}
-                        color={sectionColor}
-                        mapLayerInstance={mapLayerInstance_AGEB}
                     />
                 )}
 
@@ -477,11 +363,11 @@ const Visor = () => {
                     }}
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
-                        ...(layer ? [layer] : []), // juarez, agebs, colonias 
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
                         //...dissolvedLayer,
                         //...(coloniasLayer ? [coloniasLayer] : []),
-                        ...dissolvedLayer,
+                        ...(activeLayerKey === "agebs" ? dissolvedLayer : []),
+                        ...(activeLayerKey === "colonias" ? dissolvedLayer_Colonias : [])
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     controller={true}

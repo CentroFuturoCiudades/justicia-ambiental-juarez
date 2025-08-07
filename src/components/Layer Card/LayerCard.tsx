@@ -15,28 +15,32 @@ type LayerCardProps = {
 
 const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
 
-    const { selectedAGEBS,setSelectedAGEBS } = useAppContext();
+    const { selectedAGEBS, setSelectedAGEBS, selectedColonias_geojson, setSelectedColonias_geojson, activeLayerKey } = useAppContext();
 
     if (!tematicaData || !tematicaData.features) {
         return null; // o un mensaje de error
     }
+    const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias_geojson;
 
     // con base a los ID de agebs seleccionados busca en todos los features para sacar el promedio
     //si no hay agebs seleccionados, saca el promedio de todos los features
-    function getAverage(features: Feature[], cvegeos: string[], property: string): number {
+    function getAverage(features: Feature[], selectedIds: string[] , property: string): number {
         if (!tematicaData) return 0;
-        if (selectedAGEBS.length === 0) {
+
+        if (selectedIds.length === 0) {
             return mapLayerInstance.positiveAvg;
         }
+        const idField = activeLayerKey === "agebs" ? "cvegeo" : "name";
         const values = features
-        .filter((f: Feature) => cvegeos.includes((f.properties as { cvegeo: string }).cvegeo))
+        .filter((f: Feature) => selectedIds.includes((f.properties as any)[idField]))
         .map(f => f.properties?.[property])
         .filter(value => value != null);
         return values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
     }
 
 
-    const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
+    //const agebAverage = getAverage(tematicaData.features, selectedAGEBS, selectedLayerData.property);
+    const agebAverage = getAverage(tematicaData.features, selected, selectedLayerData.property);
     const agebAverageFormatted = selectedLayerData.formatValue(agebAverage);
     
     return (
@@ -47,7 +51,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                 </div>
                 <div className="layerCard__layerCardBody">
                     <div>
-                        { selectedAGEBS.length === 0 ? (
+                        { selected.length === 0 ? (
                             <div>
                                 <p style={{ fontSize: "15px"}}>
                                     Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{agebAverageFormatted}</strong>.
@@ -55,20 +59,20 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                {selectedAGEBS.length == 1 ? "El AGEB seleccionado tiene" : "Los AGEBs seleccionados tienen"} un {selectedLayerData.title} de <strong>{agebAverageFormatted}</strong>; por
+                                {selected.length == 1 ? "El AGEB seleccionado tiene" : "Los AGEBs seleccionados tienen"} un {selectedLayerData.title} de <strong>{agebAverageFormatted}</strong>; por
                                 <strong>{(agebAverage > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
                             </p>
                         )}
-                        {mapLayerInstance.getRangeGraph(selectedAGEBS.length > 0 ? agebAverage : undefined)}
+                        {mapLayerInstance.getRangeGraph(selected.length > 0 ? agebAverage : undefined)}
                     </div>
                 </div>
             </div>
-            {selectedAGEBS.length > 0 && (
+            {selected.length > 0 && (
                 <Button 
                 size={"xs"}
                 rounded={"full"}
                 p={4}
-                onClick={() => setSelectedAGEBS([])}
+                onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias_geojson([])}
                 style={{ backgroundColor: COLORS.GLOBAL.backgroundDark, color: "white" }} 
                 >
                     <p style={{ fontSize: "15px" }}>Limpiar selección</p>
