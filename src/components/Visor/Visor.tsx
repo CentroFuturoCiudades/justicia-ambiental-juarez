@@ -63,33 +63,22 @@ const Visor = () => {
 
 
     let dissolvedLayer: GeoJsonLayer[] = [];
-    let dissolvedLayer_Colonias: GeoJsonLayer[] = [];
 
-    // get geometries of selectedAGEBS
-    const selectedAGEBSGeometries = useMemo(() => {
-        const setAgebs = new Set(selectedAGEBS);
-        // en vez de agebsGeoJson o tematicaData 
-        return agebsGeoJson?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
-    }, [selectedAGEBS]);
+    //get geometries of selected agebs/colonias
+    const selectedGeometries = useMemo(() => {
+        const isAgeb = activeLayerKey === "agebs";
+        const setSelected = new Set(isAgeb ? selectedAGEBS : selectedColonias);
+        return (isAgeb ? agebsGeoJson : coloniasGeoJson)?.features?.filter(
+            (feature: any) => setSelected.has(isAgeb ? feature.properties.cvegeo : feature.properties.name)
+        );
+    }, [selectedAGEBS, selectedColonias, activeLayerKey]);
 
-    //get geometries of selectedColonias
-    const selectedColoniasGeometries = useMemo(() => {
-        const setColonias = new Set(selectedColonias);
-        return coloniasGeoJson?.features?.filter((feature: any) => setColonias.has(feature.properties.name));
-    }, [selectedColonias]);
-
-
-    const handleSelectedAGEBS = (info: any) => {
+    const handleSelectedElements = (info: any) => {
         if (info) {
-            const cvegeo = info.object.properties.cvegeo as string;
-            setSelectedAGEBS(prev => prev.includes(cvegeo) ? prev.filter(key => key !== cvegeo) : [...prev, cvegeo]);
-        }
-    };
-
-    const handleSelectedColonias = (info: any) => {
-        if (info) {
-            const name = info.object.properties.name as string;
-            setSelectedColonias(prev => prev.includes(name) ? prev.filter(key => key !== name) : [...prev, name]);
+            const isAgeb = activeLayerKey === "agebs";
+            const key = isAgeb ? info.object.properties.cvegeo : info.object.properties.name;
+            const setSelected = isAgeb ? setSelectedAGEBS : setSelectedColonias;
+            setSelected(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
         }
     };
 
@@ -171,7 +160,7 @@ const Visor = () => {
             layer?.property || "",
             layer?.is_lineLayer || false,
             true,
-            activeLayerKey === "agebs" ? handleSelectedAGEBS : handleSelectedColonias,
+            handleSelectedElements,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
         );
         setTematicaLayer(geoJsonLayer);
@@ -193,34 +182,15 @@ const Visor = () => {
         setSelectedAGEBS(AGEBS_colonias);
     }, [AGEBS_colonias]);*/
 
-    //dissolve de agebs y colonias
-    if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
+
+    if(selectedGeometries && selectedGeometries.length > 0) {
         try {
-            const fc = featureCollection(selectedAGEBSGeometries);
+            const fc = featureCollection(selectedGeometries);
             const flattened = flatten(fc);
             const dissolved = dissolve(flattened as any);
             // create a new layer with the dissolved geometry
             dissolvedLayer = [new GeoJsonLayer({
                 id: 'dissolved',
-                data: dissolved,
-                pickable: false,
-                filled: false,
-                getLineColor: [250, 200, 0, 255],
-                getLineWidth: 70,
-            })];
-        } catch (error) {
-            console.error('Error dissolving features:', error);
-        }
-    }
-
-    if (selectedColoniasGeometries && selectedColoniasGeometries.length > 0) {
-        try {
-            const fc = featureCollection(selectedColoniasGeometries);
-            const flattened = flatten(fc);
-            const dissolved = dissolve(flattened as any);
-            // create a new layer with the dissolved geometry
-            dissolvedLayer_Colonias = [new GeoJsonLayer({
-                id: 'dissolved_colonias',
                 data: dissolved,
                 pickable: false,
                 filled: false,
@@ -333,10 +303,8 @@ const Visor = () => {
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                        //...dissolvedLayer,
+                        ...dissolvedLayer,
                         //...(coloniasLayer ? [coloniasLayer] : []),
-                        ...(activeLayerKey === "agebs" ? dissolvedLayer : []),
-                        ...(activeLayerKey === "colonias" ? dissolvedLayer_Colonias : [])
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     controller={true}
@@ -374,8 +342,8 @@ const Visor = () => {
                                 transitionDuration: 0,
                             } as any);
                             setTimeout(() => {
-                                // downloadPdf(deck.current, map.current, mapLayerInstance);
-                                downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
+                                 downloadPdf(deck.current, map.current, mapLayerInstance);
+                                //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>
                         <RiDownloadLine />
