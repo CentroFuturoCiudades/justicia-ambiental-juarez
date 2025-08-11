@@ -72,9 +72,9 @@ export const template: Template = {
       }, {
         "name": "graph",
         "type": "image",
-        "position": { "x": 30, "y": 220 },
-        "width": 150,
-        "height": 60,
+        "position": { "x": 70, "y": 220 },
+        "width": 75,
+        "height": 30,
         "rotate": 0,
         "opacity": 1,
         "required": false,
@@ -100,7 +100,7 @@ export const templateLegendColor = {
 };
 export const templateLegendText = {
   "type": "text",
-  "width": 30,
+  "width": 50,
   "height": 4,
   "rotate": 0,
   "alignment": "left",

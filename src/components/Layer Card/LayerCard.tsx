@@ -69,7 +69,7 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         )}
                     </div>
                 </div>
-                <div ref={rangeGraphRef} style={{ overflow: "hidden"}}>
+                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
                     {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, rangeGraphRef)}
                 </div>
             </div>
