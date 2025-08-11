@@ -5,6 +5,7 @@ import type {Feature} from "geojson";
 import "./LayerCard.scss";
 import { formatNumber } from "../../utils/utils";
 import { active } from "d3";
+import { useRef } from "react";
 
 type LayerCardProps = {
     selectedLayerData: any;
@@ -17,6 +18,8 @@ type LayerCardProps = {
 const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
 
     const { selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, activeLayerKey } = useAppContext();
+    const rangeGraphRef = useRef<HTMLDivElement>(null);
+
 
     if (!tematicaData || !tematicaData.features) {
         return null; // o un mensaje de error
@@ -64,21 +67,12 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                                 <strong>{(average > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
                             </p>
                         )}
-                        {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined)}
                     </div>
                 </div>
+                <div ref={rangeGraphRef} style={{ border: "1px solid blue", overflow: "hidden"}}>
+                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, rangeGraphRef)}
+                </div>
             </div>
-            {selected.length > 0 && (
-                <Button 
-                size={"xs"}
-                rounded={"full"}
-                p={4}
-                onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}
-                style={{ backgroundColor: COLORS.GLOBAL.backgroundDark, color: "white" }} 
-                >
-                    <p style={{ fontSize: "15px" }}>Limpiar selección</p>
-                </Button>
-            )}
         </div>
     );
 }

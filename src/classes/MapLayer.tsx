@@ -22,6 +22,7 @@ export class MapLayer {
   colorMap: any;
   legend: any = null;
   title: string;
+  ref: React.RefObject<HTMLDivElement> | null = null;
 
 
   constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue }: {
@@ -178,9 +179,10 @@ export class MapLayer {
     />
   }
 
-  getRangeGraph = (avg: number) => {
+  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    this.ref = ref;
 
     const Data = {
       minVal: this.minVal,

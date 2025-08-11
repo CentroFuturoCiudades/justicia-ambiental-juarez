@@ -4,6 +4,7 @@ import { rectangle, text, image, table } from '@pdfme/schemas';
 import { MapLayer } from "../classes/MapLayer";
 import { RasterLayer } from "../classes/RasterLayer";
 import { useAppContext } from "../context/AppContext";
+import html2canvas from "html2canvas";
 
 export const plugins = {
   Rectangle: rectangle,
@@ -67,6 +68,16 @@ export const template: Template = {
         "rotate": 0,
         "opacity": 1,
         "required": true,
+        "readOnly": false
+      }, {
+        "name": "graph",
+        "type": "image",
+        "position": { "x": 30, "y": 220 },
+        "width": 150,
+        "height": 60,
+        "rotate": 0,
+        "opacity": 1,
+        "required": false,
         "readOnly": false
       }
     ]
@@ -158,7 +169,7 @@ export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | Raste
 };
 
 
-export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer | RasterLayer | null) => {
+export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer | null) => {
   const imageUrl = getMapImage(deck, map, layerInstance);
   if (!imageUrl) {
     console.error("No image URL found");
@@ -167,6 +178,13 @@ export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer |
   const response = await fetch(imageUrl);
   const blobImage = await response.blob();
   const base64Image = await blobToBase64(blobImage);
+  //
+  let graphImage = "";
+  
+  if (layerInstance && layerInstance.ref && layerInstance.ref.current) {
+    const canvas = await html2canvas(layerInstance.ref.current);
+    graphImage = canvas.toDataURL("image/png");
+  }
   const inputs = [
     {
       "indicadores": [
@@ -174,6 +192,7 @@ export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer |
         ['Aire contaminado', '100 μg/m', '50 μg/m³'],
       ],
       "map": base64Image,
+      "graph": graphImage,
     },
   ];
   const amountOfColors = 6;
