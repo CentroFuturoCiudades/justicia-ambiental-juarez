@@ -386,8 +386,8 @@ const Visor = () => {
                             const canvas = await html2canvas(mapLayerInstance.ref.current);
                             mapLayerInstance.graphImage = canvas.toDataURL("image/png");
                         }
-                        setMapLayers(prev => [...prev, mapLayerInstance]);
-                        //setMapLayers(prev => [...prev, mapLayerInstance.clone()]);
+                        const newInstance = { ...mapLayerInstance };
+                        setMapLayers(prev => [...prev, newInstance]);
                     }}>
                         <RiAddLine />
                     </Button>
