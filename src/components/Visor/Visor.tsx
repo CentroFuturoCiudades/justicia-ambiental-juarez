@@ -374,9 +374,11 @@ const Visor = () => {
                         </Button>
                     </Group>
 
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
+                    {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) && 
+                        <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
                             <FaRegTrashCan />
                         </Button>
+                    }
 
                     <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={async () => {
                         if (mapLayerInstance?.ref?.current) {

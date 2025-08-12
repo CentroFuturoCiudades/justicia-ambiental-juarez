@@ -1,8 +1,8 @@
 import { Button, Group } from "@chakra-ui/react";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
-import { FaMinus } from "react-icons/fa";
 import { FiPlus, FiMinus } from "react-icons/fi";
+import "../Visor/Visor.scss"
 
 const ZoomControls = () => {
     const { zoomIn, zoomOut } = useAppContext();
@@ -10,7 +10,7 @@ const ZoomControls = () => {
     return (
         <div >
             <Group attached >
-                <Button 
+                <Button className="visor__button"
                     padding={1}
                     background={COLORS.GLOBAL.backgroundDark} 
                     borderRadius={0}
@@ -19,7 +19,7 @@ const ZoomControls = () => {
                 >
                     <FiPlus size={38}/>
                 </Button>
-                <Button 
+                <Button className="visor__button"
                     padding={1}
                     background={COLORS.GLOBAL.backgroundDark} 
                     borderRadius={0}
