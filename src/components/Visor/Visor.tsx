@@ -17,7 +17,7 @@ import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downloadPdf, downlaodFile } from "../../utils/downloadFile";
+import { downloadPdf, downlaodFile, downloadPdf_LAYERS} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
@@ -28,6 +28,8 @@ import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { RiAddLine } from "react-icons/ri";
+import html2canvas from "html2canvas";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -44,7 +46,8 @@ const Visor = () => {
         selectedAGEBS, setSelectedAGEBS, 
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
-        activeLayerKey, setActiveLayerKey                       // ahora es context variable
+        activeLayerKey, setActiveLayerKey,
+        mapLayers,setMapLayers //mas de una layer seleccionada en el "pop up" (simulacion)
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -60,6 +63,7 @@ const Visor = () => {
 
     const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
+    const mapLayerRef = useRef<HTMLDivElement | null>(null);
 
 
     let dissolvedLayer: GeoJsonLayer[] = [];
@@ -137,7 +141,9 @@ const Visor = () => {
         const mapLayerInstance = new MapLayer({
             opacity: 1,
             title: layer ? layer.title : "initial",
-            formatValue: layer ? layer.formatValue : ""
+            formatValue: layer ? layer.formatValue : "",
+            ref: mapLayerRef,
+            theme: layer ? layer.tematica : "default",
         });
 
         let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson)); //copia del geojson universal de agebs/colonias
@@ -268,6 +274,10 @@ const Visor = () => {
 
     }, [selectedColonias, coloniasData]);*/
 
+    useEffect(() => {
+        console.log("Array de maplayers", mapLayers)
+    }, [mapLayers]);
+
     return (
         <div className="visor">
             <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
@@ -342,7 +352,8 @@ const Visor = () => {
                                 transitionDuration: 0,
                             } as any);
                             setTimeout(() => {
-                                 downloadPdf(deck.current, map.current, mapLayerInstance);
+                                 //downloadPdf(deck.current, map.current, mapLayerInstance);
+                                 downloadPdf_LAYERS(deck.current, map.current, mapLayers);
                                 //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>
@@ -361,6 +372,16 @@ const Visor = () => {
                     </Button>
                     <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
                         <FaRegTrashCan />
+                    </Button>
+
+                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={async () => {
+                        if (mapLayerInstance?.ref?.current) {
+                            const canvas = await html2canvas(mapLayerInstance.ref.current);
+                            mapLayerInstance.graphImage = canvas.toDataURL("image/png");
+                        }
+                        setMapLayers(prev => [...prev, mapLayerInstance]);
+                    }}>
+                        <RiAddLine />
                     </Button>
                 </div>
             </div>

@@ -9,6 +9,7 @@ type RangeGraph = {
 
 };
 
+//estilos in line para la conversion a imagen
 const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) => {
 
   return (
@@ -20,12 +21,10 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         const style: React.CSSProperties = {
           position: "absolute",
           bottom: 0,
-          //top: 5,
-          //marginTop: "25px",
           alignItems: "center",
           display: "flex",
           flexDirection: "column",
-          padding: "0 8px",
+          padding: "0 2vw",
           alignContent: "center",
           zIndex: 1,
         };
@@ -44,7 +43,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         return (
           <div style={style}>
             <div style={{
-              width: "2px",
+              width: "0.15vw",
               height: "54px",
               background: "black",
               marginBottom: "4px",
@@ -76,16 +75,16 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
             zIndex: 2,
             fontSize: "14px",
             fontWeight: "bold",
-            lineHeight: "1",
+            //lineHeight: "1",
             
           };
 
           if (percent <= 5) {
-            style.left = "0px"; // padding izquierdo
+            style.left = 0;
             style.transform = "none";
             style.alignItems = "flex-start";
           } else if (percent >= 90) {
-            style.right = "0px"; // padding derecho
+            style.right = 0;
             style.transform = "none";
             style.alignItems = "flex-end";
           } else {
@@ -98,9 +97,6 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               height: "40px",
               position: "relative",
               padding: "0 8px",
-              //height: "auto",
-              //paddingRight: "8rem"
-              //padding: "0 8px",
             }}>
               <div className="rangeGraph__agebLabel" 
                 style={
@@ -126,9 +122,6 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
             width: "100%",
             height: "100%",
             padding: "0 8px",
-            //height: "44px",
-            //height: "auto",
-            //padding: "0 8px",
             marginBottom: "8px",
           }}>
           {[...colorsArray].reverse().map((color, idx) => ( 

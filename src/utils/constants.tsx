@@ -435,7 +435,7 @@ export const LAYERS: any = {
         metric: "porcentaje", //0% a 10%
         stat_type: "promedio",
         visualization_type: "Velocimetro",
-        tematica: "poblacion",
+        tematica: "industria",
         geographic_unit: "AGEB",
         threshold: "",
         description: "Porcentaje de la población que tiene 60 años o más",

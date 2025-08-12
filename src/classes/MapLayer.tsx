@@ -23,20 +23,28 @@ export class MapLayer {
   legend: any = null;
   title: string;
   ref: React.RefObject<HTMLDivElement> | null = null;
+  graphImage?: string;
+  theme?: string;
+  selectedAvg = 0;
+  selectedDescription = "";
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, ref = null, theme = "default" }: {
     opacity?: number;
     colors?: string[];
     title?: string;
     amountOfColors?: number;
     formatValue?: (value: number) => string;
+    ref?: React.RefObject<HTMLDivElement> | null;
+    theme?: string;
   }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
+    this.ref = ref;
+    this.theme = theme;
   }
 
   async loadData(url: string) {
@@ -179,10 +187,12 @@ export class MapLayer {
     />
   }
 
-  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>) => {
+  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>, description: string) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
     this.ref = ref;
+    this.selectedAvg = avg;
+    this.selectedDescription = description;
 
     const Data = {
       minVal: this.minVal,

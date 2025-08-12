@@ -18,7 +18,7 @@ type LayerCardProps = {
 const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
 
     const { selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, activeLayerKey } = useAppContext();
-    const rangeGraphRef = useRef<HTMLDivElement>(null);
+    //const rangeGraphRef = useRef<HTMLDivElement>(null);
 
 
     if (!tematicaData || !tematicaData.features) {
@@ -46,6 +46,18 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
 
     const average = getAverage(tematicaData.features, selected, selectedLayerData.property);
     const averageFormatted = selectedLayerData.formatValue(average);
+
+    function getDescription() {
+        let description = ""
+        if (selected.length === 0) {
+            description = `Ciudad Juárez tiene un ${selectedLayerData.title} de ${averageFormatted}.`;
+        } else {
+            description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${selectedLayerData.title} de ${averageFormatted}; por ${average > mapLayerInstance.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
+        }
+        return description;
+    }
+
+    const description = getDescription();
     
     return (
         <div>
@@ -69,8 +81,8 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         )}
                     </div>
                 </div>
-                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
-                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, rangeGraphRef)}
+                <div ref={mapLayerInstance.ref} style={{ overflow: "hidden", padding: "8px"}}>
+                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, mapLayerInstance.ref, description)}
                 </div>
             </div>
         </div>

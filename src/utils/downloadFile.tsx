@@ -5,6 +5,7 @@ import { MapLayer } from "../classes/MapLayer";
 import { RasterLayer } from "../classes/RasterLayer";
 import { useAppContext } from "../context/AppContext";
 import html2canvas from "html2canvas";
+import { FaHouseLaptop } from 'react-icons/fa6';
 
 export const plugins = {
   Rectangle: rectangle,
@@ -19,8 +20,16 @@ export const template: Template = {
       {
         "name": "title",
         "type": "text",
-        "content": "Indicadores Ambientales",
+        //"content": "Indicadores Ambientales",
+        "content": "Visor de Indicadores Ambientales",
         "position": { "x": 17.95, "y": 20 },
+        "width": 174.1, "height": 20.11, "rotate": 0, "alignment": "center", "verticalAlignment": "top", "fontSize": 25, "lineHeight": 1, "characterSpacing": 0, "fontColor": "#000000", "fontName": "Roboto", "backgroundColor": "", "opacity": 1, "strikethrough": false, "underline": false, "required": false, "readOnly": true
+      },
+      {
+        "name": "subtitle",
+        "type": "text",
+        "content": "Reporte",
+        "position": { "x": 21, "y": 29 },
         "width": 174.1, "height": 20.11, "rotate": 0, "alignment": "center", "verticalAlignment": "top", "fontSize": 40, "lineHeight": 1, "characterSpacing": 0, "fontColor": "#2d5534", "fontName": "Roboto", "backgroundColor": "", "opacity": 1, "strikethrough": false, "underline": false, "required": false, "readOnly": true
       },
       {
@@ -210,6 +219,214 @@ export const downloadPdf = async (deck: any, map: any, layerInstance: MapLayer |
   ];
   const pdf = await generate({ template: newTemplate, inputs, plugins });
 
+  const blobPdf = new Blob([pdf.buffer], { type: 'application/pdf' });
+  window.open(URL.createObjectURL(blobPdf));
+}
+
+export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: MapLayer[]) => {
+
+  const amountOfColors = 6;
+
+  //Para cada layerInstance
+  const sections = await Promise.all(layerInstances.map(async (layerInstance, idx) => {
+    //Map image
+    const imageUrl = getMapImage(deck, map, layerInstance);
+    if (!imageUrl) {
+      console.error("No image URL found");
+      return;
+    }
+    const response = await fetch(imageUrl);
+    const blobImage = await response.blob();
+    const base64Image = await blobToBase64(blobImage);
+
+    //Legend
+    const ranges = layerInstance?.getRanges(amountOfColors);
+    const colors = layerInstance?.getColors(amountOfColors);
+
+    //Graph
+    const graphImage = layerInstance.graphImage || "";
+
+    return {
+      map: base64Image,
+      graph: graphImage,
+      ranges,
+      colors,
+      title: layerInstance.title || `Capa ${idx + 1}`,
+      theme: layerInstance.theme || "default",
+      description: layerInstance.selectedDescription || "",
+      puntaje: layerInstance.selectedAvg || 0,    //indicador
+      juarezAvg: layerInstance.positiveAvg || 0,  //indicador
+      //indicadores: layerInstance.getIndicadores?.() || []
+    };
+
+  }));
+
+  //Agrupar por tematica
+  const groupedSections: Record<string, typeof sections> = {};
+  sections.forEach(section => {
+    const theme = section.theme || "Sin tema";
+    if (!groupedSections[theme]) groupedSections[theme] = [];
+    groupedSections[theme].push(section);
+  });
+
+  const fields = [
+    {
+      name: "title",
+      type: "text",
+      content: "Visor de Indicadores Ambientales",
+      position: { x: 17.95, y: 20 },
+      width: 174.1, height: 20.11, fontSize: 25, alignment: "center",
+      fontColor: "#000000", fontName: "Roboto", opacity: 1, readOnly: true
+    },
+    {
+      name: "subtitle",
+      type: "text",
+      content: "Reporte",
+      position: { x: 21, y: 29 },
+      width: 174.1, height: 20.11, fontSize: 40, alignment: "center",
+      fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+    }
+  ];
+
+  let y = 50;
+  //sections.forEach((section, idx) => {
+  Object.entries(groupedSections).forEach(([theme, themeSections]) => {
+    // Título de la sección
+    fields.push({
+      name: `section${theme}_title`,
+      type: "text",
+      content: theme,
+      position: { x: 20, y },
+      width: 170, height: 15, fontSize: 30, alignment: "left",
+      fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+    });
+    y += 12;
+
+    themeSections.forEach((section, idx) => {
+    // Título de la sección
+      fields.push({
+        name: `section_${theme}_${idx}_title`,
+        type: "text",
+        content: section.title,
+        position: { x: 20, y },
+        width: 170, height: 15, fontSize: 25, alignment: "left",
+        fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+      });
+      y += 18;
+
+      // Mapa
+      fields.push({
+        name: `section_${theme}_${idx}_map`,
+        type: "image",
+        position: { x: 30, y },
+        width: 150, height: 100, opacity: 1, required: true, readOnly: false
+      });
+      y += 105;
+
+      // Gráfico
+      fields.push({
+        name: `section_${theme}_${idx}_graph`,
+        type: "image",
+        position: { x: 70, y },
+        width: 75, height: 30, opacity: 1, required: false, readOnly: false
+      });
+      y += 35;
+
+      //Description
+      fields.push({
+        name: `section_${theme}_${idx}_description`,
+        type: "text",
+        content: section.description,
+        position: { x: 20, y },
+        width: 170, height: 15, fontSize: 14, alignment: "center",
+        fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+      });
+      y += 20;
+
+      // Leyenda
+      fields.push(...generatePdfLegend(section.ranges, section.colors, { x: 20, y }));
+      y += section.ranges.length * 5 + 10;
+    });
+      
+  });
+
+  y += 10;
+
+  //INDICADORES
+  fields.push({
+    name: "section indicadores",
+    type: "text",
+    content: "Tablas de indicadores por temática",
+    position: { x: 20, y },
+    width: 170, height: 15, fontSize: 30, alignment: "left",
+    fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+  });
+  y += 12;
+  
+  
+
+  Object.entries(groupedSections).forEach(([theme, themeSections]) => {
+    fields.push({
+          name: `section${theme}_title`,
+          type: "text",
+          content: theme,
+          position: { x: 20, y },
+          width: 170, height: 15, fontSize: 25, alignment: "left", verticalAlignment: "top",
+          fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+        });
+        y += 12;
+    fields.push({
+      name: `indicadores_${theme}`,
+      type: "table",
+      position: { x: 30, y },
+      width: 150,
+      //height: themeSections.length * 15 + 30, // ajusta según filas
+      height: 43.75920000000001,
+      content: `{{indicadores_${theme}}}`,
+      required: true,
+      showHead: true,
+      head: ["Indicador", "Puntaje", "Ciudad Juarez"],
+      headWidthPercentages: [52.2, 24.2, 23.6],
+      tableStyles: { borderWidth: 0.1, borderColor: "#4b5544" },
+      headStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#ffffff", "borderColor": "", backgroundColor: "#4b6648", borderWidth: { "top": 0, "right": 0, "bottom": 0, "left": 0 }, padding: {  top: 5, right: 5, bottom: 5, left: 5 } },
+      bodyStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#000000", borderColor: "#888888", alternateBackgroundColor: "#f5f5f5", borderWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 }, padding: {  top: 5, right: 5, bottom: 5, left: 5 } },
+
+      columnStyles: {}, readOnly: false
+    });
+    y += themeSections.length * 15 + 30;
+  });
+
+  const inputs = [
+    Object.fromEntries([
+      
+      // Si necesitas agregar los campos de cada sección:
+      ...Object.entries(groupedSections).flatMap(([theme, themeSections]) =>
+        themeSections.map((section, idx) => [
+          [`section_${theme}_${idx}_title`, section.title],
+          [`section_${theme}_${idx}_map`, section.map],
+          [`section_${theme}_${idx}_graph`, section.graph],
+          [`section_${theme}_${idx}_description`, section.description],
+          
+        ])
+      ).flat(),
+      ...Object.entries(groupedSections).map(([theme, themeSections]) => [
+        `indicadores_${theme}`,
+        themeSections.map(section => [
+          section.title ?? "",
+          section.puntaje !== undefined ? section.puntaje.toString() : "",
+          section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
+        ])
+      ]),
+    ])
+  ];
+
+  const template = {
+    schemas: [fields],
+    basePdf: { width: 210, height: 297, padding: [20, 10, 20, 10] }
+  };
+
+
+  const pdf = await generate({ template, inputs, plugins });
   const blobPdf = new Blob([pdf.buffer], { type: 'application/pdf' });
   window.open(URL.createObjectURL(blobPdf));
 }
