@@ -7,7 +7,7 @@ import { defaultViewState, useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
-import { Box } from "@chakra-ui/react";
+import { Box, Group } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
@@ -361,18 +361,22 @@ const Visor = () => {
                     </Button>
             
                     <ZoomControls />
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
-                        <LuSquareDashed />
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
-                        <PiIntersectSquareDuotone />
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
-                        <PiIntersectSquareFill />
-                    </Button>
+
+                    <Group attached>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
+                            <LuSquareDashed size={38}/>
+                        </Button>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
+                            <PiIntersectSquareDuotone size={38} />
+                        </Button>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
+                            <PiIntersectSquareFill size={38} />
+                        </Button>
+                    </Group>
+
                     <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
-                        <FaRegTrashCan />
-                    </Button>
+                            <FaRegTrashCan />
+                        </Button>
 
                     <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={async () => {
                         if (mapLayerInstance?.ref?.current) {
