@@ -246,6 +246,9 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
     //Graph
     const graphImage = layerInstance.graphImage || "";
 
+    //juarez total avg
+    const juarezAvg = layerInstance.formatValue(layerInstance.positiveAvg)
+
     return {
       map: base64Image,
       graph: graphImage,
@@ -255,7 +258,7 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
       theme: layerInstance.theme || "default",
       description: layerInstance.selectedDescription || "",
       puntaje: layerInstance.selectedAvg || 0,    //indicador
-      positiveAvg: layerInstance.positiveAvg || 0,  //indicador
+      positiveAvg: juarezAvg || 0,  //indicador
       //indicadores: layerInstance.getIndicadores?.() || []
     };
 
