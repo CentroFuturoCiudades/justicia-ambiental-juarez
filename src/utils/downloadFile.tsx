@@ -255,7 +255,7 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
       theme: layerInstance.theme || "default",
       description: layerInstance.selectedDescription || "",
       puntaje: layerInstance.selectedAvg || 0,    //indicador
-      juarezAvg: layerInstance.positiveAvg || 0,  //indicador
+      positiveAvg: layerInstance.positiveAvg || 0,  //indicador
       //indicadores: layerInstance.getIndicadores?.() || []
     };
 
@@ -414,7 +414,7 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
         themeSections.map(section => [
           section.title ?? "",
           section.puntaje !== undefined ? section.puntaje.toString() : "",
-          section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
+          section.positiveAvg !== undefined ? section.positiveAvg.toString() : ""
         ])
       ]),
     ])

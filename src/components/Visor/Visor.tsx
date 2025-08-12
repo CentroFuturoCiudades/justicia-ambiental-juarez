@@ -276,6 +276,7 @@ const Visor = () => {
 
     useEffect(() => {
         console.log("Array de maplayers", mapLayers)
+        console.log("Layer actual", selectedLayer)
     }, [mapLayers]);
 
     return (
@@ -386,6 +387,7 @@ const Visor = () => {
                             mapLayerInstance.graphImage = canvas.toDataURL("image/png");
                         }
                         setMapLayers(prev => [...prev, mapLayerInstance]);
+                        //setMapLayers(prev => [...prev, mapLayerInstance.clone()]);
                     }}>
                         <RiAddLine />
                     </Button>

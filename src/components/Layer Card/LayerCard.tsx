@@ -58,7 +58,9 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
     }
 
     const description = getDescription();
-    
+
+    const avg = mapLayerInstance?.getAverage(tematicaData.features, selected, selectedLayerData.property, activeLayerKey);
+
     return (
         <div>
             <div className="layerCard" style={{borderColor: color}}>
@@ -70,13 +72,13 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         { selected.length === 0 ? (
                             <div>
                                 <p style={{ fontSize: "15px"}}>
-                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{averageFormatted}</strong>.
+                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{avg}</strong>.
                                 </p>
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                {selected.length == 1 ? singleSelected : multipleSelected } un {selectedLayerData.title} de <strong>{averageFormatted}</strong>; por
-                                <strong>{(average > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
+                                {selected.length == 1 ? singleSelected : multipleSelected } un {selectedLayerData.title} de <strong>{mapLayerInstance.selectedAvg}</strong>; por
+                                <strong>{(mapLayerInstance.selectedAvg > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
                             </p>
                         )}
                     </div>

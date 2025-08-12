@@ -25,7 +25,8 @@ export class MapLayer {
   ref: React.RefObject<HTMLDivElement> | null = null;
   graphImage?: string;
   theme?: string;
-  selectedAvg = 0;
+  selectedAGEBS: string[] = [];
+  selectedAvg : string = "";
   selectedDescription = "";
 
 
@@ -187,11 +188,25 @@ export class MapLayer {
     />
   }
 
+   getAverage(features: Feature[], selected: string[], property: string, key: string): string {
+
+      if (selected.length === 0) return this.formatValue(this.positiveAvg);
+
+      const idField = key === "agebs" ? "cvegeo" : "name";
+      const values = features
+      .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
+      .map(f => f.properties?.[property])
+      .filter(value => value != null);
+      const average = values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
+      this.selectedAvg = this.formatValue(average);
+      return this.formatValue(average);
+  }
+
   getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>, description: string) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
     this.ref = ref;
-    this.selectedAvg = avg;
+    //this.selectedAvg = avg;
     this.selectedDescription = description;
 
     const Data = {
