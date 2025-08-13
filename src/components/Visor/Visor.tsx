@@ -17,7 +17,7 @@ import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downloadPdf, downlaodFile, downloadPdf_LAYERS} from "../../utils/downloadFile";
+import { downlaodFile, downloadPdf_LAYERS} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
@@ -30,6 +30,7 @@ import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi"
 import { FaRegTrashCan } from "react-icons/fa6";
 import { RiAddLine } from "react-icons/ri";
 import html2canvas from "html2canvas";
+import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -279,6 +280,25 @@ const Visor = () => {
         console.log("Layer actual", selectedLayer)
     }, [mapLayers]);
 
+    const addInstanceToArray = async (instance: MapLayer) => {
+        //deck img
+        const imageUrl = getMapImage(deck.current, map.current, instance);
+        if (imageUrl && instance) {
+            const response = await fetch(imageUrl);
+            const blobImage = await response.blob();
+            const base64Image = await blobToBase64(blobImage) as string;
+            instance.deckImage = base64Image;
+        }
+    
+        if (instance?.ref?.current) {
+            const canvas = await html2canvas(instance.ref.current);
+            instance.graphImage = canvas.toDataURL("image/png");
+        }
+
+        const newInstance = { ...instance };
+        setMapLayers(prev => [...prev, newInstance]);
+    }
+
     return (
         <div className="visor">
             <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
@@ -381,19 +401,18 @@ const Visor = () => {
                         </Button>
                     }
 
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark} onClick={async () => {
-                        if (mapLayerInstance?.ref?.current) {
-                            const canvas = await html2canvas(mapLayerInstance.ref.current);
-                            mapLayerInstance.graphImage = canvas.toDataURL("image/png");
-                        }
-                        const newInstance = { ...mapLayerInstance };
-                        setMapLayers(prev => [...prev, newInstance]);
-                    }}>
+                    <Button className="visor__button" 
+                        borderRadius={0} 
+                        p={2} 
+                        background={COLORS.GLOBAL.backgroundDark} 
+                        onClick={() => {
+                            addInstanceToArray(mapLayerInstance as MapLayer);
+                        }}>
                         <RiAddLine />
                     </Button>
                 </div>
             </div>
-                </div>
+        </div>
        );
 }
 

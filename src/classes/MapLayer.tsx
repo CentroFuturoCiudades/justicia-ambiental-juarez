@@ -24,6 +24,7 @@ export class MapLayer {
   title: string;
   ref: React.RefObject<HTMLDivElement> | null = null;
   graphImage?: string;
+  deckImage?: string;
   theme?: string;
   selectedAGEBS: string[] = [];
   selectedAvg : string = "";
