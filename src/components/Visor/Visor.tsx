@@ -297,6 +297,7 @@ const Visor = () => {
 
         const newInstance = { ...instance };
         setMapLayers(prev => [...prev, newInstance]);
+        //setMapLayers(prev => [...prev, instance]);
     }
 
     return (
@@ -354,7 +355,6 @@ const Visor = () => {
                     <BusquedaColonia />
                 </div>
 
-                {/* {selectedLayer && mapLayerInstance && ( */}
                 {selectedLayer && mapLayerInstance && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}

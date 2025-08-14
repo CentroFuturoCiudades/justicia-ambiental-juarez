@@ -369,7 +369,7 @@ export const LAYERS: any = {
         metrics: [],
     },
     ingreso: {
-        title: "ingreso promedio mensual",
+        title: "Ingreso promedio mensual",
         map_type: "geometry",
         property: "ingreso",
         is_lineLayer: false,

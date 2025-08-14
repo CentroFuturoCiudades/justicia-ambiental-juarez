@@ -250,7 +250,7 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: MapLayer[
       title: layerInstance.title,
       theme: layerInstance.theme ?? "",
       description: layerInstance.selectedDescription,
-      puntaje: layerInstance.selectedAvg ?? 0,
+      puntaje: layerInstance.formatValue(layerInstance.selectedAvg),
       juarezAvg: layerInstance.formatValue(layerInstance.positiveAvg),
     };
 
