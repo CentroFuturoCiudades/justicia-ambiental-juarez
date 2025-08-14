@@ -74,7 +74,8 @@
         right: 2rem;
         display: flex;
         flex-direction: column;
-        //gap: 8px;
+        gap: 0.3rem;
+        //width: 329px;     //creo que esta muy larga
     }
 
 }
@@ -85,4 +86,5 @@
     outline: none !important;
     box-shadow: none !important;
     border-color: transparent !important;
+    background-color: #32332f;
 }

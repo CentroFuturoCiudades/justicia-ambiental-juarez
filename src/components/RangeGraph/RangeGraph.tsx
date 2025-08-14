@@ -1,6 +1,4 @@
 import { formatNumber } from "../../utils/utils";
-import "./RangeGraph.scss"
-//import { interpolateRgb } from "d3-interpolate";
 import { IoCaretDown } from "react-icons/io5";
 
 type RangeGraph = {
@@ -11,94 +9,154 @@ type RangeGraph = {
 
 };
 
+//estilos in line para la conversion a imagen
 const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) => {
 
   return (
-    <div className="rangeGraph" style={{ width: "100%", padding: "8px" , position: "relative", marginTop: "25px", pointerEvents: "none"}}>
+    <div style={{ position: "relative"}}>
 
-      {/* CONTENEDOR DE BARRA GRÁFICA */}
-      <div className="rangeGraph__barContainer"
-        style={{
-          display: "flex",
-          width: "100%",
-          height: "34px",
-        }}
-      >
-        {/* PROMEDIO DE AGEB INDICADOR */}
-        {averageAGEB && !isNaN(averageAGEB) && <div className="rangeGraph__agebLabel" style={{
-          left: `${((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
-          top: -17,
+      {/* promedio cd juarez */}
+      {(() => {
+        const percent = ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
+        const style: React.CSSProperties = {
           position: "absolute",
-          transform: "translateX(-50%)",
+          bottom: 0,
+          alignItems: "center",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-        }}>
-          <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
-            {formatValue(averageAGEB)}
-          </p>
-          <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
-        </div>}
+          padding: "0 2vw",
+          alignContent: "center",
+          zIndex: 1,
+        };
 
-        {/* PROMEDIO CIUDAD JUAREZ */}
-        <div className="rangeGraph__average" style={{
-          position: "absolute",
-          top: 0,
-          left: `${((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
-          transform: "translateX(-50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}>
-          <div style={{
-            width: "2px",
-            height: "54px",
-            background: "black",
-            marginBottom: "4px",
-          }}
-          />
-          <div style={{fontSize: "10px", whiteSpace: "nowrap", alignContent: "center", textAlign: "center", fontWeight: "bold"}}> 
-            {formatValue(data.positiveAvg)}
-            <br />
-            Ciudad Juárez
+        if (percent <= 0) {
+          style.left = 0;
+          style.transform = "none";
+        } else if (percent >= 100) {
+          style.right = 0;
+          style.transform = "none";
+        } else {
+          style.left = `${percent}%`;
+          style.transform = "translateX(-50%)";
+        }
+
+        return (
+          <div style={style}>
+            <div style={{
+              width: "0.15vw",
+              height: "54px",
+              background: "black",
+              marginBottom: "4px",
+            }} />
+            <div style={{
+              fontSize: "10px",
+              whiteSpace: "nowrap",
+              alignContent: "center",
+              textAlign: "center",
+              fontWeight: "bold"
+            }}>
+              {formatValue(data.positiveAvg)}
+              <br />
+              Ciudad Juárez
+            </div>
           </div>
-        </div>
+        );
+      })()}
+      <div style={{height: "30px"}}>
+        {/* PROMEDIO DE AGEB */}
+        {averageAGEB && !isNaN(averageAGEB) && (() => {
+          const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
+          const style: React.CSSProperties = {
+            position: "absolute",
+            bottom: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            zIndex: 2,
+            fontSize: "14px",
+            fontWeight: "bold",
+            //lineHeight: "1",
+            
+          };
 
-
-        {/* DIVISIONES DE LA GRÁFICA */}
-        {[...colorsArray].reverse().map((color, idx) => ( 
-          <div
-            key={idx}
-            style={{
-              flex: 1,
-              background: color,
-              height: "100%",
-            }}
-          />     
-        ))}
+          if (percent <= 5) {
+            style.left = 0;
+            style.transform = "none";
+            style.alignItems = "flex-start";
+          } else if (percent >= 90) {
+            style.right = 0;
+            style.transform = "none";
+            style.alignItems = "flex-end";
+          } else {
+            style.left = `calc(${percent}% )`;
+            style.transform = "translateX(-50%)";
+          }
+          return (
+            <div style={{
+              width: "100%",
+              height: "40px",
+              position: "relative",
+              padding: "0 8px",
+            }}>
+              <div className="rangeGraph__agebLabel" 
+                style={
+                  style
+                }>
+                  <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
+                    {formatValue(averageAGEB)}
+                  </p>
+                  <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
+              </div>
+          </div>
+          );
+        })()}
       </div>
 
-      {/* MIN Y MAX */}
-      <div style={{ position: "relative", width: "100%", marginTop: "4px", height: "24px", }}>
-        {[data.minVal, data.maxVal].map((value, index) => (
+
+
+      <div >
+        
+        {/* CUADRITOS */}
+        <div style={{
+            display: "flex",
+            width: "100%",
+            height: "100%",
+            padding: "0 8px",
+            marginBottom: "8px",
+          }}>
+          {[...colorsArray].reverse().map((color, idx) => ( 
             <div
+              key={idx}
+              style={{
+                flex: 1,
+                background: color,
+                height: "30px",
+              }}
+            />
+          ))}
+        </div>
+        { /* mayor y menor */}
+      <div style={{  display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        {[data.minVal, data.maxVal].map((value, index) => (
+          <div
             key={index}
             style={{
-                position: "absolute",
-                left: `${((value - data.minVal) / (data.maxVal - data.minVal)) * 100}%`,
-                transform: "translateX(-50%)",
-                fontSize: "10px",
-                textAlign: "center",
+              fontSize: "10px",
+              textAlign: "center",
             }}
-            >
+          >
             {formatValue(value)}
             <br />
-            {(index === 0 ? "Menor" : "Mayor")}            
-            </div>
+            {(index === 0 ? "Menor" : "Mayor")}
+          </div>
         ))}
-        </div>
+      </div>
+      </div>
+
+      
+      
     </div>
-  );
+  )
 }
 
 export default RangeGraph;

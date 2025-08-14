@@ -1,6 +1,7 @@
 import { type MapViewState } from "deck.gl";
 import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
 import type { FeatureCollection } from "geojson";
+import { MapLayer } from "../classes/MapLayer";
 
 type ViewState = {
     latitude: number;
@@ -28,6 +29,9 @@ interface AppContextI {
     setSelectedColonias_SET: Dispatch<SetStateAction<Set<string>>>;
     coloniasData: FeatureCollection;
     setColoniasData: Dispatch<SetStateAction<FeatureCollection>>;
+    //array de maplayers para el reporte
+    mapLayers: MapLayer[];
+    setMapLayers: Dispatch<SetStateAction<MapLayer[]>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -65,6 +69,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //
     const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
     const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
+    //maplayer array for pdf
+    const [mapLayers, setMapLayers] = useState<MapLayer[]>([]);
 
     return (
         <AppContext.Provider value={{
@@ -85,7 +91,10 @@ const AppContextProvider = ({ children }: { children: any }) => {
             selectedColonias_SET,
             setSelectedColonias_SET,
             coloniasData,
-            setColoniasData
+            setColoniasData,
+            //
+            mapLayers,
+            setMapLayers
 
         }}
         >

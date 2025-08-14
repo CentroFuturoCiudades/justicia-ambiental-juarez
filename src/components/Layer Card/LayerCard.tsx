@@ -5,6 +5,7 @@ import type {Feature} from "geojson";
 import "./LayerCard.scss";
 import { formatNumber } from "../../utils/utils";
 import { active } from "d3";
+import { useRef } from "react";
 
 type LayerCardProps = {
     selectedLayerData: any;
@@ -17,6 +18,8 @@ type LayerCardProps = {
 const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
 
     const { selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, activeLayerKey } = useAppContext();
+    //const rangeGraphRef = useRef<HTMLDivElement>(null);
+
 
     if (!tematicaData || !tematicaData.features) {
         return null; // o un mensaje de error
@@ -43,7 +46,21 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
 
     const average = getAverage(tematicaData.features, selected, selectedLayerData.property);
     const averageFormatted = selectedLayerData.formatValue(average);
-    
+
+    function getDescription() {
+        let description = ""
+        if (selected.length === 0) {
+            description = `Ciudad Juárez tiene un ${selectedLayerData.title} de ${averageFormatted}.`;
+        } else {
+            description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${selectedLayerData.title} de ${averageFormatted}; por ${average > mapLayerInstance.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
+        }
+        return description;
+    }
+
+    const description = getDescription();
+
+    const avg = mapLayerInstance?.getAverage(tematicaData.features, selected, selectedLayerData.property, activeLayerKey);
+
     return (
         <div>
             <div className="layerCard" style={{borderColor: color}}>
@@ -55,30 +72,21 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         { selected.length === 0 ? (
                             <div>
                                 <p style={{ fontSize: "15px"}}>
-                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{averageFormatted}</strong>.
+                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{avg}</strong>.
                                 </p>
                             </div>
                         ): (
                             <p style={{ fontSize: "15px"}}>
-                                {selected.length == 1 ? singleSelected : multipleSelected } un {selectedLayerData.title} de <strong>{averageFormatted}</strong>; por
-                                <strong>{(average > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
+                                {selected.length == 1 ? singleSelected : multipleSelected } un {selectedLayerData.title} de <strong>{mapLayerInstance.selectedAvg}</strong>; por
+                                <strong>{(mapLayerInstance.selectedAvg > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
                             </p>
                         )}
-                        {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined)}
                     </div>
                 </div>
+                <div ref={mapLayerInstance.ref} style={{ overflow: "hidden", padding: "8px"}}>
+                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, mapLayerInstance.ref, description)}
+                </div>
             </div>
-            {selected.length > 0 && (
-                <Button 
-                size={"xs"}
-                rounded={"full"}
-                p={4}
-                onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}
-                style={{ backgroundColor: COLORS.GLOBAL.backgroundDark, color: "white" }} 
-                >
-                    <p style={{ fontSize: "15px" }}>Limpiar selección</p>
-                </Button>
-            )}
         </div>
     );
 }

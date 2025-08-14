@@ -22,20 +22,31 @@ export class MapLayer {
   colorMap: any;
   legend: any = null;
   title: string;
+  ref: React.RefObject<HTMLDivElement> | null = null;
+  graphImage?: string;
+  deckImage?: string;
+  theme?: string;
+  selectedAGEBS: string[] = [];
+  selectedAvg : string = "";
+  selectedDescription = "";
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, ref = null, theme = "default" }: {
     opacity?: number;
     colors?: string[];
     title?: string;
     amountOfColors?: number;
     formatValue?: (value: number) => string;
+    ref?: React.RefObject<HTMLDivElement> | null;
+    theme?: string;
   }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
+    this.ref = ref;
+    this.theme = theme;
   }
 
   async loadData(url: string) {
@@ -178,9 +189,26 @@ export class MapLayer {
     />
   }
 
-  getRangeGraph = (avg: number) => {
+   getAverage(features: Feature[], selected: string[], property: string, key: string): string {
+
+      if (selected.length === 0) return this.formatValue(this.positiveAvg);
+
+      const idField = key === "agebs" ? "cvegeo" : "name";
+      const values = features
+      .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
+      .map(f => f.properties?.[property])
+      .filter(value => value != null);
+      const average = values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
+      this.selectedAvg = this.formatValue(average);
+      return this.formatValue(average);
+  }
+
+  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>, description: string) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    this.ref = ref;
+    //this.selectedAvg = avg;
+    this.selectedDescription = description;
 
     const Data = {
       minVal: this.minVal,

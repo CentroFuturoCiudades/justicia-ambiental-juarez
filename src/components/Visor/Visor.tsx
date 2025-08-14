@@ -7,7 +7,7 @@ import { defaultViewState, useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
-import { Box } from "@chakra-ui/react";
+import { Box, Group } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
 import ZoomControls from "../ZoomControls/ZoomControls";
@@ -17,7 +17,7 @@ import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downloadPdf, downlaodFile } from "../../utils/downloadFile";
+import { downlaodFile, downloadPdf} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
@@ -28,6 +28,9 @@ import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { RiAddLine } from "react-icons/ri";
+import html2canvas from "html2canvas";
+import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -44,7 +47,8 @@ const Visor = () => {
         selectedAGEBS, setSelectedAGEBS, 
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
-        activeLayerKey, setActiveLayerKey                       // ahora es context variable
+        activeLayerKey, setActiveLayerKey,
+        mapLayers,setMapLayers //mas de una layer seleccionada en el "pop up" (simulacion)
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -60,36 +64,26 @@ const Visor = () => {
 
     const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
+    const mapLayerRef = useRef<HTMLDivElement | null>(null);
 
 
     let dissolvedLayer: GeoJsonLayer[] = [];
-    let dissolvedLayer_Colonias: GeoJsonLayer[] = [];
 
-    // get geometries of selectedAGEBS
-    const selectedAGEBSGeometries = useMemo(() => {
-        const setAgebs = new Set(selectedAGEBS);
-        // en vez de agebsGeoJson o tematicaData 
-        return agebsGeoJson?.features?.filter((feature: any) => setAgebs.has(feature.properties.cvegeo));
-    }, [selectedAGEBS]);
+    //get geometries of selected agebs/colonias
+    const selectedGeometries = useMemo(() => {
+        const isAgeb = activeLayerKey === "agebs";
+        const setSelected = new Set(isAgeb ? selectedAGEBS : selectedColonias);
+        return (isAgeb ? agebsGeoJson : coloniasGeoJson)?.features?.filter(
+            (feature: any) => setSelected.has(isAgeb ? feature.properties.cvegeo : feature.properties.name)
+        );
+    }, [selectedAGEBS, selectedColonias, activeLayerKey]);
 
-    //get geometries of selectedColonias
-    const selectedColoniasGeometries = useMemo(() => {
-        const setColonias = new Set(selectedColonias);
-        return coloniasGeoJson?.features?.filter((feature: any) => setColonias.has(feature.properties.name));
-    }, [selectedColonias]);
-
-
-    const handleSelectedAGEBS = (info: any) => {
+    const handleSelectedElements = (info: any) => {
         if (info) {
-            const cvegeo = info.object.properties.cvegeo as string;
-            setSelectedAGEBS(prev => prev.includes(cvegeo) ? prev.filter(key => key !== cvegeo) : [...prev, cvegeo]);
-        }
-    };
-
-    const handleSelectedColonias = (info: any) => {
-        if (info) {
-            const name = info.object.properties.name as string;
-            setSelectedColonias(prev => prev.includes(name) ? prev.filter(key => key !== name) : [...prev, name]);
+            const isAgeb = activeLayerKey === "agebs";
+            const key = isAgeb ? info.object.properties.cvegeo : info.object.properties.name;
+            const setSelected = isAgeb ? setSelectedAGEBS : setSelectedColonias;
+            setSelected(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
         }
     };
 
@@ -148,7 +142,9 @@ const Visor = () => {
         const mapLayerInstance = new MapLayer({
             opacity: 1,
             title: layer ? layer.title : "initial",
-            formatValue: layer ? layer.formatValue : ""
+            formatValue: layer ? layer.formatValue : "",
+            ref: mapLayerRef,
+            theme: layer ? layer.tematica : "default",
         });
 
         let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson)); //copia del geojson universal de agebs/colonias
@@ -171,7 +167,7 @@ const Visor = () => {
             layer?.property || "",
             layer?.is_lineLayer || false,
             true,
-            activeLayerKey === "agebs" ? handleSelectedAGEBS : handleSelectedColonias,
+            handleSelectedElements,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
         );
         setTematicaLayer(geoJsonLayer);
@@ -193,34 +189,15 @@ const Visor = () => {
         setSelectedAGEBS(AGEBS_colonias);
     }, [AGEBS_colonias]);*/
 
-    //dissolve de agebs y colonias
-    if (selectedAGEBSGeometries && selectedAGEBSGeometries.length > 0) {
+
+    if(selectedGeometries && selectedGeometries.length > 0) {
         try {
-            const fc = featureCollection(selectedAGEBSGeometries);
+            const fc = featureCollection(selectedGeometries);
             const flattened = flatten(fc);
             const dissolved = dissolve(flattened as any);
             // create a new layer with the dissolved geometry
             dissolvedLayer = [new GeoJsonLayer({
                 id: 'dissolved',
-                data: dissolved,
-                pickable: false,
-                filled: false,
-                getLineColor: [250, 200, 0, 255],
-                getLineWidth: 70,
-            })];
-        } catch (error) {
-            console.error('Error dissolving features:', error);
-        }
-    }
-
-    if (selectedColoniasGeometries && selectedColoniasGeometries.length > 0) {
-        try {
-            const fc = featureCollection(selectedColoniasGeometries);
-            const flattened = flatten(fc);
-            const dissolved = dissolve(flattened as any);
-            // create a new layer with the dissolved geometry
-            dissolvedLayer_Colonias = [new GeoJsonLayer({
-                id: 'dissolved_colonias',
                 data: dissolved,
                 pickable: false,
                 filled: false,
@@ -298,6 +275,30 @@ const Visor = () => {
 
     }, [selectedColonias, coloniasData]);*/
 
+    useEffect(() => {
+        console.log("Array de maplayers", mapLayers)
+    }, [mapLayers]);
+
+    const addInstanceToArray = async (instance: MapLayer) => {
+
+        const imageUrl = getMapImage(deck.current, map.current, instance);
+
+        if (imageUrl && instance) {
+            const response = await fetch(imageUrl);
+            const blobImage = await response.blob();
+            const base64Image = await blobToBase64(blobImage) as string;
+            instance.deckImage = base64Image;
+        }
+    
+        if (instance?.ref?.current) {
+            const canvas = await html2canvas(instance.ref.current);
+            instance.graphImage = canvas.toDataURL("image/png");
+        }
+
+        const newInstance = { ...instance };
+        setMapLayers(prev => [...prev, newInstance]);
+    }
+
     return (
         <div className="visor">
             <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
@@ -333,10 +334,8 @@ const Visor = () => {
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                        //...dissolvedLayer,
+                        ...dissolvedLayer,
                         //...(coloniasLayer ? [coloniasLayer] : []),
-                        ...(activeLayerKey === "agebs" ? dissolvedLayer : []),
-                        ...(activeLayerKey === "colonias" ? dissolvedLayer_Colonias : [])
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     controller={true}
@@ -374,29 +373,45 @@ const Visor = () => {
                                 transitionDuration: 0,
                             } as any);
                             setTimeout(() => {
-                                // downloadPdf(deck.current, map.current, mapLayerInstance);
-                                downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
+                                 downloadPdf(deck.current, map.current, mapLayers);
+                                //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>
                         <RiDownloadLine />
                     </Button>
             
                     <ZoomControls />
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
-                        <LuSquareDashed />
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
-                        <PiIntersectSquareDuotone />
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
-                        <PiIntersectSquareFill />
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
-                        <FaRegTrashCan />
+
+                    <Group attached>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
+                            <LuSquareDashed size={38}/>
+                        </Button>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
+                            <PiIntersectSquareDuotone size={38} />
+                        </Button>
+                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
+                            <PiIntersectSquareFill size={38} />
+                        </Button>
+                    </Group>
+
+                    {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) && 
+                        <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
+                            <FaRegTrashCan />
+                        </Button>
+                    }
+
+                    <Button className="visor__button" 
+                        borderRadius={0} 
+                        p={2} 
+                        background={COLORS.GLOBAL.backgroundDark} 
+                        onClick={() => {
+                            addInstanceToArray(mapLayerInstance as MapLayer);
+                        }}>
+                        <RiAddLine />
                     </Button>
                 </div>
             </div>
-                </div>
+        </div>
        );
 }
 
