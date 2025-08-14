@@ -17,7 +17,7 @@ import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downlaodFile, downloadPdf_LAYERS} from "../../utils/downloadFile";
+import { downlaodFile, downloadPdf} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
@@ -277,12 +277,12 @@ const Visor = () => {
 
     useEffect(() => {
         console.log("Array de maplayers", mapLayers)
-        console.log("Layer actual", selectedLayer)
     }, [mapLayers]);
 
     const addInstanceToArray = async (instance: MapLayer) => {
-        //deck img
+
         const imageUrl = getMapImage(deck.current, map.current, instance);
+
         if (imageUrl && instance) {
             const response = await fetch(imageUrl);
             const blobImage = await response.blob();
@@ -373,8 +373,7 @@ const Visor = () => {
                                 transitionDuration: 0,
                             } as any);
                             setTimeout(() => {
-                                 //downloadPdf(deck.current, map.current, mapLayerInstance);
-                                 downloadPdf_LAYERS(deck.current, map.current, mapLayers);
+                                 downloadPdf(deck.current, map.current, mapLayers);
                                 //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>

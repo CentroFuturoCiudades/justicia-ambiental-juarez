@@ -87,8 +87,14 @@ export const blobToBase64 = (blob: Blob) => {
 export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | RasterLayer | null): string | undefined => {
 
   const deckglCanvas = deck.deck.canvas;
+  //const mapboxCanvas = map.getMap().getCanvas();
+
+  //console.log("deckglCanvas:", deckglCanvas);
+  //console.log("mapboxCanvas:", mapboxCanvas);
+
   const width = deckglCanvas.width;
   const height = deckglCanvas.height;
+  console.log("getMapImage width:", width, "height:", height);
 
   const merge = document.createElement("canvas");
   merge.width = width;
@@ -100,6 +106,9 @@ export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | Raste
     console.error("No context found");
     return;
   }
+
+  //context.globalAlpha = 1.0;
+  //context.drawImage(mapboxCanvas, 0, 0, width, height);
 
   context.globalAlpha = 1.0;
   context.drawImage(deckglCanvas, 0, 0, width, height);
@@ -119,7 +128,14 @@ function groupByTheme(sections : Section[]) {
 
 //Datos por pagina (1era seccion MAPAS)
 function buildSectionPage(section: Section, theme: string, idx: number, y: number) {
-  
+  const pageHeight = 297 - 20; //page height - bottom margin
+  const elementsCount = 4; //# page elements
+
+  const elementHeights = [15, 140, 35, 15];
+  const totalElementsHeight = elementHeights.reduce((a, b) => a + b, 0);
+  const leftoverSpace = pageHeight - y - totalElementsHeight;
+  const gap = leftoverSpace / (elementsCount - 1); //espaciado dinamico para abarcar toda la pagina
+
   const pageFields = []
 
   //section title
@@ -127,29 +143,29 @@ function buildSectionPage(section: Section, theme: string, idx: number, y: numbe
     name: `section_${theme}_${idx}_title`,
     type: "text",
     content: section.title,
-    position: { x: 20, y },
-    width: 170, height: 15, fontSize: 25, alignment: "left",
+    position: { x: 10, y },
+    width: 170, height: elementHeights[0], fontSize: 25, alignment: "left",
     fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
   })
-  y += 18;
+  y += elementHeights[0] + gap;
 
   //map
   pageFields.push({
     name: `section_${theme}_${idx}_map`,
     type: "image",
-    position: { x: 30, y },
-    width: 150, height: 100, opacity: 1, required: true, readOnly: false
+    position: { x: 10, y },
+    width: 200, height: elementHeights[1], opacity: 1, required: true, readOnly: false
   })
-  y += 105;
+  y += elementHeights[1] + gap;
 
   //graph
   pageFields.push({
     name: `section_${theme}_${idx}_graph`,
     type: "image",
-    position: { x: 70, y },
-    width: 75, height: 30, opacity: 1, required: false, readOnly: false
+    position: { x: 50, y },
+    width: 110, height: elementHeights[2], opacity: 1, required: false, readOnly: false
   })
-  y += 35;
+  y += elementHeights[2] + gap;
 
   //description
   pageFields.push({
@@ -157,13 +173,12 @@ function buildSectionPage(section: Section, theme: string, idx: number, y: numbe
     type: "text",
     content: section.description,
     position: { x: 20, y },
-    width: 170, height: 15, fontSize: 14, alignment: "center",
+    width: 170, height: elementHeights[3], fontSize: 14, alignment: "center",
     fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
   })
-  y += 25;
 
   //legend?? (no venia en el diseño)
-  pageFields.push(...generatePdfLegend(section.ranges, section.colors, { x: 20, y }));
+  //pageFields.push(...generatePdfLegend(section.ranges, section.colors, { x: 20, y }));
 
   return pageFields;
 
@@ -174,8 +189,8 @@ function buildIndicatorsTable(theme: string, y: number) {
   return {
     name: `indicadores_${theme}`,
     type: "table",
-    position: { x: 30, y },
-    width: 150,
+    position: { x: 20, y },
+    width: 170,
     height: 43.75920000000001,
     content: `{{indicadores_${theme}}}`,
     required: true,
@@ -220,7 +235,7 @@ function buildInputs(groupedSections: Record<string, Section[]>) {
 }
 
 //REPORTE DINAMICO
-export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: MapLayer[]) => {
+export const downloadPdf = async (deck: any, map: any, layerInstances: MapLayer[]) => {
 
   const amountOfColors = 6;
 
@@ -261,7 +276,7 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
   ];
 
   const schemas = [];
-  
+
   //Agrupar por tematica
   const groupedSections = groupByTheme(sections);
 
@@ -275,13 +290,13 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
       name: `section_${theme}_title`,
       type: "text",
       content: theme,
-      position: { x: 20, y: (firstTheme === theme ? 50 : 10) },
+      position: { x: 10, y: (firstTheme === theme ? 50 : 10) },
       width: 170, height: 15, fontSize: 30, alignment: "left",
       fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
     };
 
     themeSections.forEach((section, idx) => {
-      const pageFields = buildSectionPage(section, theme, idx, (theme === firstTheme && idx === 0) ? 60 : 25);
+      const pageFields = buildSectionPage(section, theme, idx, (theme === firstTheme && idx === 0) ? 65 : 25);
 
       if (theme === firstTheme && idx === 0){
         schemas.push([...pdfTtitle, themeTitle, ...pageFields]);
@@ -299,13 +314,13 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
       name: "section_indicadores_title",
       type: "text",
       content: "Tablas de indicadores por temática",
-      position: { x: 20, y: 10 },
+      position: { x: 20, y: 20 },
       width: 170, height: 15, fontSize: 30, alignment: "left",
       fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
     }
   ];
 
-  let y = 30;
+  let y = 35;
 
   //tablas de indicadores en una misma pag (page break automatico)
   Object.entries(groupedSections).forEach(([theme, themeSections]) => {
@@ -317,7 +332,7 @@ export const downloadPdf_LAYERS = async (deck: any, map: any, layerInstances: Ma
       width: 170, height: 15, fontSize: 25, alignment: "left",
       fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
     });
-    y += 20;
+    y += 15;
 
     indicadores.push(buildIndicatorsTable(theme, y));
     y += themeSections.length * 15 + 30;
