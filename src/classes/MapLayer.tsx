@@ -22,7 +22,6 @@ export class MapLayer {
   colorMap: any;
   legend: any = null;
   title: string;
-  ref: React.RefObject<HTMLDivElement> | null = null;
   graphImage?: string;
   deckImage?: string;
   theme?: string;
@@ -210,7 +209,7 @@ export class MapLayer {
     const singleSelected = key === "agebs" ? "El AGEB seleccionado tiene" : "La colonia seleccionada tiene";
     const multipleSelected = key === "agebs" ? "Los AGEBs seleccionados tienen" : "Las colonias seleccionadas tienen";
     let description = ""
-    
+
     if (selected.length === 0) {
         description = `Ciudad Juárez tiene un ${title} de ${average}.`;
         this.selectedDescription = description;
@@ -229,10 +228,9 @@ export class MapLayer {
       }
   }
 
-  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>) => {
+  getRangeGraph = (avg: number) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
-    this.ref = ref;
 
     const Data = {
       minVal: this.minVal,

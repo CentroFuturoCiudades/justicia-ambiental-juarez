@@ -1,6 +1,7 @@
 import { useAppContext } from "../../context/AppContext";
 import { COLORS } from "../../utils/constants";
 import type {Feature} from "geojson";
+import { useRef } from "react";
 import "./LayerCard.scss";
 
 type LayerCardProps = {
@@ -8,13 +9,13 @@ type LayerCardProps = {
     tematicaData: { features: Feature[] };
     color: string;
     mapLayerInstance: any;
+    rangeGraphRef: React.RefObject<HTMLDivElement | null>;
 };
 
 
-const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
+const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, rangeGraphRef }: LayerCardProps) => {
 
     const { selectedAGEBS, selectedColonias, activeLayerKey } = useAppContext();
-    //const rangeGraphRef = useRef<HTMLDivElement>(null);
     const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
 
 
@@ -33,8 +34,8 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }:
                         <p style={{ fontSize: "15px" }}>{description}</p>
                     </div>
                 </div>
-                <div ref={mapLayerInstance.ref} style={{ overflow: "hidden", padding: "8px"}}>
-                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined, mapLayerInstance.ref)}
+                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
+                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
                 </div>
             </div>
         </div>

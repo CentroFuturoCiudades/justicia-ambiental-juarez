@@ -64,7 +64,8 @@ const Visor = () => {
 
     const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
-    const mapLayerRef = useRef<HTMLDivElement | null>(null);
+    const rangeGraphRef = useRef<HTMLDivElement | null>(null);
+
 
 
     let dissolvedLayer: GeoJsonLayer[] = [];
@@ -143,7 +144,6 @@ const Visor = () => {
             opacity: 1,
             title: layer ? layer.title : "initial",
             formatValue: layer ? layer.formatValue : "",
-            ref: mapLayerRef,
             theme: layer ? layer.tematica : "default",
         });
 
@@ -290,8 +290,8 @@ const Visor = () => {
             instance.deckImage = base64Image;
         }
     
-        if (instance?.ref?.current) {
-            const canvas = await html2canvas(instance.ref.current);
+        if (rangeGraphRef.current) {
+            const canvas = await html2canvas(rangeGraphRef.current);
             instance.graphImage = canvas.toDataURL("image/png");
         }
 
@@ -318,6 +318,7 @@ const Visor = () => {
                         tematicaData={tematicaData}
                         color={sectionColor}
                         mapLayerInstance={mapLayerInstance}
+                        rangeGraphRef={rangeGraphRef}
                     />
                 )}
 
