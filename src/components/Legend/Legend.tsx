@@ -29,9 +29,11 @@ const Legend = ({
 
     const rangeText = `${formatValue(value[1])} - ${formatValue(value[0])}`;
 
-    return (<div key={index} className="legend-item" >
-      <div className="legend-text" >{rangeText}</div>
-    </div>);
+    return (
+      <div key={index} className="legend-item" >
+        <div className="legend-text" >{rangeText}</div>
+      </div>
+    );
   }
 
   const linearGradient = `linear-gradient(to bottom, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[i])} ${i * 100 / ranges.length}%`).join(", ")})`;
@@ -81,7 +83,7 @@ const Legend = ({
             })}
           </div>
         </> : <div style={gradientStyle}></div>}
-        <div>
+        <div className="legend-ranges">
           {ranges?.length && ranges.map((value, index) => renderLegeindItem(value, index))}
         </div>
       </div>
