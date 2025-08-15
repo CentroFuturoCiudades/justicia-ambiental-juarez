@@ -21,10 +21,19 @@
 
   --border-radius: 0.5rem;
 
+/*
   --font-size-title: 50px;
   --font-size-header: 30px;
   --font-size-subtitle: 22px;
   --font-size-body: 20px;
+  --font-size-button: 15px;
+*/
+  --font-size-title: 2.6vw;
+  --font-size-header: 1.56vw;
+  --font-size-subtitle: 1.15vw;
+  --font-size-body: 1.04vw;
+  --font-size-button: 0.78vw;
+
 }
 
 #root {
