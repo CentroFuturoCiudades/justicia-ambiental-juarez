@@ -18,7 +18,7 @@ const CapasBase = () => {
                 <Accordion.Item value="main">
 
                     <Accordion.ItemTrigger className="capas-base-container__main-trigger">
-                        <Box className="capas-base-container__main-title">
+                        <Box>
                             capas complementarias
                         </Box>
                         <Accordion.ItemIndicator className="capas-base-container__main-indicator"/>
@@ -28,14 +28,14 @@ const CapasBase = () => {
                         <Accordion.ItemBody className="capas-base-container__itemBody" >
                             {Object.entries(CAPAS_BASE).map(([key, value]) => (
                                 <>
-                                <Box key={key} p={0} display="flex" alignItems="center" width={"100%"}>
+                                <Box className="capas-base-container__checkboxContent" key={key}>
                                     <Checkbox.Root key={key} className="custom-green-checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"} disabled={!value.enabled}>
                                         <Checkbox.HiddenInput 
                                             checked={selectedBaseLayers.includes(key)}
                                             onChange={() => handleBaseLayerToggle(key)}
                                         />
                                         <Checkbox.Control />
-                                        <Checkbox.Label style={{fontSize:"0.7rem"}}>{value.title}</Checkbox.Label>
+                                        <Checkbox.Label className="capas-base-container__checkboxLabel">{value.title}</Checkbox.Label>
                                     </Checkbox.Root>
                                 </Box>
                                 </>

@@ -1,4 +1,5 @@
 .capas-base-container {
+  font-size: var(--font-size-button);
 
   &__main-trigger {
     background-color: #424242;
@@ -7,22 +8,13 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    //border-radius: 0.2rem;
     border-radius: 0%;
-    padding: 0.25rem 1rem !important;
-  }
-
-  &__main-title {
-    font-weight: 500;
-    font-size: 0.9rem;
+    padding: 0.25em 1em !important;
+    height: 3.65vh;
   }
 
   &__main-indicator {
     color: white;
-    font-weight: 600;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
   }
 
   &__itemContent {
@@ -36,6 +28,17 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
+  }
+
+  &__checkboxContent {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__checkboxLabel {
+    font-size: var(--font-size-button);
   }
 
 }
