@@ -68,8 +68,14 @@
         left: 2rem;
         display: flex;
         justify-content: space-between;
-        gap: 0.2rem;
-        //max-width: 180px;
+        gap: 0.5vw;
+    }
+
+    &__button {
+        border-radius: 0;
+        padding: 0;
+        min-width: 2.5vw;
+        font-size: var(--font-size-button); // usa tu variable responsive
     }
 
     &__dropDowns {

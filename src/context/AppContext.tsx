@@ -14,8 +14,8 @@ interface AppContextI {
     setViewState: Dispatch<SetStateAction<ViewState>>;
     selectedLayer: string;
     setSelectedLayer: Dispatch<SetStateAction<string>>;
-    activeLayerKey: string;
-    setActiveLayerKey: Dispatch<SetStateAction<string>>;
+    activeLayerKey: string | null;
+    setActiveLayerKey: Dispatch<SetStateAction<string | null>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -55,7 +55,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
-    const [activeLayerKey, setActiveLayerKey] = useState<string>("juarez");
+    const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
 
     //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);

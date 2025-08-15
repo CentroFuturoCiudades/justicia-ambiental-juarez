@@ -127,7 +127,7 @@ const Visor = () => {
     //crear mapLayerInstance, geojsonLayer y la data
     useEffect(() => {
 
-        if(activeLayerKey === "juarez") {
+        if(activeLayerKey === null) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
@@ -178,7 +178,7 @@ const Visor = () => {
     // cambio de layer activa (botones arriba)
     const handleLayerToggle = (layerKey: string) => {
         if(layerKey === activeLayerKey) {
-            setActiveLayerKey("juarez");
+            setActiveLayerKey(null);
         } else {
             setActiveLayerKey(layerKey);
         }
@@ -368,11 +368,11 @@ const Visor = () => {
                 )}
 
                 <div className="visor__topButtons">
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark}
+                    <Button className="visor__button" background={COLORS.GLOBAL.backgroundDark}
                         onClick={() => navigate("/")}>
-                        <RiHome2Line/>
+                        <RiHome2Line style={{fontSize: "1em"}}/>
                     </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark}
+                    <Button className="visor__button" background={COLORS.GLOBAL.backgroundDark}
                         onClick={() => {
                             setViewState({
                                 ...defaultViewState,
@@ -383,37 +383,32 @@ const Visor = () => {
                                 //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
                             }, 100);
                         }}>
-                        <RiDownloadLine />
+                        <RiDownloadLine style={{fontSize: "1em"}}/>
                     </Button>
             
                     <ZoomControls />
 
                     <Group attached>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
-                            <LuSquareDashed size={38}/>
+                        {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) &&
+                            <Button className="visor__button" minWidth="auto" p={1.5} background={COLORS.GLOBAL.backgroundMedium } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
+                                <LuSquareDashed style={{fontSize: "1em"}}/>
+                            </Button>                       
+                        }
+                        <Button className="visor__button" minWidth="auto" p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
+                            <PiIntersectSquareDuotone style={{fontSize: "1em"}} />
                         </Button>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
-                            <PiIntersectSquareDuotone size={38} />
-                        </Button>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
-                            <PiIntersectSquareFill size={38} />
+                        <Button className="visor__button" minWidth="auto" p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
+                            <PiIntersectSquareFill style={{fontSize: "1em"}}     />
                         </Button>
                     </Group>
 
-                    {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) && 
-                        <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
-                            <FaRegTrashCan />
-                        </Button>
-                    }
-
                     <Button className="visor__button" 
-                        borderRadius={0} 
-                        p={2} 
+     
                         background={COLORS.GLOBAL.backgroundDark} 
                         onClick={() => {
                             addInstanceToArray(mapLayerInstance as MapLayer);
                         }}>
-                        <RiAddLine />
+                        <RiAddLine style={{fontSize: "1em"}}/>
                     </Button>
                 </div>
             </div>

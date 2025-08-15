@@ -13,7 +13,6 @@ const ZoomControls = () => {
                 <Button className="visor__button"
                     padding={1}
                     background={COLORS.GLOBAL.backgroundDark} 
-                    borderRadius={0}
                     onClick={zoomIn}
                     minWidth="auto"
                 >
@@ -22,7 +21,6 @@ const ZoomControls = () => {
                 <Button className="visor__button"
                     padding={1}
                     background={COLORS.GLOBAL.backgroundDark} 
-                    borderRadius={0}
                     onClick={zoomOut}
                     minWidth="auto"
                 >
