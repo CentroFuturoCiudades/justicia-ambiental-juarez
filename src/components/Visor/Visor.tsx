@@ -302,26 +302,31 @@ const Visor = () => {
 
     return (
         <div className="visor">
-            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
-                <div className="visor__title">
-                    <p className="visor__titleItalic">visor de </p>
-                    <p className="visor__titleBold"> indicadores ambientales</p>
-                </div>
-                <div style={{ fontWeight: "600", fontSize: "17px", lineHeight: "1.2", textAlign: "justify",marginBottom: "1rem" }}>
-                    <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
-                </div>
-                <Tematica />
+            {/* Panel izquierdo */}
+            <Box className="visor__leftPanel" scrollbar="hidden">
+                <div className="visor__panelContent">
 
-                {selectedLayer && tematicaData && mapLayerInstance && (
-                    <LayerCard
-                        selectedLayerData={selectedLayerData}
-                        tematicaData={tematicaData}
-                        color={sectionColor}
-                        mapLayerInstance={mapLayerInstance}
-                        rangeGraphRef={rangeGraphRef}
-                    />
-                )}
+                    <div className="visor__title">
+                        <p className="visor__title__italic">visor de </p>
+                        <p className="visor__title__bold"> indicadores ambientales</p>
+                    </div>
 
+                    <div className="visor__description">
+                        <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
+                    </div>
+                    
+                    <Tematica />
+
+                    {selectedLayer && tematicaData && mapLayerInstance && (
+                        <LayerCard
+                            selectedLayerData={selectedLayerData}
+                            tematicaData={tematicaData}
+                            color={sectionColor}
+                            mapLayerInstance={mapLayerInstance}
+                            rangeGraphRef={rangeGraphRef}
+                        />
+                    )}
+                </div>
             </Box>
 
             <div className="visor__mapContainer">

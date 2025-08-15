@@ -5,42 +5,46 @@
     flex-direction: row;
     height: calc( 100vh - 0rem);
     color: var(--text-primary);
-    font-size: var(--font-size-body);
+    //font-size: var(--font-size-body);
     border-radius: var(--border-radius);
 
     &__leftPanel {
-        width: 300px;
+        width: 25.78vw;
         background: var(--background-d1);
         height: auto;
+        display: flex;
+        justify-content: center;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
 
-        padding: 1rem;
+    &__panelContent {
+        width: 81.41%;
     }
 
     &__title {
-        font-size: var(--font-size-header);
-        //font-weight: bold;
+        font-size: var(--font-size-title);
         line-height: 1.2;
-
         padding: 1rem 0rem;
         border-bottom: 2px solid var(--text-primary);
         margin-bottom: 1rem;
-        //border: 1px solid red;
+
+        &__italic {
+            font-family: 'Space Mono', monospace;
+            font-style: italic;
+        }
+        &__bold {
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+        }
     }
 
-    &__titleItalic {
-        font-family: 'Space Mono', monospace;
-        font-style: italic;
-    }
-
-    &__titleBold {
-        font-family: 'Space Mono', monospace;
-        font-weight: bold !important;
-    }
-
-    &__summary {
-        background-color: var(--background);
-        padding: 1rem;
-        border-radius: var(--border-radius);
+    &__description {
+        font-weight: bold;
+        font-size: var(--font-size-body);
+        line-height: 1.2;
+        text-align: justify;
+        margin-bottom: 1rem;
     }
 
     &__mapContainer {
@@ -71,11 +75,13 @@
     &__dropDowns {
         position: absolute;
         top: 2rem;
+        //top: 2vw;
         right: 2rem;
+        //right: 2vw;
         display: flex;
         flex-direction: column;
         gap: 0.3rem;
-        //width: 329px;     //creo que esta muy larga
+        width: 17.13vw;
     }
 
 }
