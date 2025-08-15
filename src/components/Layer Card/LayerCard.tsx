@@ -3,6 +3,8 @@ import { COLORS } from "../../utils/constants";
 import type {Feature} from "geojson";
 import { useRef } from "react";
 import "./LayerCard.scss";
+import { IoInformationCircleSharp } from "react-icons/io5";
+
 
 type LayerCardProps = {
     selectedLayerData: any;
@@ -18,7 +20,6 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, r
     const { selectedAGEBS, selectedColonias, activeLayerKey } = useAppContext();
     const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
 
-
     const average = mapLayerInstance.getAverage(tematicaData.features, selected, selectedLayerData.property, activeLayerKey);
     const averageFormatted = selectedLayerData.formatValue(average);
     const description = mapLayerInstance.getDescription(selected, selectedLayerData.title, activeLayerKey, averageFormatted);
@@ -27,15 +28,24 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, r
         <div>
             <div className="layerCard" style={{borderColor: color}}>
                 <div className="layerCard__cardTitle" style={{background: color}}> 
-                    <p className="layerCard__layerTitle">{selectedLayerData?.title}</p>
+                    {selected.length === 0 ? 
+                        <p>{selectedLayerData?.title}</p>
+                    : 
+                        <p>{selectedLayerData?.title} por {(activeLayerKey === "agebs" ? "AGEBS" : "Colonias")}</p>
+                    }
+
+                    <IoInformationCircleSharp />
                 </div>
                 <div className="layerCard__layerCardBody">
                     <div>
-                        <p style={{ fontSize: "15px" }}>{description}</p>
+                        <p>{description}</p>
                     </div>
                 </div>
                 <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
                     {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
+                </div>
+                <div>
+                    <p className="layerCard__source">Fuente: XXX </p>
                 </div>
             </div>
         </div>

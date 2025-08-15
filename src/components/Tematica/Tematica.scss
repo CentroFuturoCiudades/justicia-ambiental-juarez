@@ -1,30 +1,23 @@
 .tematica-container {
-  margin-bottom: 1rem;
+  margin-bottom: 2vh;
+  //font-size: var(--font-size-body);
+  font-size: var(--font-size-subtitle);
+
+  &__accordion {
+    border-color: gray;
+    border-radius: 0.4rem;
+  }
 
   &__main-trigger {
     display: flex;
     align-items: center;
-    width: 100%;
     justify-content: space-between;
-    //border-radius: 0.2rem;
-    padding: 0.25rem 1rem !important;
-    border-radius: 0%;
-
-  }
-
-  &__main-title {
-    font-weight: 500;
-    font-size: 1.2rem;
-    display: flex;
-    width: 100%;
+    padding: 0.4em 1em !important;
+    border-radius: 0;
     color: white;
   }
 
-  &__main-indicator {
-    color: white;
-  }
-
-  &__section-indicator {
+  &__dropdown-indicator {
     color: white;
   }
 
@@ -38,27 +31,26 @@
 
   &__itemContent {
     padding: 0rem;
-    border-radius: 0%;
   }
 
   &__section-trigger {
-    width: 100%;
+    display: flex;
+    align-items: center;
     justify-content: space-between;
     border-radius: 0 !important;
-    padding: 0.25rem 1rem !important;
-  }
-
-  &__section-title {
-    font-weight: 500;
-    font-size: 1rem;
+    padding: 0.4em 1em !important;
     color: white;
   }
 
-  &__checkbox-label {
-    font-size: 0.8rem;
-    font-weight: 300;
+  &__checkbox-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 0.5em 1em;
+    font-size: var(--font-size-body);
     text-transform: lowercase;
   }
+
 }
 
 .tematica-container__main-trigger:hover {
