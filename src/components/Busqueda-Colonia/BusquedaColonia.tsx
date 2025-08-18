@@ -5,14 +5,17 @@ import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { FixedSizeList as List } from "react-window";
 
+type ColoniasProps = {
+    coloniasData: any;
+};
 
-const BusquedaColonia = () => {
-    const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
-    const endpoint = 'https://justiciaambientalstore.blob.core.windows.net/data/colonias.geojson';
-    const url = `${endpoint}?${REACT_APP_SAS_TOKEN}`;
+const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
+
     const [colonias, setColonias] = useState<string[]>([]);
     const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
     const { selectedColonias, setSelectedColonias, setColoniasData } = useAppContext();
+
+
 
     const handleColoniaToggle = (colonia: string) => {
         setSelectedColonias(prev =>
@@ -21,21 +24,17 @@ const BusquedaColonia = () => {
     };
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (!data || !data.features) { 
-                    console.error("Invalid colonias data");
-                    return;
-                }
-                const nombres = data.features.map((f: any) => f.properties.NOMBRE);
-                setColonias(nombres);
-                setColoniasData(data);
-            })
-            .catch(err => console.error("Error fetching colonias:", err));
-    }, [url]);
+        if (coloniasData && coloniasData.features) {
+            const nombres = coloniasData.features.map((f: any) => f.properties.name);
+            setColonias(nombres);
+        }
+    }, [coloniasData]);
 
     const coloniasFiltradas = useMemo(() => {
+        //console.log("Colonias recibidas:", coloniasData);
+        //const nombres = coloniasData.features.map((f: any) => f.properties.name);
+        //setColonias(nombres);
+
 
         const filtradasBusqueda = colonias.filter((nombre: string) =>
             nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())

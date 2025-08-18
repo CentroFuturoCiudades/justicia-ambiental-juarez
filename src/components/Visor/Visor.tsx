@@ -358,7 +358,9 @@ const Visor = () => {
 
                 <div className="visor__dropDowns">
                     <CapasBase />
-                    <BusquedaColonia />
+                    {coloniasGeoJson && (
+                        <BusquedaColonia coloniasData={coloniasGeoJson} />
+                    )}
                 </div>
 
                 {selectedLayer && mapLayerInstance && (
