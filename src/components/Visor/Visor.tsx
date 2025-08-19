@@ -10,7 +10,6 @@ import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
 import { Box, Group } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
-import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
@@ -27,10 +26,17 @@ import { PathStyleExtension } from '@deck.gl/extensions';
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { RiAddLine } from "react-icons/ri";
+import { ImFilePicture } from "react-icons/im";
+import { AiOutlineSelect } from "react-icons/ai";
+import { SiTarget } from "react-icons/si";
+import PopUp from "../Download PopUp/PopUp";
+import { FiPlus, FiMinus } from "react-icons/fi";
+
+
+
 import html2canvas from "html2canvas";
 import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
+import Controls from "../ZoomControls/Controls";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -48,7 +54,8 @@ const Visor = () => {
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
         activeLayerKey, setActiveLayerKey,
-        mapLayers,setMapLayers //mas de una layer seleccionada en el "pop up" (simulacion)
+        mapLayers,setMapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
+        zoomIn, zoomOut,
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -65,6 +72,7 @@ const Visor = () => {
     const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
     const rangeGraphRef = useRef<HTMLDivElement | null>(null);
+    const [popUp, setPopUp] = useState<boolean>(false);
 
 
 
@@ -175,14 +183,6 @@ const Visor = () => {
 
     }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson]);
 
-    // cambio de layer activa (botones arriba)
-    const handleLayerToggle = (layerKey: string) => {
-        if(layerKey === activeLayerKey) {
-            setActiveLayerKey(null);
-        } else {
-            setActiveLayerKey(layerKey);
-        }
-    };
 
     //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs (INTERSECCION, ya no se usa por el momento)
     /*useEffect(() => {        
@@ -279,27 +279,6 @@ const Visor = () => {
         console.log("Array de maplayers", mapLayers)
     }, [mapLayers]);
 
-    const addInstanceToArray = async (instance: MapLayer) => {
-
-        const imageUrl = getMapImage(deck.current, map.current, instance);
-
-        if (imageUrl && instance) {
-            const response = await fetch(imageUrl);
-            const blobImage = await response.blob();
-            const base64Image = await blobToBase64(blobImage) as string;
-            instance.deckImage = base64Image;
-        }
-    
-        if (rangeGraphRef.current) {
-            const canvas = await html2canvas(rangeGraphRef.current);
-            instance.graphImage = canvas.toDataURL("image/png");
-        }
-
-        const newInstance = { ...instance };
-        setMapLayers(prev => [...prev, newInstance]);
-        //setMapLayers(prev => [...prev, instance]);
-    }
-
     return (
         <div className="visor">
             {/* Panel izquierdo */}
@@ -370,49 +349,19 @@ const Visor = () => {
                 )}
 
                 <div className="visor__topButtons">
-                    <Button className="visor__button" background={COLORS.GLOBAL.backgroundDark}
-                        onClick={() => navigate("/")}>
-                        <RiHome2Line style={{fontSize: "1em"}}/>
-                    </Button>
-                    <Button className="visor__button" background={COLORS.GLOBAL.backgroundDark}
-                        onClick={() => {
-                            setViewState({
-                                ...defaultViewState,
-                                transitionDuration: 0,
-                            } as any);
-                            setTimeout(() => {
-                                 downloadPdf(deck.current, map.current, mapLayers);
-                                //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
-                            }, 100);
-                        }}>
-                        <RiDownloadLine style={{fontSize: "1em"}}/>
-                    </Button>
-            
-                    <ZoomControls />
-
-                    <Group attached>
-                        {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) &&
-                            <Button className="visor__button" minWidth="auto" p={1.5} background={COLORS.GLOBAL.backgroundMedium } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
-                                <LuSquareDashed style={{fontSize: "1em"}}/>
-                            </Button>                       
-                        }
-                        <Button className="visor__button" minWidth="auto" p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
-                            <PiIntersectSquareDuotone style={{fontSize: "1em"}} />
-                        </Button>
-                        <Button className="visor__button" minWidth="auto" p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
-                            <PiIntersectSquareFill style={{fontSize: "1em"}}     />
-                        </Button>
-                    </Group>
-
-                    <Button className="visor__button" 
-     
-                        background={COLORS.GLOBAL.backgroundDark} 
-                        onClick={() => {
-                            addInstanceToArray(mapLayerInstance as MapLayer);
-                        }}>
-                        <RiAddLine style={{fontSize: "1em"}}/>
-                    </Button>
+                    <Controls 
+                        mapLayerInstance={mapLayerInstance} 
+                        rangeGraphRef={rangeGraphRef} 
+                        deck={deck} 
+                        map={map} 
+                        setPopUp={setPopUp} 
+                    />
                 </div>
+
+                {/*pop up*/ }
+                {popUp && mapLayers.length > 0 && (
+                    <PopUp deck={deck.current} map={map.current} setPopUp={setPopUp} />
+                )}
             </div>
         </div>
        );

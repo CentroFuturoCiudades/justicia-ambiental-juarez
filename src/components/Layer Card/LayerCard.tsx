@@ -34,7 +34,12 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, r
                         <p>{selectedLayerData?.title} por {(activeLayerKey === "agebs" ? "AGEBS" : "Colonias")}</p>
                     }
 
-                    <IoInformationCircleSharp />
+                    <div className="layerCard__infoIconWrapper">
+                        <IoInformationCircleSharp className="layerCard__infoIcon" />
+                        <div className="layerCard__tooltip">
+                            Información de la capa.
+                        </div>
+                    </div>
                 </div>
                 <div className="layerCard__layerCardBody">
                     <div>

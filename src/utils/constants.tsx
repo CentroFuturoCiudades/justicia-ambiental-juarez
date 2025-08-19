@@ -508,7 +508,7 @@ export const CAPAS_BASE = {
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
     },
-    capa3: {
+    parques_industriales: {
         title: "parques industriales",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: true,

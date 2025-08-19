@@ -5,7 +5,7 @@ import RompecabezasIcono from "/assets/Icono ROMPECABEZAS.png";
 import CloseIcon from "/assets/Icono CERRAR.png"
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
-import './AC.scss';
+import './Accordion.scss';
 import { useState } from "react";
 import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
 import ContactIcon from "/assets/Icono CONTACTO.png";
@@ -204,7 +204,7 @@ const Accordion = () => {
 
     const handleItemClick = (item: AccordionItemType) => {
         if (selectedItem && selectedItem.id === item.id) {
-            setSelectedItem(null); // Close the item if it's already open
+            setSelectedItem(null);
         } else {
             setSelectedItem(item);
         }
@@ -213,32 +213,32 @@ const Accordion = () => {
     return (
       <div className="body">
 
-          {/* botones flotantes */}
-        <div className="speed-dial">
-          <div className="speed-dial__item">
-              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
-                  <span className="icon">
-                      <img src={VisorIcon} alt="Visor Icon" style={{ height: '50px' }} />
-                  </span>
-              </button>
-          </div>
-          <div className="speed-dial__item">
-              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
-                  { !selectedItem && <span className="button-text">contacto</span> }
-                  <span className="icon">
-                      <img src={ContactIcon} alt="Contact Icon" style={{ height: '50px' }} />
-                  </span>
-              </button>
-          </div>
-          <div className="speed-dial__item">
-              <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
-                  { !selectedItem && <span className="button-text">equipo</span> }
-                  <span className="icon">
-                      <img src={MoreIcon} alt="More Icon" style={{ height: '50px' }} />
-                  </span>
-              </button>
-          </div>
+      {/*Botones Landing */}
+      <div className="visor-button">
+          <button  type="button" onClick={() => window.location.href = "/visor"}>
+            <span className="icon">
+                <img src={VisorIcon} alt="Visor Icon" style={{ height: '10dvh' }} />
+            </span>
+          </button>
         </div>
+      <div className="speed-dial">
+        <div className="speed-dial__item">
+          <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+              <span className={`button-text${selectedItem ? " hidden" : ""}`}>contacto</span>
+              <span className="icon">
+                  <img src={ContactIcon} alt="Contact Icon"  />
+              </span>
+          </button>
+        </div>
+        <div className="speed-dial__item">
+          <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+              <span className={`button-text${selectedItem ? " hidden" : ""}`}>equipo</span>
+              <span className="icon">
+                  <img src={MoreIcon} alt="More Icon"  />
+              </span>
+          </button>
+        </div>
+      </div>
 
           {/* Botones Izquierda */}
           <div className="body__buttonColumn" >
@@ -265,9 +265,9 @@ const Accordion = () => {
               {/*<div className="scrollable" style={{ height: "100%", width: "100%", padding: "2rem 1.5rem 1rem 1.5rem", border: "1px solid black" }}>*/}
                 {selectedItem.content}
               {/*</div>*/}
-              <button type="button" className="body__closeButton" onClick={() => setSelectedItem(null)} >
+              <Button type="button" className="body__closeButton" onClick={() => setSelectedItem(null)} variant="ghost" p={0} minW={0} height="auto">
                 <img src={CloseIcon} alt="Cerrar" className="body__closeIcon" />
-              </button>
+              </Button>
             </Box>
             )}
           </div>

@@ -7,7 +7,7 @@ const CapasBase = () => {
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
     
     //seleccion de capas base
-    const handleBaseLayerToggle = (layerKey: string) => {
+    const handleBaseLayerToggle = (layerKey: string, value: any) => {
         setSelectedBaseLayers(prev => 
             prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
         );
@@ -32,7 +32,7 @@ const CapasBase = () => {
                                     <Checkbox.Root key={key} className="custom-green-checkbox" cursor="pointer" variant={"solid"} colorPalette={"green"} size={"sm"} disabled={!value.enabled}>
                                         <Checkbox.HiddenInput 
                                             checked={selectedBaseLayers.includes(key)}
-                                            onChange={() => handleBaseLayerToggle(key)}
+                                            onChange={() => handleBaseLayerToggle(key, value)}
                                         />
                                         <Checkbox.Control />
                                         <Checkbox.Label className="capas-base-container__checkboxLabel">{value.title}</Checkbox.Label>

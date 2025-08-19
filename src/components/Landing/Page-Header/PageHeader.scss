@@ -1,33 +1,31 @@
 .page-header {
-  width: 100%;
-  padding: 0 9vw 0 4vw;
+  padding-left: 4vw;
+  display: flex;
+  align-items: flex-start;
+  position: relative;
   height: min-content;
 
+
   &__logo {
+    width: 88%;
     padding: 1.5em 0;
-    margin-left: 0;
-    border-bottom: 0.125em solid black;;
-    width: 100%;
+    border-bottom: 0.25em solid black;
+    position: relative;
   }
 
   &__title {
-    font-size: 2em;
+    font-size: var(--font-size-title);
     line-height: 1.2;
-  }
 
-  &__titleItalic {
-    font-family: 'Space Mono', monospace;
-    font-style: italic;
-  }
+    &__italic {
+      font-family: 'Space Mono', monospace;
+      font-style: italic;
+    }
 
-  &__titleBold {
-    font-family: 'Space Mono', monospace;
-    font-weight: bold;
-  }
-
-  &__line {
-    width: 80vw;
-    background-color: var(--border-color, gray);
+    &__bold {
+      font-family: 'Space Mono', monospace;
+      font-weight: bold;
+    }
   }
 
   * {
@@ -35,3 +33,43 @@
   }
 
 }
+/*
+  .visor-button {
+  position: absolute;
+  top: 100%;
+  left: calc(90% + 1dvw);
+
+  button {
+    background-color: transparent;
+    border-radius: 99px;
+    padding: 0.2rem;
+    
+    .icon {
+      color: var(--icon-color, #333);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: transparent;
+      border-radius: 50%;
+      transition: transform 0.3s ease;
+    }
+  }
+  button:hover,
+  button:focus-visible {
+    background-color: #f5ede3;
+    border: 1px solid #f5ede3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .icon {
+      transform: scale(1.1);
+      background-color: #f5ede3;
+    }
+  }
+}
+
+.visor-button button:focus,
+.visor-button button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}*/

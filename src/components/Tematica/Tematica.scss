@@ -44,11 +44,23 @@
 
   &__checkbox-content {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+   gap: 0.3vw;
     align-items: center;
     width: 100%;
     padding: 0.5em 1em;
-    font-size: var(--font-size-body);
+    //font-size: var(--font-size-body);
     text-transform: lowercase;
+  }
+
+  &__checkbox-label {
+    font-size: var(--font-size-button);
+
+    &.-selected {
+      font-weight: bold;
+      font-size: var(--font-size-button);
+    }
   }
 
 }

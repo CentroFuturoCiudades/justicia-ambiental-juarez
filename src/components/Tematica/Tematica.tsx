@@ -2,16 +2,27 @@ import { Accordion, AccordionItemBody, Box, Checkbox, Span } from "@chakra-ui/re
 import { SECTIONS, LAYERS, COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
+import { useEffect } from "react";
+import { MdFullscreen } from "react-icons/md";
+
 
 const Tematica = () => {
 
-    const { selectedLayer, setSelectedLayer, setActiveLayerKey } = useAppContext();
+    const { selectedLayer, setSelectedLayer, setActiveLayerKey, mapLayers } = useAppContext();
+    const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
+    
 
     const handleLayerToggle = (layerKey: string) => {
         setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
-        setActiveLayerKey( layerKey === selectedLayer ? "juarez" : "agebs");
+        setActiveLayerKey( layerKey === selectedLayer ? null : "agebs");
     }
- 
+
+    const dropdownLayerTitles = Object.values(LAYERS).map(l => l.title);
+    const savedLayers = mapLayers.filter(instance => dropdownLayerTitles.includes(instance.title));
+    const savedLayerTitles = savedLayers.map(inst => inst.title);
+    //const savedLayers = mapLayers.filter(instance => instance.title === selectedLayerData?.title);
+    //const savedLayerTitles = savedLayers.map(inst => inst.title);
+
     return (
         <div className="tematica-container">
             {/* 1st level accordion */}
@@ -42,8 +53,8 @@ const Tematica = () => {
                                         <Accordion.ItemContent className="tematica-container__itemContent">
                                             <AccordionItemBody className="tematica-container__sub-accordion" >
                                             {section.layers.map((layerKey, idx) => (
-                                            <>
-                                                <Box key={layerKey} className="tematica-container__checkbox-content">
+                                            <>                                            
+                                                <Box key={layerKey} className="tematica-container__checkbox-content" >
                                                     <Checkbox.Root 
                                                         cursor={"pointer"} 
                                                         variant={"solid"} 
@@ -54,8 +65,9 @@ const Tematica = () => {
                                                     >
                                                         <Checkbox.HiddenInput />
                                                         <Checkbox.Control />
-                                                        <Checkbox.Label style={selectedLayer === layerKey ? { fontWeight: "bold" } : {}}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
-                                                    </Checkbox.Root>                                               
+                                                        <Checkbox.Label className={`tematica-container__checkbox-label${selectedLayer === layerKey ? " -selected" : ""}`}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                    </Checkbox.Root>   
+                                                    {/*savedLayerTitles.length > 0 && savedLayerTitles.includes(LAYERS[layerKey]?.title) && <MdFullscreen style={{ fontSize: "1vh", minWidth: "1.3vw", minHeight: "3vh" }} />*/}
                                                 </Box>
                                                 {idx < section.layers.length - 1 && (
                                                     <Box
