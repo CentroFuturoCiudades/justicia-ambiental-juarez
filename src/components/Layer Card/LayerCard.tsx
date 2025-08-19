@@ -1,90 +1,56 @@
-import { Button } from "@chakra-ui/react";
 import { useAppContext } from "../../context/AppContext";
 import { COLORS } from "../../utils/constants";
 import type {Feature} from "geojson";
-import "./LayerCard.scss";
-import { formatNumber } from "../../utils/utils";
-import { active } from "d3";
 import { useRef } from "react";
+import "./LayerCard.scss";
+import { IoInformationCircleSharp } from "react-icons/io5";
+
 
 type LayerCardProps = {
     selectedLayerData: any;
     tematicaData: { features: Feature[] };
     color: string;
     mapLayerInstance: any;
+    rangeGraphRef: React.RefObject<HTMLDivElement | null>;
 };
 
 
-const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance }: LayerCardProps) => {
+const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, rangeGraphRef }: LayerCardProps) => {
 
-    const { selectedAGEBS, setSelectedAGEBS, selectedColonias, setSelectedColonias, activeLayerKey } = useAppContext();
-    //const rangeGraphRef = useRef<HTMLDivElement>(null);
-
-
-    if (!tematicaData || !tematicaData.features) {
-        return null; // o un mensaje de error
-    }
+    const { selectedAGEBS, selectedColonias, activeLayerKey } = useAppContext();
     const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
-    const singleSelected = activeLayerKey === "agebs" ? "El AGEB seleccionado tiene" : "La colonia seleccionada tiene";
-    const multipleSelected = activeLayerKey === "agebs" ? "Los AGEBs seleccionados tienen" : "Las colonias seleccionadas tienen";
 
-    // con base a los ID de agebs seleccionados busca en todos los features para sacar el promedio
-    //si no hay agebs seleccionados, saca el promedio de todos los features
-    function getAverage(features: Feature[], selectedIds: string[] , property: string): number {
-        if (!tematicaData) return 0;
-
-        if (selectedIds.length === 0) {
-            return mapLayerInstance.positiveAvg;
-        }
-        const idField = activeLayerKey === "agebs" ? "cvegeo" : "name";
-        const values = features
-        .filter((f: Feature) => selectedIds.includes((f.properties as any)[idField]))
-        .map(f => f.properties?.[property])
-        .filter(value => value != null);
-        return values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
-    }
-
-    const average = getAverage(tematicaData.features, selected, selectedLayerData.property);
+    const average = mapLayerInstance.getAverage(tematicaData.features, selected, selectedLayerData.property, activeLayerKey);
     const averageFormatted = selectedLayerData.formatValue(average);
-
-    function getDescription() {
-        let description = ""
-        if (selected.length === 0) {
-            description = `Ciudad Juárez tiene un ${selectedLayerData.title} de ${averageFormatted}.`;
-        } else {
-            description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${selectedLayerData.title} de ${averageFormatted}; por ${average > mapLayerInstance.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
-        }
-        return description;
-    }
-
-    const description = getDescription();
-
-    const avg = mapLayerInstance?.getAverage(tematicaData.features, selected, selectedLayerData.property, activeLayerKey);
+    const description = mapLayerInstance.getDescription(selected, selectedLayerData.title, activeLayerKey, averageFormatted);
 
     return (
         <div>
             <div className="layerCard" style={{borderColor: color}}>
                 <div className="layerCard__cardTitle" style={{background: color}}> 
-                    <p className="layerCard__layerTitle">{selectedLayerData?.title}</p>
+                    {selected.length === 0 ? 
+                        <p>{selectedLayerData?.title}</p>
+                    : 
+                        <p>{selectedLayerData?.title} por {(activeLayerKey === "agebs" ? "AGEBS" : "Colonias")}</p>
+                    }
+
+                    <div className="layerCard__infoIconWrapper">
+                        <IoInformationCircleSharp className="layerCard__infoIcon" />
+                        <div className="layerCard__tooltip">
+                            Información de la capa.
+                        </div>
+                    </div>
                 </div>
                 <div className="layerCard__layerCardBody">
                     <div>
-                        { selected.length === 0 ? (
-                            <div>
-                                <p style={{ fontSize: "15px"}}>
-                                    Ciudad Juárez tiene un {selectedLayerData.title} de <strong>{avg}</strong>.
-                                </p>
-                            </div>
-                        ): (
-                            <p style={{ fontSize: "15px"}}>
-                                {selected.length == 1 ? singleSelected : multipleSelected } un {selectedLayerData.title} de <strong>{mapLayerInstance.selectedAvg}</strong>; por
-                                <strong>{(mapLayerInstance.selectedAvg > mapLayerInstance.positiveAvg) ? " ENCIMA " : " DEBAJO"}</strong> de la media de Ciudad Juárez.
-                            </p>
-                        )}
+                        <p>{description}</p>
                     </div>
                 </div>
-                <div ref={mapLayerInstance.ref} style={{ overflow: "hidden", padding: "8px"}}>
-                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average : undefined, mapLayerInstance.ref, description)}
+                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
+                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
+                </div>
+                <div>
+                    <p className="layerCard__source">Fuente: XXX </p>
                 </div>
             </div>
         </div>

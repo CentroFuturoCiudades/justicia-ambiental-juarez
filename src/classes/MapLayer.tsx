@@ -22,12 +22,10 @@ export class MapLayer {
   colorMap: any;
   legend: any = null;
   title: string;
-  ref: React.RefObject<HTMLDivElement> | null = null;
   graphImage?: string;
   deckImage?: string;
   theme?: string;
-  selectedAGEBS: string[] = [];
-  selectedAvg : string = "";
+  selectedAvg = 0;
   selectedDescription = "";
 
 
@@ -189,26 +187,50 @@ export class MapLayer {
     />
   }
 
-   getAverage(features: Feature[], selected: string[], property: string, key: string): string {
+   getAverage(features: Feature[], selected: string[], property: string, key: string) : number {
 
-      if (selected.length === 0) return this.formatValue(this.positiveAvg);
+      if (selected.length === 0) return this.positiveAvg;
 
       const idField = key === "agebs" ? "cvegeo" : "name";
       const values = features
       .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
       .map(f => f.properties?.[property])
       .filter(value => value != null);
-      const average = values.reduce((sum: number, num: number) => sum + num, 0) / values.length;
-      this.selectedAvg = this.formatValue(average);
-      return this.formatValue(average);
+      const average = values.length > 0
+        ? values.reduce((sum: number, num: number) => sum + num, 0) / values.length
+        : 0;
+      this.selectedAvg = average;
+
+      return this.selectedAvg;
   }
 
-  getRangeGraph = (avg: number, ref: React.RefObject<HTMLDivElement>, description: string) => {
+  getDescription(selected: string[], title: string, key: string, average: string) {
+
+    const singleSelected = key === "agebs" ? "El AGEB seleccionado tiene" : "La colonia seleccionada tiene";
+    const multipleSelected = key === "agebs" ? "Los AGEBs seleccionados tienen" : "Las colonias seleccionadas tienen";
+    let description = ""
+
+    if (selected.length === 0) {
+        description = `Ciudad Juárez tiene un ${title} de ${average}.`;
+        this.selectedDescription = description;
+        return (
+          <>Ciudad Juárez tiene un {title} de <strong>{average}</strong>.</>
+        );
+
+    } else {
+        description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${title} de ${average}; por ${this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
+        this.selectedDescription = description;
+        return (
+          <>
+            {selected.length === 1 ? singleSelected : multipleSelected} un {title} de <strong>{average}</strong>; por <strong>{this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"}</strong> de la media de Ciudad Juárez.
+          </>
+        )
+      }
+  }
+
+  getRangeGraph = (avg: number) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
-    this.ref = ref;
-    //this.selectedAvg = avg;
-    this.selectedDescription = description;
 
     const Data = {
       minVal: this.minVal,

@@ -14,8 +14,8 @@ interface AppContextI {
     setViewState: Dispatch<SetStateAction<ViewState>>;
     selectedLayer: string;
     setSelectedLayer: Dispatch<SetStateAction<string>>;
-    activeLayerKey: string;
-    setActiveLayerKey: Dispatch<SetStateAction<string>>;
+    activeLayerKey: string | null;
+    setActiveLayerKey: Dispatch<SetStateAction<string | null>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -30,8 +30,8 @@ interface AppContextI {
     coloniasData: FeatureCollection;
     setColoniasData: Dispatch<SetStateAction<FeatureCollection>>;
     //array de maplayers para el reporte
-    mapLayers: MapLayer[];
-    setMapLayers: Dispatch<SetStateAction<MapLayer[]>>;
+    mapLayers: any[];
+    setMapLayers: Dispatch<SetStateAction<any[]>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -55,7 +55,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
-    const [activeLayerKey, setActiveLayerKey] = useState<string>("juarez");
+    const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
 
     //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
@@ -70,7 +70,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
     const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
     //maplayer array for pdf
-    const [mapLayers, setMapLayers] = useState<MapLayer[]>([]);
+    const [mapLayers, setMapLayers] = useState<any[]>([]);
 
     return (
         <AppContext.Provider value={{

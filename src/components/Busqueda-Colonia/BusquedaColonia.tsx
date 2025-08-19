@@ -5,14 +5,17 @@ import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { FixedSizeList as List } from "react-window";
 
+type ColoniasProps = {
+    coloniasData: any;
+};
 
-const BusquedaColonia = () => {
-    const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
-    const endpoint = 'https://justiciaambientalstore.blob.core.windows.net/data/colonias.geojson';
-    const url = `${endpoint}?${REACT_APP_SAS_TOKEN}`;
+const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
+
     const [colonias, setColonias] = useState<string[]>([]);
     const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
     const { selectedColonias, setSelectedColonias, setColoniasData } = useAppContext();
+
+
 
     const handleColoniaToggle = (colonia: string) => {
         setSelectedColonias(prev =>
@@ -21,21 +24,17 @@ const BusquedaColonia = () => {
     };
 
     useEffect(() => {
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                if (!data || !data.features) { 
-                    console.error("Invalid colonias data");
-                    return;
-                }
-                const nombres = data.features.map((f: any) => f.properties.NOMBRE);
-                setColonias(nombres);
-                setColoniasData(data);
-            })
-            .catch(err => console.error("Error fetching colonias:", err));
-    }, [url]);
+        if (coloniasData && coloniasData.features) {
+            const nombres = coloniasData.features.map((f: any) => f.properties.name);
+            setColonias(nombres);
+        }
+    }, [coloniasData]);
 
     const coloniasFiltradas = useMemo(() => {
+        //console.log("Colonias recibidas:", coloniasData);
+        //const nombres = coloniasData.features.map((f: any) => f.properties.name);
+        //setColonias(nombres);
+
 
         const filtradasBusqueda = colonias.filter((nombre: string) =>
             nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())
@@ -60,10 +59,11 @@ const BusquedaColonia = () => {
 
     return (
         <div className="busqueda-colonia-container">
+
             <Accordion.Root collapsible variant={"enclosed"} style={{ borderColor: "gray", borderRadius: "0rem", background: COLORS.GLOBAL.backgroundLight }}>
                 <Accordion.Item value="main">
                     <Accordion.ItemTrigger className="busqueda-colonia-container__main-trigger">
-                        <Box className="busqueda-colonia-container__main-title">
+                        <Box>
                             búsqueda por colonia
                         </Box>
                         <Accordion.ItemIndicator className="busqueda-colonia-container__main-indicator" />
@@ -71,15 +71,13 @@ const BusquedaColonia = () => {
 
                     <Accordion.ItemContent className="busqueda-colonia-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundLight }}>
                         {/* buscador de colonias */}
-                        <Box  background={"#f5f5f5"} pa>
+                        <Box  background={"#f5f5f5"}>
                             <Input 
                                 placeholder="Buscar colonia..."
                                 value={coloniaBuscada}
                                 onChange={(e) => setColoniaBuscada(e.target.value)}
-                                padding={"0.25rem 1rem"}
-                                borderRadius={"0rem"}
+                                className="busqueda-colonia-container__input"
                                 size={"sm"}
-                                style={{ fontSize: "0.8rem" }}
                                 border= {`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
                             />
                         </Box>
@@ -106,13 +104,12 @@ const BusquedaColonia = () => {
                                         <Box
                                             key={colonia}
                                             style={style}
-                                            padding={"0rem 0.5rem 0rem 0.5rem"}
-                                            width="100%"
+                                            className="busqueda-colonia-container__coloniaList"
                                             backgroundColor={isSelected ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
                                             //backgroundColor= {isLastSeleccionada ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
                                             borderBottom={ isLastSeleccionada ? `3px solid ${COLORS.GLOBAL.backgroundMedium}` : "none"}
                                         >
-                                            <Box display="flex" alignItems="center" width={"100%"} overflow={"hidden"}  padding={"0.4rem 0.5rem"} borderBottom={ (last || isLastSeleccionada) ? "none" : "1px solid #ccc"} >
+                                            <Box className="busqueda-colonia-container__checkbox" borderBottom={ (last || isLastSeleccionada) ? "none" : "1px solid #ccc"} >
                                                 <Checkbox.Root
                                                     className="custom-green-checkbox"
                                                     cursor="pointer"
@@ -125,7 +122,7 @@ const BusquedaColonia = () => {
                                                         onChange={() => handleColoniaToggle(colonia)}
                                                     />
                                                     <Checkbox.Control />
-                                                    <Checkbox.Label style={{ fontSize: "0.6rem", whiteSpace: "nowrap", wordBreak: "break-word", maxWidth: "100%", display: "block"}}>
+                                                    <Checkbox.Label className="busqueda-colonia-container__checkboxLabel">
                                                         {colonia}
                                                     </Checkbox.Label>
                                                 </Checkbox.Root>

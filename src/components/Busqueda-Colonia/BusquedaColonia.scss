@@ -1,4 +1,5 @@
 .busqueda-colonia-container {
+  font-size: var(--font-size-button);
 
   &__main-trigger {
     background-color: #424242;
@@ -7,22 +8,14 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    //border-radius: 0.2rem;
     border-radius: 0%;
-    padding: 0.25rem 1rem !important;
-  }
+    padding: 0.25em 1em !important;
+    height: 3.65vh;
 
-  &__main-title {
-    font-weight: 500;
-    font-size: 0.9rem;
   }
 
   &__main-indicator {
     color: white;
-    font-weight: 600;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
   }
 
   &__itemContent {
@@ -32,15 +25,40 @@
     //height: 7.9rem;
   }
 
+  &__input {
+    padding: 0.25em 1em;
+    border-radius: 0rem;
+    font-size: var(--font-size-button);
+  }
+
   &__itemBody {
-    //padding: 10px;
     display: flex;
     flex-direction: column;
-    //gap: 2px;
+  }
+
+  &__coloniaList {
+    padding: 0em 0.5em;
+    border-radius: 0rem;
+    font-size: var(--font-size-button);
+    border-radius: 0rem;
   }
 
   &__checkbox {
     margin-left: 0rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    padding: 0.4em 0.5em;
+    font-size: var(--font-size-button);
+  }
+
+  &__checkboxLabel {
+    white-space: nowrap;
+    word-break: break-word;
+    max-width: 100%;
+    display: block;
+    font-size: var(--font-size-button);
   }
 }
 

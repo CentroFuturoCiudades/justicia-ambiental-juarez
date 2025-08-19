@@ -10,7 +10,6 @@ import { LAYERS, COLORS, CAPAS_BASE } from "../../utils/constants";
 import { Box, Group } from "@chakra-ui/react";
 import { GeoJsonLayer } from "deck.gl";
 import { useEffect, useState } from "react";
-import ZoomControls from "../ZoomControls/ZoomControls";
 import { MapLayer } from "../../classes/MapLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
@@ -27,10 +26,17 @@ import { PathStyleExtension } from '@deck.gl/extensions';
 import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
 import { LuSquareDashed } from "react-icons/lu";
 import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
-import { FaRegTrashCan } from "react-icons/fa6";
-import { RiAddLine } from "react-icons/ri";
+import { ImFilePicture } from "react-icons/im";
+import { AiOutlineSelect } from "react-icons/ai";
+import { SiTarget } from "react-icons/si";
+import PopUp from "../Download PopUp/PopUp";
+import { FiPlus, FiMinus } from "react-icons/fi";
+
+
+
 import html2canvas from "html2canvas";
 import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
+import Controls from "../ZoomControls/Controls";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -48,7 +54,8 @@ const Visor = () => {
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
         activeLayerKey, setActiveLayerKey,
-        mapLayers,setMapLayers //mas de una layer seleccionada en el "pop up" (simulacion)
+        mapLayers,setMapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
+        zoomIn, zoomOut,
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -64,7 +71,9 @@ const Visor = () => {
 
     const [agebsGeoJson, setAgebsGeoJson] = useState<any>(null);                                        //guarda el geojson universal de agebs
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
-    const mapLayerRef = useRef<HTMLDivElement | null>(null);
+    const rangeGraphRef = useRef<HTMLDivElement | null>(null);
+    const [popUp, setPopUp] = useState<boolean>(false);
+
 
 
     let dissolvedLayer: GeoJsonLayer[] = [];
@@ -126,7 +135,7 @@ const Visor = () => {
     //crear mapLayerInstance, geojsonLayer y la data
     useEffect(() => {
 
-        if(activeLayerKey === "juarez") {
+        if(activeLayerKey === null) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
@@ -143,7 +152,6 @@ const Visor = () => {
             opacity: 1,
             title: layer ? layer.title : "initial",
             formatValue: layer ? layer.formatValue : "",
-            ref: mapLayerRef,
             theme: layer ? layer.tematica : "default",
         });
 
@@ -175,14 +183,6 @@ const Visor = () => {
 
     }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson]);
 
-    // cambio de layer activa (botones arriba)
-    const handleLayerToggle = (layerKey: string) => {
-        if(layerKey === activeLayerKey) {
-            setActiveLayerKey("juarez");
-        } else {
-            setActiveLayerKey(layerKey);
-        }
-    };
 
     //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs (INTERSECCION, ya no se usa por el momento)
     /*useEffect(() => {        
@@ -279,47 +279,33 @@ const Visor = () => {
         console.log("Array de maplayers", mapLayers)
     }, [mapLayers]);
 
-    const addInstanceToArray = async (instance: MapLayer) => {
-
-        const imageUrl = getMapImage(deck.current, map.current, instance);
-
-        if (imageUrl && instance) {
-            const response = await fetch(imageUrl);
-            const blobImage = await response.blob();
-            const base64Image = await blobToBase64(blobImage) as string;
-            instance.deckImage = base64Image;
-        }
-    
-        if (instance?.ref?.current) {
-            const canvas = await html2canvas(instance.ref.current);
-            instance.graphImage = canvas.toDataURL("image/png");
-        }
-
-        const newInstance = { ...instance };
-        setMapLayers(prev => [...prev, newInstance]);
-    }
-
     return (
         <div className="visor">
-            <Box className="visor__leftPanel" scrollbar="hidden" overflowY="auto" maxHeight="100vh">
-                <div className="visor__title">
-                    <p className="visor__titleItalic">visor de </p>
-                    <p className="visor__titleBold"> indicadores ambientales</p>
-                </div>
-                <div style={{ fontWeight: "600", fontSize: "17px", lineHeight: "1.2", textAlign: "justify",marginBottom: "1rem" }}>
-                    <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
-                </div>
-                <Tematica />
+            {/* Panel izquierdo */}
+            <Box className="visor__leftPanel" scrollbar="hidden">
+                <div className="visor__panelContent">
 
-                {selectedLayer && tematicaData && mapLayerInstance && (
-                    <LayerCard
-                        selectedLayerData={selectedLayerData}
-                        tematicaData={tematicaData}
-                        color={sectionColor}
-                        mapLayerInstance={mapLayerInstance}
-                    />
-                )}
+                    <div className="visor__title">
+                        <p className="visor__title__italic">visor de </p>
+                        <p className="visor__title__bold"> indicadores ambientales</p>
+                    </div>
 
+                    <div className="visor__description">
+                        <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
+                    </div>
+                    
+                    <Tematica />
+
+                    {selectedLayer && tematicaData && mapLayerInstance && (
+                        <LayerCard
+                            selectedLayerData={selectedLayerData}
+                            tematicaData={tematicaData}
+                            color={sectionColor}
+                            mapLayerInstance={mapLayerInstance}
+                            rangeGraphRef={rangeGraphRef}
+                        />
+                    )}
+                </div>
             </Box>
 
             <div className="visor__mapContainer">
@@ -351,10 +337,11 @@ const Visor = () => {
 
                 <div className="visor__dropDowns">
                     <CapasBase />
-                    <BusquedaColonia />
+                    {coloniasGeoJson && (
+                        <BusquedaColonia coloniasData={coloniasGeoJson} />
+                    )}
                 </div>
 
-                {/* {selectedLayer && mapLayerInstance && ( */}
                 {selectedLayer && mapLayerInstance && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}
@@ -362,54 +349,19 @@ const Visor = () => {
                 )}
 
                 <div className="visor__topButtons">
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark}
-                        onClick={() => navigate("/")}>
-                        <RiHome2Line/>
-                    </Button>
-                    <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark}
-                        onClick={() => {
-                            setViewState({
-                                ...defaultViewState,
-                                transitionDuration: 0,
-                            } as any);
-                            setTimeout(() => {
-                                 downloadPdf(deck.current, map.current, mapLayers);
-                                //downlaodFile("/assets/Template Reporte.pdf", "Template Reporte.pdf");
-                            }, 100);
-                        }}>
-                        <RiDownloadLine />
-                    </Button>
-            
-                    <ZoomControls />
-
-                    <Group attached>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "juarez" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("juarez")}>
-                            <LuSquareDashed size={38}/>
-                        </Button>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("agebs")}>
-                            <PiIntersectSquareDuotone size={38} />
-                        </Button>
-                        <Button className="visor__button" minWidth="auto" borderRadius={0} p={1.5} background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : COLORS.GLOBAL.backgroundMedium} onClick={() => handleLayerToggle("colonias")}>
-                            <PiIntersectSquareFill size={38} />
-                        </Button>
-                    </Group>
-
-                    {(selectedAGEBS.length > 0 || selectedColonias.length > 0 ) && 
-                        <Button className="visor__button" borderRadius={0} p={2} background={COLORS.GLOBAL.backgroundDark } onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}>
-                            <FaRegTrashCan />
-                        </Button>
-                    }
-
-                    <Button className="visor__button" 
-                        borderRadius={0} 
-                        p={2} 
-                        background={COLORS.GLOBAL.backgroundDark} 
-                        onClick={() => {
-                            addInstanceToArray(mapLayerInstance as MapLayer);
-                        }}>
-                        <RiAddLine />
-                    </Button>
+                    <Controls 
+                        mapLayerInstance={mapLayerInstance} 
+                        rangeGraphRef={rangeGraphRef} 
+                        deck={deck} 
+                        map={map} 
+                        setPopUp={setPopUp} 
+                    />
                 </div>
+
+                {/*pop up*/ }
+                {popUp && mapLayers.length > 0 && (
+                    <PopUp deck={deck.current} map={map.current} setPopUp={setPopUp} />
+                )}
             </div>
         </div>
        );

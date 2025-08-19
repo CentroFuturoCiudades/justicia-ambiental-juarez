@@ -1,4 +1,6 @@
 import "./PageHeader.scss";
+import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
+
 
 export default function PageHeader() {
     return (
@@ -6,8 +8,9 @@ export default function PageHeader() {
             {/* TITULO */}
             <div className="page-header__logo" >
                 <p className="page-header__title" >
-                    <span className="page-header__titleItalic">visor de <br /></span>
-                    <span className="page-header__titleBold">indicadores ambientales</span>
+                    <span className="page-header__title__italic">visor de <br /></span>
+                    <span className="page-header__title__bold">indicadores<br /></span>
+                    <span className="page-header__title__bold">ambientales y sociales</span>
                 </p>
             </div>
         </header>

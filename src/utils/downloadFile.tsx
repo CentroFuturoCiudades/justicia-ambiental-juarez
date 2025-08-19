@@ -14,6 +14,8 @@ type Section = {
   description: string;
   puntaje: string | number;
   juarezAvg: string | number;
+  selected: string;
+  complementarias: string;
 }
 
 export const plugins = {
@@ -219,28 +221,40 @@ function buildInputs(groupedSections: Record<string, Section[]>) {
           [`section_${theme}_${idx}_map`, section.map],
           [`section_${theme}_${idx}_graph`, section.graph],
           [`section_${theme}_${idx}_description`, section.description],
-          [`section_${theme}_${idx}_legend`, generatePdfLegend(section.ranges, section.colors, { x: 20, y: 180 + idx * 5 })]
+          [`section_${theme}_${idx}_legend`, generatePdfLegend(section.ranges, section.colors, { x: 20, y: 180 + idx * 5 })],
+          [`section_${theme}_${idx}_selected`, section.selected]
         ])
       ).flat(),
       ...Object.entries(groupedSections).map(([theme, themeSections]) => [
         `indicadores_${theme}`,
-        themeSections.map(section => [
-          section.title ?? "",
-          section.puntaje !== undefined ? section.puntaje.toString() : "",
-          section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
-        ])
-      ]),
-    ])
+        [
+          ...themeSections.flatMap(section => [
+            [
+              section.title ?? "",
+              section.puntaje !== undefined ? section.puntaje.toString() : "",
+              section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
+            ],
+            [
+              section.selected || "",
+              section.complementarias || "",
+              ""
+            ]
+          ])
+        ]
+    ]),
+  ])
+
   ];
 }
 
 //REPORTE DINAMICO
-export const downloadPdf = async (deck: any, map: any, layerInstances: MapLayer[]) => {
+export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) => {
 
   const amountOfColors = 6;
 
   //PARA CADA INSTANCE
   const sections: Section[] = await Promise.all(layerInstances.map(async (layerInstance) => {
+
 
     return {
       map: layerInstance.deckImage ?? "",
@@ -250,11 +264,16 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: MapLayer[
       title: layerInstance.title,
       theme: layerInstance.theme ?? "",
       description: layerInstance.selectedDescription,
-      puntaje: layerInstance.selectedAvg ?? 0,
+      puntaje: layerInstance.formatValue(layerInstance.selectedAvg),
       juarezAvg: layerInstance.formatValue(layerInstance.positiveAvg),
+      //selected: layerInstance.selected ?? []
+      selected: (layerInstance.selected ?? []).map(s => `• ${s}`).join('\n'),
+      complementarias: (layerInstance.complementarias ?? []).map(c => `• ${c}`).join('\n')
+
     };
 
   }));
+  //console.log("sections:", sections);
 
   const pdfTtitle = [
     {
