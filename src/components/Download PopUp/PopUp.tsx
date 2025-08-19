@@ -41,7 +41,6 @@ const PopUp = ({deck, map, setPopUp}) => {
                 paddingBottom: "10dvh",
             }}>
             <p className="title">| descargas |</p>
-            <p className="title">Industrial</p>
 
             <div style={{ overflowY: "auto", overflowX: "hidden", display: "flex", flexDirection: "column", gap: "2dvh" }}>
 
