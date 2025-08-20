@@ -38,9 +38,17 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
         selectedBaseLayers, 
         setActiveLayerKey, selectedLayer,
         selectionMode, setSelectionMode,
+        setViewState,
     } = useAppContext();
 
     const addInstanceToArray = async (instance: MapLayer) => {
+        const initialViewState = { latitude: 31.66, longitude: -106.4245, zoom: 10.8 };
+
+        //guarda el view actual
+        //const prevViewState = deck.current?.deck.viewState;
+
+        //regresa al original para usar ese canvas
+        setViewState(initialViewState);
 
         const imageUrl = getMapImage(deck.current, map.current, instance);
 
@@ -50,7 +58,8 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
             const base64Image = await blobToBase64(blobImage) as string;
             instance.deckImage = base64Image;
         }
-    
+        //setViewState(prevViewState); //regresa al viewstate modificado
+
         if (rangeGraphRef.current) {
             const canvas = await html2canvas(rangeGraphRef.current);
             instance.graphImage = canvas.toDataURL("image/png");
@@ -62,9 +71,8 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
             complementarias: selectedBaseLayers,
             activeKey: activeLayerKey
         };
-        console.log("new instance", newInstance);
         setMapLayers(prev => [...prev, newInstance]);
-    }
+    };
 
     const handleSelectionMode = (mode: string) => {
         if (mode === selectionMode) {
