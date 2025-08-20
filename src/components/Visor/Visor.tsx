@@ -23,19 +23,7 @@ import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
 //import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
 //import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
-import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
-import { LuSquareDashed } from "react-icons/lu";
-import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
-import { ImFilePicture } from "react-icons/im";
-import { AiOutlineSelect } from "react-icons/ai";
-import { SiTarget } from "react-icons/si";
 import PopUp from "../Download PopUp/PopUp";
-import { FiPlus, FiMinus } from "react-icons/fi";
-
-
-
-import html2canvas from "html2canvas";
-import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 import Controls from "../ZoomControls/Controls";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
@@ -43,7 +31,6 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 
 const Visor = () => {
-    const navigate = useNavigate();
     const deck = useRef<any>(null);
     const map = useRef<any>(null);
     const { 
@@ -53,9 +40,8 @@ const Visor = () => {
         selectedAGEBS, setSelectedAGEBS, 
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
-        activeLayerKey, setActiveLayerKey,
-        mapLayers,setMapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
-        zoomIn, zoomOut,
+        activeLayerKey,
+        mapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -281,19 +267,26 @@ const Visor = () => {
 
     return (
         <div className="visor">
+
             {/* Panel izquierdo */}
             <Box className="visor__leftPanel" scrollbar="hidden">
                 <div className="visor__panelContent">
 
                     <div className="visor__title">
-                        <p className="visor__title__italic">visor de </p>
-                        <p className="visor__title__bold"> indicadores ambientales</p>
+                        <p className="italic">visor de </p>
+                        <p className="bold"> indicadores</p>
+                        <p className="bold"> ambientales y sociales</p>
                     </div>
 
                     <div className="visor__description">
                         <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
                     </div>
                     
+
+
+
+
+
                     <Tematica />
 
                     {selectedLayer && tematicaData && mapLayerInstance && (
@@ -305,6 +298,10 @@ const Visor = () => {
                             rangeGraphRef={rangeGraphRef}
                         />
                     )}
+
+
+
+
                 </div>
             </Box>
 
