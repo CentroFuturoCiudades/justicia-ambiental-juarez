@@ -24,6 +24,11 @@
   }
 }
 
+.button--thin {
+  width: 2vw;
+  min-width: 0;
+}
+
 .button-row .button:hover {
   border-color: transparent !important;
   background-color: #32332f;

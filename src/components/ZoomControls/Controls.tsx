@@ -36,7 +36,8 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
         selectedColonias, setSelectedColonias,
         mapLayers, setMapLayers, 
         selectedBaseLayers, 
-        setActiveLayerKey, selectedLayer
+        setActiveLayerKey, selectedLayer,
+        selectionMode, setSelectionMode,
     } = useAppContext();
 
     const addInstanceToArray = async (instance: MapLayer) => {
@@ -65,9 +66,13 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
         setMapLayers(prev => [...prev, newInstance]);
     }
 
-    useEffect(() => {
-       console.log("selected layer", selectedLayer);
-    }, [selectedLayer]);
+    const handleSelectionMode = (mode: string) => {
+        if (mode === selectionMode) {
+            setSelectionMode(null);
+        } else {
+            setSelectionMode(mode);
+        }
+    }
 
     return (
         <div className="button-row">
@@ -77,17 +82,13 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
             </Button>
                                 
             <Group attached >
-                <Button className="button"
-                    width={"2vw"}
-                    minWidth={0}
+                <Button className="button button--thin"
                     background={COLORS.GLOBAL.backgroundDark} 
                     onClick={zoomIn}
                 >
                     <img src={Icon_ZoomIn} alt="Zoom In" /> 
                 </Button>
-                <Button className="button"
-                    width={"2vw"}
-                    minWidth={0}
+                <Button className="button button--thin"
                     background={COLORS.GLOBAL.backgroundDark} 
                     onClick={zoomOut}
                 >
@@ -98,29 +99,27 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
             {selectedLayer &&
                 <>
                     <Group attached>
-                        <Button className="button" width={"2vw"} minWidth={"2vw"} background={COLORS.GLOBAL.backgroundDark} >
+                        <Button className="button button--thin" background={selectionMode === "agebs" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => handleSelectionMode("agebs")}>
                             <img src={Selection} alt="Seleccionar" />
                         </Button>
-                        <Button className="button" width={"2vw"} minWidth={"2vw"} background={ "#6f6f6f"}>
+                        <Button className="button button--thin" background={selectionMode === "radius" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => handleSelectionMode("radius")}>
                             <SiTarget />
                         </Button>
-                        <Button 
-                            className="button"   
-                            width={"2vw"}
-                            minWidth={"2vw"}
-                            background={"#6f6f6f"} 
-                            onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}
-                            disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
-                        >
-                            <img src={Deselect} alt="Deseleccionar" />
-                        </Button>                       
+                            <Button 
+                                className="button button--thin"
+                                background={"#6f6f6f"} 
+                                onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}
+                                disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0 && selectionMode !== "agebs")}
+                            >
+                                <img src={Deselect} alt="Deseleccionar" />
+                            </Button>                    
                     </Group>
 
                     <Group attached>
-                        <Button className="button" width={"2vw"} minWidth={"2vw"}  background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => setActiveLayerKey("agebs")}>
+                        <Button className="button button--thin" background={activeLayerKey === "agebs" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => setActiveLayerKey("agebs")}>
                             <img src={IconAGEBS} alt="AGEBS" />
                         </Button>
-                        <Button className="button" disabled={true} width={"2vw"} minWidth={"2vw"}  background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => setActiveLayerKey("colonias")}>
+                        <Button className="button button--thin" background={activeLayerKey === "colonias" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => setActiveLayerKey("colonias")}>
                             <img src={IconColonias} alt="Colonias" />
                         </Button>
                     </Group>      
