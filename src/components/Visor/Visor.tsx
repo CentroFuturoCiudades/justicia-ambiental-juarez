@@ -14,21 +14,20 @@ import { MapLayer } from "../../classes/MapLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downlaodFile, downloadPdf} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
 //import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
-//import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
+import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
 import PopUp from "../Download PopUp/PopUp";
-import Controls from "../ZoomControls/Controls";
+import Controls from "../Controls/Controls";
+import * as turf from "@turf/turf";
+import { booleanPointInPolygon } from "@turf/turf";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
-
 
 const Visor = () => {
     const deck = useRef<any>(null);
@@ -41,7 +40,8 @@ const Visor = () => {
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
         activeLayerKey,
-        mapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
+        mapLayers,
+        selectionMode,
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -59,6 +59,117 @@ const Visor = () => {
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
     const rangeGraphRef = useRef<HTMLDivElement | null>(null);
     const [popUp, setPopUp] = useState<boolean>(false);
+
+    const [coords, setCoords] = useState({ latitude: viewState.latitude, longitude: viewState.longitude });
+    const [circleCoords, setCircleCoords] = useState(coords);
+    const [radius, setRadius] = useState(2000);
+    const [polygon, setPolygon] = useState<any>();
+    const [drag, setDrag] = useState<boolean>(false);
+    //const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]);
+    const [flagDragEnd, setFlagDragEnd] = useState<boolean>(false); //para forzar el useMemo de filteredFeatures al soltar el circulo
+
+    useEffect(() => {
+        setCircleCoords(coords)
+    }, [coords])
+
+    //se queda igual porque es lo que dibuja el circulo
+    useEffect(() => {
+        if(!circleCoords) return;
+        const temp = turf.circle(
+            [circleCoords.longitude, circleCoords.latitude] as any,
+            radius,
+            {
+                units: "meters",
+                steps: radius * 16 / 100,
+            } as any,
+        );
+        setPolygon(temp);
+    }, [circleCoords, radius]);
+
+    /*const filteredFeatures = useMemo(() => {
+        if (!polygon || !tematicaData) return [];
+        return tematicaData.features.filter((feature: any) => {
+            return booleanPointInPolygon(feature, polygon)
+        });
+    }, [polygon]);*/
+
+    /*const filteredFeatures = useMemo(() => {
+        console.log("Recalculating filteredFeatures");
+        if (!polygon || !tematicaData) return [];
+        const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
+        return tematicaData.features.filter((feature: any) =>
+            booleanIntersects(feature, circlePolygon)
+        );
+        }, [polygon, tematicaData]);*/
+
+    const filteredFeatures = useMemo(() => {
+        if (!polygon || !selectedLayer) return [];
+        const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
+        return tematicaData.features.filter((feature: any) =>
+            booleanIntersects(feature, circlePolygon)
+        );
+    }, [flagDragEnd, selectionMode]);
+
+    const lensLayer = new GeoJsonLayer({
+        id: "lens-layer",
+        data: polygon,
+        filled: true,
+        getFillColor: [255, 255, 255, 0],
+        getLineColor: [42, 47, 58, 255],
+        getLineWidth: 8,
+        pickable: true, //viewState.zoom < ZOOM_SHOW_DETAILS,?? 16
+        getDashArray: [6, 1],
+        dashJustified: true,
+        dashGapPickable: true,
+        onDragStart: () => {
+            setDrag(true);
+            setFlagDragEnd(false);
+        },
+        onDrag: (info: any) => {
+            if (!info || !info.coordinate) return;
+            setCircleCoords({
+                latitude: info.coordinate[1],
+                longitude: info.coordinate[0],
+            });
+        },
+        onDragEnd: (info: any, event: any) => {
+            //debouncedHover(info);
+            setDrag(false);
+            setFlagDragEnd(true);
+            /*if(tematicaData && polygon) {
+                const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
+                const filtered = tematicaData.features.filter((feature: any) =>
+                    booleanIntersects(feature, circlePolygon)
+                );
+                setFilteredFeatures(filtered);
+            }*/
+        },
+        extensions: [new PathStyleExtension({ dash: true })],
+        updateTriggers: {
+            getDashArray: [radius],
+        }
+    });
+
+    const centerPointLayer = new GeoJsonLayer({
+        id: "center-point-layer",
+        data: circleCoords
+            ? turf.point([circleCoords.longitude, circleCoords.latitude])
+            : undefined,
+        filled: true,
+        getLineColor: [42, 47, 58, 255],
+        getLineWidth: 5,
+        getFillColor: [200, 200, 200, 200],
+        getRadius: 15,
+        pickable: false,
+    });
+
+
+
+    /*
+    var center = [-75.343, 39.984];
+var radius = 5;
+var options = {steps: 10, units: 'kilometers', properties: {foo: 'bar'}};
+var circle = turf.circle(center, radius, options);*/
 
 
 
@@ -148,16 +259,20 @@ const Visor = () => {
             setTematicaData(null);
             return;
         }
-        
-        //procesa la data que va en layerCard
+
         if ( layer?.dataProcesssing ) { 
             jsonData = layer.dataProcesssing(jsonData);
         }
+        
+        //procesa la data que va en layerCard
+        const features = selectionMode === "radius" ? filteredFeatures : jsonData.features;
+        const data = {...jsonData, features };
         setTematicaData(jsonData);
 
         //crea la capa geojson
         const geoJsonLayer = mapLayerInstance.getLayer(
-            jsonData,
+            //(selectionMode==="radius" ? filteredFeatures : jsonData),
+            data,
             layer?.property || "",
             layer?.is_lineLayer || false,
             true,
@@ -167,7 +282,7 @@ const Visor = () => {
         setTematicaLayer(geoJsonLayer);
         setMapLayerInstance(mapLayerInstance);
 
-    }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson]);
+    }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson, selectionMode, filteredFeatures]);
 
 
     //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs (INTERSECCION, ya no se usa por el momento)
@@ -307,6 +422,7 @@ const Visor = () => {
 
             <div className="visor__mapContainer">
                 <DeckGL
+                    controller={{dragPan: !drag}}
                     ref={deck}
                     initialViewState={viewState}
                     viewState={viewState}
@@ -318,10 +434,12 @@ const Visor = () => {
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
                         ...dissolvedLayer,
+                        (selectionMode === "radius" && lensLayer),
+                        (selectionMode === "radius" && centerPointLayer),
                         //...(coloniasLayer ? [coloniasLayer] : []),
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
-                    controller={true}
+                    //controller={true}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
