@@ -18,6 +18,7 @@ import IconColonias from '/assets/Icono COLONIAS.png'
 import IconDownload from '/assets/Icono DESCARGAR.png'
 import Icon_ZoomIn from '/assets/Icono ZOOMIN.png'
 import Icon_ZoomOut from '/assets/Icono ZOOMOUT.png'
+import IconRadius from '/assets/Icono RADIO.png'
 
 type ControlProps = {
     mapLayerInstance: any;
@@ -44,34 +45,33 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
     const addInstanceToArray = async (instance: MapLayer) => {
         const initialViewState = { latitude: 31.66, longitude: -106.4245, zoom: 10.8 };
 
-        //guarda el view actual
         //const prevViewState = deck.current?.deck.viewState;
 
-        //regresa al original para usar ese canvas
         setViewState(initialViewState);
+        setTimeout(async() => {
+            const imageUrl = getMapImage(deck.current, map.current, instance);
 
-        const imageUrl = getMapImage(deck.current, map.current, instance);
+            if (imageUrl && instance) {
+                const response = await fetch(imageUrl);
+                const blobImage = await response.blob();
+                const base64Image = await blobToBase64(blobImage) as string;
+                instance.deckImage = base64Image;
+            }
+            //setViewState(prevViewState);
 
-        if (imageUrl && instance) {
-            const response = await fetch(imageUrl);
-            const blobImage = await response.blob();
-            const base64Image = await blobToBase64(blobImage) as string;
-            instance.deckImage = base64Image;
-        }
-        //setViewState(prevViewState); //regresa al viewstate modificado
+            if (rangeGraphRef.current) {
+                const canvas = await html2canvas(rangeGraphRef.current);
+                instance.graphImage = canvas.toDataURL("image/png");
+            }
 
-        if (rangeGraphRef.current) {
-            const canvas = await html2canvas(rangeGraphRef.current);
-            instance.graphImage = canvas.toDataURL("image/png");
-        }
-
-        const newInstance = { 
-            ...instance,
-            selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
-            complementarias: selectedBaseLayers,
-            activeKey: activeLayerKey
-        };
-        setMapLayers(prev => [...prev, newInstance]);
+            const newInstance = { 
+                ...instance,
+                selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
+                complementarias: selectedBaseLayers,
+                activeKey: activeLayerKey
+            };
+            setMapLayers(prev => [...prev, newInstance]);
+        }, 300);
     };
 
     const handleSelectionMode = (mode: string) => {
@@ -111,7 +111,7 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
                             <img src={Selection} alt="Seleccionar" />
                         </Button>
                         <Button className="button button--thin" background={selectionMode === "radius" ? COLORS.GLOBAL.backgroundDark : "#6f6f6f"} onClick={() => handleSelectionMode("radius")}>
-                            <SiTarget />
+                            <img src={IconRadius} alt="Radio" />
                         </Button>
                             <Button 
                                 className="button button--thin"
