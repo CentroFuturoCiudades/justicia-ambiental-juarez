@@ -1,65 +1,95 @@
-.busqueda-colonia-container {
-  font-size: var(--font-size-button);
+.colonias {
+  font-size: var(--font-size-body);
 
-  &__main-trigger {
-    background-color: #424242;
-    color: white;
+  .accordion {
+    border-radius: 0.5em;
+    font-size: var(--font-size-body);
+
+    &__item {
+      background-color: var(--background-d1);
+    }
+
+    &__trigger {
+      background-color: #424242;
+      color: white;
+      border-radius: 0.3em;
+      padding: 0.25em 1em !important;
+      height: 3.65vh;
+    }
+
+    &__indicator {
+      color: white;
+    }
+
+    &__itemContent {
+      background-color: var(--background-d1);
+      padding: 0rem;
+      border-radius: 0%;
+      color: black;
+    }
+
+    &__itemBody {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+    }
+
+    &__searchBar {
+      padding: 0;
+      border-bottom: 1px solid gray;
+    }
+
+    &__input {
+      padding: 0 0.8em;
+      border: none;
+      height: 3em;
+      border-radius: 0rem;
+      font-size: var(--font-size-button);
+    }
+
+    &__coloniaList {
+      padding: 0em 0.5em;
+      border-radius: 0rem;
+      font-size: var(--font-size-button);
+      border-radius: 0rem;
+    }
+
+  }
+
+  .checkbox-container {
+    padding: 0 0.8em;
     display: flex;
     align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    border-radius: 0%;
-    padding: 0.25em 1em !important;
-    height: 3.65vh;
+
+    .checkbox {
+      width: 100%;
+      height: 100%;
+      
+    }
+
+    .checkbox_content {
+      display: flex;
+      align-items: center;
+      gap: 0.4vw;
+      
+      .label {
+        font-size: var(--font-size-button);
+        flex: 1;
+        line-height: 1.2;
+        text-transform: lowercase;
+        
+      }
+      
+    }
 
   }
-
-  &__main-indicator {
-    color: white;
-  }
-
-  &__itemContent {
-    background-color: #f5f5f5;
-    padding: 0rem;
-    border-radius: 0%;
-    //height: 7.9rem;
-  }
-
-  &__input {
-    padding: 0.25em 1em;
-    border-radius: 0rem;
-    font-size: var(--font-size-button);
-  }
-
-  &__itemBody {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &__coloniaList {
-    padding: 0em 0.5em;
-    border-radius: 0rem;
-    font-size: var(--font-size-button);
-    border-radius: 0rem;
-  }
-
-  &__checkbox {
-    margin-left: 0rem;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    overflow: hidden;
-    padding: 0.4em 0.5em;
-    font-size: var(--font-size-button);
-  }
-
-  &__checkboxLabel {
-    white-space: nowrap;
-    word-break: break-word;
-    max-width: 100%;
-    display: block;
-    font-size: var(--font-size-button);
-  }
+}
+.colonias__main-trigger:focus,
+.colonias__main-trigger:focus-visible,
+.colonias__main-trigger:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 .chakra-accordion__itemContent {
@@ -77,12 +107,12 @@
   border-color: #a2b687;
 }
 
-.busqueda-colonia-container__itemBody {
-  scrollbar-width:thin; 
-  scrollbar-color: #b2b2b2 ; 
+.accordion__coloniaList {
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: 6px;
-    background: #f5f5f5;
+    display: none;
+    width: 0;
+    background: transparent;
   }
 }

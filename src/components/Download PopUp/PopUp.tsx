@@ -14,6 +14,7 @@ import { downloadPdf } from "../../utils/downloadFile";
 import CloseIcon from "/assets/Icono CERRAR.png"
 import { CAPAS_BASE } from "../../utils/constants";
 import './PopUp.scss'
+import { useEffect } from "react";
 
 
 
@@ -55,6 +56,7 @@ const PopUp = ({deck, map, setPopUp}) => {
                             {instance.selected.length > 0 && (
                                 
                                 <div >
+                                    <p>Temática: {instance.theme}</p>
                                     <p>Promedio: {instance.formatValue(instance.selectedAvg)}</p>
                                     <h3>{instance.activeKey === "colonias" ? "Colonias Seleccionadas:" : "AGEBS Seleccionadas:"}</h3>
                                     <ul style={{ paddingLeft: "1dvh" }}>
@@ -82,6 +84,7 @@ const PopUp = ({deck, map, setPopUp}) => {
                         <Button type="button"  style={{ borderRadius: "50%", padding: 0, height: "6vh", backgroundColor: "transparent" }}
                             onClick={() => {
                                 setMapLayers(prev => prev.filter((_, i) => i !== index));
+                                setPopUp(false);
                             }} variant="ghost"  
                         >
                             <img src={CloseIcon} alt="Cerrar" className="body__closeIcon" />
@@ -104,7 +107,7 @@ const PopUp = ({deck, map, setPopUp}) => {
                 <MdOutlineFolderOpen/>
             </Button>
 
-            <Button type="button" className="body__closeButton" onClick={() => setPopUp(false)} variant="ghost" p={0} minW={0} height="auto" top={"0.1dvh"} right={"0.1dvh"}>
+            <Button type="button" className="body__closeButton" onClick={() => {setPopUp(false) }} variant="ghost" p={0} minW={0} height="auto" top={"0.1dvh"} right={"0.1dvh"}>
                 <img src={CloseIcon} alt="Cerrar" className="body__closeIcon" />
             </Button>
         </div>

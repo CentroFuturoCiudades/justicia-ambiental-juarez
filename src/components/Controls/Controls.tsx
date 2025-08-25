@@ -19,6 +19,7 @@ import IconDownload from '/assets/Icono DESCARGAR.png'
 import Icon_ZoomIn from '/assets/Icono ZOOMIN.png'
 import Icon_ZoomOut from '/assets/Icono ZOOMOUT.png'
 import IconRadius from '/assets/Icono RADIO.png'
+import { useState } from "react";
 
 type ControlProps = {
     mapLayerInstance: any;
@@ -41,6 +42,7 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
         selectionMode, setSelectionMode,
         setViewState,
     } = useAppContext();
+    const [showAddedTooltip, setShowAddedTooltip] = useState(false);
 
     const addInstanceToArray = async (instance: MapLayer) => {
         const initialViewState = { latitude: 31.66, longitude: -106.4245, zoom: 10.8 };
@@ -72,6 +74,8 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
             };
             setMapLayers(prev => [...prev, newInstance]);
         }, 300);
+        setShowAddedTooltip(true);
+        setTimeout(() => setShowAddedTooltip(false), 1500); // Oculta después de 1.5s
     };
 
     const handleSelectionMode = (mode: string) => {
@@ -142,6 +146,11 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
                     >
                         <img src={SaveLayer} alt="Guardar Capa" />
                         {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
+                        {showAddedTooltip && (
+                            <div className="added-tooltip">
+                                Capa agregada
+                            </div>
+                        )}
                     </Button>
 
                     <Button className="button"

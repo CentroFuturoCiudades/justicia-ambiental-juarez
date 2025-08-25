@@ -1,9 +1,11 @@
-import { Accordion, Box, Checkbox, Input } from "@chakra-ui/react";
+import { Accordion, Checkbox, Input, Span } from "@chakra-ui/react";
 import { useEffect, useMemo, useState } from "react";
 import "./BusquedaColonia.scss";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { FixedSizeList as List } from "react-window";
+//import { VariableSizeList as List } from "react-window";
+
 
 type ColoniasProps = {
     coloniasData: any;
@@ -13,11 +15,12 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
 
     const [colonias, setColonias] = useState<string[]>([]);
     const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
-    const { selectedColonias, setSelectedColonias, setColoniasData } = useAppContext();
+    const { selectedColonias, setSelectedColonias } = useAppContext();
 
 
 
     const handleColoniaToggle = (colonia: string) => {
+        console.log("colonia length:", colonia.length);
         setSelectedColonias(prev =>
             prev.includes(colonia) ? prev.filter(key => key !== colonia) : [...prev, colonia]
         );
@@ -31,10 +34,6 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
     }, [coloniasData]);
 
     const coloniasFiltradas = useMemo(() => {
-        //console.log("Colonias recibidas:", coloniasData);
-        //const nombres = coloniasData.features.map((f: any) => f.properties.name);
-        //setColonias(nombres);
-
 
         const filtradasBusqueda = colonias.filter((nombre: string) =>
             nombre.toLowerCase().includes(coloniaBuscada.toLowerCase())
@@ -52,82 +51,63 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
         return [...seleccionadas, ...noSeleccionadas];
     }, [colonias, coloniaBuscada, selectedColonias]);
 
-    const seleccionadasCount = selectedColonias.filter((nombre: string) =>
-        coloniasFiltradas.includes(nombre)
-    ).length;
-
-
     return (
-        <div className="busqueda-colonia-container">
-
-            <Accordion.Root collapsible variant={"enclosed"} style={{ borderColor: "gray", borderRadius: "0rem", background: COLORS.GLOBAL.backgroundLight }}>
-                <Accordion.Item value="main">
-                    <Accordion.ItemTrigger className="busqueda-colonia-container__main-trigger">
-                        <Box>
-                            búsqueda por colonia
-                        </Box>
-                        <Accordion.ItemIndicator className="busqueda-colonia-container__main-indicator" />
+        <div className="colonias">
+            <Accordion.Root collapsible variant={"enclosed"} className="accordion">
+                <Accordion.Item value="main" className="accordion__item">
+                    <Accordion.ItemTrigger className="accordion__trigger">
+                        <Span flex={1}> búsqueda por colonia </Span>
+                        <Accordion.ItemIndicator className="accordion__indicator" />
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="busqueda-colonia-container__itemContent" style={{ background: COLORS.GLOBAL.backgroundLight }}>
-                        {/* buscador de colonias */}
-                        <Box  background={"#f5f5f5"}>
-                            <Input 
-                                placeholder="Buscar colonia..."
-                                value={coloniaBuscada}
-                                onChange={(e) => setColoniaBuscada(e.target.value)}
-                                className="busqueda-colonia-container__input"
-                                size={"sm"}
-                                border= {`1px solid ${COLORS.GLOBAL.backgroundMedium}`}
-                            />
-                        </Box>
-                        <Accordion.ItemBody
-                            className="busqueda-colonia-container__itemBody"
-                            style={{
-                                overflowY: "auto",
-                                padding: "0rem"
-                            }}
-                        >
+                    <Accordion.ItemContent className="accordion__itemContent" >
+                        <Accordion.ItemBody className="accordion__itemBody"   >
+                            {/* buscador de colonias */}
+                            <Span className="accordion__searchBar" >
+                                <Input 
+                                    placeholder="buscar colonia..."
+                                    value={coloniaBuscada}
+                                    onChange={(e) => setColoniaBuscada(e.target.value)}
+                                    className="accordion__input"
+                                />
+                            </Span>
                             {/* colonias filtradas */}
                             <List
                                 height={155}
                                 itemCount={coloniasFiltradas.length}
-                                itemSize={35}
+                                itemSize={37}
+                                className="accordion__coloniaList"
+
                             >
                                 {({ index, style }: { index: number; style: any }) => {
                                     const colonia = coloniasFiltradas[index];
                                     const last = index === coloniasFiltradas.length - 1;
-                                    //const isLastSeleccionada = index <= seleccionadasCount - 1;
                                     const isSelected = selectedColonias.includes(colonia);
-                                    const isLastSeleccionada = selectedColonias.includes(colonia) && index === seleccionadasCount - 1;
                                     return (
-                                        <Box
-                                            key={colonia}
-                                            style={style}
-                                            className="busqueda-colonia-container__coloniaList"
-                                            backgroundColor={isSelected ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
-                                            //backgroundColor= {isLastSeleccionada ? COLORS.GLOBAL.backgroundMedium : COLORS.GLOBAL.backgroundLight}
-                                            borderBottom={ isLastSeleccionada ? `3px solid ${COLORS.GLOBAL.backgroundMedium}` : "none"}
+                                        <Span className="checkbox-container" 
+                                            style={{ ...style, backgroundColor: isSelected ? `${COLORS.GLOBAL.backgroundMedium}` : "transparent" }}
                                         >
-                                            <Box className="busqueda-colonia-container__checkbox" borderBottom={ (last || isLastSeleccionada) ? "none" : "1px solid #ccc"} >
-                                                <Checkbox.Root
-                                                    className="custom-green-checkbox"
-                                                    cursor="pointer"
-                                                    variant="solid"
-                                                    size="sm"
-                                                    disabled
-                                                    checked={selectedColonias.includes(colonia)}
-                                                >
+                                            <Checkbox.Root
+                                                className="checkbox"
+                                                cursor="pointer"
+                                                variant="solid"
+                                                size="sm"
+                                                disabled
+                                                checked={selectedColonias.includes(colonia)}
+                                                key={colonia}
+                                                style={{ borderBottom: last ? "none" : "1px solid gray"}}
+                                            >
+                                                <Span className="checkbox_content">
                                                     <Checkbox.HiddenInput
                                                         onChange={() => handleColoniaToggle(colonia)}
                                                     />
                                                     <Checkbox.Control />
-                                                    <Checkbox.Label className="busqueda-colonia-container__checkboxLabel">
+                                                    <Checkbox.Label className="label" >
                                                         {colonia}
                                                     </Checkbox.Label>
-                                                </Checkbox.Root>
-                                            </Box>
-                                        </Box>
+                                                </Span>
+                                            </Checkbox.Root>
+                                        </Span>
                                     );
                                 }}
                             </List>

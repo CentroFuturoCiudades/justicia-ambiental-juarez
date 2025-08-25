@@ -19,12 +19,11 @@ import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
-//import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
+import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
 import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
 import PopUp from "../Download PopUp/PopUp";
 import Controls from "../Controls/Controls";
 import * as turf from "@turf/turf";
-import { booleanPointInPolygon } from "@turf/turf";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -75,6 +74,7 @@ const Visor = () => {
     //se queda igual porque es lo que dibuja el circulo
     useEffect(() => {
         if(!circleCoords) return;
+        console.log("entro a lo que hace el circulo")
         const temp = turf.circle(
             [circleCoords.longitude, circleCoords.latitude] as any,
             radius,
@@ -86,27 +86,12 @@ const Visor = () => {
         setPolygon(temp);
     }, [circleCoords, radius]);
 
-    /*const filteredFeatures = useMemo(() => {
-        if (!polygon || !tematicaData) return [];
-        return tematicaData.features.filter((feature: any) => {
-            return booleanPointInPolygon(feature, polygon)
-        });
-    }, [polygon]);*/
-
-    /*const filteredFeatures = useMemo(() => {
-        console.log("Recalculating filteredFeatures");
-        if (!polygon || !tematicaData) return [];
-        const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
-        return tematicaData.features.filter((feature: any) =>
-            booleanIntersects(feature, circlePolygon)
-        );
-        }, [polygon, tematicaData]);*/
-
     const filteredFeatures = useMemo(() => {
-        if (!polygon || !selectedLayer) return [];
+        if (!polygon || !selectedLayer || selectionMode !== "radius") return [];
         const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
         return tematicaData.features.filter((feature: any) =>
-            booleanIntersects(feature, circlePolygon)
+            booleanContains(circlePolygon, feature)
+            //booleanIntersects(feature, circlePolygon)
         );
     }, [flagDragEnd, selectionMode]);
 
@@ -116,7 +101,7 @@ const Visor = () => {
         filled: true,
         getFillColor: [255, 255, 255, 0],
         getLineColor: [42, 47, 58, 255],
-        getLineWidth: 8,
+        getLineWidth: 30,
         pickable: true, //viewState.zoom < ZOOM_SHOW_DETAILS,?? 16
         getDashArray: [6, 1],
         dashJustified: true,
@@ -136,13 +121,6 @@ const Visor = () => {
             //debouncedHover(info);
             setDrag(false);
             setFlagDragEnd(true);
-            /*if(tematicaData && polygon) {
-                const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
-                const filtered = tematicaData.features.filter((feature: any) =>
-                    booleanIntersects(feature, circlePolygon)
-                );
-                setFilteredFeatures(filtered);
-            }*/
         },
         extensions: [new PathStyleExtension({ dash: true })],
         updateTriggers: {
@@ -271,13 +249,13 @@ var circle = turf.circle(center, radius, options);*/
 
         //crea la capa geojson
         const geoJsonLayer = mapLayerInstance.getLayer(
-            //(selectionMode==="radius" ? filteredFeatures : jsonData),
             data,
             layer?.property || "",
             layer?.is_lineLayer || false,
             true,
             handleSelectedElements,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
+            selectionMode
         );
         setTematicaLayer(geoJsonLayer);
         setMapLayerInstance(mapLayerInstance);
@@ -433,7 +411,7 @@ var circle = turf.circle(center, radius, options);*/
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                        ...dissolvedLayer,
+                        (selectionMode ==="agebs" && dissolvedLayer),
                         (selectionMode === "radius" && lensLayer),
                         (selectionMode === "radius" && centerPointLayer),
                         //...(coloniasLayer ? [coloniasLayer] : []),

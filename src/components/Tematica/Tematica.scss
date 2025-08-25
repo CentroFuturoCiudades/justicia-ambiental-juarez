@@ -1,85 +1,89 @@
 .tematica {
   margin-bottom: 2dvh;
-  .content {
+  &__content {
     border-radius: 0 0 0.5em 0.5em;
   }
-  .accordion_tematica,
-  .sub_accordion {
+  &__accordion_tematica,
+  &__sub_accordion {
     color: white;
     padding: 0.3em 0.8em;
     font-size: var(--font-size-subtitle);
   }
-  .accordion_tematica {
+  &__accordion_tematica {
     border-radius: 0.5em;
   }
-  .sub_accordion {
+  &__sub_accordion {
     border-radius: 0;
   }
-  .indicator {
+  &__indicator {
     color: white;
   }
-  .indicator2 {
+  &__indicator2 {
     color: gray;
   }
-  .body_content {
+  &__body_content {
     padding: 0;
     border-radius: 0;
   }
-  .sub_content {
+  &__subcontent {
     display: flex;
     flex-direction: column;
     background-color: white;
     padding: 0 0.8em;
   }
-  .checkbox {
+  &__checkbox {
     display: flex;
     align-items: center;
-    padding: 0.4em 0;
+    padding: 0.5em 0;
+    //height: 3vw;
     border-bottom: 1px solid gray;
+    //border:1px solid red;
 
     &:last-child {
       border-bottom: none;
     }
   }
-  .checkbox_content {
+  &__checkbox_content {
     display: flex;
     align-items: center;
     width: 100%;
     gap: 0.6vw;
-
-    .label {
+    //border: 1px solid blue;
+    min-height: 2vw;
+  }
+    &__label {
       font-size: var(--font-size-body);
       flex: 1;
       line-height: 1.2;
       text-transform: lowercase;
     }
-    .image_container {
+    &__image_container {
       width: 2vw;
       height: 1.8vw;
       display: flex;
       padding: 0;
     }
 
-    .image_container img {
+    &__image_container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-  }
+  
 }
 
-.accordion_tematica:focus,
-.accordion_tematica:focus-visible,
-.accordion_tematica:active,
-.sub_accordion:focus,
-.sub_accordion:focus-visible,
-.sub_accordion:active {
+.tematica__accordion_tematica:focus,
+.tematica__accordion_tematica:focus-visible,
+.tematica__accordion_tematica:active,
+.tematica__sub_accordion:focus,
+.tematica__sub_accordion:focus-visible,
+.tematica__sub_accordion:active {
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
 }
 
-.accordion_tematica[aria-expanded="true"] {
+.tematica__accordion_tematica[aria-expanded="true"] {
   border-radius: 0.5em 0.5em 0 0;
 }
 
@@ -100,16 +104,16 @@
   border-color: #a2b687;
 }
 
-.chakra-checkbox__control[data-state="checked"] + .label {
+.chakra-checkbox__control[data-state="checked"] + .tematica__label {
   font-weight: bold;
 }
 
-.accordion_tematica:hover {
+.tematica__accordion_tematica:hover {
   background: #3b3b3b !important;
   border-color: #3b3b3b;
 }
 
-.sub_accordion:hover {
+.tematica__sub_accordion:hover {
   background: #b3b3b3  !important;
   border-color: #b3b3b3 ;
 }
