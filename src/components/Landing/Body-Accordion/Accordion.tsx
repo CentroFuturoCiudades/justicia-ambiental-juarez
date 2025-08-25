@@ -213,14 +213,14 @@ const Accordion = () => {
     return (
       <div className="body">
 
-      {/*Botones Landing */}
+      {/*Botones Landing 
       <div className="visor-button">
           <button  type="button" onClick={() => window.location.href = "/visor"}>
             <span className="icon">
                 <img src={VisorIcon} alt="Visor Icon" style={{ height: '10dvh' }} />
             </span>
           </button>
-        </div>
+        </div>*/}
       <div className="speed-dial">
         <div className="speed-dial__item">
           <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>

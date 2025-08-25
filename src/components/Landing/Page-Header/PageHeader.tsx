@@ -13,6 +13,9 @@ export default function PageHeader() {
                     <span className="page-header__title__bold">ambientales y sociales</span>
                 </p>
             </div>
+                <button  className="button_visor" onClick={() => window.location.href = "/visor"}>
+                    <img src={VisorIcon} alt="Visor Icon" className="img"/>
+                </button>
         </header>
     );
 }

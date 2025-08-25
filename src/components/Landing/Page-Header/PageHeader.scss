@@ -33,6 +33,37 @@
   }
 
 }
+.button_visor {
+  position: absolute;
+  left: calc(100% - 8vw);
+  bottom: 0%;
+  transform: translateY(50%);
+  width: 6vw;
+  height: 6vw;
+  border-radius: 50%;
+  padding: 0.2dvh;
+  background-color: transparent;
+
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.button_visor:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: var(--background-d1);
+  transform: scale(1.05) translateY(50%);
+  border: none;
+}
+
+.button_visor:focus,
+.button_visor:focus-visible {
+  outline: none !important;
+  border-color: transparent !important;
+}
+
 /*
   .visor-button {
   position: absolute;
