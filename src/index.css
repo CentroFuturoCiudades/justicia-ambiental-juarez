@@ -28,12 +28,12 @@
   --font-size-body: 20px;
   --font-size-button: 15px;
 */
-  --font-size-title: 2.6vw;
-  --font-size-header2: 1.73vw;
-  --font-size-header: 1.56vw;
-  --font-size-subtitle: 1.15vw;
-  --font-size-body: 1.04vw;
-  --font-size-button: 0.78vw;
+  --font-size-title: min(4.45dvh, 2.55dvw);
+  --font-size-header2: min(3.52dvh, 2dvw);
+  --font-size-header: min(2.67dvh, 1.53dvw);
+  --font-size-subtitle: min(1.95dvh, 1.12dvw);
+  --font-size-body: min(1.78dvh, 1.02dvw);
+  --font-size-button: min(1.33dvh, 0.76dvw);
 
 }
 

@@ -8,40 +8,33 @@
   justify-content: space-between;
   gap: 5dvw;
   padding-left: 4vw;
-  padding-top: 5vh;
-  padding-bottom: 5vh;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
 
   &__buttonColumn {
-    //height: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2em;
     justify-content: space-between;
     width: 38vw;
     font-family: monospace;
   }
 
   &__button {
-    height: 14vh;
-   // box-sizing: border-box;
-    white-space: normal;
-    word-break: break-word;
-    padding: 0em 6em;
+    height: 15vh;
+    white-space: pre-line;
     display: flex;
     align-items: center;
     align-content: center;
-    border-radius: 0.5em;
+    border-radius: 0.3em;
     border: 0.08em solid #c4c4c4;
-    box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
-    font-size: var(--font-size-subtitle);
+    font-size: var(--font-size-header);
     color: black;
-
   }
 
   &__buttonText {
     font-weight: bold;
     line-height: 1.2;
-    //border: 1px solid blue;
   }
 
   &__buttonIcon {
@@ -49,7 +42,7 @@
     right: -1.7em;
     top: 50%;
     transform: translateY(-50%);
-    height: 3.5em;
+    height: 2.5em;
     border-radius: 50%;
   }
 

@@ -22,7 +22,7 @@ type AccordionItemType = {
 const items: AccordionItemType[] = [
 {
     id: "lupa",
-    title: "¿qué es la evaluación ambiental?",
+    title: "¿qué es la \nevaluación ambiental?",
     content: (
       <div className="card" >
         <div className="scrollable" >
@@ -213,32 +213,24 @@ const Accordion = () => {
     return (
       <div className="body">
 
-      {/*Botones Landing 
-      <div className="visor-button">
-          <button  type="button" onClick={() => window.location.href = "/visor"}>
-            <span className="icon">
-                <img src={VisorIcon} alt="Visor Icon" style={{ height: '10dvh' }} />
-            </span>
-          </button>
-        </div>*/}
-      <div className="speed-dial">
-        <div className="speed-dial__item">
-          <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
-              <span className={`button-text${selectedItem ? " hidden" : ""}`}>contacto</span>
-              <span className="icon">
-                  <img src={ContactIcon} alt="Contact Icon"  />
-              </span>
-          </button>
+        <div className="speed-dial">
+          <div className="speed-dial__item">
+            <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+                <span className={`button-text${selectedItem ? " hidden" : ""}`}>contacto</span>
+                <span className="icon">
+                    <img src={ContactIcon} alt="Contact Icon"  />
+                </span>
+            </button>
+          </div>
+          <div className="speed-dial__item">
+            <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
+                <span className={`button-text${selectedItem ? " hidden" : ""}`}>equipo</span>
+                <span className="icon">
+                    <img src={MoreIcon} alt="More Icon"  />
+                </span>
+            </button>
+          </div>
         </div>
-        <div className="speed-dial__item">
-          <button type="button" aria-label="Ir al visor" onClick={() => window.location.href = "/visor"}>
-              <span className={`button-text${selectedItem ? " hidden" : ""}`}>equipo</span>
-              <span className="icon">
-                  <img src={MoreIcon} alt="More Icon"  />
-              </span>
-          </button>
-        </div>
-      </div>
 
           {/* Botones Izquierda */}
           <div className="body__buttonColumn" >
