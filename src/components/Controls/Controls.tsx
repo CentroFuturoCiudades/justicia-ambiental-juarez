@@ -136,32 +136,33 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
                         </Button>
                     </Group>      
 
-                    <Button className="button"
-                        position={"relative"}
-                        disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
-                        background={COLORS.GLOBAL.backgroundDark} 
-                        onClick={() => {
-                            addInstanceToArray(mapLayerInstance as MapLayer);
-                        }}
-                    >
-                        <img src={SaveLayer} alt="Guardar Capa" />
-                        {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
-                        {showAddedTooltip && (
-                            <div className="added-tooltip">
-                                Capa agregada
-                            </div>
-                        )}
-                    </Button>
+                    <Group attached>
+                        <Button className="button"
+                            position={"relative"}
+                            disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
+                            background={COLORS.GLOBAL.backgroundDark} 
+                            onClick={() => {
+                                addInstanceToArray(mapLayerInstance as MapLayer);
+                            }}
+                        >
+                            <img src={SaveLayer} alt="Guardar Capa" />
+                            {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
+                            {showAddedTooltip && (
+                                <div className="added-tooltip">
+                                    Capa agregada
+                                </div>
+                            )}
+                        </Button>
 
-                    <Button className="button"
-                        disabled={mapLayers.length === 0}
-                        background={COLORS.GLOBAL.backgroundDark}
-                        onClick={() => {
-                            setPopUp(true);
-                        }}>
-                        <img src={IconDownload} alt="Descargar" />
-                    </Button>
-        
+                        <Button className="button"
+                            disabled={mapLayers.length === 0}
+                            background={COLORS.GLOBAL.backgroundDark}
+                            onClick={() => {
+                                setPopUp(true);
+                            }}>
+                            <img src={IconDownload} alt="Descargar" />
+                        </Button>
+                    </Group>
                 </>
             }
 

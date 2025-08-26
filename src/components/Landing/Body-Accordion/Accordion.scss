@@ -1,9 +1,10 @@
 .body {
   z-index: 1;
   width: 88%;
-  height: 100%;
   display: flex;
   flex-direction: row;
+  flex: 1 1 0;
+  min-height: 0;
   justify-content: space-between;
   gap: 5dvw;
   padding-left: 4vw;
@@ -11,17 +12,18 @@
   padding-bottom: 5vh;
 
   &__buttonColumn {
+    //height: 100%;
     display: flex;
     flex-direction: column;
+    gap: 2em;
     justify-content: space-between;
     width: 38vw;
     font-family: monospace;
-    //border: 1px solid red;
   }
 
   &__button {
     height: 14vh;
-   // box-sizing: border-box; //padding no crece el boton fuera de buttonColumn
+   // box-sizing: border-box;
     white-space: normal;
     word-break: break-word;
     padding: 0em 6em;
@@ -93,8 +95,11 @@
 //right buttons
 .visor-button {
   position: absolute;
-  top: 20dvh;
-  right: 3dvh;
+  //top: 20dvh;
+  //right: 3dvh;
+  left: calc(100% - 8vw);
+  top: calc(100% - 40vw);
+  border: 1px solid red;
 
   button {
     background-color: transparent;

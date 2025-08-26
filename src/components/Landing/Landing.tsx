@@ -5,20 +5,23 @@ import PageFooter from "./Page-Footer/Page-Footer";
 //import AccordionComponent from "./Body-Accordion/AccordionComponent";
 import LandingBackground from "/assets/Fondo.jpg";
 import Accordion from "./Body-Accordion/Accordion";
+import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
+
 
 const Landing = () => {
 
     return (
         <div className="landing">
                 
-            <div className="landing__header">
+            {/*<div className="landing__header">
                 <PageHeader />
-            </div>
+            </div>*/}
 
             <img src={LandingBackground} className="landing__background" />
 
 
             <div className="landing__body" >
+                <PageHeader />
                 <Accordion/>
             </div>
 
