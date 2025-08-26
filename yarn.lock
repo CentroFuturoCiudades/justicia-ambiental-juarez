@@ -754,6 +754,11 @@
   resolved "https://registry.npmjs.org/@fontsource/roboto/-/roboto-5.2.6.tgz"
   integrity sha512-hzarG7yAhMoP418smNgfY4fO7UmuUEm5JUtbxCoCcFHT0hOJB+d/qAEyoNjz7YkPU5OjM2LM8rJnW8hfm0JLaA==
 
+"@fontsource/space-mono@^5.2.8":
+  version "5.2.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/space-mono/-/space-mono-5.2.8.tgz#7bb05ea93ac9e1e66fc48fb8a49590fa9c5a113e"
+  integrity sha512-25X0fg1+kxxLes9/c6AozhrrAuBW1uLaOL584IRg4DZxVxNOMzcS3mHS1UtmsyTwtU2HpiIt9Kv23Q+7xQO+hg==
+
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.npmjs.org/@humanfs/core/-/core-0.19.1.tgz"
