@@ -7,9 +7,12 @@ import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import { COLORS } from "../../../utils/constants";
 import './Accordion.scss';
 import { useState } from "react";
-import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
 import ContactIcon from "/assets/Icono CONTACTO.png";
 import MoreIcon from "/assets/Icono MAS_EQUIPO.png";
+import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
+import { ClickScrollPlugin } from "overlayscrollbars";
+import 'overlayscrollbars/overlayscrollbars.css';
+import Card1_img from '/assets/Indicadores Ambientales.png';
 
 type AccordionItemType = {
   id: string;                      // Unique identifier
@@ -24,51 +27,49 @@ const items: AccordionItemType[] = [
     id: "lupa",
     title: "¿qué es la \nevaluación ambiental?",
     content: (
-      <div className="card" >
-        <div className="scrollable" >
-          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
-            <div className="subtitle-card">
-              |objetivo|
+      <div className="scrollable2-container" style={{height: "100%"}}>
+        <OverlayScrollbarsComponent
+          options={{ scrollbars: { autoHide: 'never', dragScroll: true, clickScroll: true}, }}
+          className="scrollable2"
+        >
+            <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
+              <div>
+                <p className="subtitle-card">|objetivo|</p>
+                <p className="bodytext-card">
+                  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                  when an unknown printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but also the leap into
+                  electronic typesetting, remaining essentially unchanged. It was popularised in
+                  the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+                  and more recently with desktop publishing software like Aldus PageMaker including
+                  versions of Lorem Ipsum.
+                </p>
+              </div>
+              <div>
+                <p className="subtitle-card">|indicadores ambientales|</p>
+                <p className="bodytext-card">
+                  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                  when an unknown printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but also the leap into
+                  electronic typesetting, remaining essentially unchanged. It was popularised in
+                  the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
+                </p>
+              </div>
+              <div style={{ display: "flex", flexDirection: "row", width: "100%"}}>
+                <p className="bodytext-card" style={{ flex: "0 0 60%", maxWidth: "60%", marginRight: "2rem" }}>
+                  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+                  when an unknown printer took a galley of type and scrambled it to make a type
+                  specimen book. It has survived not only five centuries, but also the leap into
+                  electronic typesetting, remaining essentially unchanged. It was popularised in
+                  the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
+                </p>
+                <div style={{ width: "80%" }}>
+                  <img src={Card1_img} alt="Indicadores Ambientales" />
+                </div>
+              </div>
             </div>
-            <div className="bodytext-card">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-              when an unknown printer took a galley of type and scrambled it to make a type 
-              specimen book. It has survived not only five centuries, but also the leap into 
-              electronic typesetting, remaining essentially unchanged. It was popularised in 
-              the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-              and more recently with desktop publishing software like Aldus PageMaker including 
-              versions of Lorem Ipsum.
-            </div>
-          </div>
-
-          <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
-            <p className="subtitle-card">
-              |justicia ambiental|
-            </p>
-            <p className="bodytext-card">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-              Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-              when an unknown printer took a galley of type and scrambled it to make a type 
-              specimen book. It has survived not only five centuries, but also the leap into 
-              electronic typesetting, remaining essentially unchanged. It was popularised in 
-              the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-              and more recently with desktop publishing software like Aldus PageMaker including 
-              versions of Lorem Ipsum.
-            </p>
-            <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", gap: "2rem", width: "100%" }}>
-              <p className="bodytext-card">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                electronic typesetting, remaining essentially unchanged. It was popularised in 
-                and more recently with desktop publishing software like Aldus PageMaker including 
-                versions of Lorem Ipsum.
-              </p>
-              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmVq-OmHL5H_5P8b1k306pFddOe3049-il2A&s" style={{ maxWidth: "100%", height: "auto", objectFit: "contain" }}></img>
-            </div>
-          </div>
-        </div>
-      </div>
+        </OverlayScrollbarsComponent>
+</div>
     ),
     images: ["https://via.placeholder.com/150x100"],
     icon: LupaIcono,
@@ -77,8 +78,11 @@ const items: AccordionItemType[] = [
     id: "hoja",
     title: "uso de la herramienta",
     content: (
-      <div className="card">
-        <div className="scrollable" >
+      <div className="scrollable2-container" style={{height: "100%"}}>
+        <OverlayScrollbarsComponent
+          options={{ scrollbars: { autoHide: 'never', dragScroll: true, clickScroll: true}, }}
+          className="scrollable2"
+        >
           <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
             <p className="subtitle-card">
               |metodología|
@@ -133,7 +137,7 @@ const items: AccordionItemType[] = [
             </div>
 
           </div>
-        </div>
+        </OverlayScrollbarsComponent>
       </div>
     ),
     images: ["https://via.placeholder.com/150x100"],
@@ -143,8 +147,11 @@ const items: AccordionItemType[] = [
     id: "rompecabezas",
     title: "4 ejes temáticos",
     content: (
-      <div className="card" >
-        <div className="scrollable">
+      <div className="scrollable2-container" style={{height: "100%"}}>
+        <OverlayScrollbarsComponent
+          options={{ scrollbars: { autoHide: 'never', dragScroll: true, clickScroll: true}, }}
+          className="scrollable2"
+        >
         <div style={{ gap: "1rem", display: "flex", flexDirection: "column"}}>
           <p className="subtitle-card">
             |datos|
@@ -191,7 +198,7 @@ const items: AccordionItemType[] = [
           },
         ]}
       />
-      </div>
+      </OverlayScrollbarsComponent>
       </div>
     ),
     images: [],
@@ -253,7 +260,7 @@ const Accordion = () => {
           {/* Info box derecha */}
           <div className="body__derecha">
             { selectedItem && (
-            <Box className="body__box" bg={COLORS.GLOBAL.fondo} border={`1px solid ${COLORS.GLOBAL.backgroundMedium}`} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} >
+            <Box className="body__box" bg={COLORS.GLOBAL.fondo} boxShadow={`6px 6px 2px ${COLORS.GLOBAL.backgroundMedium}`} >
               {/*<div className="scrollable" style={{ height: "100%", width: "100%", padding: "2rem 1.5rem 1rem 1.5rem", border: "1px solid black" }}>*/}
                 {selectedItem.content}
               {/*</div>*/}
