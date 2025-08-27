@@ -81,10 +81,12 @@ const PopUp = ({deck, map, setPopUp}) => {
                             </div>
                         </div>
          
-                        <Button type="button"  style={{ borderRadius: "50%", padding: 0, height: "6vh", backgroundColor: "transparent" }}
+                        <Button type="button" className="popUp-button" style={{ borderRadius: "50%", padding: 0, height: "6vh", backgroundColor: "transparent" }}
                             onClick={() => {
                                 setMapLayers(prev => prev.filter((_, i) => i !== index));
-                                setPopUp(false);
+                                if(mapLayers.length === 1){
+                                    setPopUp(false);
+                                }
                             }} variant="ghost"  
                         >
                             <img src={CloseIcon} alt="Cerrar" className="body__closeIcon" />
@@ -94,7 +96,7 @@ const PopUp = ({deck, map, setPopUp}) => {
             </div>
 
             {/*boton de descarga*/}
-            <Button className="download-button"onClick={() => {
+            <Button className="download-button" onClick={() => {
                     setViewState({
                         ...defaultViewState,
                         transitionDuration: 0,
