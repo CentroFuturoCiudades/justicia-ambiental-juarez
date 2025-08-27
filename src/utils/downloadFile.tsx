@@ -88,11 +88,15 @@ export const blobToBase64 = (blob: Blob) => {
 
 export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | RasterLayer | null): string | undefined => {
 
+  const initialViewState = { latitude: 31.66, longitude: -106.4245, zoom: 10.8 };
+   deck.deck.viewState = { ...initialViewState };
   const deckglCanvas = deck.deck.canvas;
   //const mapboxCanvas = map.getMap().getCanvas();
 
   //console.log("deckglCanvas:", deckglCanvas);
   //console.log("mapboxCanvas:", mapboxCanvas);
+
+  console.log("deckgl", deck)
 
   const width = deckglCanvas.width;
   const height = deckglCanvas.height;
@@ -193,16 +197,16 @@ function buildIndicatorsTable(theme: string, y: number) {
     type: "table",
     position: { x: 20, y },
     width: 170,
-    height: 43.75920000000001,
+    height:  43,
     content: `{{indicadores_${theme}}}`,
     required: true,
     showHead: true,
-    head: ["Indicador", "Puntaje", "Ciudad Juarez"],
-    headWidthPercentages: [52.2, 24.2, 23.6],
+    head: ["AGEB", "Temática", "Indicador", "Promedio", "Ciudad Juarez"],
+    headWidthPercentages: [26, 18, 20, 18, 18],
     tableStyles: { borderWidth: 0.1, borderColor: "#4b5544" },
     headStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#ffffff", borderColor: "", backgroundColor: "#4b6648", borderWidth: { top: 0, right: 0, bottom: 0, left: 0 }, padding: { top: 5, right: 5, bottom: 5, left: 5 } },
-    bodyStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#000000", borderColor: "#888888", alternateBackgroundColor: "#f5f5f5", borderWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 }, padding: { top: 5, right: 5, bottom: 5, left: 5 } },
-    columnStyles: {},
+    bodyStyles: { fontName: "Roboto", fontSize: 10, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#000000", borderColor: "#888888", alternateBackgroundColor: "#f5f5f5", borderWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 }, padding: { top: 8, right: 5, bottom: 8, left: 5 } },
+    columnStyles: { },
     readOnly: false,
     fontSize: 13,
     alignment: "left",
@@ -227,22 +231,15 @@ function buildInputs(groupedSections: Record<string, Section[]>) {
       ).flat(),
       ...Object.entries(groupedSections).map(([theme, themeSections]) => [
         `indicadores_${theme}`,
-        [
-          ...themeSections.flatMap(section => [
-            [
-              section.title ?? "",
-              section.puntaje !== undefined ? section.puntaje.toString() : "",
-              section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
-            ],
-            [
-              section.selected || "",
-              section.complementarias || "",
-              ""
-            ]
-          ])
-        ]
-    ]),
-  ])
+        themeSections.map(section => [
+          section.selected,
+          section.theme ?? "",
+          section.title ?? "",
+          section.puntaje !== undefined ? section.puntaje.toString() : "",
+          section.juarezAvg !== undefined ? section.juarezAvg.toString() : ""
+        ])
+      ]),
+    ])
 
   ];
 }

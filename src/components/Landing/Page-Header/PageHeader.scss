@@ -3,8 +3,9 @@
   display: flex;
   align-items: flex-start;
   position: relative;
+  z-index: 1;
+  background-color: #fefdfc;
   height: min-content;
-
 
   &__logo {
     width: 88%;
@@ -33,43 +34,33 @@
   }
 
 }
-/*
-  .visor-button {
+.button_visor {
   position: absolute;
-  top: 100%;
-  left: calc(90% + 1dvw);
+  left: calc(100% - 8vw);
+  top: calc(100% - 3vw);
+  width: 6vw;
+  height: 6vw;
+  border-radius: 50%;
+  padding: 0.2dvh;
+  background-color: transparent;
+  transition: transform 0.3s ease;
 
-  button {
-    background-color: transparent;
-    border-radius: 99px;
-    padding: 0.2rem;
-    
-    .icon {
-      color: var(--icon-color, #333);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: transparent;
-      border-radius: 50%;
-      transition: transform 0.3s ease;
-    }
-  }
-  button:hover,
-  button:focus-visible {
-    background-color: #f5ede3;
-    border: 1px solid #f5ede3;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    .icon {
-      transform: scale(1.1);
-      background-color: #f5ede3;
-    }
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
+.button_visor:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  background-color: var(--background-d1);
+  transform: scale(1.05);
+  border: none;
+}
 
-.visor-button button:focus,
-.visor-button button:focus-visible {
+.button_visor:focus,
+.button_visor:focus-visible {
   outline: none !important;
-  box-shadow: none !important;
   border-color: transparent !important;
-}*/
+}

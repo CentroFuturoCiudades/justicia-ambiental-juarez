@@ -1,92 +1,100 @@
-.tematica-container {
-  margin-bottom: 2vh;
-  //font-size: var(--font-size-body);
-  font-size: var(--font-size-subtitle);
-
-  &__accordion {
-    border-color: gray;
-    border-radius: 0.4rem;
+.tematica {
+  margin-bottom: 2dvh;
+  &__content {
+    //border-radius: 0 0 0.5em 0.5em;
+    border-radius: 0 0 0.3vw 0.3vw;
   }
-
-  &__main-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.4em 1em !important;
+  &__accordion_tematica,
+  &__sub_accordion {
+    color: white;
+    padding: 0.3em 0.8em;
+    font-size: var(--font-size-subtitle);
+  }
+  &__accordion_tematica {
+    //border-radius: 0.5em;
+    border-radius: 0.3dvw;
+  }
+  &__sub_accordion {
     border-radius: 0;
+  }
+  &__indicator {
     color: white;
   }
-
-  &__dropdown-indicator {
-    color: white;
+  &__indicator2 {
+    color: gray;
   }
-
-  &__sub-accordion {
-    padding: 0rem;
-    margin-top: 0rem;
-    width: 100%;
-    border-top-left-radius: 0 !important;
-    border-top-right-radius: 0 !important;
+  &__body_content {
+    padding: 0;
+    border-radius: 0;
   }
-
-  &__itemContent {
-    padding: 0rem;
+  &__subcontent {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 0 0.8em;
   }
-
-  &__section-trigger {
+  &__checkbox {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    border-radius: 0 !important;
-    padding: 0.4em 1em !important;
-    color: white;
-  }
+    padding: 0.5em 0;
+    //height: 3vw;
+    border-bottom: 1px solid gray;
+    //border:1px solid red;
 
-  &__checkbox-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-   gap: 0.3vw;
-    align-items: center;
-    width: 100%;
-    padding: 0.5em 1em;
-    //font-size: var(--font-size-body);
-    text-transform: lowercase;
-  }
-
-  &__checkbox-label {
-    font-size: var(--font-size-button);
-
-    &.-selected {
-      font-weight: bold;
-      font-size: var(--font-size-button);
+    &:last-child {
+      border-bottom: none;
     }
   }
+  &__checkbox_content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.6vw;
+    //border: 1px solid blue;
+    min-height: 2vw;
+  }
+    &__label {
+      font-size: var(--font-size-body);
+      flex: 1;
+      line-height: 1.2;
+      text-transform: lowercase;
+    }
+    &__image_container {
+      width: 2vw;
+      height: 1.8vw;
+      display: flex;
+      padding: 0;
+    }
 
+    &__image_container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
 }
 
-.tematica-container__main-trigger:hover {
-  background: #3b3b3b !important;
-  cursor: pointer;
-  border-color: #3b3b3b;
-}
-.tematica-container__section-trigger:hover {
-  background: #b3b3b3 !important;
-  cursor: pointer;
-  border-color: #b3b3b3;
-}
-
-.chakra-accordion__itemContent {
-  transition: all 0.3s ease-in-out;
-}
-
-.chakra-accordion__itemTrigger:focus,
-.chakra-accordion__itemTrigger:focus-visible,
-.chakra-accordion__itemTrigger:active,
-.chakra-accordion__itemTrigger[aria-expanded="true"] {
+.tematica__accordion_tematica:focus,
+.tematica__accordion_tematica:focus-visible,
+.tematica__accordion_tematica:active,
+.tematica__sub_accordion:focus,
+.tematica__sub_accordion:focus-visible,
+.tematica__sub_accordion:active {
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+.tematica__accordion_tematica[aria-expanded="true"] {
+  //border-radius: 0.5em 0.5em 0 0;
+  border-radius: 0.3dvw 0.3dvw 0 0;
+}
+
+.chakra-checkbox__control {
+  width: 1em;
+  height: 1em;
+  min-width: 1em;
+  min-height: 1em;
 }
 
 .chakra-checkbox__control[data-state="unchecked"] {
@@ -94,7 +102,21 @@
   background: #d1d1d1da !important;
 }
 
-.custom-green-checkbox .chakra-checkbox__control[data-state="checked"] {
+.chakra-checkbox__control[data-state="checked"] {
   background: #a2b687;
   border-color: #a2b687;
+}
+
+.chakra-checkbox__control[data-state="checked"] + .tematica__label {
+  font-weight: bold;
+}
+
+.tematica__accordion_tematica:hover {
+  background: #3b3b3b !important;
+  border-color: #3b3b3b;
+}
+
+.tematica__sub_accordion:hover {
+  background: #b3b3b3  !important;
+  border-color: #b3b3b3 ;
 }

@@ -16,6 +16,8 @@ interface AppContextI {
     setSelectedLayer: Dispatch<SetStateAction<string>>;
     activeLayerKey: string | null;
     setActiveLayerKey: Dispatch<SetStateAction<string | null>>;
+    selectionMode: string | null;
+    setSelectionMode: Dispatch<SetStateAction<string | null>>;
     selectedBaseLayers: string[];
     setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
     zoomIn: () => void;
@@ -56,6 +58,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
+    const [selectionMode, setSelectionMode] = useState<string | null>(null);
 
     //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
@@ -80,6 +83,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setSelectedLayer, 
             activeLayerKey,
             setActiveLayerKey,
+            selectionMode,
+            setSelectionMode,
             selectedBaseLayers,
             setSelectedBaseLayers,
             zoomIn,

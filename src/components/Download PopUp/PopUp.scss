@@ -21,3 +21,14 @@
 .download-button:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
+
+.popUp-button:hover {
+    border-color: transparent !important;
+}
+
+.popUp-button:focus,
+.popUp-button:focus-visible,
+.download-button:focus,
+.download-button:focus-visible {
+   outline: none !important;
+}

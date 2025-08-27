@@ -1,5 +1,5 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
-import { color, rgb } from "d3";
+import { color, rgb, selection } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
 import { COLORS } from "../utils/constants";
@@ -52,7 +52,7 @@ export class MapLayer {
     return await data.json();
   }
 
-  getLayer = (data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = []): GeoJsonLayer => {
+  getLayer = (data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null): GeoJsonLayer => {
 
     this.isLineLayer = true;
     var getColor: any;
@@ -127,7 +127,8 @@ export class MapLayer {
     const geojsonLayer = new GeoJsonLayer({
       id: "geojson-layer",
       data: data,
-      pickable: true,
+      //pickable: true,
+      pickable: selectionMode === "radius" ? false : true,
       filled: true,
       stroked: true,
       opacity: this.opacity,

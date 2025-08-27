@@ -1,42 +1,36 @@
 .body {
   z-index: 1;
-  //width: 100%;
-  height: 100%;
-  //box-sizing: border-box;
+  width: 88%;
   display: flex;
   flex-direction: row;
+  flex: 1 1 0;
+  min-height: 0;
   justify-content: space-between;
+  gap: 5dvw;
   padding-left: 4vw;
-  padding-right: 8vw;
-  padding-top: 5vh;
-  padding-bottom: 5vh;
-  //padding: 2em 8vw 2em 4vw;
- // gap: 6vw;
-  //position: relative;
+  padding-top: 4vh;
+  padding-bottom: 4vh;
 
   &__buttonColumn {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 33vw;
+    gap: 4dvh;
+    width: 35vw;
     font-family: monospace;
   }
 
   &__button {
-    height: 14vh;
-   // box-sizing: border-box; //padding no crece el boton fuera de buttonColumn
-    white-space: normal;
-    word-break: break-word;
-    padding: 0em 6em;
     display: flex;
     align-items: center;
     align-content: center;
-    border-radius: 0.5em;
+    flex: 1 1 0;
+    font-size: var(--font-size-header);
+    white-space: pre-line;
+    border-radius: 0.3vw;
     border: 0.08em solid #c4c4c4;
-    box-shadow: 0 0.125em 0.25em rgba(0, 0, 0, 0.1);
-    font-size: var(--font-size-subtitle);
     color: black;
-
   }
 
   &__buttonText {
@@ -49,33 +43,35 @@
     right: -1.7em;
     top: 50%;
     transform: translateY(-50%);
-    height: 3.5em;
+    height: 2.5em;
     border-radius: 50%;
   }
 
   
 
   &__derecha {
-    //width: 100%;
-    width: 50vw;
     height: 100%;
+    width: 50vw;
+    //border: 1px solid red;
   }
 
   &__box {
-    margin-right: 1em;
     height: 100%;
     position: relative;
-    font-size: var(--font-size-body);
+    //font-size: var(--font-size-body);
+    border-radius: 0.3vw;
+    padding: 1.5dvw;
+    border: 1px solid #c4c4c4;
   }
 
   &__closeButton {
     cursor: pointer;
     background-color: transparent;
     position: absolute;
-    top: -0.3em;
-    right: 0.3em;
-    height: 3.75em;
-    width: 3.75em;
+    top: 0.6vh;
+    right: 0.7vw;
+    //height: 100%;
+    width: 3vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,8 +91,11 @@
 //right buttons
 .visor-button {
   position: absolute;
-  top: 20dvh;
-  right: 3dvh;
+  //top: 20dvh;
+  //right: 3dvh;
+  left: calc(100% - 8vw);
+  top: calc(100% - 40vw);
+  border: 1px solid red;
 
   button {
     background-color: transparent;
@@ -193,60 +192,38 @@
             }
           }
         }
-
-      
-
-      /*&:hover .button1,
-      .button1:focus-visible {
-        background-color: #f5ede3;
-        border: 1px solid #f5ede3;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-        .icon {
-          transform: scale(1.1);
-          background-color: #f5ede3;
-        }
-      }*/
-
-      //esta escondido
-      /*&:hover .button-text:not(.hidden),
-      &:focus-visible .button-text:not(.hidden) {
-        opacity: 1;
-        visibility: visible;
-        margin-right: 1dvw;
-        background-color: #f5ede3;
-        .icon {
-          transform: scale(1.1);
-          background-color: #f5ede3;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-      }*/
-
-    
-//no esta escondido
-      &:hover .button-text:not(.hidden),
-      &:focus-visible .button-text:not(.hidden) {
-        opacity: 1;
-        visibility: visible;
-        margin-right: 1dvw;
-        background-color: #f5ede3;
-        border: 1px solid #f5ede3;
-
-        .icon {
-          transform: scale(1.1);
-          background-color: #f5ede3;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-      }
     }
   }
 }
 
+.speed-dial__item button:hover,
 .speed-dial__item button:focus,
 .speed-dial__item button:focus-visible {
   outline: none !important;
   box-shadow: none !important;
   border-color: transparent !important;
+}
+
+.speed-dial__item button:hover .button-text:not(.hidden),
+.speed-dial__item button:focus-visible .button-text:not(.hidden) {
+  opacity: 1;
+  visibility: visible;
+  margin-right: 1dvw;
+  background-color: #f5ede3;
+  border: 1px solid #f5ede3;
+
+  .icon {
+    transform: scale(1.1);
+    background-color: #f5ede3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.speed-dial__item button:hover:not(:has(.button-text.hidden)),
+.speed-dial__item button:focus-visible:not(:has(.button-text.hidden)) {
+  background-color: #f5ede3;
+  border: 1px solid #f5ede3;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -256,7 +233,7 @@
   font-family: monospace;
 }
 .bodytext-card {
-  font-size: 1em;
+  font-size: var(--font-size-body);
   font-family: 'Playfair Display', serif;
 }
 
@@ -314,13 +291,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  //padding-right: 1.5rem;
   padding-right: 1.5em;
-  //padding-left: 1.5rem;
   padding-left: 1.5em;
-  //padding-top: 2.7rem;
   padding-top: 2.5em;
-  //padding-bottom: 1.5rem;
   padding-bottom: 1.5em;
   //border: 3px solid black;
 }
@@ -330,46 +303,83 @@
   z-index: 3;
   overflow-x: hidden;
   overflow-y: auto; 
-  //padding-right: 1rem; 
   padding-right: 1em;
-  //padding-left: 1rem; 
   padding-left: 0.5em;
   gap: 2em; 
   display: flex; 
   flex-direction: column; 
-  height: 100%;
-  //border: 2px solid blue;
+  //height: 100%;
+  max-height: 300px;
   text-align: justify;
 }
 
+.scrollable2 {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 1.5dvw;
+}
+
+.scrollable2 .os-scrollbar-vertical {
+  width: 1vw;
+  border: 1px solid black;
+  padding: 0;
+  height: 80%;
+  margin-top: 5%;
+  right: 0.1vw;
+}
+
+.scrollable2 .os-scrollbar-track {
+  border-radius: 0;
+  //box-sizing: border-box;
+  //z-index: 10;
+}
+
+.scrollable2 .os-scrollbar-handle {
+  background: #af6864;
+  border-radius: 0;
+  min-height: 5px;
+  max-height: 15px;
+}
+
+.scroll-arrow {
+  width: 2em;
+  height: 2em;
+  background: #f5ede3;
+  border: 1px solid #9f5548;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0.5em auto;
+}
+
 /* SCROLLBAR STYLES */
-.scrollable::-webkit-scrollbar {
-  //width: 20px;
-  width: 1.25em;
+/*.scrollable::-webkit-scrollbar {
+  width: 1.2vw;
 }
 
 .scrollable::-webkit-scrollbar-track {
   background: transparent;
   border: 0.08em solid black;
 }
+
 .scrollable::-webkit-scrollbar-thumb {
   background: #9f5548;
   border: 0.08em solid transparent;
   background-clip: content-box;
 }
 
-/* Flecha arriba */
 .scrollable::-webkit-scrollbar-button:vertical:start:decrement {
   background: url('/assets/ARROW_UP.png') center center no-repeat;
-  background-size: 20px 20px;
-  height: 20px;
+  background-size: 2vw 2.04vh;
+  //height: 20px;
+  //height: 100%;
   border: 1px solid #333;
 }
 
-/* Flecha abajo */
 .scrollable::-webkit-scrollbar-button:single-button:vertical:increment {
   background: url('/assets/ARROW_DOWN.png') center center no-repeat;
-  background-size: 20px 20px;
+  background-size: 2vw 2.04vh;
   border: 1px solid #333;
-  height: 20px;
-}
+}*/

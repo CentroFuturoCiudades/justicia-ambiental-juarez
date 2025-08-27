@@ -1,14 +1,11 @@
 .capas-base-container {
-  font-size: var(--font-size-button);
+  font-size: var(--font-size-body);
 
   &__main-trigger {
     background-color: #424242;
     color: white;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    border-radius: 0%;
+    //border-radius: 0.3em;
+    border-radius: 0.3vw;
     padding: 0.25em 1em !important;
     height: 3.65vh;
   }
@@ -18,29 +15,37 @@
   }
 
   &__itemContent {
-    background-color: #f5f5f5;
     padding: 0rem;
     border-radius: 0%;
+    transition: none;
   }
 
   &__itemBody {
-    padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    background-color: #f5f5f5;
+    padding: 0.2em 0.8em;
+  }
+  .checkbox {
+    display: flex;
+    align-items: center;
+    padding: 0.2em 0;
   }
 
-  &__checkboxContent {
-    padding: 0;
+  .checkbox_content {
     display: flex;
     align-items: center;
     width: 100%;
-  }
+    gap: 0.6vw;
 
-  &__checkboxLabel {
-    font-size: var(--font-size-button);
+    .label {
+      font-size: var(--font-size-button);
+      flex: 1;
+      line-height: 1.2;
+      text-transform: lowercase;
+    }
+    
   }
-
 }
 
 .chakra-accordion__itemContent {
@@ -53,12 +58,20 @@
   border-color: #363636;
 }
 
-.custom-green-checkbox .chakra-checkbox__control[data-state="checked"] {
+.capas-base-container__main-trigger:focus,
+.capas-base-container__main-trigger:focus-visible,
+.capas-base-container__main-trigger:active {
+    outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.chakra-checkbox__control[data-state="checked"] {
   background: #a2b687;
   border-color: #a2b687;
 }
 
 .chakra-checkbox__control[data-state="unchecked"] {
   border-color: rgb(112, 112, 112);
-  background: #d1d1d1da !important; // o el color que quieras para unchecked
+  background: #d1d1d1da !important;
 }

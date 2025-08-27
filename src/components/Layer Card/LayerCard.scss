@@ -3,11 +3,11 @@
     background-color: var(--background);
     padding: 0.5rem;
     border: 2px solid;
-    border-radius: 0.4rem;
+    //border-radius: 0.4rem;
+    border-radius: 0.3vw;
     border-color: var(--ambiental-primary);
     //margin-bottom: 1rem;
     height: auto;
-    position: relative;
     
 
     &__cardTitle {
@@ -32,15 +32,14 @@
         .layerCard__tooltip {
             display: none;
             position: absolute;
-            top: 50%; // centra verticalmente respecto al icono
-    left: 105%; // coloca el tooltip justo a la derecha de la tarjeta
+            top: 50%;
+            left: 105%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.65);
             color: #222;
             padding: 0.7em 1.2em;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             font-size: var(--font-size-body);
-            z-index: 100;
 
         }
 

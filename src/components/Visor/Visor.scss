@@ -3,22 +3,19 @@
     
     display: flex;
     flex-direction: row;
-    //height: calc( 100vh - 0rem);
     height: 100vh;
     color: var(--text-primary);
-    //font-size: var(--font-size-body);
+    font-size: var(--font-size-body);
     border-radius: var(--border-radius);
     overflow: hidden;
 
     &__leftPanel {
         width: 25.78vw;
         background: var(--background-d1);
-        height: auto;
         display: flex;
         justify-content: center;
         overflow-y: auto;
-        max-height: 100vh;
-        
+        position: relative;
     }
 
     &__panelContent {
@@ -26,35 +23,33 @@
     }
 
     &__title {
-        font-size: var(--font-size-title);
+        font-size: var(--font-size-header2);
+        font-family: 'Space Mono', monospace;
         line-height: 1.2;
         padding: 1rem 0rem;
         border-bottom: 2px solid var(--text-primary);
         margin-bottom: 1rem;
 
-        &__italic {
-            font-family: 'Space Mono', monospace;
+        .italic {
             font-style: italic;
         }
-        &__bold {
-            font-family: 'Space Mono', monospace;
+        .bold {
             font-weight: bold;
         }
     }
 
     &__description {
-        font-weight: bold;
-        font-size: var(--font-size-body);
         line-height: 1.2;
         text-align: justify;
         margin-bottom: 1rem;
     }
+        //hasta aqui todo bien
+
 
     &__mapContainer {
         background: peachpuff;
         flex: 1;
         position: relative;
-
 
         .mapboxgl-control-container {
             display: none !important;
@@ -69,23 +64,7 @@
         position: absolute;
         top: 2vh;
         left: 2vw;
-        display: flex;
-        height: 5vh;
-        //width: 20vw;
-        width: auto;
-        box-sizing: border-box;
-    }
-
-    &__button {
-        height: 100%;
-        border-radius: 0;
-        padding: 0;
-        aspect-ratio: 1 / 1;
-        min-width: 0;
-        max-width: 4dvw;
-       // min-width: 2.5vw;
-        //font-size: var(--font-size-button); // usa tu variable responsive
-        
+        height: 6vh;
     }
 
     &__dropDowns {
@@ -98,21 +77,4 @@
         width: 17.13vw;
     }
 
-}
-
-.visor__button svg {
-  width: 3.5dvh;
-  height: 2.5dvh;
-  min-width: 2dvh;
-  min-height: 2dvh;
-  font-size: 2.5dvh; // asegura que el icono se escale con el botón
-}
-
-.visor__button:hover,
-.visor__button:focus,
-.visor__button:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: transparent !important;
-    background-color: #32332f;
 }

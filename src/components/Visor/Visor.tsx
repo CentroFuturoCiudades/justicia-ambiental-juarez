@@ -14,36 +14,21 @@ import { MapLayer } from "../../classes/MapLayer";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { Button } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
-import { downlaodFile, downloadPdf} from "../../utils/downloadFile";
 import { dissolve } from "@turf/dissolve";
 import { union, polygon, featureCollection } from "@turf/turf";
 import { flatten } from "@turf/flatten";
 import { PathStyleExtension } from '@deck.gl/extensions';
-//import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
-//import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
-import { RiHome2Line, RiDownloadLine } from "react-icons/ri";
-import { LuSquareDashed } from "react-icons/lu";
-import { PiIntersectSquareDuotone, PiIntersectSquareFill } from "react-icons/pi";
-import { ImFilePicture } from "react-icons/im";
-import { AiOutlineSelect } from "react-icons/ai";
-import { SiTarget } from "react-icons/si";
+import booleanContains from "@turf/boolean-contains";           //para ver interseccion de colonias-agebs (no se usa por el momento)
+import  booleanIntersects  from "@turf/boolean-intersects";     //para ver interseccion de colonias-agebs (no se usa por el momento)
 import PopUp from "../Download PopUp/PopUp";
-import { FiPlus, FiMinus } from "react-icons/fi";
-
-
-
-import html2canvas from "html2canvas";
-import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
-import Controls from "../ZoomControls/Controls";
+import Controls from "../Controls/Controls";
+import * as turf from "@turf/turf";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
-
 const Visor = () => {
-    const navigate = useNavigate();
     const deck = useRef<any>(null);
     const map = useRef<any>(null);
     const { 
@@ -53,9 +38,9 @@ const Visor = () => {
         selectedAGEBS, setSelectedAGEBS, 
         selectedColonias, setSelectedColonias, 
         // coloniasData, 
-        activeLayerKey, setActiveLayerKey,
-        mapLayers,setMapLayers, //mas de una layer seleccionada en el "pop up" (simulacion)
-        zoomIn, zoomOut,
+        activeLayerKey,
+        mapLayers,
+        selectionMode,
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -73,6 +58,96 @@ const Visor = () => {
     const [coloniasGeoJson, setColoniasGeoJson] = useState<any>(null);                                  //guarda el geojson universal de colonias
     const rangeGraphRef = useRef<HTMLDivElement | null>(null);
     const [popUp, setPopUp] = useState<boolean>(false);
+
+    const [coords, setCoords] = useState({ latitude: viewState.latitude, longitude: viewState.longitude });
+    const [circleCoords, setCircleCoords] = useState(coords);
+    const [radius, setRadius] = useState(2000);
+    const [polygon, setPolygon] = useState<any>();
+    const [drag, setDrag] = useState<boolean>(false);
+    //const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]);
+    const [flagDragEnd, setFlagDragEnd] = useState<boolean>(false); //para forzar el useMemo de filteredFeatures al soltar el circulo
+
+    useEffect(() => {
+        setCircleCoords(coords)
+    }, [coords])
+
+    //se queda igual porque es lo que dibuja el circulo
+    useEffect(() => {
+        if(!circleCoords) return;
+        console.log("entro a lo que hace el circulo")
+        const temp = turf.circle(
+            [circleCoords.longitude, circleCoords.latitude] as any,
+            radius,
+            {
+                units: "meters",
+                steps: radius * 16 / 100,
+            } as any,
+        );
+        setPolygon(temp);
+    }, [circleCoords, radius]);
+
+    const filteredFeatures = useMemo(() => {
+        if (!polygon || !selectedLayer || selectionMode !== "radius") return [];
+        const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
+        return tematicaData.features.filter((feature: any) =>
+            booleanContains(circlePolygon, feature)
+            //booleanIntersects(feature, circlePolygon)
+        );
+    }, [flagDragEnd, selectionMode]);
+
+    const lensLayer = new GeoJsonLayer({
+        id: "lens-layer",
+        data: polygon,
+        filled: true,
+        getFillColor: [255, 255, 255, 0],
+        getLineColor: [250, 200, 0, 255],
+        getLineWidth: 30,
+        pickable: true, //viewState.zoom < ZOOM_SHOW_DETAILS,?? 16
+        getDashArray: [6, 1],
+        dashJustified: true,
+        dashGapPickable: true,
+        onDragStart: () => {
+            setDrag(true);
+            setFlagDragEnd(false);
+        },
+        onDrag: (info: any) => {
+            if (!info || !info.coordinate) return;
+            setCircleCoords({
+                latitude: info.coordinate[1],
+                longitude: info.coordinate[0],
+            });
+        },
+        onDragEnd: (info: any, event: any) => {
+            //debouncedHover(info);
+            setDrag(false);
+            setFlagDragEnd(true);
+        },
+        extensions: [new PathStyleExtension({ dash: true })],
+        updateTriggers: {
+            getDashArray: [radius],
+        }
+    });
+
+    const centerPointLayer = new GeoJsonLayer({
+        id: "center-point-layer",
+        data: circleCoords
+            ? turf.point([circleCoords.longitude, circleCoords.latitude])
+            : undefined,
+        filled: true,
+        getLineColor: [250, 200, 0, 255],
+        getLineWidth: 5,
+        getFillColor: [200, 200, 200, 200],
+        getRadius: 15,
+        pickable: false,
+    });
+
+
+
+    /*
+    var center = [-75.343, 39.984];
+var radius = 5;
+var options = {steps: 10, units: 'kilometers', properties: {foo: 'bar'}};
+var circle = turf.circle(center, radius, options);*/
 
 
 
@@ -162,26 +237,30 @@ const Visor = () => {
             setTematicaData(null);
             return;
         }
-        
-        //procesa la data que va en layerCard
+
         if ( layer?.dataProcesssing ) { 
             jsonData = layer.dataProcesssing(jsonData);
         }
+        
+        //procesa la data que va en layerCard
+        const features = selectionMode === "radius" ? filteredFeatures : jsonData.features;
+        const data = {...jsonData, features };
         setTematicaData(jsonData);
 
         //crea la capa geojson
         const geoJsonLayer = mapLayerInstance.getLayer(
-            jsonData,
+            data,
             layer?.property || "",
             layer?.is_lineLayer || false,
             true,
             handleSelectedElements,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
+            selectionMode
         );
         setTematicaLayer(geoJsonLayer);
         setMapLayerInstance(mapLayerInstance);
 
-    }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson]);
+    }, [selectedLayer, activeLayerKey, agebsGeoJson, coloniasGeoJson, selectionMode, filteredFeatures]);
 
 
     //cada vez que cambien las colonias seleccionadas, ver que agebs colindan y cambiar selectedagebs (INTERSECCION, ya no se usa por el momento)
@@ -281,19 +360,26 @@ const Visor = () => {
 
     return (
         <div className="visor">
+
             {/* Panel izquierdo */}
             <Box className="visor__leftPanel" scrollbar="hidden">
                 <div className="visor__panelContent">
 
                     <div className="visor__title">
-                        <p className="visor__title__italic">visor de </p>
-                        <p className="visor__title__bold"> indicadores ambientales</p>
+                        <p className="italic">visor de </p>
+                        <p className="bold"> indicadores</p>
+                        <p className="bold"> ambientales y sociales</p>
                     </div>
 
                     <div className="visor__description">
                         <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
                     </div>
                     
+
+
+
+
+
                     <Tematica />
 
                     {selectedLayer && tematicaData && mapLayerInstance && (
@@ -305,11 +391,16 @@ const Visor = () => {
                             rangeGraphRef={rangeGraphRef}
                         />
                     )}
+
+
+
+
                 </div>
             </Box>
 
             <div className="visor__mapContainer">
                 <DeckGL
+                    controller={{dragPan: !drag}}
                     ref={deck}
                     initialViewState={viewState}
                     viewState={viewState}
@@ -320,11 +411,13 @@ const Visor = () => {
                     layers={[
                         ...(tematicaLayer ? [tematicaLayer] : []),
                         ...selectedBaseLayers.map(key => baseLayers[key]).filter(Boolean),
-                        ...dissolvedLayer,
+                        (selectionMode ==="agebs" && dissolvedLayer),
+                        (selectionMode === "radius" && lensLayer),
+                        (selectionMode === "radius" && centerPointLayer),
                         //...(coloniasLayer ? [coloniasLayer] : []),
                     ]}
                     style={{ height: "100%", width: "100%", position: "relative" }}
-                    controller={true}
+                    //controller={true}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                 >
                     <Map
