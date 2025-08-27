@@ -100,7 +100,7 @@ const Visor = () => {
         data: polygon,
         filled: true,
         getFillColor: [255, 255, 255, 0],
-        getLineColor: [42, 47, 58, 255],
+        getLineColor: [250, 200, 0, 255],
         getLineWidth: 30,
         pickable: true, //viewState.zoom < ZOOM_SHOW_DETAILS,?? 16
         getDashArray: [6, 1],
@@ -134,7 +134,7 @@ const Visor = () => {
             ? turf.point([circleCoords.longitude, circleCoords.latitude])
             : undefined,
         filled: true,
-        getLineColor: [42, 47, 58, 255],
+        getLineColor: [250, 200, 0, 255],
         getLineWidth: 5,
         getFillColor: [200, 200, 200, 200],
         getRadius: 15,

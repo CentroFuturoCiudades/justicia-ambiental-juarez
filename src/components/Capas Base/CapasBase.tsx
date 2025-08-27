@@ -14,7 +14,7 @@ const CapasBase = () => {
     };
     return (
         <div className="capas-base-container">
-            <Accordion.Root collapsible variant={"enclosed"} className="capas-base" style={{ borderRadius: "0.5em"}}>
+            <Accordion.Root collapsible variant={"enclosed"} className="capas-base" style={{ borderRadius: "0.3dvw"}}>
                 <Accordion.Item value="main" style={{  borderRadius: "0.5em" }}>
 
                     <Accordion.ItemTrigger className="capas-base-container__main-trigger">

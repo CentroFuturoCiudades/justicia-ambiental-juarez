@@ -1,7 +1,8 @@
 .tematica {
   margin-bottom: 2dvh;
   &__content {
-    border-radius: 0 0 0.5em 0.5em;
+    //border-radius: 0 0 0.5em 0.5em;
+    border-radius: 0 0 0.3vw 0.3vw;
   }
   &__accordion_tematica,
   &__sub_accordion {
@@ -10,7 +11,8 @@
     font-size: var(--font-size-subtitle);
   }
   &__accordion_tematica {
-    border-radius: 0.5em;
+    //border-radius: 0.5em;
+    border-radius: 0.3dvw;
   }
   &__sub_accordion {
     border-radius: 0;
@@ -84,7 +86,8 @@
 }
 
 .tematica__accordion_tematica[aria-expanded="true"] {
-  border-radius: 0.5em 0.5em 0 0;
+  //border-radius: 0.5em 0.5em 0 0;
+  border-radius: 0.3dvw 0.3dvw 0 0;
 }
 
 .chakra-checkbox__control {
