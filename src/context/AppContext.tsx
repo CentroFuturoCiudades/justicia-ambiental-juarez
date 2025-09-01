@@ -12,14 +12,27 @@ type ViewState = {
 interface AppContextI {
     viewState: ViewState;
     setViewState: Dispatch<SetStateAction<ViewState>>;
+    agebsGeoJson: FeatureCollection;
+    setAgebsGeoJson: Dispatch<SetStateAction<FeatureCollection>>;
+    coloniasGeoJson: FeatureCollection;
+    setColoniasGeoJson: Dispatch<SetStateAction<FeatureCollection>>;
+    mapLayerInstance: MapLayer | null;
+    setMapLayerInstance: Dispatch<SetStateAction<MapLayer | null>>;
+    tematicaData: any;
+    setTematicaData: Dispatch<SetStateAction<any>>;
+    filteredFeatures: any[];
+    setFilteredFeatures: Dispatch<SetStateAction<any[]>>;
+    dragMap: boolean;
+    setDragMap: Dispatch<SetStateAction<boolean>>;
+    //
     selectedLayer: string;
     setSelectedLayer: Dispatch<SetStateAction<string>>;
     activeLayerKey: string | null;
     setActiveLayerKey: Dispatch<SetStateAction<string | null>>;
     selectionMode: string | null;
     setSelectionMode: Dispatch<SetStateAction<string | null>>;
-    selectedBaseLayers: string[];
-    setSelectedBaseLayers: Dispatch<SetStateAction<string[]>>;
+    selectedBaseLayers: any[];
+    setSelectedBaseLayers: Dispatch<SetStateAction<any[]>>;
     zoomIn: () => void;
     zoomOut: () => void;
     selectedAGEBS: string[];
@@ -55,13 +68,21 @@ export const defaultViewState = {
 
 const AppContextProvider = ({ children }: { children: any }) => {
     const [viewState, setViewState] = useState<MapViewState>(defaultViewState)
+    //geojsons
+    const [agebsGeoJson, setAgebsGeoJson] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
+    const [coloniasGeoJson, setColoniasGeoJson] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
+    //mapinstance y data
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | null>(null);
+    const [tematicaData, setTematicaData] = useState<any>(null);
+    const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
+    const [dragMap, setDragMap] = useState<boolean>(false);
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState("");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
     const [selectionMode, setSelectionMode] = useState<string | null>(null);
 
     //capas base
-    const [selectedBaseLayers, setSelectedBaseLayers] = useState<string[]>([]);
+    const [selectedBaseLayers, setSelectedBaseLayers] = useState<any[]>([]);
 
     //zoom
     const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
@@ -79,8 +100,21 @@ const AppContextProvider = ({ children }: { children: any }) => {
         <AppContext.Provider value={{
             viewState,
             setViewState,
-            selectedLayer, 
-            setSelectedLayer, 
+            agebsGeoJson,
+            setAgebsGeoJson,
+            coloniasGeoJson,
+            setColoniasGeoJson,
+            mapLayerInstance,
+            setMapLayerInstance,
+            tematicaData,
+            setTematicaData,
+            filteredFeatures,
+            setFilteredFeatures,
+            dragMap,
+            setDragMap,
+            //
+            selectedLayer,
+            setSelectedLayer,
             activeLayerKey,
             setActiveLayerKey,
             selectionMode,

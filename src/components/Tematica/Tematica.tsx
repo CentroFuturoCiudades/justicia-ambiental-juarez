@@ -1,8 +1,10 @@
-import { Accordion, AccordionItemBody, Box, Checkbox, Span } from "@chakra-ui/react";
-import { SECTIONS, LAYERS, COLORS } from "../../utils/constants";
+import { Accordion, AccordionItemBody, Checkbox, Span } from "@chakra-ui/react";
+import { SECTIONS, LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
 import SavedLayerIcon from "/assets/Icono CAPA AGREGADA.png"
+import { AiOutlineDown } from "react-icons/ai";
+
 
 
 const Tematica = () => {
@@ -16,25 +18,32 @@ const Tematica = () => {
     }
 
     return (
-        <div className="tematica-container" >
-            <Accordion.Root collapsible className="tematica">
-                <Accordion.Item value="tematica" className="tematica__content" >
-                    <Accordion.ItemTrigger className="tematica__accordion_tematica" style={{ backgroundColor: COLORS.GLOBAL.backgroundDark}}>
-                        <Span flex="1">temática</Span>
-                        <Accordion.ItemIndicator  className="tematica__indicator"/>
+        <div>
+            <Accordion.Root collapsible className="accordion">
+                <Accordion.Item value="tematica" className="accordion__item" >
+
+                    <Accordion.ItemTrigger className="dropdown">
+                        <Span className="dropdown__title">temática</Span>
+                        <Accordion.ItemIndicator  className="dropdown__indicator">
+                            <AiOutlineDown/>
+                        </Accordion.ItemIndicator>
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="tematica__content">
-                        <AccordionItemBody className="tematica__body_content" >
+                    <Accordion.ItemContent className="accordion__item">
+                        <AccordionItemBody className="accordion__body" >
                             {Object.entries(SECTIONS).map(([sectionKey, section]) => (
                             <Accordion.Root collapsible>
-                                <Accordion.Item value="hospitales">
-                                    <Accordion.ItemTrigger className="tematica__sub_accordion" style={{ background: COLORS.GLOBAL.backgroundMedium }}>
-                                        <Span flex="1" >{section.label}</Span>
-                                        <Accordion.ItemIndicator className="indicator2"/>
+                                <Accordion.Item value={sectionKey}>
+
+                                    <Accordion.ItemTrigger className="dropdown dropdown--light">
+                                        <Span className="dropdown__title"> {section.label} </Span>
+                                        <Accordion.ItemIndicator  className="dropdown__indicator">
+                                            <AiOutlineDown/>
+                                        </Accordion.ItemIndicator>
                                     </Accordion.ItemTrigger>
-                                    <Accordion.ItemContent style={{borderRadius: 0}}>
-                                        <AccordionItemBody className="tematica__subcontent" >
+
+                                    <Accordion.ItemContent className="accordion__content">
+                                        <AccordionItemBody className="accordion__subcontent" >
                                             {section.layers.map((layerKey, idx) => (
                                                 <Checkbox.Root 
                                                     cursor={"pointer"} 
@@ -42,14 +51,14 @@ const Tematica = () => {
                                                     checked={selectedLayer === layerKey}
                                                     onCheckedChange={() => handleLayerToggle(layerKey)}
                                                     disabled={!LAYERS[layerKey]?.enabled}
-                                                    className="tematica__checkbox"
+                                                    className="checkbox"
                                                 >
-                                                    <Span className="tematica__checkbox_content">
+                                                    <Span className="checkbox__content">
                                                         <Checkbox.HiddenInput />
                                                         <Checkbox.Control />
-                                                        <Checkbox.Label className="tematica__label" style={{ fontWeight: selectedLayer === layerKey ? 'bold' : 'normal' }}> {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                        <Checkbox.Label className={`checkbox__label ${selectedLayer === layerKey ? 'checkbox__label--bold' : ''}`} > {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
                                                         {mapLayers.some(instance => instance.title === LAYERS[layerKey]?.title) && (
-                                                            <span className="tematica__image_container">
+                                                            <span className="checkbox__image_container">
                                                                 <img src={SavedLayerIcon} alt="Saved Layer" />
                                                             </span>
                                                         )}

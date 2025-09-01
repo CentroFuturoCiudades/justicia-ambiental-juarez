@@ -1,47 +1,77 @@
-import { Accordion, Box, Checkbox, Span} from "@chakra-ui/react";
+import { Accordion, Checkbox, Span } from "@chakra-ui/react";
 import "./CapasBase.scss";
-import { CAPAS_BASE, COLORS } from "../../utils/constants";
+import { CAPAS_BASE } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
+import { AiOutlineDown } from "react-icons/ai";
 
 const CapasBase = () => { 
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
     
     //seleccion de capas base
-    const handleBaseLayerToggle = (layerKey: string, value: any) => {
+    /*const handleBaseLayerToggle = (layerKey: string, value: string) => {
         setSelectedBaseLayers(prev => 
             prev.includes(layerKey) ? prev.filter(key => key !== layerKey) : [...prev, layerKey]
         );
+    };*/
+    const handleBaseLayerToggle = (layerKey: string, url: string) => {
+        setSelectedBaseLayers(prev =>
+            prev.some(item => item.key === layerKey)
+                ? prev.filter(item => item.key !== layerKey)
+                : [...prev, { key: layerKey, url }]
+        );
     };
+
     return (
         <div className="capas-base-container">
-            <Accordion.Root collapsible variant={"enclosed"} className="capas-base" style={{ borderRadius: "0.3dvw"}}>
-                <Accordion.Item value="main" style={{  borderRadius: "0.5em" }}>
+            <Accordion.Root collapsible variant={"enclosed"} style={{ borderRadius: "0.3dvw"}}>
+                <Accordion.Item value="main">
 
-                    <Accordion.ItemTrigger className="capas-base-container__main-trigger">
-                        <Span flex={1}> capas complementarias </Span>
-                        <Accordion.ItemIndicator className="capas-base-container__main-indicator"/>
+                    <Accordion.ItemTrigger className="dropdown" style={{ height: "3.65vh" }}>
+                        <Span className="dropdown__title"> capas complementarias </Span>
+                        <Accordion.ItemIndicator className="dropdown__indicator">
+                            <AiOutlineDown />
+                        </Accordion.ItemIndicator>
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="capas-base-container__itemContent" >
                         <Accordion.ItemBody className="capas-base-container__itemBody" >
                             {Object.entries(CAPAS_BASE).map(([key, value]) => (
+                                <>
                                 <Checkbox.Root key={key} 
-                                    className="checkbox"
                                     cursor="pointer" 
                                     variant={"solid"} 
-                                    colorPalette={"green"} 
-                                    size={"sm"} 
+                                    checked={selectedBaseLayers.some(item => item.key === key)}
+                                    onCheckedChange={() => handleBaseLayerToggle(key, value.url)}
                                     disabled={!value.enabled}
+                                    className="checkbox"
+                                    style={{ border: "none" }}
                                 >
-                                    <Span className="checkbox_content">
-                                        <Checkbox.HiddenInput 
-                                            checked={selectedBaseLayers.includes(key)}
-                                            onChange={() => handleBaseLayerToggle(key, value)}
-                                        />
+                                    <Span className="checkbox__content" style={{ minHeight: "0"}}>
+                                        <Checkbox.HiddenInput />
                                         <Checkbox.Control />
-                                        <Checkbox.Label className="label">{value.title}</Checkbox.Label>
+                                        <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === key) ? " checkbox__label--bold" : ""}`} style={{ fontStyle: "normal"}}> {value.title} </Checkbox.Label>
                                     </Span>
                                 </Checkbox.Root>
+                                <div style={{ paddingLeft: '1dvw', display: 'flex', flexDirection: 'column' }}>
+                                {value.layers && Object.entries(value.layers).map(([layerKey, layer]: any) => (
+                                    <Checkbox.Root key={layerKey} 
+                                        cursor="pointer" 
+                                        variant={"solid"}
+                                        checked={selectedBaseLayers.some(item => item.key === layerKey)}
+                                        onCheckedChange={() => handleBaseLayerToggle(layerKey, layer.url)}
+                                        disabled={!layer.enabled}
+                                        className="checkbox"
+                                        style={{ border: "none" }}
+                                    >
+                                        <Span className="checkbox__content" style={{ minHeight: "0"}}>
+                                            <Checkbox.HiddenInput />
+                                            <Checkbox.Control />
+                                            <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === layerKey) ? " checkbox__label--bold" : ""}`} style={{ fontStyle: "normal" }}> {layer.title} </Checkbox.Label>
+                                        </Span>
+                                    </Checkbox.Root>
+                                ))}
+                                </div>
+                                </>
                             ))}
                         </Accordion.ItemBody>
                     </Accordion.ItemContent>

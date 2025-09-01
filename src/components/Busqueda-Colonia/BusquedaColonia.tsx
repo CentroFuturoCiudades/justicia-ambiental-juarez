@@ -4,6 +4,7 @@ import "./BusquedaColonia.scss";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { FixedSizeList as List } from "react-window";
+import { AiOutlineDown } from "react-icons/ai";
 //import { VariableSizeList as List } from "react-window";
 
 
@@ -55,9 +56,11 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
         <div className="colonias">
             <Accordion.Root collapsible variant={"enclosed"} className="accordion">
                 <Accordion.Item value="main" className="accordion__item">
-                    <Accordion.ItemTrigger className="accordion__trigger">
-                        <Span flex={1}> búsqueda por colonia </Span>
-                        <Accordion.ItemIndicator className="accordion__indicator" />
+                    <Accordion.ItemTrigger className="dropdown" style={{ height: "3.65vh" }}>
+                        <Span className="dropdown__title"> búsqueda por colonia </Span>
+                        <Accordion.ItemIndicator className="dropdown__indicator">
+                            <AiOutlineDown />
+                        </Accordion.ItemIndicator>
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="accordion__itemContent" >

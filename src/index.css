@@ -14,10 +14,23 @@
   --background-d1: #F1EFEE;
   --background-d2: #c4c4c4;
 
-  --ambiental-primary: #a2b28b;
-  --industria-primary: #C6AFA7;
-  --equipamiento-primary: #9C8C97;
-  --poblacion-primary: #87A49F;
+  --shadow-buttons: #f5ede3;
+  --background-dots: #ead7c7;
+  --other1: #f5ede3;
+  --other-gray: #fefdfc;
+
+
+  --ambiental-primary: #b5c48d; /*#a2b28b*/
+  --industria-primary: #d3b2a3; /*#C6AFA7*/
+  --equipamiento-primary: #b29ab1; /*#9C8C97*/
+  --poblacion-primary: #a3c9c7; /*#87A49F*/
+
+  --background-dark: #40423d;
+  --background-medium: #c4c4c4;
+  --background-light: #f1f0ee;
+
+  --close-button: #af6864;
+  --cursor-color: #e28984;
 
   --border-radius: 0.5rem;
 
@@ -28,12 +41,12 @@
   --font-size-body: 20px;
   --font-size-button: 15px;
 */
-  --font-size-title: min(4.45dvh, 2.55dvw);
-  --font-size-header2: min(3.52dvh, 2dvw);
-  --font-size-header: min(2.67dvh, 1.53dvw);
-  --font-size-subtitle: min(1.95dvh, 1.12dvw);
-  --font-size-body: min(1.78dvh, 1.02dvw);
-  --font-size-button: min(1.33dvh, 0.76dvw);
+  --font-size-title: min(4.45vh, 2.55vw);
+  --font-size-header2: min(3.52vh, 2vw);
+  --font-size-header: min(2.67vh, 1.53vw);
+  --font-size-subtitle: min(1.95vh, 1.12vw);
+  --font-size-body: min(1.78vh, 1.02vw);
+  --font-size-button: min(1.33vh, 0.76vw);
 
 }
 

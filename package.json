@@ -14,6 +14,7 @@
     "@chakra-ui/react": "^3.21.0",
     "@emotion/react": "^11.14.0",
     "@fontsource/roboto": "^5.2.6",
+    "@fontsource/roboto-mono": "^5.2.6",
     "@fontsource/space-mono": "^5.2.8",
     "@pdfme/common": "^5.4.2",
     "@pdfme/generator": "^5.4.2",

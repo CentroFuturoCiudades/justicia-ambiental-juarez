@@ -1,0 +1,104 @@
+.card {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    font-size: var(--font-size-body);
+    border-radius: 0.15vw;
+    display: flex;
+    padding: 1.5vw;
+    border: 1px solid #40423d;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
+    //flex: 1;
+    //flex-direction: column;
+}
+
+.scroll-content {
+    overflow-y: scroll;
+    //overflow-y: auto;
+    padding-right: 2.4vw;
+    //flex: 1;
+    width: 100%;
+}
+
+.scroll-content .os-scrollbar-vertical {
+  width: 1vw;
+  border: 1px solid black;
+  padding: 0;
+  height: 80%;
+  margin-top: 5.5%;
+  //right: 0.1vw;
+}
+
+.scroll-content .os-scrollbar-track {
+  border-radius: 0;
+}
+
+.scroll-content .os-scrollbar-handle {
+  background: #af6864;
+  border-radius: 0;
+  min-height: 5px;
+  max-height: 3dvh;
+  height: 2dvh;
+}
+
+.scroll-content .os-scrollbar-handle:hover,
+.scroll-content .os-scrollbar-handle:active,
+.scroll-content .os-scrollbar-handle:focus {
+  background: #af6864; // mismo color
+}
+
+.closeButton {
+    background-color: transparent;
+    position: absolute;
+    top: 0.8vh;
+    right: 0.6vw;
+    //height: 100%;
+    width: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    padding: 0;
+    border: none;
+}
+
+.downloadButton {
+    background-color: transparent;
+    position: absolute;
+    bottom: 0.8vh;
+    right: 0.6vw;
+    //height: 100%;
+    width: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    padding: 0;
+    border: none;
+    color: black
+}
+
+.closeIcon {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.closeButton:hover,
+.closeButton:active {
+  border-color: transparent !important;
+  border: none !important;
+  background-color: transparent !important;
+}
+
+.closeButton:focus,
+.closeButton:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.closeIcon:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease;
+}

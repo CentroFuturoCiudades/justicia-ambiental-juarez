@@ -749,6 +749,11 @@
   resolved "https://registry.npmjs.org/@floating-ui/utils/-/utils-0.2.9.tgz"
   integrity sha512-MDWhGtE+eHw5JW7lq4qhc5yRLS11ERl1c7Z6Xd0a58DozHES6EnNNwUWbMiG4J9Cgj053Bhk8zvlhFYKVhULwg==
 
+"@fontsource/roboto-mono@^5.2.6":
+  version "5.2.6"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-5.2.6.tgz#d87717798833d175fcd8f6b99f0f1c7f2a4a7939"
+  integrity sha512-fLCa3zs9XruKE8Fdbq0UWB0wqTi5dzi09QsnW7HgTwwnSVDZ3nH+X7Qg7l0yeIZs+E472cKE3RUD21ZnaXk4Zg==
+
 "@fontsource/roboto@^5.2.6":
   version "5.2.6"
   resolved "https://registry.npmjs.org/@fontsource/roboto/-/roboto-5.2.6.tgz"

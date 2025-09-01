@@ -1,42 +1,34 @@
 .page-header {
   padding-left: 4vw;
-  display: flex;
-  align-items: flex-start;
+  padding-right: 12vw;
   position: relative;
   z-index: 1;
   background-color: #fefdfc;
-  height: min-content;
 
   &__logo {
-    width: 88%;
-    padding: 1.5em 0;
-    border-bottom: 0.25em solid black;
-    position: relative;
+    width: 100%;
+    padding: 3vh 0;
+    border-bottom: 0.2em solid black;
   }
 
   &__title {
+    font-family: 'Space Mono', monospace;
     font-size: var(--font-size-title);
     line-height: 1.2;
 
     &__italic {
-      font-family: 'Space Mono', monospace;
       font-style: italic;
     }
-
     &__bold {
-      font-family: 'Space Mono', monospace;
       font-weight: bold;
     }
   }
-
-  * {
-    box-sizing: border-box;
-  }
-
 }
+
 .button_visor {
   position: absolute;
-  left: calc(100% - 8vw);
+  //left: calc(100% - 8vw);
+  right: 3vw;
   top: calc(100% - 3vw);
   width: 6vw;
   height: 6vw;
@@ -51,6 +43,7 @@
     object-fit: cover;
   }
 }
+
 .button_visor:hover {
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);

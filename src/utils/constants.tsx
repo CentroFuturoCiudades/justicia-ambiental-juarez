@@ -502,17 +502,58 @@ export const CAPAS_BASE = {
         title: "hidrografía",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
+        layers: {}
     },
     capa2: {
         title: "equipamientos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
+        layers: {
+            salud: {
+                title: "salud",
+                url: "",
+                enabled: false
+            },
+            educacion:{
+                title: "educación",
+                url: "",
+                enabled: false
+            },
+            recreacion: {
+                title: "recreación",
+                url: "",
+                enabled: false
+            }
+        }
     },
-    parques_industriales: {
-        title: "parques industriales",
+    industrias: {
+        title: "industrias",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: true,
+        enabled: false,
+        layers: {
+            parques_industriales: {
+                title: "parques industriales",
+                url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+                enabled: true
+            },
+            maquilas: {
+                title: "maquilas",
+                url: "",
+                enabled: false
+            },
+            fabricas: {
+                title: "fábricas",
+                url: "",
+                enabled: false
+            }
+        }
     },
+    vialidades: {
+        title: "vialidades",
+        url: "",
+        enabled: false,
+        layers: {}
+    }
 }
 
 export const TEMAS = {

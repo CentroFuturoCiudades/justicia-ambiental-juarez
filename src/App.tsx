@@ -4,6 +4,8 @@ import Visor from './components/Visor/Visor';
 import AppContextProvider from "./context/AppContext"
 import { Provider } from './components/ui/provider';
 import { Route, Routes } from 'react-router-dom';
+import { Toaster } from "./components/ui/toaster"
+
 
 function App() {
 
@@ -14,6 +16,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/visor" element={<Visor />} />
       </Routes>
+      <Toaster />
       </AppContextProvider>
     </Provider>
   )
