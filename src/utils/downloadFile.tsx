@@ -340,16 +340,6 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
 
   //tablas de indicadores en una misma pag (page break automatico)
   Object.entries(groupedSections).forEach(([theme, themeSections]) => {
-    indicadores.push({
-      name: `section_${theme}_title`,
-      type: "text",
-      content: theme,
-      position: { x: 20, y },
-      width: 170, height: 15, fontSize: 25, alignment: "left",
-      fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
-    });
-    y += 15;
-
     indicadores.push(buildIndicatorsTable(theme, y));
     y += themeSections.length * 15 + 30;
   });
