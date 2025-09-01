@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import "./QuadrantMenu.scss";
+import type { JSX } from 'react';
 
 // Interface for menu grid items and center header
 interface QuadrantMenuItem {
     mainHeader: string;
     title: string;
-    description: string;
+    description: JSX.Element | string;
     iconUrl: string;
     url: string;
 }
@@ -32,7 +33,7 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
         //setActiveIndex(prev => (prev === index ? null : index));
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "2dvh"}}>
             <section className="quadrant-menu" >
                 <header className="quadrant-menu__header">
                     <h2>{mainHeader}</h2>
@@ -58,11 +59,11 @@ export default function QuadrantMenu({ items, mainHeader }: QuadrantMenuProps) {
                 </div>
             </section>
             {activeItem && (
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", width: "100%"}}>
-                    <p className={`quadrant-title--${activeIndex}`} >{activeItem.title}</p>
-                    <p className='quadrant-description'>
+                <div style={{ display: "flex", flexDirection: "column", gap: "2dvh"}}>
+                    <p className={`quadrant-title quadrant-title--${activeIndex}`} >|{activeItem.title}|</p>
+                    <div className="quadrant-description">
                         {activeItem.description}
-                    </p>
+                    </div>
                 </div>
             )}
         </div>

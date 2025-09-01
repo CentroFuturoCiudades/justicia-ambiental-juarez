@@ -56,9 +56,10 @@ export class MapLayer {
 
     this.isLineLayer = true;
     var getColor: any;
+    const featuresForStats = data.allFeatures;
 
     if (field) {
-      var mappedData: number[] = data.features.map((item: any) => { return item.properties[field] });
+      var mappedData: number[] = featuresForStats.map((item: any) => { return item.properties[field] });
       mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
       /*if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
@@ -127,7 +128,6 @@ export class MapLayer {
     const geojsonLayer = new GeoJsonLayer({
       id: "geojson-layer",
       data: data,
-      //pickable: true,
       pickable: selectionMode === "radius" ? false : true,
       filled: true,
       stroked: true,

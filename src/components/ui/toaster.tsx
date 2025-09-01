@@ -12,6 +12,9 @@ import {
 export const toaster = createToaster({
   placement: "bottom-end",
   pauseOnPageIdle: true,
+  //offsets: "20dvw"
+  offsets: { left: "0px", top: "0px", right: "20dvw", bottom: "2dvh" },
+
 })
 
 export const Toaster = () => {

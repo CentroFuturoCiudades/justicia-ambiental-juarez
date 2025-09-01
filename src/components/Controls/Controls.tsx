@@ -2,7 +2,6 @@ import { Button, Group } from "@chakra-ui/react";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import "../Visor/Visor.scss"
-import { SiTarget } from "react-icons/si";
 import { MapLayer } from "../../classes/MapLayer";
 import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 import html2canvas from "html2canvas";
@@ -20,6 +19,8 @@ import Icon_ZoomIn from '/assets/Icono ZOOMIN.png'
 import Icon_ZoomOut from '/assets/Icono ZOOMOUT.png'
 import IconRadius from '/assets/Icono RADIO.png'
 import { useState } from "react";
+import { defaultViewState } from "../../context/AppContext";
+import { toaster } from "../ui/toaster";
 
 type ControlProps = {
     mapLayerInstance: any;
@@ -44,12 +45,10 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
     } = useAppContext();
     const [showAddedTooltip, setShowAddedTooltip] = useState(false);
 
-    const addInstanceToArray = async (instance: MapLayer) => {
-        const initialViewState = { latitude: 31.66, longitude: -106.4245, zoom: 10.8 };
-
+    const saveLayerScreenshot = async (instance: MapLayer) => {
         //const prevViewState = deck.current?.deck.viewState;
 
-        setViewState(initialViewState);
+        setViewState(defaultViewState);
         setTimeout(async() => {
             const imageUrl = getMapImage(deck.current, map.current, instance);
 
@@ -142,16 +141,16 @@ const Controls = ({mapLayerInstance, rangeGraphRef, deck, map, setPopUp} : Contr
                             disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
                             background={COLORS.GLOBAL.backgroundDark} 
                             onClick={() => {
-                                addInstanceToArray(mapLayerInstance as MapLayer);
+                                saveLayerScreenshot(mapLayerInstance as MapLayer);
+                                toaster.create({
+                                    description: "El indicador se ha guardado correctamente para el reporte.",
+                                    type: "info",
+                                    duration: 6000,
+                                });
                             }}
                         >
                             <img src={SaveLayer} alt="Guardar Capa" />
                             {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
-                            {showAddedTooltip && (
-                                <div className="added-tooltip">
-                                    Capa agregada
-                                </div>
-                            )}
                         </Button>
 
                         <Button className="button"
