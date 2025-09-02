@@ -14,7 +14,6 @@ export const toaster = createToaster({
   pauseOnPageIdle: true,
   //offsets: "20dvw"
   offsets: { left: "0px", top: "0px", right: "20dvw", bottom: "2dvh" },
-
 })
 
 export const Toaster = () => {
@@ -22,7 +21,7 @@ export const Toaster = () => {
     <Portal>
       <ChakraToaster toaster={toaster} insetInline={{ mdDown: "4" }}>
         {(toast) => (
-          <Toast.Root width={{ md: "sm" }}>
+          <Toast.Root width="fit-content" style={{ backgroundColor: "rgba(241, 240, 238, 0.8)", fontFamily: "Roboto", fontWeight: 300, fontSize: "var(--font-size-button)", fontStyle: "italic", minWidth: "20dvw", maxWidth: "32dvw", marginLeft: "auto", marginRight: 0 }}>
             {toast.type === "loading" ? (
               <Spinner size="sm" color="blue.solid" />
             ) : (

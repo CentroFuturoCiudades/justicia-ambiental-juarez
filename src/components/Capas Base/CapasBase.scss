@@ -1,12 +1,6 @@
-.capas-base-container {
-
-  &__itemContent {
-    padding: 0;
-   // border-radius: 0;
-    transition: none;
-  }
-
-  &__itemBody {
+.right-accordion {
+  border-radius: 0.3dvw;
+  &__body {
     display: flex;
     flex-direction: column;
     background-color: var(--background-light);
@@ -14,6 +8,21 @@
   }
 }
 
-.chakra-accordion__itemContent {
-  transition: all 0.3s ease-in-out;
+.accordion__item--right {
+  background-color: var(--background-light);
+}
+
+.dropdown--right {
+  height: 3.65vh;
+}
+
+.checkbox--right {
+  border: none;
+  .checkbox__content {
+    min-height: 0;
+    gap: 0.3dvw;
+  }
+  .checkbox__label {
+    font-style: normal;
+  }
 }

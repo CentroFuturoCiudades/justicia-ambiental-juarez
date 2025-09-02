@@ -121,7 +121,10 @@
   box-shadow: none !important;
   border-color: transparent !important;
 }
-.dropdown[aria-expanded="true"] {
+.dropdown--modifyRadius {
+  border-radius: 0.15dvw;
+}
+.dropdown--modifyRadius[aria-expanded="true"] {
   border-radius: 0.15dvw 0.15dvw 0 0;
 }
 .dropdown:hover {

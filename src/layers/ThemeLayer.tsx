@@ -4,6 +4,9 @@ import { GeoJsonLayer } from "deck.gl";
 import { MapLayer } from "../classes/MapLayer";
 import { LAYERS } from "../utils/constants";
 
+/* THEME LAYER:
+    - Crea una capa geojson con la TEMATICA seleccionada
+*/
 const ThemeLayer = () => {
     const { 
         agebsGeoJson, coloniasGeoJson,
@@ -14,11 +17,12 @@ const ThemeLayer = () => {
         selectionMode,
         selectedAGEBS, setSelectedAGEBS,
         selectedColonias, setSelectedColonias,
-        filteredFeatures
+        filteredFeatures,
     } = useAppContext();
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer | null>(null);
 
+    // Maneja la seleccion de agebs/colonias
     const handleSelectedElements = (info: any) => {
         if (info) {
             const isAgeb = activeLayerKey === "agebs";
@@ -28,53 +32,52 @@ const ThemeLayer = () => {
         }
     };
 
-    //crear mapLayerInstance, geojsonLayer y la data
+    // Crea la capa de la tematica seleccionada
     useEffect(() => {
-    
-        if(activeLayerKey === null) {
+
+        if(activeLayerKey === null || !selectedLayer) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
             return;
         };
 
-        let layer;
-        if(selectedLayer) {
-            layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        }
+        const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
 
-        //crea instancia
+        // Crea instancia de MapLayer
         const mapLayerInstance = new MapLayer({
             opacity: 1,
-            title: layer ? layer.title : "initial",
-            formatValue: layer ? layer.formatValue : "",
-            theme: layer ? layer.tematica : "default",
+            title: layer.title,
+            formatValue: layer.formatValue,
+            theme: layer.tematica,
         });
 
-        let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson)); //copia del geojson universal de agebs/colonias
-        if (layer?.property && !jsonData.features?.some((f: any) => layer.property in f.properties)) {
+        // Copia del geojson universal de agebs/colonias (para aplicar cambios dependiendo del dataProcessing de la capa seleccionada)
+        let jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson));
+
+        // Verifica si la propiedad de la capa está presente en los features (quitar cuando esten los datos completos)
+        if ( !jsonData.features?.some((f: any) => layer.property in f.properties) ) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
             return;
         }
 
+        // Si hay procesamiento especifico de la capa, aplica cambios a los datos
         if ( layer?.dataProcesssing ) { 
-            jsonData = layer.dataProcesssing(jsonData); //proceso el geojson completo
+            jsonData = layer.dataProcesssing(jsonData); //aplica cambios a la copia
         }
-        
-        //procesa la data que va en layerCard
+
+        // Data de la capa: todos los features y los filtrados (en caso de que este activado el radio)
         const allFeatures = jsonData.features;
         const data = {
             ...jsonData, 
             features: selectionMode === "radius" ? filteredFeatures : jsonData.features,
             allFeatures,
          };
-        console.log("data for themelayer", data);
-        //setTematicaData(jsonData); //toda la data
         setTematicaData(data);
 
-        //crea la capa geojson
+        // Crea la capa geojson de tematica (con todos los features o los filtrados dentro del radio)
         const geoJsonLayer = mapLayerInstance.getLayer(
             data,
             layer?.property || "",

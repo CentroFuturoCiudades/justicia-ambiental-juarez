@@ -4,7 +4,11 @@ import { GeoJsonLayer } from "deck.gl";
 
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
-
+/*
+    COMPLEMENTARY LAYERS:
+    - Fetch de cada "capa complementaria" seleccionada (selectedBaseLayers)
+    - Se crea una GeoJsonLayer por cada selectedBaseLayer
+*/
 const ComplementaryLayers = () => {
     const { selectedBaseLayers } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer }>({});
@@ -18,7 +22,6 @@ const ComplementaryLayers = () => {
     
         selectedBaseLayers.forEach(({key, url}) => {
             if (!baseLayers[key]) {
-                //const layer = CAPAS_BASE[layerKey as keyof typeof CAPAS_BASE];
                 if (!url) {
                     console.error(`No URL for layer: ${key}`);
                     return null;

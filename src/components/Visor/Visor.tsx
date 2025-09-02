@@ -5,7 +5,7 @@ import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS } from "../../utils/constants";
-import { Box } from "@chakra-ui/react";
+import { Box, Slider, SliderControl } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
@@ -32,6 +32,8 @@ const Visor = () => {
         activeLayerKey,
         mapLayers,
         dragMap,
+        radius, setRadius,
+        selectionMode,
     } = useAppContext();
 
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -144,6 +146,26 @@ const Visor = () => {
                         setPopUp={setDownloadPopUp} 
                     />
                 </div>
+
+                {selectionMode === "radius" && 
+                    <div className="slider">
+                        <Slider.Root 
+                            className="slider__root"
+                            value={[radius]} //intial value of 2000
+                            min={1000}
+                            max={5000}
+                            step={100}
+                            onValueChange={details => setRadius(details.value[0])}
+                        >
+                            <SliderControl>
+                                <Slider.Track className="slider__track" >
+                                    <Slider.Range className="slider__range" />
+                                </Slider.Track>
+                                <Slider.Thumbs className="slider__thumb" />
+                            </SliderControl>
+                        </Slider.Root>
+                    </div>
+                }
 
                 {/*Download PopUp */}
                 {downloadPopUp && mapLayers.length > 0 && (
