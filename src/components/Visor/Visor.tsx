@@ -126,9 +126,7 @@ const Visor = () => {
 
                 <div className="visor__dropDowns">
                     <CapasBase />
-                    {activeLayerKey === "colonias" && (
-                        <BusquedaColonia coloniasData={coloniasGeoJson} />
-                    )}
+                    { activeLayerKey === "colonias" && <BusquedaColonia /> }
                 </div>
 
                 {selectedLayer && mapLayerInstance && (
@@ -137,20 +135,18 @@ const Visor = () => {
                     </div>
                 )}
 
-                <div className="visor__topButtons">
-                    <Toolbar 
-                        rangeGraphRef={rangeGraphRef}
-                        deck={deck}
-                        map={map}
-                        setPopUp={setDownloadPopUp}
-                    />
-                </div>
+                <Toolbar 
+                    rangeGraphRef={rangeGraphRef}
+                    deck={deck}
+                    map={map}
+                    setPopUp={setDownloadPopUp}
+                />
 
                 {selectionMode === "radius" && 
                     <RadiusSlider />
                 }
 
-                {/*Download PopUp */}
+                {/*Download Summary PopUp */}
                 {downloadPopUp && mapLayers.length > 0 && (
                     <PopUp deck={deck.current} map={map.current} setPopUp={setDownloadPopUp} />
                 )}

@@ -7,16 +7,14 @@ import { FixedSizeList as List } from "react-window";
 import { AiOutlineDown } from "react-icons/ai";
 //import { VariableSizeList as List } from "react-window";
 
-
-type ColoniasProps = {
-    coloniasData: any;
-};
-
-const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
+const BusquedaColonia = () => {
 
     const [colonias, setColonias] = useState<string[]>([]);
     const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
-    const { selectedColonias, setSelectedColonias } = useAppContext();
+    const { 
+        coloniasGeoJson,
+        selectedColonias, setSelectedColonias 
+    } = useAppContext();
 
 
 
@@ -28,11 +26,11 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
     };
 
     useEffect(() => {
-        if (coloniasData && coloniasData.features) {
-            const nombres = coloniasData.features.map((f: any) => f.properties.name);
+        if (coloniasGeoJson && coloniasGeoJson.features) {
+            const nombres = coloniasGeoJson.features.map((f: any) => f.properties.name);
             setColonias(nombres);
         }
-    }, [coloniasData]);
+    }, [coloniasGeoJson]);
 
     const coloniasFiltradas = useMemo(() => {
 
@@ -53,9 +51,9 @@ const BusquedaColonia = ({ coloniasData }:  ColoniasProps) => {
     }, [colonias, coloniaBuscada, selectedColonias]);
 
     return (
-        <div>
+        <div >
             <Accordion.Root collapsible className="right-accordion">
-                <Accordion.Item value="main" className="accordion__item accordion__item--right" >
+                <Accordion.Item value="busqueda-colonias" className="accordion__item accordion__item--right" >
                     <Accordion.ItemTrigger className="dropdown dropdown--right" >
                         <Span className="dropdown__title"> búsqueda por colonia </Span>
                         <Accordion.ItemIndicator className="dropdown__indicator">

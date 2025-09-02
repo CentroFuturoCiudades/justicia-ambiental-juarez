@@ -24,7 +24,7 @@ const CapasBase = () => {
     return (
         <div>
             <Accordion.Root collapsible className="right-accordion">
-                <Accordion.Item value="main" className="accordion__item  accordion__item--right" >
+                <Accordion.Item value="base" className="accordion__item  accordion__item--right" >
 
                     <Accordion.ItemTrigger className="dropdown dropdown--right" >
                         <Span className="dropdown__title"> capas complementarias </Span>
