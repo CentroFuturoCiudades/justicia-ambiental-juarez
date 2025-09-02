@@ -21,8 +21,9 @@
         z-index: 1;
     }
     &__image {
-        height: auto;
-        object-fit: cover;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
     }
 
 }

@@ -91,7 +91,6 @@
         height: 7dvh;
         width: 7dvh;
         border-radius: 50%;
-        padding: 1dvh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -99,11 +98,9 @@
         transition: transform 0.3s ease;
 
         img {
-          //height: 6dvh;
-          //width: auto;
-          height: 100%;
-          width: 100%;
-          object-fit: cover;
+          max-width: 90%;
+          max-height: 90%;
+          object-fit: contain;
         }
       }
     }
