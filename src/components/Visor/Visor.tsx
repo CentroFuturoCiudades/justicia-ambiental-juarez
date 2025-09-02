@@ -5,12 +5,13 @@ import { useAppContext } from "../../context/AppContext";
 import Tematica from "../Tematica/Tematica";
 import CapasBase from "../Capas Base/CapasBase";
 import { LAYERS, COLORS } from "../../utils/constants";
-import { Box, Slider, SliderControl } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { useRef } from "react";
 import Toolbar from "../Toolbar/Toolbar";
+import RadiusSlider from "../Toolbar/RadiusSlider";
 import InfoTooltip from "../Layer Card/InfoTooltip";
 import Layers from "../Layers/Layers";
 import PopUp from "../Download PopUp/PopUp";
@@ -32,7 +33,6 @@ const Visor = () => {
         activeLayerKey,
         mapLayers,
         dragMap,
-        radius, setRadius,
         selectionMode,
     } = useAppContext();
 
@@ -147,23 +147,7 @@ const Visor = () => {
                 </div>
 
                 {selectionMode === "radius" && 
-                    <div className="slider">
-                        <Slider.Root 
-                            className="slider__root"
-                            value={[radius]} //intial value of 2000
-                            min={1000}
-                            max={5000}
-                            step={100}
-                            onValueChange={details => setRadius(details.value[0])}
-                        >
-                            <SliderControl>
-                                <Slider.Track className="slider__track" >
-                                    <Slider.Range className="slider__range" />
-                                </Slider.Track>
-                                <Slider.Thumbs className="slider__thumb" />
-                            </SliderControl>
-                        </Slider.Root>
-                    </div>
+                    <RadiusSlider />
                 }
 
                 {/*Download PopUp */}

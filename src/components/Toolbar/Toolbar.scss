@@ -39,3 +39,29 @@
 .button-row .button:focus-visible {
   outline: none !important;
 }
+
+.slider {
+  position: absolute;
+  top: 10vh;
+  left: 6dvw;
+  background-color: var(--background-dark);
+  border-radius: 0.5dvw;
+
+  &__root {
+    width: 12dvw;
+    padding: 0.3dvh 0.5dvw;
+  }
+  &__track {
+      background-color: var(--background);
+      height: 0.4dvh;
+  }
+  &__range {
+      background-color: var(--background);
+  }
+  &__thumb {
+      background-color: var(--background-medium);
+      border: none;
+      height: 1.8dvh;
+      width: 1.8dvh;
+  }
+}

@@ -82,29 +82,3 @@
     }
 
 }
-
-.slider {
-    position: absolute;
-    top: 10vh;
-    left: 6dvw;
-    background-color: var(--background-dark);
-    padding: 0.3dvw;
-    border-radius: 0.3dvw;
-
-    &__root {
-        width: 12dvw;
-    }
-    &__track {
-        background-color: var(--background);
-        height: 0.5dvh;
-    }
-    &__range {
-        background-color: var(--background);
-    }
-    &__thumb {
-        background-color: var(--background-medium);
-        border: none;
-        height: 2dvh;
-        width: 2dvh;
-    }
-}
