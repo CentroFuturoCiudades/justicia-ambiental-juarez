@@ -42,6 +42,21 @@
   outline: none !important;
 }
 
+.circle {
+  position: absolute;
+  top: 0.1vw;
+  right: 0.1vw;
+  width: 0.8vw;
+  height: 0.8vw;
+  border-radius: 50%;
+  background: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.6vw;
+}
+
 .slider {
   position: absolute;
   top: 10vh;
