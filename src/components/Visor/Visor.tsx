@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import LayerCard from "../Layer Card/LayerCard";
 import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
 import { useRef } from "react";
-import Controls from "../Controls/Controls";
+import Toolbar from "../Toolbar/Toolbar";
 import InfoTooltip from "../Layer Card/InfoTooltip";
 import Layers from "../Layers/Layers";
 import PopUp from "../Download PopUp/PopUp";
@@ -138,12 +138,11 @@ const Visor = () => {
                 )}
 
                 <div className="visor__topButtons">
-                    <Controls 
-                        mapLayerInstance={mapLayerInstance} 
-                        rangeGraphRef={rangeGraphRef} 
-                        deck={deck} 
-                        map={map} 
-                        setPopUp={setDownloadPopUp} 
+                    <Toolbar 
+                        rangeGraphRef={rangeGraphRef}
+                        deck={deck}
+                        map={map}
+                        setPopUp={setDownloadPopUp}
                     />
                 </div>
 
