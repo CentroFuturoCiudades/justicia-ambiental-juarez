@@ -9,9 +9,9 @@ const RadiusSlider = () => {
             <Slider.Root 
                 className="slider__root"
                 value={[radius]} //intial value of 2000
-                min={1000}
-                max={5000}
-                step={100}
+                min={500}
+                max={2000}
+                step={500}
                 onValueChange={details => setRadius(details.value[0])}
             >
                 <SliderControl>
