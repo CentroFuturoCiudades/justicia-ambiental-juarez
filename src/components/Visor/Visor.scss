@@ -64,13 +64,6 @@
         }
     }
 
-    &__topButtons {
-        position: absolute;
-        top: 2vh;
-        left: 2vw;
-        height: 6vh;
-    }
-
     &__dropDowns {
         position: absolute;
         top: 2vh;
@@ -79,7 +72,6 @@
         flex-direction: column;
         gap: 0.3rem;
         width: 17.13vw;
-        z-index: 10;
     }
 
 }
