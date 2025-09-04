@@ -2,20 +2,20 @@ import {
     ThemeLayer,
     LensLayer,
     ComplementaryLayers,
-    DissolvedLayer
+    SelectedLayers,
 } from "../../layers";
 
 const Layers = () => {
     const { layers: themeLayers } = ThemeLayer();
     const { layers: lensLayers } = LensLayer();
     const { layers: complementaryLayers } = ComplementaryLayers();
-    const { layers: dissolvedLayers } = DissolvedLayer();
+    const { layers: selectedLayers } = SelectedLayers();
 
     const layers: any[] = [
         ...themeLayers,
         ...complementaryLayers,
         ...lensLayers,
-        ...dissolvedLayers
+        ...selectedLayers
     ];
 
     return { layers };

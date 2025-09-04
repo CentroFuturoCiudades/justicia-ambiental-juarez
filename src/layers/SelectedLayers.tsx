@@ -5,7 +5,11 @@ import { dissolve } from "@turf/dissolve";
 import { flatten } from "@turf/flatten";
 import { featureCollection } from "@turf/turf";
 
-const DissolvedLayer = () => {
+/*
+    SELECTED LAYER:
+    - Crea una capa a partir de las agebs/colonias seleccionadas
+*/
+const SelectedLayer = () => {
     const { 
         agebsGeoJson, coloniasGeoJson,
         activeLayerKey,
@@ -15,8 +19,8 @@ const DissolvedLayer = () => {
     } = useAppContext();
 
    let dissolvedLayer: GeoJsonLayer[] = [];
-   
-    //get geometries of selected agebs/colonias
+
+    // Obtiene features a base de los identificadores (cvegeos/nombre) seleccionados para agebs/colonias
     const selectedGeometries = useMemo(() => {
         const isAgeb = activeLayerKey === "agebs";
         const setSelected = new Set(isAgeb ? selectedAGEBS : selectedColonias);
@@ -25,6 +29,7 @@ const DissolvedLayer = () => {
         );
     }, [selectedAGEBS, selectedColonias, activeLayerKey]);
 
+    // Si hubo agebs/colonias seleccionadas, se disuelven en una sola geometria y se hace la capa
     if(selectedGeometries && selectedGeometries.length > 0) {
         try {
             const fc = featureCollection(selectedGeometries);
@@ -44,10 +49,7 @@ const DissolvedLayer = () => {
         }
     }
 
-    if(selectionMode !== "agebs") {
-        return { layers: [] };
-    }
-    return { layers: dissolvedLayer };
+    return { layers: selectionMode === "agebs" ? dissolvedLayer : [] };
 }
 
-export default DissolvedLayer;
+export default SelectedLayer;

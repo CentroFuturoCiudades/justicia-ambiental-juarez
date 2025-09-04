@@ -2,6 +2,7 @@ import { type MapViewState } from "deck.gl";
 import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
 import type { FeatureCollection } from "geojson";
 import { MapLayer } from "../classes/MapLayer";
+import type { LayerKey } from "../utils/constants";
 
 type ViewState = {
     latitude: number;
@@ -24,9 +25,11 @@ interface AppContextI {
     setFilteredFeatures: Dispatch<SetStateAction<any[]>>;
     dragMap: boolean;
     setDragMap: Dispatch<SetStateAction<boolean>>;
+    radius: number;
+    setRadius: Dispatch<SetStateAction<number>>;
     //
-    selectedLayer: string;
-    setSelectedLayer: Dispatch<SetStateAction<string>>;
+    selectedLayer: LayerKey;
+    setSelectedLayer: Dispatch<SetStateAction<LayerKey>>;
     activeLayerKey: string | null;
     setActiveLayerKey: Dispatch<SetStateAction<string | null>>;
     selectionMode: string | null;
@@ -76,8 +79,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [tematicaData, setTematicaData] = useState<any>(null);
     const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
     const [dragMap, setDragMap] = useState<boolean>(false);
+    const [radius, setRadius] = useState<number>(1000);
     //una capa a la vez
-    const [selectedLayer, setSelectedLayer] = useState("");
+    const [selectedLayer, setSelectedLayer] = useState<LayerKey>("");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
     const [selectionMode, setSelectionMode] = useState<string | null>(null);
 
@@ -112,6 +116,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setFilteredFeatures,
             dragMap,
             setDragMap,
+            radius,
+            setRadius,
             //
             selectedLayer,
             setSelectedLayer,

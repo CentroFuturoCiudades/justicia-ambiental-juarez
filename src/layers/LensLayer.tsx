@@ -6,6 +6,11 @@ import { GeoJsonLayer } from "deck.gl";
 import  booleanIntersects  from "@turf/boolean-intersects"; 
 import { PathStyleExtension } from '@deck.gl/extensions';
 
+/*
+    LENS LAYER:
+    - Crea un lente circular alrededor del punto seleccionado
+    - Determina los filteredFeatures dentro del lente (radio)
+*/
 const LensLayer = () => {
     
     const {
@@ -15,18 +20,18 @@ const LensLayer = () => {
         tematicaData,
         setFilteredFeatures,
         setDragMap,
+        radius
     } = useAppContext();
-    const [coords, setCoords] = useState({ latitude: viewState.latitude, longitude: viewState.longitude });
-    const [circleCoords, setCircleCoords] = useState(coords);
-    const [radius, setRadius] = useState(2000);
+
+    const [circleCoords, setCircleCoords] = useState({
+        latitude: viewState.latitude,
+        longitude: viewState.longitude
+    });
     const [polygon, setPolygon] = useState<any>();
     const [flagDragEnd, setFlagDragEnd] = useState<boolean>(false);
     const allFeatures = tematicaData ? tematicaData.allFeatures : [];
 
-    useEffect(() => {
-        setCircleCoords(coords)
-    }, [coords])
-    
+    // Crea circulo basado en coordenadas del mapa y valor de radio
     useEffect(() => {
         if(!circleCoords) return;
         const temp = turf.circle(
@@ -40,15 +45,17 @@ const LensLayer = () => {
         setPolygon(temp);
     }, [circleCoords, radius]);
 
+    // Filtra los features: busca entre todos los features cuales intersectan con el circulo (cada que termina el Drag)
     useEffect(() => {
         if (!polygon || !selectedLayer || selectionMode !== "radius") return;
         const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
         const filtered = allFeatures.filter((feature: any) =>
-            booleanIntersects(turf.centroid(feature), circlePolygon)
+            booleanIntersects(feature, circlePolygon)
         );
         setFilteredFeatures(filtered);
-    }, [flagDragEnd, selectionMode]);
+    }, [flagDragEnd, selectionMode, radius]);
 
+    // lensLayer: crea un GeoJsonLayer para el circulo
     const lensLayer = new GeoJsonLayer({
         id: "lens-layer",
         data: polygon,
@@ -72,7 +79,6 @@ const LensLayer = () => {
             });
         },
         onDragEnd: (info: any, event: any) => {
-            //debouncedHover(info);
             setDragMap(false);
             setFlagDragEnd(true);
         },
@@ -82,6 +88,7 @@ const LensLayer = () => {
         }
     });
 
+    // Centro del circulo
     const centerPointLayer = new GeoJsonLayer({
         id: "center-point-layer",
         data: circleCoords

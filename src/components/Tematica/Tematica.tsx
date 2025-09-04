@@ -4,6 +4,7 @@ import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
 import SavedLayerIcon from "/assets/Icono CAPA AGREGADA.png"
 import { AiOutlineDown } from "react-icons/ai";
+import type { LayerKey } from "../../utils/constants";
 
 
 
@@ -11,7 +12,12 @@ const Tematica = () => {
 
     const { selectedLayer, setSelectedLayer, setActiveLayerKey, mapLayers, setSelectionMode } = useAppContext();    
 
-    const handleLayerToggle = (layerKey: string) => {
+    /* Al seleccionar una capa de Tematica:
+        - Se actualiza la capa seleccionada
+        - Se establece la clave de la capa activa (agebs/colonias)
+        - Se establece el modo de selección
+    */
+    const handleLayerToggle = (layerKey: LayerKey) => {
         setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
         setActiveLayerKey( layerKey === selectedLayer ? null : "agebs");
         setSelectionMode( layerKey === selectedLayer ? null : "agebs");
@@ -22,7 +28,7 @@ const Tematica = () => {
             <Accordion.Root collapsible className="accordion">
                 <Accordion.Item value="tematica" className="accordion__item" >
 
-                    <Accordion.ItemTrigger className="dropdown">
+                    <Accordion.ItemTrigger className="dropdown dropdown--modifyRadius">
                         <Span className="dropdown__title">temática</Span>
                         <Accordion.ItemIndicator  className="dropdown__indicator">
                             <AiOutlineDown/>
@@ -44,7 +50,7 @@ const Tematica = () => {
 
                                     <Accordion.ItemContent className="accordion__content">
                                         <AccordionItemBody className="accordion__subcontent" >
-                                            {section.layers.map((layerKey, idx) => (
+                                            {section.layers.map((layerKey) => (
                                                 <Checkbox.Root 
                                                     cursor={"pointer"} 
                                                     variant={"solid"} 

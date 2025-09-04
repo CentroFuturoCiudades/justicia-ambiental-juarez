@@ -1,9 +1,11 @@
 .button-row {
   display: flex;
   gap: 0.65vw;
-  width: 100%;
-  height: 100%;
   justify-content: flex-start;
+  position: absolute;
+  top: 2vh;
+  left: 2vw;
+  height: 6vh;
 }
 
 .button {
@@ -15,6 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: var(--background-dark);
 
   .img {
     width: 100%;
@@ -52,4 +55,30 @@
   justify-content: center;
   color: white;
   font-size: 0.6vw;
+}
+
+.slider {
+  position: absolute;
+  top: 10vh;
+  left: 6dvw;
+  background-color: var(--background-dark);
+  border-radius: 0.5dvw;
+
+  &__root {
+    width: 12dvw;
+    padding: 0.3dvh 0.5dvw;
+  }
+  &__track {
+      background-color: var(--background);
+      height: 0.4dvh;
+  }
+  &__range {
+      background-color: var(--background);
+  }
+  &__thumb {
+      background-color: var(--background-medium);
+      border: none;
+      height: 1.8dvh;
+      width: 1.8dvh;
+  }
 }
