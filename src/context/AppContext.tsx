@@ -27,6 +27,8 @@ interface AppContextI {
     setDragMap: Dispatch<SetStateAction<boolean>>;
     radius: number;
     setRadius: Dispatch<SetStateAction<number>>;
+    flagSlider: boolean;
+    setFlagSlider: Dispatch<SetStateAction<boolean>>;
     //
     selectedLayer: LayerKey;
     setSelectedLayer: Dispatch<SetStateAction<LayerKey>>;
@@ -80,6 +82,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
     const [dragMap, setDragMap] = useState<boolean>(false);
     const [radius, setRadius] = useState<number>(1000);
+    const [flagSlider, setFlagSlider] = useState<boolean>(false);
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState<LayerKey>("");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
@@ -118,6 +121,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setDragMap,
             radius,
             setRadius,
+            flagSlider,
+            setFlagSlider,
             //
             selectedLayer,
             setSelectedLayer,

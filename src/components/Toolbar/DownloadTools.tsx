@@ -1,5 +1,6 @@
 import { useAppContext } from "../../context/AppContext";
 import { Group, Button } from "@chakra-ui/react";
+import { Tooltip } from "../ui/Tooltip";
 import { toaster } from "../ui/toaster";
 import html2canvas from "html2canvas";
 import { MapLayer } from "../../classes/MapLayer";
@@ -7,7 +8,6 @@ import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 import { defaultViewState } from "../../context/AppContext";
 import SaveLayer from '/assets/Icono GUARDAR CAPA.png'
 import IconDownload from '/assets/Icono DESCARGAR.png'
-import { COLORS } from "../../utils/constants"; //pasar a css
 import type { DownloadProps } from "./Toolbar";
 
 const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => {
@@ -20,6 +20,13 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
         activeLayerKey,
         selectedBaseLayers,
     } = useAppContext();
+
+    const hasSelection = (
+        (activeLayerKey === "agebs" && selectedAGEBS.length > 0) || 
+        (activeLayerKey === "colonias" && selectedColonias.length > 0)
+    ) ? true : false;
+
+    const hasScreenshots = (mapLayers.length > 0) ? true : false;
 
     const saveLayerScreenshot = async (instance: MapLayer) => {
         setViewState(defaultViewState);
@@ -50,32 +57,38 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
 
     return (
         <div>
-            <Group attached style={{ height: "100%" }}>
-                <Button className="button"
-                    position={"relative"}
-                    disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
-                    background={COLORS.GLOBAL.backgroundDark} 
-                    onClick={() => {
-                        saveLayerScreenshot(mapLayerInstance as MapLayer);
-                        toaster.create({
-                            description: "El indicador se ha guardado correctamente para el reporte.",
-                            type: "info",
-                            duration: 6000,
-                        });
-                    }}
-                >
-                    <img src={SaveLayer} alt="Guardar Capa" />
-                    {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
-                </Button>
+            <Group attached className="button_group">
+                <Tooltip content="Guardar Capa" disabled={!hasSelection}>
+                    <Button 
+                        className="button"
+                        position={"relative"}
+                        disabled={!hasSelection}
+                        onClick={() => {
+                            saveLayerScreenshot(mapLayerInstance as MapLayer);
+                            toaster.create({
+                                description: "El indicador se ha guardado correctamente para el reporte.",
+                                type: "info",
+                                duration: 6000,
+                            });
+                        }}
+                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
+                    >
+                        <img src={SaveLayer} alt="Guardar Capa" style={{maxWidth: "90%", maxHeight: "90%"}}/>
+                        {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
+                    </Button>
+                </Tooltip>
 
-                <Button className="button"
-                    disabled={mapLayers.length === 0}
-                    background={COLORS.GLOBAL.backgroundDark}
-                    onClick={() => {
-                        setPopUp(true);
-                    }}>
-                    <img src={IconDownload} alt="Descargar" />
-                </Button>
+                <Tooltip content="Descargar Resumen" disabled={!hasScreenshots}>
+                    <Button className="button"
+                        disabled={!hasScreenshots}
+                        onClick={() => {
+                            setPopUp(true);
+                        }}
+                        style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                    >
+                        <img src={IconDownload} alt="Descargar" />
+                    </Button>
+                </Tooltip>
             </Group>
         </div>
     );

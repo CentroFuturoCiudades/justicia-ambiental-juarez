@@ -20,7 +20,8 @@ const LensLayer = () => {
         tematicaData,
         setFilteredFeatures,
         setDragMap,
-        radius
+        radius,
+        flagSlider, setFlagSlider,
     } = useAppContext();
 
     const [circleCoords, setCircleCoords] = useState({
@@ -53,7 +54,8 @@ const LensLayer = () => {
             booleanIntersects(feature, circlePolygon)
         );
         setFilteredFeatures(filtered);
-    }, [flagDragEnd, selectionMode, radius]);
+        setFlagSlider(false);
+    }, [flagDragEnd, selectionMode, flagSlider]);
 
     // lensLayer: crea un GeoJsonLayer para el circulo
     const lensLayer = new GeoJsonLayer({

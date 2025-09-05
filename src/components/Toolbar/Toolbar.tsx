@@ -19,14 +19,14 @@ const Toolbar = ({ rangeGraphRef, deck, map, setPopUp }: DownloadProps) => {
     const navigate = useNavigate();
     const { selectedLayer } = useAppContext();
     return (
-        <div className="button-row">
+        <div className="toolbar">
 
             {/* Home */}
             <Button className="button"
                 onClick={() => navigate("/")}>
                 <img src={Home} alt="Home" />
             </Button>
-        
+
             <ZoomTools />
 
             {selectedLayer && 

@@ -73,5 +73,10 @@
         gap: 0.3rem;
         width: 17.13vw;
     }
-
+    &__radiusSlider {
+        position: absolute;
+        top: 10vh;
+        left: 6vw;
+        //width: 17.13vw;
+    }
 }

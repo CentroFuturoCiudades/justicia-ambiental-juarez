@@ -15,6 +15,7 @@ import RadiusSlider from "../Toolbar/RadiusSlider";
 import InfoTooltip from "../Layer Card/InfoTooltip";
 import Layers from "../Layers/Layers";
 import PopUp from "../Download PopUp/PopUp";
+import ReactDOM from "react-dom";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -23,6 +24,15 @@ const Visor = () => {
     const deck = useRef<any>(null);
     const map = useRef<any>(null);
     const layerCardRef = useRef<HTMLDivElement | null>(null);
+    const [showHoverCard, setShowHoverCard] = useState(false);
+    const [cardRect, setCardRect] = useState<DOMRect | null>(null);
+    const handleInfoHover = (show: boolean) => {
+        setShowHoverCard(show);
+        if (show && layerCardRef.current) {
+            setCardRect(layerCardRef.current.getBoundingClientRect());
+        }
+    };
+
     const { 
         viewState, setViewState, 
         setAgebsGeoJson,
@@ -87,16 +97,16 @@ const Visor = () => {
                     <Tematica />
 
                     {selectedLayer && tematicaData && mapLayerInstance && (
-                        <div ref={layerCardRef}>
                         <LayerCard
                             selectedLayerData={selectedLayerData}
                             tematicaData={tematicaData}
                             color={sectionColor}
                             mapLayerInstance={mapLayerInstance}
                             rangeGraphRef={rangeGraphRef}
-                            onInfoHover={setShowInfoTooltip}
+                            //onInfoHover={setShowInfoTooltip}
+                            onInfoHover={handleInfoHover}
+                            layerCardRef={layerCardRef}
                         />
-                        </div>
                     )}
 
                 </Box>
@@ -151,7 +161,9 @@ const Visor = () => {
                     <PopUp deck={deck.current} map={map.current} setPopUp={setDownloadPopUp} />
                 )}
 
-                {showInfoTooltip && <InfoTooltip />}
+                {showHoverCard && cardRect && 
+                    <InfoTooltip cardRect={cardRect} />
+                }
             </div>
         </div>
        );

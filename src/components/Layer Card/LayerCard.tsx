@@ -1,7 +1,5 @@
 import { useAppContext } from "../../context/AppContext";
-import { COLORS } from "../../utils/constants";
 import type {Feature} from "geojson";
-import { useRef } from "react";
 import "./LayerCard.scss";
 import { IoInformationCircleSharp } from "react-icons/io5";
 
@@ -13,10 +11,11 @@ type LayerCardProps = {
     mapLayerInstance: any;
     rangeGraphRef: React.RefObject<HTMLDivElement | null>;
     onInfoHover: any;
+    layerCardRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 
-const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, rangeGraphRef, onInfoHover}: LayerCardProps) => {
+const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, rangeGraphRef, onInfoHover, layerCardRef }: LayerCardProps) => {
 
     const { selectedAGEBS, selectedColonias, activeLayerKey, selectionMode } = useAppContext();
     const isRadius = selectionMode === "radius";
@@ -37,40 +36,26 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, r
     const description = mapLayerInstance.getDescription(selected, selectedLayerData.title, activeLayerKey, averageFormatted);
 
     return (
-        <div>
-            <div className="layerCard" style={{borderColor: color}}>
-                <div className="layerCard__cardTitle" style={{background: color}}> 
-                    {selected.length === 0 ? 
-                        <p>{selectedLayerData?.title}</p>
-                    : 
-                        <p>{selectedLayerData?.title} por {(activeLayerKey === "agebs" ? "AGEBS" : "Colonias")}</p>
-                    }
-
-                    {/*<div className="layerCard__infoIconWrapper">
-                        <IoInformationCircleSharp className="layerCard__infoIcon" />
-                        <div className="layerCard__tooltip">
-                            Información de la capa.
-                        </div>
-                    </div>*/}
-                    <div
-                        onMouseEnter={onInfoHover}
-                        onMouseLeave={() => onInfoHover(null)}
-                        style={{ display: "inline-block" }}
-                    >
-                        <IoInformationCircleSharp />
-                    </div>
-                </div>
-                <div className="layerCard__layerCardBody">
-                    <div>
-                        <p>{description}</p>
-                    </div>
-                </div>
-                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
-                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
-                </div>
-                <div>
-                    <p className="layerCard__source">Fuente: XXX </p>
-                </div>
+        <div className="layerCard" style={{borderColor: color}} ref={layerCardRef}>
+            <div className="layerCard__header" style={{background: color}}> 
+                <p className="layerCard__header__title">
+                    {selected.length === 0 ? selectedLayerData.title : 
+                    `${selectedLayerData?.title} por ${activeLayerKey === "agebs" ? "AGEBS" : "Colonias"}`}
+                </p>
+                <span
+                    //ref={layerCardRef}
+                    onMouseEnter={() => onInfoHover(true)}
+                    onMouseLeave={() => onInfoHover(false)}
+                    style={{ display: "inline-block", cursor: "pointer" }}
+                >
+                    <IoInformationCircleSharp className="layerCard__header__icon"/>
+                </span>
+            </div>
+            <div className="layerCard__layerCardBody">
+                <p>{description}</p>
+            </div>
+            <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.3dvw 0.5dvw" }}>
+                {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
             </div>
         </div>
     );
