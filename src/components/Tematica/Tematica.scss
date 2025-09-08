@@ -1,6 +1,6 @@
 .accordion {
   &__item {
-    border-radius: 0 0 0.3vw 0.3vw;
+    border-radius: 0 0 0.2vw 0.2vw;
   }
   &__body {
     padding: 0;
@@ -82,7 +82,7 @@
   padding: 0;
   gap: 0;
   //border-radius: 0.15dvw;
-  border-radius: 0.3vw;
+  border-radius: 0.2vw;
   line-height: normal;
   font-size: var(--font-size-subtitle);
   font-family: 'Roboto';
@@ -124,11 +124,11 @@
 }
 .dropdown--modifyRadius {
   //border-radius: 0.15dvw;
-  border-radius: 0.3vw;
+  border-radius: 0.2vw;
 }
 .dropdown--modifyRadius[aria-expanded="true"] {
   //border-radius: 0.15dvw 0.15dvw 0 0;
-  border-radius: 0.3vw 0.3vw 0 0;
+  border-radius: 0.2vw 0.2vw 0 0;
 }
 .dropdown:hover {
   background: #3b3b3b !important;

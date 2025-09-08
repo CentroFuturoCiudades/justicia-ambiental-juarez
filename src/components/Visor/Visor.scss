@@ -28,13 +28,12 @@
     }
 
     &__title {
-        font-size: var(--font-size-header);
-        width: 100%;
+        font-size: var(--font-size-visor-header);
+        font-weight: 700;
         font-family: 'Space Mono', monospace;
         line-height: 1.2;
         padding: 0 0 2.5dvh 0;
         border-bottom: 2px solid var(--text-primary);
-        margin-bottom: 0;
 
         .italic {
             font-style: italic;

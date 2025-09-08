@@ -36,17 +36,18 @@
 
 /*
   --font-size-title: 50px;
+  --font-size-visor-header: 35px;
   --font-size-header: 30px;
   --font-size-subtitle: 22px;
   --font-size-body: 20px;
   --font-size-button: 15px;
 */
-  --font-size-title: min(4.45vh, 2.55vw);
-  --font-size-header2: min(3.52vh, 2vw);
-  --font-size-header: min(2.67vh, 1.53vw);
-  --font-size-subtitle: min(1.95vh, 1.12vw);
-  --font-size-body: min(1.78vh, 1.02vw);
-  --font-size-button: min(1.33vh, 0.76vw);
+  --font-size-title: min(4.45dvh, 2.55dvw);
+  --font-size-visor-header: min(3.20dvh, 1.87dvw);
+  --font-size-header: min(2.67dvh, 1.53dvw);
+  --font-size-subtitle: min(1.95dvh, 1.12dvw);
+  --font-size-body: min(1.78dvh, 1.02dvw);
+  --font-size-button: min(1.33dvh, 0.76dvw);
 
 }
 

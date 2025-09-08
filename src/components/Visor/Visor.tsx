@@ -139,7 +139,6 @@ const Visor = () => {
                     map={map}
                     setPopUp={setShowDownloadCard}
                 />
-
                 {selectionMode === "radius" && 
                     <RadiusSlider />
                 }

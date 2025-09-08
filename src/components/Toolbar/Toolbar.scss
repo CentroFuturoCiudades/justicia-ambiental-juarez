@@ -5,8 +5,7 @@
   position: absolute;
   top: 2vw;
   left: 2vw;
-  height: 3vw;
-  //min-height: 2vw;
+  height: 2.5vw;
 }
 
 .button_group {
@@ -64,33 +63,20 @@
   font-size: 0.5vw;
 }
 
+// Slider styles
 .slider {
-  max-width: 18vw;
-  //padding: 0.1dvh 0.5dvw;
+  max-width: 18dvw;
   border-radius: 0.5dvw;
   background-color: var(--background-dark);
-  padding: 0 1vw 1vh 1vw;
-  margin: 0;
+  padding: min(0.52dvw, 0.89dvh) min(0.78dvw, 1.33dvh);
   position: absolute;
-  top: 11vh;
-  left: 6vw;
-  height: auto;
+  top: calc(2dvw + 2.5dvw + 0.5dvw); // top + toolbar height + gap
+  left: 6dvw;
 }
 
 .chakra-slider__root {
-  width: 100%;
-  min-width: 0;
   height: 4dvh;
   min-height: 0;
-  padding: 0;
-  margin: 0;
-  position: relative;
-}
-
-.chakra-slider__control {
-  padding: 0;
-  //height: 0.4vh;
-  //min-height: 0;
 }
 
 .chakra-slider__track {
@@ -98,22 +84,18 @@
 }
 
 .chakra-slider__thumb {
-  width: 1vw;
-  height: 1vw;
+  width: min(1dvw, 2.5dvh);
+  height: min(1dvw, 2.5dvh);
   background-color: var(--background-medium);
   border: none;
 }
 
 .chakra-slider__marker {
-  //min-height: 0;
-  //height: 0.4dvh;
   gap: 0.9vh;
 }
 
 .chakra-slider__marker-label {
-  font-size: 0.7vw;
+  font-size: min(0.67dvw, 1.15dvh);
   line-height: 1;
-  margin: 0;
-  padding: 0;
   color: white;
 }
