@@ -30,6 +30,13 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
 
     const saveLayerScreenshot = async (instance: MapLayer) => {
         setViewState(defaultViewState);
+        const newInstance = { 
+            ...instance,
+            selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
+            complementarias: selectedBaseLayers,
+            activeKey: activeLayerKey
+        };
+        
         setTimeout(async() => {
             const imageUrl = getMapImage(deck.current, map.current, instance);
 
@@ -37,20 +44,14 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                 const response = await fetch(imageUrl);
                 const blobImage = await response.blob();
                 const base64Image = await blobToBase64(blobImage) as string;
-                instance.deckImage = base64Image;
+                newInstance.deckImage = base64Image;
             }
 
             if (rangeGraphRef.current) {
                 const canvas = await html2canvas(rangeGraphRef.current);
-                instance.graphImage = canvas.toDataURL("image/png");
+                newInstance.graphImage = canvas.toDataURL("image/png");
             }
 
-            const newInstance = { 
-                ...instance,
-                selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
-                complementarias: selectedBaseLayers,
-                activeKey: activeLayerKey
-            };
             setMapLayers(prev => [...prev, newInstance]);
         }, 300);
     };
