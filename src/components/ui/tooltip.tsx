@@ -25,12 +25,22 @@ export const Tooltip = React.forwardRef<HTMLDivElement, TooltipProps>(
 
     if (disabled) return children
 
+    const modifiedContentProps = {
+      ...contentProps,
+      css: {
+        backgroundColor: "rgba(241, 240, 238, 0.8)",
+        color: "black",
+        fontSize: "var(--font-size-body)",
+        ...(contentProps?.css || {}),
+      },
+    }
+
     return (
       <ChakraTooltip.Root {...rest}>
         <ChakraTooltip.Trigger asChild>{children}</ChakraTooltip.Trigger>
         <Portal disabled={!portalled} container={portalRef}>
           <ChakraTooltip.Positioner>
-            <ChakraTooltip.Content ref={ref} {...contentProps}>
+            <ChakraTooltip.Content ref={ref} {...modifiedContentProps}>
               {showArrow && (
                 <ChakraTooltip.Arrow>
                   <ChakraTooltip.ArrowTip />

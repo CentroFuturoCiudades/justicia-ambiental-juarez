@@ -81,7 +81,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [tematicaData, setTematicaData] = useState<any>(null);
     const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
     const [dragMap, setDragMap] = useState<boolean>(false);
-    const [radius, setRadius] = useState<number>(1000);
+    const [radius, setRadius] = useState<number>(2000);
     const [flagSlider, setFlagSlider] = useState<boolean>(false);
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState<LayerKey>("");

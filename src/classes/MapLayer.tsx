@@ -181,7 +181,6 @@ export class MapLayer {
     return <Legend
       title={title}
       colors={completeColors}
-      legendColor={COLORS.GLOBAL.backgroundDark}
       ranges={ranges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
       categorical={false}

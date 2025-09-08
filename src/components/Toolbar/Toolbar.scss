@@ -74,6 +74,7 @@
   position: absolute;
   top: 11vh;
   left: 6vw;
+  height: auto;
 }
 
 .chakra-slider__root {
@@ -97,8 +98,10 @@
 }
 
 .chakra-slider__thumb {
-  width: 1.2vw;
-  height: 1.2vw;
+  width: 1vw;
+  height: 1vw;
+  background-color: var(--background-medium);
+  border: none;
 }
 
 .chakra-slider__marker {

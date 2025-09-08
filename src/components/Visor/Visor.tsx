@@ -2,41 +2,28 @@ import "./Visor.scss";
 import DeckGL from "deck.gl";
 import Map from "react-map-gl/mapbox";
 import { useAppContext } from "../../context/AppContext";
-import Tematica from "../Tematica/Tematica";
-import CapasBase from "../Capas Base/CapasBase";
-import { LAYERS, COLORS } from "../../utils/constants";
+import { useEffect, useState, useRef } from "react";
+import { LAYERS } from "../../utils/constants";
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import Layers from "../Layers/Layers";
+import Tematica from "../Tematica/Tematica";
+import CapasComplementarias from "../Capas Complementarias/CapasComplementarias";
+import BusquedaColonia from "../Busqueda Colonia/BusquedaColonia";
 import LayerCard from "../Layer Card/LayerCard";
-import BusquedaColonia from "../Busqueda-Colonia/BusquedaColonia";
-import { useRef } from "react";
 import Toolbar from "../Toolbar/Toolbar";
 import RadiusSlider from "../Toolbar/RadiusSlider";
-import InfoTooltip from "../Layer Card/InfoTooltip";
-import Layers from "../Layers/Layers";
-import PopUp from "../Download PopUp/PopUp";
-import ReactDOM from "react-dom";
+import InfoTooltip from "../Layer Card/Info Tooltip/InfoTooltip";
+import PopUp from "../Download Card/PopUp";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 const Visor = () => {
-    const deck = useRef<any>(null);
-    const map = useRef<any>(null);
-    const layerCardRef = useRef<HTMLDivElement | null>(null);
-    const [showHoverCard, setShowHoverCard] = useState(false);
-    const [cardRect, setCardRect] = useState<DOMRect | null>(null);
-    const handleInfoHover = (show: boolean) => {
-        setShowHoverCard(show);
-        if (show && layerCardRef.current) {
-            setCardRect(layerCardRef.current.getBoundingClientRect());
-        }
-    };
 
     const { 
         viewState, setViewState, 
         setAgebsGeoJson,
-        coloniasGeoJson, setColoniasGeoJson,
+        setColoniasGeoJson,
         mapLayerInstance,
         tematicaData,
         selectedLayer,  
@@ -46,14 +33,19 @@ const Visor = () => {
         selectionMode,
     } = useAppContext();
 
-    const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
-    const tematicaKey = selectedLayerData?.tematica as keyof typeof COLORS | undefined;
-    const sectionColor = tematicaKey ? COLORS[tematicaKey]?.primary : "#ccc";
-
-    const rangeGraphRef = useRef<HTMLDivElement | null>(null);
-    const [downloadPopUp, setDownloadPopUp] = useState<boolean>(false);
-    const [showInfoTooltip, setShowInfoTooltip] = useState<boolean>(false);
     const { layers } = Layers();
+
+    // Refs
+    const deck = useRef<any>(null);
+    const map = useRef<any>(null);
+    const layerCardRef = useRef<HTMLDivElement | null>(null);
+    const rangeGraphRef = useRef<HTMLDivElement | null>(null);
+    const mapContainerRef = useRef<HTMLDivElement | null>(null);
+
+    const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
+
+    const [showDownloadCard, setShowDownloadCard] = useState<boolean>(false);
+    const [showInfoCard, setShowInfoCard] = useState(false);
 
     //FETCH AGEBS
     useEffect(() => {
@@ -99,12 +91,8 @@ const Visor = () => {
                     {selectedLayer && tematicaData && mapLayerInstance && (
                         <LayerCard
                             selectedLayerData={selectedLayerData}
-                            tematicaData={tematicaData}
-                            color={sectionColor}
-                            mapLayerInstance={mapLayerInstance}
                             rangeGraphRef={rangeGraphRef}
-                            //onInfoHover={setShowInfoTooltip}
-                            onInfoHover={handleInfoHover}
+                            onInfoHover={setShowInfoCard}
                             layerCardRef={layerCardRef}
                         />
                     )}
@@ -112,7 +100,7 @@ const Visor = () => {
                 </Box>
             </Box>
 
-            <div className="visor__mapContainer">
+            <div className="visor__mapContainer" ref={mapContainerRef}>
                 <DeckGL
                     controller={{ dragPan: !dragMap }}
                     ref={deck}
@@ -135,7 +123,7 @@ const Visor = () => {
                 </DeckGL>
 
                 <div className="visor__dropDowns">
-                    <CapasBase />
+                    <CapasComplementarias />
                     { activeLayerKey === "colonias" && <BusquedaColonia /> }
                 </div>
 
@@ -149,7 +137,7 @@ const Visor = () => {
                     rangeGraphRef={rangeGraphRef}
                     deck={deck}
                     map={map}
-                    setPopUp={setDownloadPopUp}
+                    setPopUp={setShowDownloadCard}
                 />
 
                 {selectionMode === "radius" && 
@@ -157,13 +145,16 @@ const Visor = () => {
                 }
 
                 {/*Download Summary PopUp */}
-                {downloadPopUp && mapLayers.length > 0 && (
-                    <PopUp deck={deck.current} map={map.current} setPopUp={setDownloadPopUp} />
+                {showDownloadCard && mapLayers.length > 0 && (
+                    <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} />
                 )}
 
-                {showHoverCard && cardRect && 
-                    <InfoTooltip cardRect={cardRect} />
-                }
+                <InfoTooltip
+                    show={showInfoCard}
+                    containerRef={mapContainerRef}
+                    layerCardRef={layerCardRef}
+                    selectedLayerData={selectedLayerData}
+                />
             </div>
         </div>
        );

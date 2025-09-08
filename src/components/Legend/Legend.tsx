@@ -1,7 +1,7 @@
 import React from "react"
 import "./Legend.scss"
 import { scaleLinear } from "d3-scale";
-import { COLORS, LAYERS } from "../../utils/constants";
+import { LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 
 type LegendProps = {
@@ -14,12 +14,11 @@ type LegendProps = {
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
-const Legend = ({
-  ranges, title, colors, formatValue, categorical }: LegendProps) => {
+const Legend = ({ ranges, title, colors, formatValue, categorical }: LegendProps) => {
 
   const { selectedLayer } = useAppContext();
   const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
-  const color = selectedLayerData?.tematica ? COLORS[selectedLayerData.tematica as keyof typeof COLORS].primary : COLORS.GLOBAL.backgroundDark;
+  const themeKey = selectedLayerData?.tematica;
 
   // construct the amount of colors based on the colors provided
   const domain = ranges.map((range) => range[1]);
@@ -30,8 +29,8 @@ const Legend = ({
     const rangeText = `${formatValue(value[1])} - ${formatValue(value[0])}`;
 
     return (
-      <div key={index} className="legend-item" >
-        <div className="legend-text" >{rangeText}</div>
+      <div key={index} className="legend-body__item">
+        {rangeText}
       </div>
     );
   }
@@ -41,18 +40,17 @@ const Legend = ({
 
   const gradientStyle: React.CSSProperties = {
     background: linearGradient,
-    width: '20px',
+    width: "2vw",
     height: 'auto',
-    borderRadius: '4px',
-    marginRight: "1rem"
+    borderRadius: '0.3dvw',
   };
 
   return (
-    <div className="legend-container" style={{ border: `1px solid ${color}` }}>
-      <div className="legend__title-container" style={{ backgroundColor: color }}>
-        <h6 className="legend__title">{title}</h6>
+    <div className={`legend legend--${themeKey}`}>
+      <div className={`legend__title legend__title--${themeKey}`}>
+        {title}
       </div>
-      <div className="legend-body" >
+      <div className="legend-body">
         {categorical ? <>
           <div
             style={{

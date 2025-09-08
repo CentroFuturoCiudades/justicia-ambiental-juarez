@@ -1,20 +1,9 @@
-
-//lista de savedInstances
-// -title
-// -agrupar por theme
-// -selected average
-// - capas complementarias
-//- agebs seleccionados
-
 import { Button } from "@chakra-ui/react";
 import { defaultViewState, useAppContext } from "../../context/AppContext";
-import { IoIosCloseCircle } from "react-icons/io";
 import { MdOutlineFolderOpen } from "react-icons/md";
 import { downloadPdf } from "../../utils/downloadFile";
-import CloseIcon from "/assets/Icono CERRAR.png"
 import { CAPAS_BASE } from "../../utils/constants";
 import './PopUp.scss'
-import { useEffect } from "react";
 import Card from "../Landing/Card/Card";
 import { IoClose } from "react-icons/io5";
 

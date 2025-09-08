@@ -1,10 +1,10 @@
 import { Accordion, Checkbox, Span } from "@chakra-ui/react";
-import "./CapasBase.scss";
+import "./CapasComplementerias.scss";
 import { CAPAS_BASE } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
 
-const CapasBase = () => { 
+const CapasComplementarias = () => { 
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
     
     /*
@@ -80,4 +80,4 @@ const CapasBase = () => {
     );
 }
 
-export default CapasBase;
+export default CapasComplementarias;

@@ -1,6 +1,4 @@
-//import { MdArrowDropDown } from "react-icons/md";
-import ARROW_DOWN from "/assets/ARROW_DOWN_test.png"
-
+import Triangle from "/assets/Traingulito.png";
 
 type RangeGraph = {
     data: { [ key: string ]: number };
@@ -21,7 +19,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
       justifyContent: "center",
     }}>
       {/* INDICADOR de promedio de la selección */}
-      {averageAGEB && !isNaN(averageAGEB) && (() => {
+      {averageAGEB > 0 && (() => {
         const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
         const style: React.CSSProperties = {
           position: "absolute",
@@ -47,12 +45,11 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: "4.5dvh"}}>
+          <div style={{ position: "relative", width: "100%", height: "4.3dvh" }}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
-                {/*<MdArrowDropDown style={{ color: "var(--close-button)", width: "3vw", height: "3vw", border: "1px solid red"}}/>*/}
-                <span style={{ height: "1vw" }}>
-                  <img src={ARROW_DOWN} style={{ width: "100%", height: "100%", objectFit: "cover"}}/>
+                <span style={{ height: "1.5vw", transform: "translateY(20%)" }}>
+                  <img src={Triangle} style={{ width: "100%", height: "100%", objectFit: "cover"}}/>
                 </span>
             </div>
           </div>
