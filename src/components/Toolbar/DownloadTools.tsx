@@ -1,6 +1,6 @@
 import { useAppContext } from "../../context/AppContext";
 import { Group, Button } from "@chakra-ui/react";
-import { Tooltip } from "../ui/Tooltip";
+import { Tooltip } from "../ui/tooltip";
 import { toaster } from "../ui/toaster";
 import html2canvas from "html2canvas";
 import { MapLayer } from "../../classes/MapLayer";
@@ -36,7 +36,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
             complementarias: selectedBaseLayers,
             activeKey: activeLayerKey
         };
-        
+
         setTimeout(async() => {
             const imageUrl = getMapImage(deck.current, map.current, instance);
 
