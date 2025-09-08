@@ -1,6 +1,6 @@
 import { useAppContext } from "../../context/AppContext";
 import { Group, Button } from "@chakra-ui/react";
-import { Tooltip } from "../ui/Tooltip";
+import { Tooltip } from "../ui/tooltip";
 import IconAGEBS from '/assets/Icono AGEBS.png'
 import IconColonias from '/assets/Icono COLONIAS.png'
 
