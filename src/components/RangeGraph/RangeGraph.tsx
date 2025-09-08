@@ -48,7 +48,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
           <div style={{ position: "relative", width: "100%", height: "4.3dvh" }}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
-                <span style={{ height: "1.5vw", transform: "translateY(20%)" }}>
+                <span style={{ height: "1.5dvw", transform: "translateY(20%)" }}>
                   <img src={Triangle} style={{ width: "100%", height: "100%", objectFit: "cover"}}/>
                 </span>
             </div>
@@ -62,7 +62,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
           flexDirection: "row",
           width: "100%",
           height: "5.5dvh",
-          padding: "0 1vw",
+          padding: "0 1dvw",
           position: "relative",
       }}>
 
@@ -91,17 +91,17 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
             return (
               <div style={style}>
                 <div style={{
-                  width: "0.14vw",
+                  width: "0.14dvw",
                   height: "8.5dvh",
                   background: "black",
-                  marginTop: "-1.5vh",
+                  marginTop: "-1.5dvh",
                 }}/>
                   <div style={{
                     fontSize: "var(--font-size-button)",
                     fontWeight: "300",
                     alignContent: "center",
                     textAlign: "center",
-                    marginTop: "1vh",
+                    marginTop: "1dvh",
                     lineHeight: "1",
                   }}>
                     {formatValue(data.positiveAvg)}
@@ -139,7 +139,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               fontWeight: "300",
               textAlign: "center",
               lineHeight: "1",
-              paddingTop: "0.8vh",
+              paddingTop: "0.8dvh",
             }}
           >
             {formatValue(value)}

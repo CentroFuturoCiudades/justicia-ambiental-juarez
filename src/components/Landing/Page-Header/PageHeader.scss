@@ -1,13 +1,13 @@
 .page-header {
-  padding-left: 4vw;
-  padding-right: 12vw;
+  padding-left: 4dvw;
+  padding-right: 12dvw;
   position: relative;
   z-index: 1;
   background-color: #fefdfc;
 
   &__logo {
     width: 100%;
-    padding: 3vh 0;
+    padding: 3dvh 0;
     border-bottom: 0.2em solid black;
   }
 
@@ -28,10 +28,10 @@
 .button_visor {
   position: absolute;
   //left: calc(100% - 8vw);
-  right: 3vw;
-  top: calc(100% - 3vw);
-  width: 6vw;
-  height: 6vw;
+  right: 3dvw;
+  top: calc(100% - 3dvw);
+  width: 6dvw;
+  height: 6dvw;
   border-radius: 50%;
   padding: 0.2dvh;
   background-color: transparent;

@@ -1,11 +1,11 @@
 .toolbar {
   display: flex;
-  gap: 0.65vw;
+  gap: 0.65dvw;
   justify-content: flex-start;
   position: absolute;
-  top: 2vw;
-  left: 2vw;
-  height: 2.5vw;
+  top: 2dvw;
+  left: 2dvw;
+  height: 2.5dvw;
 }
 
 .button_group {
@@ -14,8 +14,8 @@
 
 .button {
   height: 100%;
-  width: 3.5vw;
-  min-width: 2vw;
+  width: 3.5dvw;
+  min-width: 2dvw;
   padding: 0;
   border-radius: 0.2em;
   display: flex;
@@ -30,7 +30,7 @@
   }
 }
 .button--thin {
-  width: 2vw;
+  width: 2dvw;
   background-color: #6f6f6f;
 }
 .button--thin.button--active {
@@ -50,10 +50,10 @@
 
 .circle {
   position: absolute;
-  top: 0.1vw;
-  right: 0.1vw;
-  width: 0.8vw;
-  height: 0.8vw;
+  top: 0.1dvw;
+  right: 0.1dvw;
+  width: 0.8dvw;
+  height: 0.8dvw;
   border-radius: 50%;
   background: red;
   display: flex;

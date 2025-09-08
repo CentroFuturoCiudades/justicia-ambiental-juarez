@@ -6,7 +6,7 @@
   gap: 5dvw;
   //flex: 1;
   //min-height: 0;
-  padding: 4vh 12vw 4vh 4vw;
+  padding: 4dvh 12dvw 4dvh 4dvw;
 }
 
 .buttonColumn {
@@ -14,7 +14,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 4dvh;
-  width: 35vw;
+  width: 35dvw;
   font-family: 'Roboto Mono';
   font-weight: 700;
 
@@ -25,7 +25,7 @@
     flex: 1;
     font-size: var(--font-size-header);
     white-space: pre-line;
-    border-radius: 0.3vw;
+    border-radius: 0.3dvw;
     border: 0.08rem solid #40423d;
     color: black;
     line-height: 1.2;
@@ -55,14 +55,14 @@
 
 .cardContainer {
   display: flex;
-  width: 50vw;
+  width: 50dvw;
 }
 
 .speed-dial {
   position: absolute;
-  right: 4vw;
-  bottom: 18vh;
-  gap: 2.5vh;
+  right: 4dvw;
+  bottom: 18dvh;
+  gap: 2.5dvh;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -71,8 +71,8 @@
     button {
       cursor: pointer;
       display: inline-flex;
-      border-radius: 2vw 99px 99px 2vw;
-      padding: 0 0 0 1vw;
+      border-radius: 2dvw 99px 99px 2dvw;
+      padding: 0 0 0 1dvw;
       align-items: center;
       background-color: transparent;
       transition: all 0.3s ease;

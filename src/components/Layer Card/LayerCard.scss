@@ -1,8 +1,8 @@
 .layerCard {
     background-color: var(--background);
-    padding: 0.7vw;
+    padding: 0.7dvw;
     border: 2px solid;
-    border-radius: 0.3vw;    
+    border-radius: 0.3dvw;
 
     &__header {
       font-size: var(--font-size-subtitle);
@@ -10,8 +10,8 @@
       font-weight: 500;
       color: white;
       text-transform: lowercase;
-      padding: 0.5vw;
-      border-radius: 0.2vw;
+      padding: 0.5dvw;
+      border-radius: 0.2dvw;
       display: flex;
       align-items: center;
 
@@ -24,7 +24,7 @@
     }
 
     &__body {
-      padding: 0.5vw;
+      padding: 0.5dvw;
       font-size: var(--font-size-body);
     }
 }

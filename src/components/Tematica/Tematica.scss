@@ -1,6 +1,6 @@
 .accordion {
   &__item {
-    border-radius: 0 0 0.2vw 0.2vw;
+    border-radius: 0 0 0.2dvw 0.2dvw;
   }
   &__body {
     padding: 0;
@@ -25,8 +25,8 @@
     display: flex;
     align-items: center;
     width: 100%;
-    gap: 0.6vw;
-    min-height: 2vw;
+    gap: 0.6dvw;
+    min-height: 2dvw;
   }
 
   &__label {
@@ -42,8 +42,8 @@
     font-weight: 500;
   }
   &__image_container {
-    width: 2vw;
-    height: 1.8vw;
+    width: 2dvw;
+    height: 1.8dvw;
     display: flex;
     padding: 0;
   }
@@ -81,8 +81,7 @@
   color: white;
   padding: 0;
   gap: 0;
-  //border-radius: 0.15dvw;
-  border-radius: 0.2vw;
+  border-radius: 0.2dvw;
   line-height: normal;
   font-size: var(--font-size-subtitle);
   font-family: 'Roboto';
@@ -90,7 +89,7 @@
   &__title {
     border-right: 1px solid white;
     flex: 1;
-    padding: 0.6vh 0.6vw;
+    padding: 0.6dvh 0.6dvw;
     font-weight: 400;
     height: 100%;
     display: flex;
@@ -98,7 +97,7 @@
   }
   &__indicator {
     color: white;
-    padding: 0 0.5vw;
+    padding: 0 0.5dvw;
   }
   &--light {
     background-color: var(--background-medium);
@@ -124,11 +123,10 @@
 }
 .dropdown--modifyRadius {
   //border-radius: 0.15dvw;
-  border-radius: 0.2vw;
+  border-radius: 0.2dvw;
 }
 .dropdown--modifyRadius[aria-expanded="true"] {
-  //border-radius: 0.15dvw 0.15dvw 0 0;
-  border-radius: 0.2vw 0.2vw 0 0;
+  border-radius: 0.2dvw 0.2dvw 0 0;
 }
 .dropdown:hover {
   background: #3b3b3b !important;
