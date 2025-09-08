@@ -1,6 +1,6 @@
 import { useAppContext } from "../../context/AppContext";
 import { Group, Button } from "@chakra-ui/react";
-import { Tooltip } from "../ui/Tooltip";
+import { Tooltip } from "../ui/tooltip";
 import Selection from '/assets/Icono SELECCION.png'
 import IconRadius from '/assets/Icono RADIO.png'
 import Deselect from '/assets/Icono DESELECCION.png'
