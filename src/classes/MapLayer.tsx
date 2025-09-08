@@ -221,9 +221,9 @@ export class MapLayer {
         description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${title} de ${average}; por ${this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
         this.selectedDescription = description;
         return (
-          <>
-            {selected.length === 1 ? singleSelected : multipleSelected} un {title} de <strong>{average}</strong>; por <strong>{this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"}</strong> de la media de Ciudad Juárez.
-          </>
+          <span style={{ fontStyle: "italic" }}>
+            {selected.length === 1 ? singleSelected : multipleSelected} un {title} de <strong className="description-bold">{average}</strong>; por <strong className="description-bold"> {this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"} </strong> de la media de Ciudad Juárez.
+          </span>
         )
       }
   }

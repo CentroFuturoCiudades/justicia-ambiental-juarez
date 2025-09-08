@@ -1,32 +1,37 @@
 .layerCard {
     background-color: var(--background);
-    padding: 1vw;
+    padding: 0.7vw;
     border: 2px solid;
     border-radius: 0.3vw;    
 
     &__header {
-        font-size: var(--font-size-subtitle);
-        font-family: 'Roboto';
-        font-weight: 500;
-        color: white;
-        text-transform: lowercase;
-        padding: 0.5vw;
-        border-radius: 0.3vw;
-        display: flex;
-        align-items: center;
+      font-size: var(--font-size-subtitle);
+      font-family: 'Roboto';
+      font-weight: 500;
+      color: white;
+      text-transform: lowercase;
+      padding: 0.5vw;
+      border-radius: 0.2vw;
+      display: flex;
+      align-items: center;
 
-        &__title {
-            flex: 1;
-        }
-        &__icon {
-            font-size: var(--font-size-header);
-        }
+      &__title {
+          flex: 1;
+      }
+      &__icon {
+          font-size: var(--font-size-header);
+      }
     }
 
     &__body {
-        padding: 0.5vw;
-        font-size: var(--font-size-body);
+      padding: 0.5vw;
+      font-size: var(--font-size-body);
     }
+}
+
+.description-bold {
+  font-style: normal;
+  font-weight: bold;
 }
 
 $tematicas: (

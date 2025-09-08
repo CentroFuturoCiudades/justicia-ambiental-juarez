@@ -75,7 +75,11 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                         style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
                     >
                         <img src={SaveLayer} alt="Guardar Capa" style={{maxWidth: "90%", maxHeight: "90%"}}/>
-                        {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
+                        {mapLayers.length > 0 && 
+                            <div className="circle">
+                                {mapLayers.length}
+                            </div>
+                        }
                     </Button>
                 </Tooltip>
 
