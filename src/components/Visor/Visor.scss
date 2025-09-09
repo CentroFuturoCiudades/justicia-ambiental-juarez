@@ -1,6 +1,5 @@
 .visor {
     width: auto;
-    
     display: flex;
     flex-direction: row;
     height: 100dvh;
@@ -14,8 +13,6 @@
         background: var(--background-d1);
         display: flex;
         justify-content: center;
-        position: relative;
-        padding: 2.5dvh 0;
     }
 
     &__panelContent {
@@ -24,15 +21,13 @@
         flex-direction: column;
         gap: 2dvh;
         overflow-y: auto;
-        //padding: 2dvh 0;
+        padding: 2dvh 0;
     }
 
     &__title {
-        font-size: var(--font-size-visor-header);
-        font-weight: 700;
         font-family: 'Space Mono', monospace;
-        line-height: 1.2;
-        padding: 0 0 2.5dvh 0;
+        font-size: var(--font-size-visor-header);
+        padding-bottom: 2dvh;
         border-bottom: 2px solid var(--text-primary);
 
         .italic {
@@ -44,9 +39,8 @@
     }
 
     &__description {
-        line-height: 1.2;
-        margin-bottom: 1dvh;
         font-size: var(--font-size-subtitle);
+        margin-bottom: 1dvh;
     }
 
     &__mapContainer {

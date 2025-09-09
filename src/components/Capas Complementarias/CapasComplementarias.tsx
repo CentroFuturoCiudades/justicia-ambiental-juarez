@@ -23,7 +23,7 @@ const CapasComplementarias = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible className="right-accordion">
+            <Accordion.Root collapsible className="accordion" >
                 <Accordion.Item value="base" className="accordion__item  accordion__item--right" >
 
                     <Accordion.ItemTrigger className="dropdown dropdown--right" >
@@ -34,7 +34,7 @@ const CapasComplementarias = () => {
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="accordion__item" >
-                        <Accordion.ItemBody className="right-accordion__body" >
+                        <Accordion.ItemBody className="accordion__subcontent accordion__subcontent--right" >
                             {Object.entries(CAPAS_BASE).map(([key, value]) => (
                                 <>
                                 <Checkbox.Root key={key} 
@@ -51,7 +51,7 @@ const CapasComplementarias = () => {
                                         <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === key) ? " checkbox__label--bold" : ""}`} > {value.title} </Checkbox.Label>
                                     </Span>
                                 </Checkbox.Root>
-                                <div style={{ paddingLeft: '1.3dvw', display: 'flex', flexDirection: 'column' }}>
+                                <div className="sub-checkbox">
                                 {value.layers && Object.entries(value.layers).map(([layerKey, layer]: any) => (
                                     <Checkbox.Root key={layerKey} 
                                         cursor="pointer" 

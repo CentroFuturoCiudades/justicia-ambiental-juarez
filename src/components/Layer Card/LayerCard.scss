@@ -2,16 +2,15 @@
     background-color: var(--background);
     padding: 0.7dvw;
     border: 2px solid;
-    border-radius: 0.3dvw;
+    border-radius: var(--border-radius);
 
     &__header {
       font-size: var(--font-size-subtitle);
-      font-family: 'Roboto';
       font-weight: 500;
       color: white;
       text-transform: lowercase;
       padding: 0.5dvw;
-      border-radius: 0.2dvw;
+      border-radius: var(--border-radius);
       display: flex;
       align-items: center;
 

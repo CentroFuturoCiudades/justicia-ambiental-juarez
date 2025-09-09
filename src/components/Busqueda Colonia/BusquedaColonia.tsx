@@ -3,23 +3,22 @@ import { useEffect, useMemo, useState } from "react";
 import "./BusquedaColonia.scss";
 import { COLORS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
-import { FixedSizeList as List } from "react-window";
+import { VariableSizeList as List } from "react-window";
 import { AiOutlineDown } from "react-icons/ai";
-//import { VariableSizeList as List } from "react-window";
 
 const BusquedaColonia = () => {
 
-    const [colonias, setColonias] = useState<string[]>([]);
-    const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
     const { 
         coloniasGeoJson,
         selectedColonias, setSelectedColonias 
     } = useAppContext();
+    const [colonias, setColonias] = useState<string[]>([]);
+    const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
+    const charsPerLine = 40;
 
 
 
     const handleColoniaToggle = (colonia: string) => {
-        console.log("colonia length:", colonia.length);
         setSelectedColonias(prev =>
             prev.includes(colonia) ? prev.filter(key => key !== colonia) : [...prev, colonia]
         );
@@ -50,10 +49,19 @@ const BusquedaColonia = () => {
         return [...seleccionadas, ...noSeleccionadas];
     }, [colonias, coloniaBuscada, selectedColonias]);
 
+    const getItemSize = (index: number) => {
+        const colonia = coloniasFiltradas[index];
+        const lines = Math.ceil(colonia.length / charsPerLine);
+        const baseHeight = window.innerHeight * 0.04;
+        if (lines === 1) return baseHeight;
+        return baseHeight * 1.3;
+    }
+
     return (
-        <div >
-            <Accordion.Root collapsible className="right-accordion">
+        <div>
+            <Accordion.Root collapsible className="accordion">
                 <Accordion.Item value="busqueda-colonias" className="accordion__item accordion__item--right" >
+                    
                     <Accordion.ItemTrigger className="dropdown dropdown--right" >
                         <Span className="dropdown__title"> búsqueda por colonia </Span>
                         <Accordion.ItemIndicator className="dropdown__indicator">
@@ -62,7 +70,7 @@ const BusquedaColonia = () => {
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="accordion__item" >
-                        <Accordion.ItemBody className="right-accordion__body" style={{ padding: "0" }} >
+                        <Accordion.ItemBody className="accordion__subcontent accordion__subcontent--right" style={{ padding: "0" }} >
                             {/* buscador de colonias */}
                             <Span className="searchBar" >
                                 <Input
@@ -75,9 +83,9 @@ const BusquedaColonia = () => {
 
                             {/* colonias filtradas */}
                             <List
-                                height={155}
+                                height={window.innerHeight * 0.23}
                                 itemCount={coloniasFiltradas.length}
-                                itemSize={window.innerHeight * 0.06}
+                                itemSize={getItemSize}
                                 className="accordion__coloniaList"
                             >
                                 {({ index, style }: { index: number; style: any }) => {

@@ -28,20 +28,20 @@ const Tematica = () => {
             <Accordion.Root collapsible className="accordion">
                 <Accordion.Item value="tematica" className="accordion__item" >
 
-                    <Accordion.ItemTrigger className="dropdown dropdown--modifyRadius">
+                    <Accordion.ItemTrigger className="dropdown dropdown--tematica">
                         <Span className="dropdown__title">temática</Span>
                         <Accordion.ItemIndicator  className="dropdown__indicator">
                             <AiOutlineDown/>
                         </Accordion.ItemIndicator>
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="accordion__item">
+                    <Accordion.ItemContent className="accordion__item" >
                         <AccordionItemBody className="accordion__body" >
-                            {Object.entries(SECTIONS).map(([sectionKey, section]) => (
-                            <Accordion.Root collapsible>
-                                <Accordion.Item value={sectionKey}>
-
-                                    <Accordion.ItemTrigger className="dropdown dropdown--light">
+                            {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
+                            <Accordion.Root collapsible key={sectionKey}>
+                                <Accordion.Item value={sectionKey} className="accordion__item">
+                            
+                                    <Accordion.ItemTrigger className={`dropdown dropdown--light${idx === arr.length - 1 ? " dropdown--last" : ""}`}>
                                         <Span className="dropdown__title"> {section.label} </Span>
                                         <Accordion.ItemIndicator  className="dropdown__indicator">
                                             <AiOutlineDown/>

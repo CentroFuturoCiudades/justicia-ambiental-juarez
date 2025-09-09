@@ -1,13 +1,58 @@
+.dropdown {
+  background-color: var(--background-dark);
+  color: white;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-subtitle);
+  padding: 0;
+  gap: 0;
+  line-height: normal;
+  display: flex;
+
+  &__title {
+    flex: 1;
+    padding: 0.6dvh 0.6dvw;
+    border-right: 1px solid white;
+    font-weight: 400;
+    align-items: center;
+  }
+  &__indicator {
+    color: white;
+    display: flex;
+    justify-content: center;
+    min-width: 2.2dvw;
+  }
+
+  &--light {
+    background-color: var(--background-medium);
+    border-radius: 0;
+    //border: none;
+
+    .dropdown__title {
+      border-right: 1px solid gray;
+      font-weight: 300;
+    }
+    .dropdown__indicator {
+      color: gray;
+    }
+
+    &.dropdown--last {
+      border-radius: 0 0 0.1vw 0.1vw;
+    }
+  }
+}
+
 .accordion {
   &__item {
-    border-radius: 0 0 0.2dvw 0.2dvw;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
   &__body {
     padding: 0;
-    border-radius: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    border: 1px solid gray;
+    border-top: none;
   }
   &__content {
-    border-radius: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
   &__subcontent {
     display: flex;
@@ -18,7 +63,6 @@
 }
 
 .checkbox {
-  padding: 0.2dvh 0;
   border-bottom: 1px solid gray;
 
   &__content {
@@ -26,32 +70,30 @@
     align-items: center;
     width: 100%;
     gap: 0.6dvw;
-    min-height: 2dvw;
   }
 
   &__label {
     font-size: var(--font-size-body);
-    font-family: 'Roboto', sans-serif;
     flex: 1;
     line-height: 1.2;
     text-transform: lowercase;
     font-weight: 300;
     font-style: italic;
-  }
-  &__label--bold {
-    font-weight: 500;
-  }
-  &__image_container {
-    width: 2dvw;
-    height: 1.8dvw;
-    display: flex;
-    padding: 0;
-  }
+    padding: 0.7dvh 0;
 
-  &__image_container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    &--bold {
+      font-weight: 500;
+    }
+  }
+ 
+  &__image_container {
+    height: min(3.5dvh, 1.8dvw);
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
   }
 
   &:last-child {
@@ -59,74 +101,27 @@
   }
 }
 
+// Personalized Chakra Checkbox
 .chakra-checkbox__control {
-  width: 1.1dvw;
-  height: 1.1dvw;
-  min-width: 1dvw;
-  min-height: 1dvw;
+  width: min(1dvw, 2dvh) ;
+  height: min(1dvw, 2dvh);
+  border-radius: 0.1dvw;
 }
-
 .chakra-checkbox__control[data-state="unchecked"] {
-  border-color: rgb(112, 112, 112);
-  background: #d1d1d1da !important;
+  border-color: var(--background-dark);
+  background-color: var(--background-medium);
 }
-
 .chakra-checkbox__control[data-state="checked"] {
-  background: #a2b687;
-  border-color: #a2b687;
+  background: var(--ambiental-primary);
+  border-color: var(--ambiental-primary);
 }
 
-.dropdown {
-  background-color: var(--background-dark);
-  color: white;
-  padding: 0;
-  gap: 0;
-  border-radius: 0.2dvw;
-  line-height: normal;
-  font-size: var(--font-size-subtitle);
-  font-family: 'Roboto';
-
-  &__title {
-    border-right: 1px solid white;
-    flex: 1;
-    padding: 0.6dvh 0.6dvw;
-    font-weight: 400;
-    height: 100%;
-    display: flex;
-    align-items: center;
-  }
-  &__indicator {
-    color: white;
-    padding: 0 0.5dvw;
-  }
-  &--light {
-    background-color: var(--background-medium);
-    border-radius: 0;
-
-    .dropdown__title {
-      border-right: 1px solid gray;
-      font-weight: 300;
-    }
-
-    .dropdown__indicator {
-      color: gray;
-    }
-  }
+// Dropdown triggers
+.dropdown--tematica {
+  border-radius: var(--border-radius);
 }
-
-.dropdown:focus,
-.dropdown:focus-visible,
-.dropdown:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
-}
-.dropdown--modifyRadius {
-  //border-radius: 0.15dvw;
-  border-radius: 0.2dvw;
-}
-.dropdown--modifyRadius[aria-expanded="true"] {
-  border-radius: 0.2dvw 0.2dvw 0 0;
+.dropdown--tematica[aria-expanded="true"] {
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 .dropdown:hover {
   background: #3b3b3b !important;

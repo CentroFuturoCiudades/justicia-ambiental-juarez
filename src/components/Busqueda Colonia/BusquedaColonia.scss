@@ -10,9 +10,17 @@
     border: none;
     font-size: var(--font-size-subtitle);
   }
+  &:focus {
+    outline: none;
+  }
 }
-.searchBar__input:focus {
-  outline: none;
+
+.accordion__coloniaList {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .checkbox-container {
@@ -25,14 +33,4 @@
   padding: 0;
   width: 100%;
   height: 100%;
-}
-
-.accordion__coloniaList {
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    display: none;
-    width: 0;
-    background: transparent;
-  }
 }
