@@ -45,7 +45,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: "4.3dvh" }}>
+          <div style={{ position: "relative", width: "100%", height: "min(4.3dvh, 4.3dvw)" }}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
                 <span style={{ height: "1.5dvw", transform: "translateY(20%)" }}>
@@ -61,7 +61,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
           display: "flex",
           flexDirection: "row",
           width: "100%",
-          height: "5.5dvh",
+          height: "min(5.5dvh, 5.5dvw)",
           padding: "0 1dvw",
           position: "relative",
       }}>
@@ -92,7 +92,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               <div style={style}>
                 <div style={{
                   width: "0.14dvw",
-                  height: "8.5dvh",
+                  height: "min(8.5dvh, 8.5dvw)",
                   background: "black",
                   marginTop: "-1.5dvh",
                 }}/>
