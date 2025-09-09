@@ -1,31 +1,31 @@
 .layerCard {
-    background-color: var(--background);
-    padding: 0.7dvw;
-    border: 2px solid;
+  background-color: var(--background);
+  padding: 0.7dvw;
+  border: 0.15em solid;
+  border-radius: var(--border-radius);
+
+  &__header {
+    font-size: var(--font-size-subtitle);
+    font-weight: 500;
+    color: white;
+    text-transform: lowercase;
+    padding: 0.5dvw;
     border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
 
-    &__header {
-      font-size: var(--font-size-subtitle);
-      font-weight: 500;
-      color: white;
-      text-transform: lowercase;
-      padding: 0.5dvw;
-      border-radius: var(--border-radius);
-      display: flex;
-      align-items: center;
-
-      &__title {
-          flex: 1;
-      }
-      &__icon {
-          font-size: var(--font-size-header);
-      }
+    &__title {
+      flex: 1;
     }
-
-    &__body {
-      padding: 0.5dvw;
-      font-size: var(--font-size-body);
+    &__icon {
+      font-size: var(--font-size-header);
     }
+  }
+
+  &__body {
+    padding: 0.5dvw;
+    font-size: var(--font-size-body);
+  }
 }
 
 .description-bold {

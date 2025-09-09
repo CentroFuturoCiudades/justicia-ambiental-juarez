@@ -1,7 +1,14 @@
 import { Portal } from "@chakra-ui/react";
 import "./InfoTooltip.scss";
 
-const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : any ) => {
+type InfoTooltipProps = {
+  show: React.Dispatch<React.SetStateAction<boolean>>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  layerCardRef: React.RefObject<HTMLDivElement | null>;
+  selectedLayerData: any;
+};
+
+const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : InfoTooltipProps ) => {
 
   if (!show || !layerCardRef.current) return null;  
   const cardRect = layerCardRef.current.getBoundingClientRect();

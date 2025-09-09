@@ -5,7 +5,7 @@ import { IoInformationCircleSharp } from "react-icons/io5";
 type LayerCardProps = {
     selectedLayerData: any;
     rangeGraphRef: React.RefObject<HTMLDivElement | null>;
-    onInfoHover: any;
+    onInfoHover: React.Dispatch<React.SetStateAction<boolean>>;
     layerCardRef?: React.RefObject<HTMLDivElement | null>;
 };
 

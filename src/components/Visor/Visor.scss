@@ -59,8 +59,8 @@
 
     &__dropDowns {
         position: absolute;
-        top: min(2.5dvh, 2.5dvw);
-        right: min(2.5dvh, 2.5dvw);
+        top: min(3dvh, 1.75dvw);
+        right: min(3dvh, 1.75dvw);
         display: flex;
         flex-direction: column;
         gap: min(0.5dvh, 0.5dvw);
