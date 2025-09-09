@@ -99,7 +99,6 @@ const BusquedaColonia = () => {
                                             <Checkbox.Root
                                                 cursor="pointer"
                                                 variant="solid"
-                                                disabled
                                                 checked={selectedColonias.includes(colonia)}
                                                 key={colonia}
                                                 className="checkbox checkbox-colonias"

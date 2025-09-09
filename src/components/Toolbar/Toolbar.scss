@@ -1,11 +1,13 @@
 .toolbar {
-  display: flex;
-  gap: 0.65dvw;
-  justify-content: flex-start;
   position: absolute;
   top: min(3dvh, 1.75dvw);
   left: min(3dvh, 1.75dvw);
-  height: 2.3dvw;
+  display: flex;
+  gap: 0.65dvw;
+  justify-content: flex-start;
+  //height: min(3.9dvh, 2.3dvw);
+  //height: min(3.65dvh, 2.13dvw);
+  height: 2.13dvw;
 }
 
 .button_group {
@@ -14,7 +16,7 @@
 
 .button {
   height: 100%;
-  width: 3.3dvw;
+  width: 3dvw;
   min-width: 2dvw;
   padding: 0;
   border-radius: var(--border-radius);

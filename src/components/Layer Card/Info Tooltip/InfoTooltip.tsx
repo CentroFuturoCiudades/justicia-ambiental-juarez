@@ -2,7 +2,7 @@ import { Portal } from "@chakra-ui/react";
 import "./InfoTooltip.scss";
 
 type InfoTooltipProps = {
-  show: React.Dispatch<React.SetStateAction<boolean>>;
+  show: boolean;
   containerRef: React.RefObject<HTMLDivElement | null>;
   layerCardRef: React.RefObject<HTMLDivElement | null>;
   selectedLayerData: any;

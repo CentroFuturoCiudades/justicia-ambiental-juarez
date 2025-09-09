@@ -1,4 +1,5 @@
 "use client"
+import { FaRegCheckCircle } from "react-icons/fa";
 
 import {
   Toaster as ChakraToaster,
@@ -12,7 +13,12 @@ import {
 export const toaster = createToaster({
   placement: "bottom-end",
   pauseOnPageIdle: true,
-  offsets: { left: "0px", top: "0px", right: "20dvw", bottom: "2dvh" },
+  offsets: { 
+    left: "0px", 
+    top: "0px", 
+    right: "calc(min(3dvh, 1.75dvw) + min(29.30dvh, 17.13dvw) + 1dvw)", 
+    bottom: "min(3dvh, 1.75dvw)" 
+  },
 })
 
 export const Toaster = () => {
@@ -24,16 +30,20 @@ export const Toaster = () => {
             //width="fit-content" 
             style={{ 
               //backgroundColor: "rgba(241, 240, 238, 0.8)", 
-              backgroundColor: "rgba(175, 104,100, 0.8)",
-              fontFamily: "Roboto", 
+              //backgroundColor: "rgba(196, 196, 196, 0.8)",
+              backgroundColor: "rgba(64, 66, 61, 0.5)",
+              color: "white",
               fontWeight: 300, 
-              fontSize: "3vw", 
               fontStyle: "italic",
               whiteSpace: "nowrap",
               width: "fit-content",
               height: "fit-content",
-              padding: "1vw",
+              display: "flex",
+              alignItems: "center",
+              padding: "min(1dvh, 0.5dvw)",
             }}>
+            {/* Icono check */}
+            <FaRegCheckCircle style={{ color: "green", fontSize: "var(--font-size-header)" }} />
             {toast.type === "loading" ? (
               <Spinner size="sm" color="blue.solid" />
             ) : (

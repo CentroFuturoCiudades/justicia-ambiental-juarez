@@ -438,7 +438,7 @@ export const LAYERS: any = {
         tematica: "poblacion",
         geographic_unit: "AGEB",
         threshold: "",
-        description: "Porcentaje de la población que tiene 60 años o más",
+        description: "En 1990, las familias jóvenes residían mayormente en zonas centrales como Monterrey, Guadalupe, San Pedro y San Nicolás. Pero para 2020, las familias jóvenes y los jóvenes se establecen principalmente en la periferia: Juárez, García, Apodaca, Santa Catarina y General Zuazua; mientras que los adultos mayores permanecieron en el área central. Recientemente, los cambios demográficos han demandado ajustes en políticas y servicios urbanos. La migración de hogares jóvenes se debe, en gran medida, a la escasez en el centro de.",
         year: null,
         graphs: [],
         metrics: [],
