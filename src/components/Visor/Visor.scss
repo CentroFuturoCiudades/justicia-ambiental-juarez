@@ -9,7 +9,7 @@
     overflow: hidden;
 
     &__leftPanel {
-        width: 25.78dvw;
+        width: min(44.07dvh, 25.78dvw);
         background: var(--background-d1);
         display: flex;
         justify-content: center;
@@ -19,16 +19,16 @@
         width: 81.41%;
         display: flex;
         flex-direction: column;
-        gap: 2dvh;
+        gap: min(2dvh, 2dvw);
         overflow-y: auto;
-        padding: 2dvh 0;
+        padding: min(2dvh, 2dvw) 0;
     }
 
     &__title {
         font-family: 'Space Mono', monospace;
         font-size: var(--font-size-visor-header);
-        padding-bottom: 2dvh;
-        border-bottom: 2px solid var(--text-primary);
+        padding-bottom: min(2dvh, 2dvw);
+        border-bottom: 0.1em solid var(--text-primary);
 
         .italic {
             font-style: italic;
