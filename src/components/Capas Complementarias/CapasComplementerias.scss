@@ -1,11 +1,12 @@
 .dropdown--right {
-  height: 3.65vh;
+  //height: 3.65vh;
+  height: min(3.65dvh, 2.13dvw);
 }
 
 .accordion__item--right {
   background-color: var(--background-light);
-  border-radius: 0.3dvw;
-  border: 1px solid gray;
+  border-radius: 0.2dvw;
+  //border: 1px solid gray;
 }
 
 .accordion__subcontent--right {

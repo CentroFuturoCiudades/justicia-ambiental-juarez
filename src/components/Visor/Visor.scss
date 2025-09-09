@@ -59,11 +59,11 @@
 
     &__dropDowns {
         position: absolute;
-        top: 2dvh;
-        right: 2dvw;
+        top: min(2.5dvh, 2.5dvw);
+        right: min(2.5dvh, 2.5dvw);
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
-        width: 17.13dvw;
+        gap: min(0.5dvh, 0.5dvw);
+        width: min(29.35dvh, 17.16dvw);
     }
 }
