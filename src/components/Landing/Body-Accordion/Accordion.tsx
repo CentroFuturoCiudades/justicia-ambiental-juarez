@@ -64,7 +64,10 @@ const Accordion = () => {
                   onClick={() => handleItemClick(item)}
                 >
                   <p>{item.title}</p>
-                  <img src={item.icon} className="buttonColumn__icon" style={{ background: `${COLORS.GLOBAL.fondo}`}} />
+                  <span className="buttonColumn__icon">
+                    <img src={item.icon} />
+                  </span>
+                  {/*<img className='buttonColumn__icon' src={item.icon} />*/}
                 </Button>
             ))}
         </div>

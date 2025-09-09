@@ -7,15 +7,14 @@
 
   &__logo {
     width: 100%;
-    padding: 3dvh 0;
-    border-bottom: 0.2em solid black;
+    padding: min(3dvh, 3dvw) 0;
+    border-bottom: 0.3em solid black;
   }
 
   &__title {
     font-family: 'Space Mono', monospace;
     font-size: var(--font-size-title);
-    line-height: 1.2;
-
+    
     &__italic {
       font-style: italic;
     }
@@ -27,7 +26,6 @@
 
 .button_visor {
   position: absolute;
-  //left: calc(100% - 8vw);
   right: 3dvw;
   top: calc(100% - 3dvw);
   width: 6dvw;

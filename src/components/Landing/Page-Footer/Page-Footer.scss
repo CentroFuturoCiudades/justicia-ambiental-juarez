@@ -4,7 +4,7 @@
     justify-content: flex-end;
     position: relative;
     overflow: hidden;
-    height: 13dvh;
+    height: min(13dvh, 8dvw);
     padding: 0 2.5dvw;
 
     &__background {

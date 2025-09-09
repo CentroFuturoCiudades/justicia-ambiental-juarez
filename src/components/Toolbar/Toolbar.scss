@@ -5,7 +5,7 @@
   position: absolute;
   top: min(2.5dvh, 2.5dvw);
   left: min(2.5dvh, 2.5dvw);
-  height: 2.5dvw;
+  height: 2.3dvw;
 }
 
 .button_group {
@@ -14,7 +14,7 @@
 
 .button {
   height: 100%;
-  width: 3.5dvw;
+  width: 3.3dvw;
   min-width: 2dvw;
   padding: 0;
   border-radius: var(--border-radius);

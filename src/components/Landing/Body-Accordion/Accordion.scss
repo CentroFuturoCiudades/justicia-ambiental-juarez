@@ -25,7 +25,7 @@
     flex: 1;
     font-size: var(--font-size-header);
     white-space: pre-line;
-    border-radius: 0.3dvw;
+    border-radius: var(--border-radius);
     border: 0.08rem solid #40423d;
     color: black;
     line-height: 1.2;
@@ -35,11 +35,16 @@
 
   &__icon {
     position: absolute;
-    right: -1.7em;
+    right: -2dvw;
     top: 50%;
     transform: translateY(-50%);
-    height: 2.5em;
+    height: 4dvw;
+    width: 4dvw;
     border-radius: 50%;
+    background-color: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 .buttonColumn__button:hover,
@@ -88,8 +93,8 @@
       }
 
       .icon {
-        height: 7dvh;
-        width: 7dvh;
+        height: min(4.09dvw, 7dvh);
+        width: min(4.09dvw, 7dvh);
         border-radius: 50%;
         display: flex;
         align-items: center;
