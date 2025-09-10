@@ -1,33 +1,23 @@
-.dropdown--right {
-  //height: 3.65vh;
-  height: min(3.65dvh, 2.13dvw);
+.dropdown__mainItem--right {
+  background-color: var(--background-light);
 }
 
-.accordion__item--right {
-  background-color: var(--background-light);
-  border-radius: 0.2dvw;
-  //border: 1px solid gray;
-}
-
-.accordion__subcontent--right {
-  background-color: var(--background-light);
-  padding: 1dvh 0.8dvw;
+.dropdown__subContent--complementarias {
+  padding: min(1dvh, 0.5dvw) min(1.36dvh, 0.8dvw);
 }
 
 .checkbox--right {
   border: none;
-  .checkbox__content {
-    min-height: 0;
-    gap: 0.3dvw;
-  }
+  padding: 0.1dvh 0;
+
   .checkbox__label {
     font-style: normal;
-    padding: 0.2vh;
+
   }
 }
 
 .sub-checkbox {
   display: flex;
   flex-direction: column;
-  padding-left: 1.3dvw;
+  padding-left: min(2.2dvh, 1.3dvw);
 }

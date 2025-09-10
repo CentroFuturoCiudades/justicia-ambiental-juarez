@@ -1,3 +1,7 @@
+.dropdown__subContent--colonias {
+  padding: 0;
+}
+
 .searchBar {
   padding: 0;
   font-style: italic;
@@ -5,8 +9,8 @@
   border-bottom: 1px solid var(--background-medium);
 
   &__input {
-    height: 4dvh;
-    padding: 0 0.6dvw;
+    height: min(4dvh, 2dvw);
+    padding: 0 min(1dvh, 0.6dvw);
     border: none;
     font-size: var(--font-size-subtitle);
   }
@@ -24,9 +28,12 @@
 }
 
 .checkbox-container {
-  display: flex;
-  align-items: center;
-  padding: 0 0.6dvw;
+  //display: flex;
+  //align-items: center;
+  padding: 0 min(1dvh, 0.6dvw);
+  &--selected {
+    background-color: var(--background-medium);
+  }
 }
 
 .checkbox-colonias {

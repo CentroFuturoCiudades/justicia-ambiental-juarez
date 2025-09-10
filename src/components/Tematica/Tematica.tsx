@@ -1,4 +1,4 @@
-import { Accordion, AccordionItemBody, Checkbox, Span } from "@chakra-ui/react";
+import { Accordion, Checkbox, Span } from "@chakra-ui/react";
 import { SECTIONS, LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import "./Tematica.scss";
@@ -6,11 +6,15 @@ import SavedLayerIcon from "/assets/Icono CAPA AGREGADA.png"
 import { AiOutlineDown } from "react-icons/ai";
 import type { LayerKey } from "../../utils/constants";
 
-
-
 const Tematica = () => {
 
-    const { selectedLayer, setSelectedLayer, setActiveLayerKey, mapLayers, setSelectionMode } = useAppContext();    
+    const { 
+        selectedLayer, 
+        setSelectedLayer, 
+        setActiveLayerKey, 
+        mapLayers, 
+        setSelectionMode 
+    } = useAppContext();
 
     /* Al seleccionar una capa de Tematica:
         - Se actualiza la capa seleccionada
@@ -25,58 +29,59 @@ const Tematica = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible className="accordion">
-                <Accordion.Item value="tematica" className="accordion__item" >
+            <Accordion.Root collapsible className="dropdown" variant="enclosed" >
+                <Accordion.Item value="tematica" className="dropdown__mainItem" >
 
-                    <Accordion.ItemTrigger className="dropdown dropdown--tematica">
-                        <Span className="dropdown__title">temática</Span>
-                        <Accordion.ItemIndicator  className="dropdown__indicator">
+                    <Accordion.ItemTrigger className="trigger" >
+                        <Span className="trigger__title">temática</Span>
+                        <Accordion.ItemIndicator  className="trigger__indicator">
                             <AiOutlineDown/>
                         </Accordion.ItemIndicator>
                     </Accordion.ItemTrigger>
 
-                    <Accordion.ItemContent className="accordion__item" >
-                        <AccordionItemBody className="accordion__body" >
-                            {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
-                            <Accordion.Root collapsible key={sectionKey}>
-                                <Accordion.Item value={sectionKey} className="accordion__item">
+                    <Accordion.ItemContent className="dropdown__mainContent" >
                             
-                                    <Accordion.ItemTrigger className={`dropdown dropdown--light${idx === arr.length - 1 ? " dropdown--last" : ""}`}>
-                                        <Span className="dropdown__title"> {section.label} </Span>
-                                        <Accordion.ItemIndicator  className="dropdown__indicator">
+                        {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
+                            <Accordion.Root collapsible key={sectionKey} >
+                                <Accordion.Item value={sectionKey} className="dropdown__subItem" >
+                            
+                                    <Accordion.ItemTrigger className={`trigger trigger--light`}>
+                                        <Span className="trigger__title"> {section.label} </Span>
+                                        <Accordion.ItemIndicator  className="trigger__indicator">
                                             <AiOutlineDown/>
                                         </Accordion.ItemIndicator>
                                     </Accordion.ItemTrigger>
 
-                                    <Accordion.ItemContent className="accordion__content">
-                                        <AccordionItemBody className="accordion__subcontent" >
-                                            {section.layers.map((layerKey) => (
-                                                <Checkbox.Root 
-                                                    cursor={"pointer"} 
-                                                    variant={"solid"} 
-                                                    checked={selectedLayer === layerKey}
-                                                    onCheckedChange={() => handleLayerToggle(layerKey)}
-                                                    disabled={!LAYERS[layerKey]?.enabled}
-                                                    className="checkbox"
-                                                >
+                                    <Accordion.ItemContent className="dropdown__subContent" >
+                                        {section.layers.map((layerKey) => (
+                                            <Checkbox.Root 
+                                                cursor={"pointer"} 
+                                                variant={"solid"} 
+                                                checked={selectedLayer === layerKey}
+                                                onCheckedChange={() => handleLayerToggle(layerKey)}
+                                                disabled={!LAYERS[layerKey]?.enabled}
+                                                className="checkbox"
+                                            >
+                                                
+                                                <Checkbox.HiddenInput />
+                                                <Checkbox.Control />
                                                     <Span className="checkbox__content">
-                                                        <Checkbox.HiddenInput />
-                                                        <Checkbox.Control />
-                                                        <Checkbox.Label className={`checkbox__label ${selectedLayer === layerKey ? 'checkbox__label--bold' : ''}`} > {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
-                                                        {mapLayers.some(instance => instance.title === LAYERS[layerKey]?.title) && (
-                                                            <span className="checkbox__image_container">
-                                                                <img src={SavedLayerIcon} alt="Saved Layer" />
-                                                            </span>
-                                                        )}
-                                                    </Span>
-                                                </Checkbox.Root>
-                                            ))}
-                                        </AccordionItemBody>
+                                                    <Checkbox.Label className={`checkbox__label ${selectedLayer === layerKey ? 'checkbox__label--bold' : ''}`} > {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                    {mapLayers.some(instance => instance.title === LAYERS[layerKey]?.title) && (
+                                                        <span className="checkbox__image_container">
+                                                            <img src={SavedLayerIcon} alt="Saved Layer" />
+                                                        </span>
+                                                    )}
+                                                    {/*<span className="checkbox__image_container">
+                                                            <img src={SavedLayerIcon} alt="Saved Layer" />
+                                                        </span>*/}
+                                                </Span>
+                                            </Checkbox.Root>
+                                        ))}
                                     </Accordion.ItemContent>
                                 </Accordion.Item>
                             </Accordion.Root>
-                            ))}
-                        </AccordionItemBody>
+                        ))}
                     </Accordion.ItemContent>
                 </Accordion.Item>
             </Accordion.Root>

@@ -1,58 +1,27 @@
 .dropdown {
-  background-color: var(--background-dark);
-  color: white;
-  border-radius: var(--border-radius);
-  font-size: var(--font-size-subtitle);
-  padding: 0;
-  gap: 0;
-  line-height: normal;
-  display: flex;
-
-  &__title {
-    flex: 1;
-    padding: 0.6dvh 0.6dvw;
-    border-right: 1px solid white;
-    font-weight: 400;
-    align-items: center;
-  }
-  &__indicator {
-    color: white;
-    display: flex;
-    justify-content: center;
-    min-width: 2.2dvw;
-  }
-
-  &--light {
+  border: 1px solid var(--background-dark);
+  //border-radius: var(--border-radius);
+  
+  &__mainItem {
+    //border-radius: 0;
+    border-radius: var(--border-radius);
     background-color: var(--background-medium);
-    border-radius: 0;
-    //border: none;
-
-    .dropdown__title {
-      border-right: 1px solid gray;
-      font-weight: 300;
-    }
-    .dropdown__indicator {
-      color: gray;
-    }
-
-    &.dropdown--last {
-      border-radius: 0 0 0.1vw 0.1vw;
-    }
   }
-}
-
-.accordion {
-  &__item {
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  &__mainContent {
+    border-radius: 0;
+    padding: 0;
+  }
+  &__subItem {
+    background-color: var(--background);
+  }
+  &__subContent {
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0.8dvw;
   }
   &__body {
     padding: 0;
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-    border: 1px solid gray;
-    border-top: none;
-  }
-  &__content {
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
   &__subcontent {
     display: flex;
@@ -62,24 +31,79 @@
   }
 }
 
+.trigger {
+  display: flex;
+  align-items: stretch;
+  min-height: min(3.65dvh, 2.13dvw);
+  background-color: var(--background-dark);
+  border-radius: 0;
+  border: none;
+  font-size: var(--font-size-subtitle);
+  //font-size: var(--font-size-subtitle);
+  color: white;
+  padding: 0;
+  gap: 0;
+  line-height: normal;
+
+  &__title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5dvw;
+    border-right: 1px solid white;
+    font-weight: 400;
+  }
+  &__indicator {
+    width: min(2.2dvw, 3.76dvh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+
+  &:hover {
+    background: #3b3b3b;
+    border-color: #3b3b3b;
+  }
+  
+  &--light {
+    background-color: var(--background-medium);
+    border-radius: 0;
+
+    .trigger__title {
+      border-right: 1px solid gray;
+      font-weight: 300;
+    }
+    .trigger__indicator {
+      color: gray;
+    }
+    &:hover {
+      background: #b3b3b3;
+      border-color: #b3b3b3 ;
+    }
+  }
+}
+
 .checkbox {
   border-bottom: 1px solid gray;
+  gap: 0.4dvw;
 
   &__content {
     display: flex;
     align-items: center;
+    min-height: min(3.5dvh, 1.8dvw);
     width: 100%;
-    gap: 0.6dvw;
   }
 
   &__label {
-    font-size: var(--font-size-body);
     flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: var(--font-size-body);
     line-height: 1.2;
     text-transform: lowercase;
     font-weight: 300;
     font-style: italic;
-    padding: 0.7dvh 0;
 
     &--bold {
       font-weight: 500;
@@ -87,11 +111,12 @@
   }
  
   &__image_container {
-    height: min(3.5dvh, 1.8dvw);
+    //height: min(3.5dvh, 2.04dvw);
+    height: min(3.1dvh, 1.8dvw);
 
     img {
-      max-width: 100%;
-      max-height: 100%;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
     }
   }
@@ -116,18 +141,6 @@
   border-color: var(--ambiental-primary);
 }
 
-// Dropdown triggers
-.dropdown--tematica {
-  border-radius: var(--border-radius);
-}
-.dropdown--tematica[aria-expanded="true"] {
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-.dropdown:hover {
-  background: #3b3b3b !important;
-  border-color: #3b3b3b;
-}
-.dropdown--light:hover {
-  background: #b3b3b3  !important;
-  border-color: #b3b3b3 ;
-}
+/*.dropdown[aria-expanded="true"] {
+  border-radius: 0 0 var(--border-radius) var(--border-radius) ;
+}*/
