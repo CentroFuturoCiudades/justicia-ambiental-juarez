@@ -93,6 +93,7 @@
     align-items: center;
     min-height: min(3.5dvh, 1.8dvw);
     width: 100%;
+    padding: min(0.5dvh, 0.3dvw) 0;
   }
 
   &__label {
