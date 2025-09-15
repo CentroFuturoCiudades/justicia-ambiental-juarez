@@ -1,23 +1,26 @@
 import { Accordion, Checkbox, Span } from "@chakra-ui/react";
-import "./CapasComplementerias.scss";
-import { CAPAS_BASE } from "../../utils/constants";
+import "./CapasComplementarias.scss";
+import { COMPLEMENTARY_LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
 
 const CapasComplementarias = () => { 
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
-    
+    const mainLayers = Object.entries(COMPLEMENTARY_LAYERS).filter(([_, value]) => !value.parent);
+    const subLayers = Object.entries(COMPLEMENTARY_LAYERS).filter(([_, value]) => value.parent);
+
     /*
         Seleccion y deseleccion de CAPAS COMPLEMENTARIAS
-        - Array de objetos {key, url}
+        - Array de keys de capas complementarias
         - Si ya hay un key igual a layerKey, se elimina del array
-        - Si no, se agrega key y url
+        - Si no, se agrega key
     */
-    const handleBaseLayerToggle = (layerKey: string, url: string) => {
+
+    const handleComplementaryLayerToggle = (layerKey: string) => {
         setSelectedBaseLayers(prev =>
-            prev.some(item => item.key === layerKey)
-                ? prev.filter(item => item.key !== layerKey)
-                : [...prev, { key: layerKey, url }]
+            prev.includes(layerKey)
+                ? prev.filter(item => item !== layerKey)
+                : [...prev, layerKey]
         );
     };
 
@@ -34,33 +37,35 @@ const CapasComplementarias = () => {
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="dropdown__subContent dropdown__subContent--complementarias" >
-                        {Object.entries(CAPAS_BASE).map(([key, value]) => (
+                        {mainLayers.map(([layerKey, value]) => (
                             <>
-                            <Checkbox.Root key={key} 
+                            <Checkbox.Root key={layerKey} 
                                 cursor="pointer" 
                                 variant={"solid"} 
-                                checked={selectedBaseLayers.some(item => item.key === key)}
-                                onCheckedChange={() => handleBaseLayerToggle(key, value.url)}
+                                checked={selectedBaseLayers.includes(layerKey)}
+                                onCheckedChange={() => handleComplementaryLayerToggle(layerKey)}
                                 disabled={!value.enabled}
                                 className="checkbox checkbox--right"
                             >
                                 <Checkbox.HiddenInput />
                                 <Checkbox.Control />
-                                <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === key) ? " checkbox__label--bold" : ""}`} > {value.title} </Checkbox.Label>
+                                <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === layerKey) ? " checkbox__label--bold" : ""}`} > {value.title} </Checkbox.Label>
                             </Checkbox.Root>
                             <div className="sub-checkbox">
-                            {value.layers && Object.entries(value.layers).map(([layerKey, layer]: any) => (
-                                <Checkbox.Root key={layerKey} 
+                            {subLayers
+                             .filter(([_, subLayer]) => subLayer.parent === layerKey)
+                             .map(([subKey, subLayer]) => (
+                                <Checkbox.Root key={subKey} 
                                     cursor="pointer" 
                                     variant={"solid"}
-                                    checked={selectedBaseLayers.some(item => item.key === layerKey)}
-                                    onCheckedChange={() => handleBaseLayerToggle(layerKey, layer.url)}
-                                    disabled={!layer.enabled}
+                                    checked={selectedBaseLayers.includes(subKey)}
+                                    onCheckedChange={() => handleComplementaryLayerToggle(subKey)}
+                                    disabled={!subLayer.enabled}
                                     className="checkbox checkbox--right"
                                 >
                                     <Checkbox.HiddenInput />
                                     <Checkbox.Control />
-                                    <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === layerKey) ? " checkbox__label--bold" : ""}`}> {layer.title} </Checkbox.Label>
+                                    <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === subKey) ? " checkbox__label--bold" : ""}`}> {subLayer.title} </Checkbox.Label>
                                 </Checkbox.Root>
                             ))}
                             </div>

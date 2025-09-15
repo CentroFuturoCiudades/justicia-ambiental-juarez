@@ -1,12 +1,14 @@
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import { GeoJsonLayer } from "deck.gl";
+import { COMPLEMENTARY_LAYERS } from "../utils/constants";
 
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 /*
     COMPLEMENTARY LAYERS:
-    - Fetch de cada "capa complementaria" seleccionada (selectedBaseLayers)
+    - baseLayers guarda key de capa y su GeoJsonLayer
+    - Fetch de cada "capa complementaria" seleccionada (selectedBaseLayers) que aun no esta en baseLayers
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
@@ -20,10 +22,12 @@ const ComplementaryLayers = () => {
             return;
         }
     
-        selectedBaseLayers.forEach(({key, url}) => {
-            if (!baseLayers[key]) {
+        selectedBaseLayers.forEach(layerKey => {
+            if (!baseLayers[layerKey]) {
+                const complementary = COMPLEMENTARY_LAYERS[layerKey as keyof typeof COMPLEMENTARY_LAYERS];
+                const url = complementary?.url;
                 if (!url) {
-                    console.error(`No URL for layer: ${key}`);
+                    console.error(`No URL for layer: ${layerKey}`);
                     return null;
                 }
 
@@ -33,16 +37,16 @@ const ComplementaryLayers = () => {
                     .then(res => res.json())
                     .then(data => {
                         const newLayer = new GeoJsonLayer({
-                            id: key,
+                            id: `complementary-${layerKey}`,
                             data: data,
                             pickable: true,
                             filled: true,
                             getFillColor: [250, 0, 0, 100],
                             getLineColor: [255, 255, 255, 180],
                         });
-                        setBaseLayers(prev => ({ ...prev, [key]: newLayer }));
+                        setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
                     })
-                    .catch(error => console.error(`Error loading GeoJSON for layer ${key}:`, error));
+                    .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
                 }
             });
         }, [selectedBaseLayers]);
