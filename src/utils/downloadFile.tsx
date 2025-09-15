@@ -15,7 +15,8 @@ type Section = {
   puntaje: string | number;
   juarezAvg: string | number;
   selected: string;
-  complementarias: string;
+  //complementarias: string;
+  activeKey: string;
 }
 
 export const plugins = {
@@ -131,6 +132,15 @@ function groupByTheme(sections : Section[]) {
   });
   return groupedSections;
 }
+function groupByActiveKey(sections : Section[]) {
+  const groupedSections : Record<string, Section[]>  = {};
+  sections.forEach(section => {
+    const key = section.activeKey || "";
+    if (!groupedSections[key]) groupedSections[key] = [];
+    groupedSections[key].push(section);
+  });
+  return groupedSections;
+}
 
 //Datos por pagina (1era seccion MAPAS)
 function buildSectionPage(section: Section, theme: string, idx: number, y: number) {
@@ -191,17 +201,17 @@ function buildSectionPage(section: Section, theme: string, idx: number, y: numbe
 }
 
 //Tabla de indicadores POR TEMA
-function buildIndicatorsTable(theme: string, y: number) {
+function buildIndicatorsTable(activeKey: string, y: number) {
   return {
-    name: `indicadores_${theme}`,
+    name: `indicadores_${activeKey}`,
     type: "table",
     position: { x: 20, y },
     width: 170,
     height:  43,
-    content: `{{indicadores_${theme}}}`,
+    content: `{{indicadores_${activeKey}}}`,
     required: true,
     showHead: true,
-    head: ["AGEB", "Temática", "Indicador", "Promedio", "Ciudad Juarez"],
+    head: [`${activeKey}`, "Temática", "Indicador", "Promedio", "Ciudad Juarez"],
     headWidthPercentages: [26, 18, 20, 18, 18],
     tableStyles: { borderWidth: 0.1, borderColor: "#4b5544" },
     headStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#ffffff", borderColor: "", backgroundColor: "#4b6648", borderWidth: { top: 0, right: 0, bottom: 0, left: 0 }, padding: { top: 5, right: 5, bottom: 5, left: 5 } },
@@ -216,7 +226,7 @@ function buildIndicatorsTable(theme: string, y: number) {
   };
 }
 
-function buildInputs(groupedSections: Record<string, Section[]>) {
+function buildInputs(groupedSections: Record<string, Section[]>, groupedByActiveKey: Record<string, Section[]>) {
   return [
     Object.fromEntries([
       ...Object.entries(groupedSections).flatMap(([theme, themeSections]) =>
@@ -229,9 +239,9 @@ function buildInputs(groupedSections: Record<string, Section[]>) {
           [`section_${theme}_${idx}_selected`, section.selected]
         ])
       ).flat(),
-      ...Object.entries(groupedSections).map(([theme, themeSections]) => [
-        `indicadores_${theme}`,
-        themeSections.map(section => [
+      ...Object.entries(groupedByActiveKey).map(([activeKey, keySections]) => [
+        `indicadores_${activeKey}`,
+        keySections.map(section => [
           section.selected,
           section.theme ?? "",
           section.title ?? "",
@@ -263,10 +273,9 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
       description: layerInstance.selectedDescription,
       puntaje: layerInstance.formatValue(layerInstance.selectedAvg),
       juarezAvg: layerInstance.formatValue(layerInstance.positiveAvg),
-      //selected: layerInstance.selected ?? []
       selected: (layerInstance.selected ?? []).map(s => `• ${s}`).join('\n'),
-      complementarias: (layerInstance.complementarias ?? []).map(c => `• ${c}`).join('\n')
-
+      //complementarias: (layerInstance.complementarias ?? []).map(c => `• ${c}`).join('\n')
+      activeKey: layerInstance.activeKey
     };
 
   }));
@@ -295,6 +304,8 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
 
   //Agrupar por tematica
   const groupedSections = groupByTheme(sections);
+  //Agrupar por activeKey (agebs o colonias)
+  const groupedByActiveKey = groupByActiveKey(sections);
 
   const themeNames = Object.keys(groupedSections);
   const firstTheme = themeNames[0];
@@ -324,34 +335,27 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
     });
   });
 
-  //SECCION INDICADORES TABLAS 
-  const indicadores = [
-    {
-      name: "section_indicadores_title",
+  //tablas de indicadores en una misma pag (page break automatico)
+  Object.entries(groupedByActiveKey).forEach(([activeKey, keySections]) => {
+    const keyTitle = {
+      name: `section_${activeKey}_title`,
       type: "text",
-      content: "Tablas de indicadores por temática",
-      position: { x: 20, y: 20 },
+      content: activeKey,
+      position: { x: 10, y:  10 },
       width: 170, height: 15, fontSize: 30, alignment: "left",
       fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
-    }
-  ];
+    };
 
-  let y = 35;
-
-  //tablas de indicadores en una misma pag (page break automatico)
-  Object.entries(groupedSections).forEach(([theme, themeSections]) => {
-    indicadores.push(buildIndicatorsTable(theme, y));
-    y += themeSections.length * 15 + 30;
+    const table = buildIndicatorsTable(activeKey, 35);
+    schemas.push([keyTitle, table]);
   });
-
-  schemas.push(indicadores);
 
   const template = {
     schemas,
     basePdf: { width: 210, height: 297, padding: [20, 10, 20, 10] as [number, number, number, number] }
   };
 
-  const inputs = buildInputs(groupedSections);
+  const inputs = buildInputs(groupedSections, groupedByActiveKey);
 
   const pdf = await generate({ template, inputs, plugins });
   const blobPdf = new Blob([pdf.buffer], { type: 'application/pdf' });
