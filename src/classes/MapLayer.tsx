@@ -2,7 +2,6 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import { color, rgb, selection } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
-import { COLORS } from "../utils/constants";
 import { scaleLinear } from "d3-scale";
 import { formatNumber } from "../utils/utils";
 
@@ -25,11 +24,13 @@ export class MapLayer {
   graphImage?: string;
   deckImage?: string;
   theme?: string;
+  categorical?: boolean;
   selectedAvg = 0;
   selectedDescription = "";
+  categories?: string[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, ref = null, theme = "default" }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, ref = null, theme = "default", categorical = false }: {
     opacity?: number;
     colors?: string[];
     title?: string;
@@ -37,6 +38,7 @@ export class MapLayer {
     formatValue?: (value: number) => string;
     ref?: React.RefObject<HTMLDivElement> | null;
     theme?: string;
+    categorical?: boolean;
   }) {
     this.opacity = opacity;
     this.colors = colors;
@@ -45,6 +47,7 @@ export class MapLayer {
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
     this.ref = ref;
     this.theme = theme;
+    this.categorical = categorical;
   }
 
   async loadData(url: string) {
@@ -58,16 +61,29 @@ export class MapLayer {
     var getColor: any;
     const featuresForStats = data.allFeatures;
 
+    const categories = this.categorical ? [...new Set(data.features.map((f: any) => f.properties[field]))].filter(Boolean) : [];
+    this.categories = categories as string[];
+    //console.log("Categories:", this.categories);
+
     if (field) {
       var mappedData: number[] = featuresForStats.map((item: any) => { return item.properties[field] });
       mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
       /*if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
       }*/
+     /*if(this.categorical) {
+      this.minVal = categories[0];
+      this.maxVal = categories[categories.length - 1];
+     }*/
       const minVal = Math.min(...mappedData) || 0;
       const maxVal = Math.max(...mappedData) || 0;
       this.maxVal = maxVal;
       this.minVal = minVal;
+
+      /*if (this.categorical) {
+        const categories = this.getCategories(data.features, field);
+        this.categories = categories;
+      }*/
 
       //creas domain
       const domain = [
@@ -101,15 +117,19 @@ export class MapLayer {
       getColor =
         (feature: any): [number, number, number] => {
 
-          // const isSelected = selectedAGEBS.some(f => f === feature.properties.cvegeo);
-          // if (isSelected) {
-          //   return [34, 139, 34]; // green color for selected features
-          // }
+          /*if (this.categorical) {
+            const categoria = feature.properties[field];
+            const idx = categories.indexOf(categoria);
+            const hexColor = this.colors[idx % this.colors.length] || "#cccccc";
+            const rgbValue = color(hexColor).rgb();
+            return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
+          }
+          else {*/
 
           const item = feature.properties[field];
           const rgbValue = color(this.colorMap(item))?.rgb();
           return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
-
+         // }
         }
     } else {
       getColor = (feature: any): [number, number, number] => {
@@ -176,6 +196,7 @@ export class MapLayer {
   getLegend = (title: string) => {
     if (!this.legend) return <></>;
     const ranges = this.getRanges();
+    //const ranges = this.getRanges(this.amountOfColors);
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
 
     return <Legend
@@ -183,7 +204,8 @@ export class MapLayer {
       colors={completeColors}
       ranges={ranges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
-      categorical={false}
+      //categorical={false}
+      categorical={this.categorical}
     />
   }
 
@@ -191,7 +213,7 @@ export class MapLayer {
 
       if (selected.length === 0) return this.positiveAvg;
 
-      const idField = key === "agebs" ? "cvegeo" : "name";
+      const idField = key === "agebs" ? "index" : "name";
       const values = features
       .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
       .map(f => f.properties?.[property])

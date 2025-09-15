@@ -1,13 +1,13 @@
 import { Accordion, Checkbox, Span } from "@chakra-ui/react";
 import "./CapasComplementarias.scss";
-import { COMPLEMENTARY_LAYERS } from "../../utils/constants";
+import { COMPLEMENTARY_LAYERS, CAPAS_BASE_CODEBOOK } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
 
 const CapasComplementarias = () => { 
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
-    const mainLayers = Object.entries(COMPLEMENTARY_LAYERS).filter(([_, value]) => !value.parent);
-    const subLayers = Object.entries(COMPLEMENTARY_LAYERS).filter(([_, value]) => value.parent);
+    const mainLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => !value.parent);
+    const subLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => value.parent);
 
     /*
         Seleccion y deseleccion de CAPAS COMPLEMENTARIAS

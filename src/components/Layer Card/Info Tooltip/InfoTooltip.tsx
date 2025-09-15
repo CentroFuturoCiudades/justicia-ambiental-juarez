@@ -29,7 +29,7 @@ const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : 
           <p style={{ flex: 1 }}>
             {selectedLayerData?.description || "Información no disponible para esta capa."}
           </p>
-          <p className="source"> Fuente: XXX </p>
+          <p className="source"> Fuente: {selectedLayerData?.source || "XXX"} </p>
         </div>
       </Portal>
       <div ref={containerRef} />

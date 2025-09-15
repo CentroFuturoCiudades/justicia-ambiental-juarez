@@ -305,3 +305,8 @@ export const accordionItems: AccordionItemType[] = [
         icon: RompecabezasIcono,
     }
 ]
+
+/*export const aboutContent = (
+    <div style={{ display: "flex", flexDirection: "column", gap: "2dvw" }}>
+
+    </div>*/

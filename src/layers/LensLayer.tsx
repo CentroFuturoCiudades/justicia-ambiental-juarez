@@ -58,7 +58,7 @@ const LensLayer = () => {
         setFilteredFeatures(filtered); //saves all features
         setFlagSlider(false);
         //NEW: depending on activeLayerKey, save identifiers of filtered features
-        const identifiers = filtered.map(f => f.properties[activeLayerKey === "agebs" ? "cvegeo" : "name"]);
+        const identifiers = filtered.map(f => f.properties[activeLayerKey === "agebs" ? "index" : "name"]);
         if (activeLayerKey === "agebs") {
             setSelectedAGEBS(identifiers);
         }

@@ -1,7 +1,7 @@
 import { useAppContext } from "../context/AppContext";
 import { useEffect, useState } from "react";
 import { GeoJsonLayer } from "deck.gl";
-import { COMPLEMENTARY_LAYERS } from "../utils/constants";
+import { COMPLEMENTARY_LAYERS, CAPAS_BASE_CODEBOOK } from "../utils/constants";
 
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
@@ -24,7 +24,7 @@ const ComplementaryLayers = () => {
     
         selectedBaseLayers.forEach(layerKey => {
             if (!baseLayers[layerKey]) {
-                const complementary = COMPLEMENTARY_LAYERS[layerKey as keyof typeof COMPLEMENTARY_LAYERS];
+                const complementary = CAPAS_BASE_CODEBOOK[layerKey as keyof typeof CAPAS_BASE_CODEBOOK];
                 const url = complementary?.url;
                 if (!url) {
                     console.error(`No URL for layer: ${layerKey}`);

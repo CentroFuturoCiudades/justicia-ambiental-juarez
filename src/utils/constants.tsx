@@ -44,19 +44,18 @@ export const SECTIONS = {
     ambiental: {
         label: "ambiental",
         layers: [
-            "vulnerabilidad_ambiental",
             "vulnerabilidad_calor", //"islas_calor",
-            "exposicion_contaminantes", //"calidad_del_aire",
             "riesgo_inundacion",
             "riesgo_trafico_vehicular",
-            "indice_vulnerabilidad_ambiental"
         ] as LayerKey[],
     },
     industria: {
         label: "industria",
         layers: [
             "hogares_vulnerables_industria",
-            "infantes_vulnerables_industria"
+            "infantes_vulnerables_industria",
+            "adultos_vulnerables_industria",
+            "exposicion_industria"
         ] as LayerKey[],
     },
     equipamiento: {
@@ -86,24 +85,6 @@ export const SECTIONS = {
 }
 
 export const LAYERS: any = {
-    vulnerabilidad_ambiental: {
-        title: "Indice de Vulnerabilidad Ambiental",
-        description: "Índice que combina",
-        source: "",
-        property: "income_pc",
-        tematica: "ambiental",
-        type: "Categorica",
-        is_lineLayer: false,
-        visualization_type: "Gráfica de rango de edades y vulnerabilidad ambiental", // mantener?
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: 2020,
-        //map_type: "geometry",
-        //metric: "puntaje_0_100", //Puntaje de 0 a 100 (Alto, Medio, Bajo)
-        //stat_type: "promedio",
-        //graphs: [],
-        //metrics: [],
-    },
     /*islas_calor: {
         title: "islas de calor",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/heat_M08.01.tif",
@@ -138,6 +119,13 @@ export const LAYERS: any = {
         geographic_unit: "AGEB y Colonia",
         threshold: "1- Menos vulnerable, 2- Ligeramente vulnerable, 3- Moderadamente vulnerable, 4- Muy vulnerable, 5- Más vulnerable",
         year: 2020,
+        enabled: true,
+        formatValue: (x: number) => {
+            return formatNumber(x, 0)
+        },
+        //colors: ["#eaf3db","#4e6a2c"],
+        amountOfColors: 5,
+        colors: ["#9ec8f3ff", "#81D8D0", "#ebdf7aff", "#eeb47eff", "red"]
         //map_type: ,
         //metric: ,
         //stat_type: ,
@@ -166,24 +154,7 @@ export const LAYERS: any = {
         graphs: [],
         metrics: [],
     },*/
-    exposicion_contaminantes: {
-        title: "Grado de exposición a contaminantes",
-        description: "grado exp. contaminantes descr.",
-        source: "North American Pollutant Release and Transfer Register (PRTR) Initiative",
-        property: "exposicion_contaminantes",
-        tematica: "ambiental",
-        type: "Categorica",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "AGEB y Colonia",
-        threshold: "",
-        year: 2023,
-        //map_type: ,
-        //metric: ,
-        //stat_type: ,
-        //graphs: [],
-        //metrics: [],
-    },
+
     riesgo_inundacion: {
         title: "Riesgo de Inundación",
         description: "Índice que mide el riesgo de inundación",
@@ -203,7 +174,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     riesgo_trafico_vehicular: {
-        title: "Exposición a zonas con alto tráfico vehicular",
+        title: "Exposición a alto tráfico vehicular",
         description: "Traffic proximity measures the count of vehicles per day (average annual daily traffic- AADT) divided by distance. EJScreen presents traffic proximity using percentile rank, ranging from 0 (lowest) to 100 (highest). ",
         source: "Datos del IMIP",
         property: "riesgo_trafico_vehicular",
@@ -220,29 +191,11 @@ export const LAYERS: any = {
         //graphs: [],
         //metrics: [],
     },
-    indice_vulnerabilidad_ambiental: {
-        title: "Indice de Vulnerabilidad Ambiental",
-        description: "Índice para medir la vulnerabilidad ambiental",
-        source: "",
-        property: "income_pc",
-        tematica: "ambiental",
-        type: "Categorica",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
-        //map_type: "geometry",
-        //metric: "puntaje_0_100",
-        //stat_type: "promedio",
-        //graphs: [],
-        //metrics: [],
-    },
     hogares_vulnerables_industria: {
-        title: "Porcentaje de hogares próximos (5 km) a X tipo industria contaminante",
+        title: "Hogares expuestos a industrias contaminantes",
         description: "% de hogares que tienen en un radio de 5 km al menos 1 industria",
-        source: "Elaboración propia con datos del DENUE (2024) y Air Alliance Houston (códigos NAICS=SCIAN)",
-        property: "hogares_vulnerables_industria",
+        source: "Elaboración propia con datos censo (2020) y North American Pollutant Release and Transfer Register (PRTR) Initiative",
+        property: "viviendas_vulnerables_industria",
         tematica: "industria",
         type: "Continua",
         is_lineLayer: false,
@@ -250,6 +203,18 @@ export const LAYERS: any = {
         geographic_unit: "AGEB y TIFF",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.viviendas_vulnerables_industria !== null );
+            data.features.forEach((feature: any) => {
+                feature.properties.viviendas_vulnerables_industria = Math.round(feature.properties.viviendas_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"]
         //map_type: "geometry",
         //metric: "porcentaje_hogares",
         //stat_type: "promedio",
@@ -257,9 +222,9 @@ export const LAYERS: any = {
         //metrics: [],
     },
     infantes_vulnerables_industria: {
-        title: "Porcentaje de 0-5 años, +65 años expuestos (5 km) a X tipo industria contaminante",
+        title: "Infancias expuestas a industrias contaminantes",
         description: "% de infantes y adultos mayores que tienen en un radio de 5 km al menos 1 industria",
-        source: "Elaboración propia con datos del DENUE (2024) y Air Alliance Houston (códigos NAICS=SCIAN)",
+        source: "Elaboración propia con datos censo (2020) y North American Pollutant Release and Transfer Register (PRTR) Initiative",
         property: "infantes_vulnerables_industria",
         tematica: "industria",
         type: "Continua",
@@ -268,15 +233,79 @@ export const LAYERS: any = {
         geographic_unit: "AGEB y TIFF",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.infantes_vulnerables_industria !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.infantes_vulnerables_industria = Math.round(feature.properties.infantes_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"]
         //map_type: "geometry",
         //metric: "porcentaje_niños",
         //stat_type: "promedio",
         //graphs: [],
         //metrics: [],
     },
+    adultos_vulnerables_industria: {
+        title: "Adultos mayores expuestos a industrias contaminantes",
+        description: "% de infantes y adultos mayores que tienen en un radio de 5 km al menos 1 industria",
+        source: "Elaboración propia con datos censo (2020) y North American Pollutant Release and Transfer Register (PRTR) Initiative",
+        property: "adultos_mayores_vulnerables_industria",
+        tematica: "industria",
+        type: "Continua",
+        is_lineLayer: false,
+        visualization_type: "Velocimetro",
+        geographic_unit: "AGEB y TIFF",
+        threshold: "",
+        year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.adultos_mayores_vulnerables_industria !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.adultos_mayores_vulnerables_industria = Math.round(feature.properties.adultos_mayores_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"]
+        //map_type: "geometry",
+        //metric: "porcentaje_niños",
+        //stat_type: "promedio",
+        //graphs: [],
+        //metrics: [],
+    },
+    exposicion_industria: {
+        title: "Exposición a industrias contaminante",
+        description: "DESCRIPCIÓN PENDIENTE",
+        source: "North American Pollutant Release and Transfer Register (PRTR) Initiative",
+        property: "exposición_contaminantes",
+        tematica: "industria",
+        type: "Categorica",
+        is_lineLayer: false,
+        //visualization_type: "Velocimetro",
+        //geographic_unit: "AGEB y TIFF",
+        //threshold: "",
+        //year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.exposición_contaminantes !== null);
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"]
+    },
     equipamientos: {
         title: "Equipamientos", //"Número y tipos de equipamientos",
-        description: "Numero y tipos de equipamientos (salud, educación, recreativos y cuidados)",
+        description: "Número de equipamientos por tipo (salud, educación, recreativos y cuidados)",
         source: "IMIP",
         property: "equipamientos",
         tematica: "equipamiento",
@@ -293,7 +322,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     indice_accesibilidad: {
-        title: "Indice de Accesibilidad",
+        title: "Indice de Accesibilidad a Equipamientos",
         description: "Índice de accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
         source: "",
         property: "income_pc",
@@ -365,8 +394,8 @@ export const LAYERS: any = {
         //metrics: [],
     },
     hogares_15min_espacios_recreativos: {
-        title: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos",
-        description: "% de hogares que tienen en un radio de 15 minutos al menos 1 espacio recreativo",
+        title: "Acceso a espacios recreativos",
+        description: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
         property: "porcentaje_hogares_recreativos",
         tematica: "equipamiento",
@@ -383,8 +412,8 @@ export const LAYERS: any = {
         //metrics: [],
     },
     hogares_30min_salud: {
-        title: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos",
-        description: "% de hogares que tienen en un radio de 30 minutos al menos 1 equipamiento de salud",
+        title: "Acceso a hospitales o clínicas",
+        description: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
         property: "porcentaje_hogares_salud",
         tematica: "equipamiento",
@@ -401,8 +430,8 @@ export const LAYERS: any = {
         //metrics: [],
     },
     hogares_30min_preparatorias: {
-        title: "Porcentaje de hogares con acceso a preparatorias a 30 minutos",
-        description: "% de hogares que tienen en un radio de 30 minutos al menos 1 preparatoria",
+        title: "Acceso a preparatorias",
+        description: "Porcentaje de hogares con acceso a preparatorias a 30 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
         property: "porcentaje_hogares_preparatorias",
         tematica: "equipamiento",
@@ -419,8 +448,8 @@ export const LAYERS: any = {
         //metrics: [],
     },
     ingreso: {
-        title: "Ingreso promedio mensual",
-        description: "Ingreso promedio",
+        title: "Ingreso promedio per cápita ",
+        description: "Ingreso promedio per cápita mensual en pesos mexicanos para población económicamente activa",
         source: "Elaboración propia, con base en datos del ENIGH (2018) y censo (2020)",
         property: "ingreso",
         tematica: "poblacion",
@@ -441,7 +470,7 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return '$' + formatNumber(x, 0)
         },
-        colors: ['#B7E4B0', '#8FE38F', '#43A047', '#2E7D32', '#145A23'],
+        colors: ["#f4f9ff", "#08316b"],
         //map_type: "geometry",
         //metric: "ingreso_promedio", //(Alto, Medio, Bajo)
         //stat_type: "promedio",
@@ -460,6 +489,18 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "0% a 20% continua",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_0a5 !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_pob_0a5 = Math.round(feature.properties.porcentaje_pob_0a5 * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors: ["#f4f9ff", "#08316b"],
         //map_type: "geometry",
         //metric: "porcentaje", //0% a 20%
         //stat_type: "promedio",
@@ -467,7 +508,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     porcentaje_pob_60: {
-        title: "Población Vulnerable", //"Porcentaje de población de 60+",
+        title: "Adultos mayores vulnerables", //"Porcentaje de población de 60+",
         description: "Porcentaje de población de 60+",
         source: "Censo INEGI (2020)",
         property: "porcentaje_pob_60",
@@ -489,7 +530,7 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors: ['#B7E4B0', '#8FE38F', '#43A047', '#2E7D32', '#145A23']
+        colors: ["#f4f9ff", "#08316b"],
         //map_type: "geometry",
         //metric: "porcentaje", //0% a 10%
         //stat_type: "promedio",
@@ -497,7 +538,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     porcentaje_escolaridad: {
-        title: "Grado promedio de escolaridad",
+        title: "Población sin preparatoria terminada",
         description: "Porcentaje de la población total del AGEB que reportó tener menos de 12 años de escolaridad completada (preparatoria)",
         source: "Censo INEGI (2020)",
         property: "porcentaje_menos_prepa_terminada",
@@ -508,6 +549,18 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "> 60%: Vulnerable",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_menos_prepa_terminada !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_menos_prepa_terminada = Math.round(feature.properties.porcentaje_menos_prepa_terminada * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors: ["#f4f9ff", "#08316b"],
         //map_type: "geometry",
         //metric: "porcentaje", // 0% a 60%
         //stat_type: "promedio",
@@ -518,7 +571,7 @@ export const LAYERS: any = {
         title: "Indice de Marginación Urbana",
         description: "Indice marg. urbana desc.",
         source: "CONAPO",
-        property: "marginacion_urbana",
+        property: "indice_marginacion",
         tematica: "poblacion",
         type: "Categorica",
         is_lineLayer: false,
@@ -526,6 +579,14 @@ export const LAYERS: any = {
         geographic_unit: "",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.indice_marginacion !== null);
+            return data;
+        },
+        formatValue: (x: string) => {
+            return x
+        },
         //map_type: "geometry",
         //metric: "puntaje_0_100",
         //stat_type: "promedio",
@@ -533,7 +594,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     indice_bienestar: {
-        title: "Nivel de Bienestar",
+        title: "Niveles de Bienestar",
         description: "Índice de Bienestar Social  (variables utilizadas: % TV, % refri, % lavadoras, % microondas, grado prom. esc., prom. ocu. por cuarto. PC1 70%)",
         source: "Datos IMIP",
         property: "indice_bienestar",
@@ -630,6 +691,12 @@ export const CAPAS_BASE_CODEBOOK = {
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
         parent: null,
+    },
+    parques_industriales: {
+        title: "parques industriales",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+        enabled: true,
+        parent: "industrias"
     },
     limite_urbano: {
         title: "límite urbano",

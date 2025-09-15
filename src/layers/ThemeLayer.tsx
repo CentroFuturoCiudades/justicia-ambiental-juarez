@@ -26,7 +26,7 @@ const ThemeLayer = () => {
     const handleSelectedElements = (info: any) => {
         if (info) {
             const isAgeb = activeLayerKey === "agebs";
-            const key = isAgeb ? info.object.properties.cvegeo : info.object.properties.name;
+            const key = isAgeb ? info.object.properties.index : info.object.properties.name;
             const setSelected = isAgeb ? setSelectedAGEBS : setSelectedColonias;
             setSelected(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
         }
@@ -43,13 +43,17 @@ const ThemeLayer = () => {
         };
 
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
+        console.log("Selected Layer type:", layer.type);
 
         // Crea instancia de MapLayer
         const mapLayerInstance = new MapLayer({
             opacity: 1,
+            colors: layer?.colors,
             title: layer.title,
+            amountOfColors: layer?.amountOfColors,
             formatValue: layer.formatValue,
             theme: layer.tematica,
+            categorical: layer.type === "Categorica" ? true : false,
         });
 
         // Copia del geojson universal de agebs/colonias (para aplicar cambios dependiendo del dataProcessing de la capa seleccionada)

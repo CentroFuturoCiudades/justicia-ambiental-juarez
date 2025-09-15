@@ -63,17 +63,17 @@ const Body = () => {
                 </span>
               </Button>
             ) : (
-                accordionItems.map((item, index) => (
-              <Button 
-                className={`buttonColumn__button${selectedItem?.id === item.id ? " buttonColumn__button--selected" : ""}`}
-                key={index} 
-                onClick={() => handleItemClick(item)}
-              >
-                <p>{item.title}</p>
-                <span className="buttonColumn__icon">
-                  <img src={item.icon} />
-                </span>
-              </Button>
+              accordionItems.map((item, index) => (
+                <Button 
+                  className={`buttonColumn__button${selectedItem?.id === item.id ? " buttonColumn__button--selected" : ""}`}
+                  key={index} 
+                  onClick={() => handleItemClick(item)}
+                >
+                  <p>{item.title}</p>
+                  <span className="buttonColumn__icon">
+                    <img src={item.icon} />
+                  </span>
+                </Button>
               ))
             )
           }
@@ -85,6 +85,9 @@ const Body = () => {
           <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
         </div>
       )}
+      {/*<div className="cardContainer">
+          <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
+        </div>*/}
     </div>
   );
 }

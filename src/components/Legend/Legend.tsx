@@ -56,9 +56,10 @@ const Legend = ({ ranges, title, colors, formatValue, categorical }: LegendProps
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "8px",
-              padding: "6px",
-              background: "#fff",
+              justifyContent: "space-between",
+              //gap: "0.5dvh",
+              //padding: "6px",
+              //background: "#fff",
               maxWidth: "80px"
             }}
           >
@@ -70,8 +71,8 @@ const Legend = ({ ranges, title, colors, formatValue, categorical }: LegendProps
                   key={index}
                   style={{
                     backgroundColor: color,
-                    width: "18px",
-                    height: "18px",
+                    width: "2dvh",
+                    height: "2dvh",
                     border: "1px solid rgba(0,0,0,0.1)",
                     borderRadius: "2px",
                     boxShadow: "0 1px 2px rgba(0,0,0,0.04)"
