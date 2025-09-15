@@ -1,6 +1,7 @@
 import { useAppContext } from "../../context/AppContext";
 import "./LayerCard.scss";
 import { IoInformationCircleSharp } from "react-icons/io5";
+import { use, useEffect, useState, type JSX } from "react";
 
 type LayerCardProps = {
     selectedLayerData: any;
@@ -16,22 +17,24 @@ const LayerCard = ({ selectedLayerData, rangeGraphRef, onInfoHover, layerCardRef
         selectedAGEBS, 
         selectedColonias, 
         activeLayerKey, 
-        selectionMode,
+        //selectionMode,
         mapLayerInstance,
         tematicaData,
+        filteredFeatures,
     } = useAppContext();
 
-    if ( !activeLayerKey || !mapLayerInstance ) return null;
+    useEffect(() => {
+        console.log("Filtered features:", filteredFeatures);
+    }, [filteredFeatures]);
+
+    if ( !activeLayerKey || !mapLayerInstance ) return;
 
     const themeKey = selectedLayerData?.tematica;
-    const isRadius = selectionMode === "radius";
-
-    const selected = isRadius
-        ? tematicaData.features.map(f => f.properties[activeLayerKey === "agebs" ? "cvegeo" : "name"])
-        : activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
-
+    const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias; // si esta cambiando cuando agrego colonias
+ 
     const average = mapLayerInstance.getAverage(
-        tematicaData.features, 
+        //tematicaData.features,
+        tematicaData.allFeatures, 
         selected, 
         selectedLayerData.property, 
         activeLayerKey
@@ -58,7 +61,7 @@ const LayerCard = ({ selectedLayerData, rangeGraphRef, onInfoHover, layerCardRef
                 <p>{description}</p>
             </div>
             <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.3dvw 0.5dvw" }}>
-                {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: 0)}
+                {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0)}
             </div>
         </div>
     );
