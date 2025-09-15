@@ -1,8 +1,8 @@
-import "./PageHeader.scss";
+import "./Header.scss";
 import VisorIcon from "/assets/Icono MAPA IR AL VISOR.png";
 
 
-export default function PageHeader() {
+export default function Header() {
     return (
         <header className="page-header" >
             <div className="page-header__logo" >

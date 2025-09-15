@@ -1,14 +1,15 @@
 .page-header {
+  position: relative;
   padding-left: 4dvw;
   padding-right: 12dvw;
-  position: relative;
-  z-index: 1;
   background-color: #fefdfc;
+  z-index: 1;
 
   &__logo {
     width: 100%;
-    padding: min(3dvh, 3dvw) 0;
-    border-bottom: 0.3em solid black;
+    padding: 3dvh 0;
+    //padding: 8dvw 0;
+    border-bottom: 3px solid black;
   }
 
   &__title {
@@ -26,12 +27,12 @@
 
 .button_visor {
   position: absolute;
-  right: 3dvw;
-  top: calc(100% - 3dvw);
-  width: 6dvw;
-  height: 6dvw;
+  right: calc(6dvw - 0.5 * min(12dvh, 8dvw));
+  top: calc(100% - min(6dvh, 4dvw));
+  width: min(12dvh, 8dvw);
+  height: min(12dvh, 8dvw);
   border-radius: 50%;
-  padding: 0.2dvh;
+  padding: min(0.35dvh, 0.2dvw);
   background-color: transparent;
   transition: transform 0.3s ease;
 
@@ -40,18 +41,13 @@
     height: 100%;
     object-fit: cover;
   }
-}
-
-.button_visor:hover {
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  background-color: var(--background-d1);
-  transform: scale(1.05);
-  border: none;
-}
-
-.button_visor:focus,
-.button_visor:focus-visible {
-  outline: none !important;
-  border-color: transparent !important;
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    box-shadow: 3px 2px 10px rgba(0, 0, 0, 0.3);
+    background-color: var(--background-d1);
+    transform: scale(1.05);
+    border: none;
+    outline: none;
+  }
 }

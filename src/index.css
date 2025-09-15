@@ -89,3 +89,12 @@ button {
   object-fit: contain;
 }*/
 
+@media (max-width: 800px) {
+  :root {
+    --font-size-title: min(6dvh, 6dvw); 
+    --font-size-visor-header: 2.2dvw;
+    --font-size-header: min(3dvh, 2.2dvw);
+    --font-size-subtitle: min(2dvh, 1.5dvw);
+    --font-size-body: 1.3dvw;
+  }
+}

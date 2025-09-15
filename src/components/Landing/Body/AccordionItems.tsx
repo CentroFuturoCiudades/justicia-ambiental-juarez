@@ -5,7 +5,7 @@ import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import Card1_img from '/assets/Indicadores Ambientales.png';
 import type { JSX } from "react";
 
-type AccordionItemType = {
+export type AccordionItemType = {
   id: string;                      // Unique identifier
   title: string;                   // Header title shown on the accordion
   content: JSX.Element | string;  // Content shown when item is expanded
