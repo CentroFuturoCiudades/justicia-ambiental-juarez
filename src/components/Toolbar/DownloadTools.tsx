@@ -1,5 +1,5 @@
 import { useAppContext } from "../../context/AppContext";
-import { Group, Button } from "@chakra-ui/react";
+import { Group, Button, Float, Circle } from "@chakra-ui/react";
 import { Tooltip } from "../ui/tooltip";
 import { toaster } from "../ui/toaster";
 import html2canvas from "html2canvas";
@@ -18,7 +18,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
         selectedAGEBS,
         selectedColonias,
         activeLayerKey,
-        selectedBaseLayers,
+        //selectedBaseLayers,
     } = useAppContext();
 
     const hasSelection = (
@@ -33,7 +33,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
         const newInstance = { 
             ...instance,
             selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
-            complementarias: selectedBaseLayers,
+            //complementarias: selectedBaseLayers,
             activeKey: activeLayerKey
         };
 
@@ -48,6 +48,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
             }
 
             if (rangeGraphRef.current) {
+                //"Unable to clone WebGL context as it has preserveDrawingBuffer=false" ??
                 const canvas = await html2canvas(rangeGraphRef.current);
                 newInstance.graphImage = canvas.toDataURL("image/png");
             }
@@ -74,18 +75,20 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                         }}
                         style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
                     >
-                        <img src={SaveLayer} alt="Guardar Capa" style={{maxWidth: "90%", maxHeight: "90%"}}/>
+                        <img src={SaveLayer} />
                         {mapLayers.length > 0 && 
-                            <div className="circle">
-                                {mapLayers.length}
-                            </div>
+                            <Float offset="min(0.7dvh, 0.4dvw)">
+                                <Circle bg="red" size="min(1.2dvh, 0.7dvw)" fontSize={"min(0.8dvh, 0.5dvw)"} >
+                                    {mapLayers.length}
+                                </Circle>
+                            </Float>
                         }
                     </Button>
                 </Tooltip>
 
                 <Tooltip content="Descargar Resumen" disabled={!hasScreenshots}>
                     <Button className="button"
-                        disabled={!hasScreenshots}
+                        //disabled={!hasScreenshots}
                         onClick={() => {
                             setPopUp(true);
                         }}

@@ -5,9 +5,8 @@
   display: flex;
   gap: 0.65dvw;
   justify-content: flex-start;
-  //height: min(3.9dvh, 2.3dvw);
   //height: min(3.65dvh, 2.13dvw);
-  height: 2.13dvw;
+  height: min(4.5dvh, 2.6dvw);
 }
 
 .button_group {
@@ -16,23 +15,24 @@
 
 .button {
   height: 100%;
-  width: 3dvw;
-  min-width: 2dvw;
+  width: 2.8dvw;
+  //width: 2.5dvw;
+  min-width: 2.8dvw;
   padding: 0;
   border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--background-dark);
-
-  .img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
+}
+.button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .button--thin {
   width: 2dvw;
+  min-width: 2dvw;
   background-color: #6f6f6f;
 }
 .button--thin.button--active {
@@ -48,21 +48,6 @@
 .toolbar .button:focus,
 .toolbar .button:focus-visible {
   outline: none !important;
-}
-
-.circle {
-  position: absolute;
-  top: 0.1dvw;
-  right: 0.1dvw;
-  width: 0.8dvw;
-  height: 0.8dvw;
-  border-radius: 50%;
-  background: red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 0.5vw;
 }
 
 // Slider styles
