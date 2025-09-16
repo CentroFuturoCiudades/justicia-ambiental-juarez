@@ -14,6 +14,7 @@ import Toolbar from "../Toolbar/Toolbar";
 import RadiusSlider from "../Toolbar/RadiusSlider";
 import InfoTooltip from "../Layer Card/Info Tooltip/InfoTooltip";
 import PopUp from "../Download Card/PopUp";
+import { Tooltip } from "../ui/tooltip";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -31,6 +32,7 @@ const Visor = () => {
         mapLayers,
         dragMap,
         selectionMode,
+        layerTooltip
     } = useAppContext();
 
     const { layers } = Layers();
@@ -148,12 +150,20 @@ const Visor = () => {
                     <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} />
                 )}
 
-                <InfoTooltip
-                    show={showInfoCard}
-                    containerRef={mapContainerRef}
-                    layerCardRef={layerCardRef}
-                    selectedLayerData={selectedLayerData}
-                />
+                {!showDownloadCard && 
+                    <InfoTooltip
+                        show={showInfoCard}
+                        containerRef={mapContainerRef}
+                        layerCardRef={layerCardRef}
+                        selectedLayerData={selectedLayerData}
+                    />
+                }
+
+                {layerTooltip &&
+                    <div className="visor__layerTooltip" style={{ left: layerTooltip.x + 8, top: layerTooltip.y }}>
+                        {layerTooltip.content.release }
+                    </div>
+                }
             </div>
         </div>
        );

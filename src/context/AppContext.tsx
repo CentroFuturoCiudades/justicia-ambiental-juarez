@@ -52,6 +52,8 @@ interface AppContextI {
     //array de maplayers para el reporte
     mapLayers: any[];
     setMapLayers: Dispatch<SetStateAction<any[]>>;
+    layerTooltip: any | null;
+    setLayerTooltip: Dispatch<SetStateAction<any | null>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -103,6 +105,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //maplayer array for pdf
     const [mapLayers, setMapLayers] = useState<any[]>([]);
 
+    const [layerTooltip, setLayerTooltip] = useState<any | null>(null);
+
     return (
         <AppContext.Provider value={{
             viewState,
@@ -144,7 +148,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setColoniasData,
             //
             mapLayers,
-            setMapLayers
+            setMapLayers,
+            layerTooltip,
+            setLayerTooltip
 
         }}
         >

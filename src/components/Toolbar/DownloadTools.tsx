@@ -88,7 +88,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
 
                 <Tooltip content="Descargar Resumen" disabled={!hasScreenshots}>
                     <Button className="button"
-                        //disabled={!hasScreenshots}
+                        disabled={!hasScreenshots}
                         onClick={() => {
                             setPopUp(true);
                         }}

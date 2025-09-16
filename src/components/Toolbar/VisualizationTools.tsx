@@ -5,7 +5,7 @@ import IconAGEBS from '/assets/Icono AGEBS.png'
 import IconColonias from '/assets/Icono COLONIAS.png'
 
 const VisualizationTools = () => {
-    const { activeLayerKey, setActiveLayerKey } = useAppContext();
+    const { activeLayerKey, setActiveLayerKey, selectedLayer } = useAppContext();
 
     return (
         <div>
@@ -24,6 +24,7 @@ const VisualizationTools = () => {
                         className={`button button--thin ${activeLayerKey === "colonias" ? "button--active" : ""}`} 
                         onClick={() => setActiveLayerKey("colonias")} 
                         style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                        disabled={selectedLayer !== "porcentaje_pob_60"}
                     >
                         <img src={IconColonias} alt="Colonias" />
                     </Button>

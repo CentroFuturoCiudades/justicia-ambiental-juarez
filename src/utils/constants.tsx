@@ -85,28 +85,6 @@ export const SECTIONS = {
 }
 
 export const LAYERS: any = {
-    /*islas_calor: {
-        title: "islas de calor",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/heat_M08.01.tif",
-        map_type: "raster",
-        property: "income_pc",
-        is_lineLayer: false,
-        type: "Continua",
-        enabled: false,
-        formatValue: (x: number) => {
-            return formatNumber(x, 1) + " °C"
-        },
-        metric: "grados_centigrados",
-        stat_type: "promedio",
-        visualization_type: "Semaforo",
-        tematica: "ambiental",
-        geographic_unit: "AGEB",    //Celdas de raster de 30 x 30m convertidas a AGEBs
-        threshold: "",
-        description: "Indice que mide la exposición a islas de calor",
-        year: null,
-        graphs: [],
-        metrics: [],
-    },*/
     vulnerabilidad_calor: {
         title: "Índice de vulnerabilidad al calor",
         description: "Evalúa la exposición al calor, la sensibilidad al calor y la capacidad de adaptación para evaluar de manera integral la vulnerabilidad al calor.",
@@ -118,43 +96,21 @@ export const LAYERS: any = {
         visualization_type: "Semaforo",
         geographic_unit: "AGEB y Colonia",
         threshold: "1- Menos vulnerable, 2- Ligeramente vulnerable, 3- Moderadamente vulnerable, 4- Muy vulnerable, 5- Más vulnerable",
+        //categories: ["Poco vulnerable", "Ligeramente vulnerable", "Moderadamente vulnerable", "Muy vulnerable", "Extremadamente vulnerable"],
+        categories: ["Extremadamente vulnerable", "Muy vulnerable", "Moderadamente vulnerable", "Ligeramente vulnerable", "Poco vulnerable"],
         year: 2020,
         enabled: true,
         formatValue: (x: number) => {
             return formatNumber(x, 0)
         },
-        //colors: ["#eaf3db","#4e6a2c"],
         amountOfColors: 5,
-        colors: ["#9ec8f3ff", "#81D8D0", "#ebdf7aff", "#eeb47eff", "red"]
+        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         //map_type: ,
         //metric: ,
         //stat_type: ,
         //graphs: [],
         //metrics: [],
     },
-    /*calidad_del_aire: {
-        title: "Calidad del Aire",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/calidad_del_aire_CO.tif",
-        map_type: "raster",
-        property: "income_pc",
-        is_lineLayer: false,
-        type: "Continua",
-        enabled: false,
-        formatValue: (x: number) => {
-            return formatNumber(x, 2) + " ppm"
-        },
-        metric: "indice_calidad_del_aire", //Varía dependiendo del contaminante
-        stat_type: "promedio",
-        visualization_type: "Mapa",
-        tematica: "ambiental",
-        geographic_unit: "Mapa", //Mapa con celdas de raster de 1kmx1km
-        threshold: "",
-        description: "Índice que mide la calidad del aire en base a diferentes contaminantes",
-        year: null,
-        graphs: [],
-        metrics: [],
-    },*/
-
     riesgo_inundacion: {
         title: "Riesgo de Inundación",
         description: "Índice que mide el riesgo de inundación",
@@ -214,7 +170,9 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"]
+        colors:["#f6ede9", "#8c5c47"],    
+        //trimOutliers: true,    
+        //trimOutliers: true,
         //map_type: "geometry",
         //metric: "porcentaje_hogares",
         //stat_type: "promedio",
@@ -244,7 +202,8 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"]
+        colors:["#f6ede9", "#8c5c47"],
+        //trimOutliers: true,
         //map_type: "geometry",
         //metric: "porcentaje_niños",
         //stat_type: "promedio",
@@ -274,7 +233,8 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"]
+        colors:["#f6ede9", "#8c5c47"],
+        //trimOutliers: true,
         //map_type: "geometry",
         //metric: "porcentaje_niños",
         //stat_type: "promedio",
@@ -282,12 +242,12 @@ export const LAYERS: any = {
         //metrics: [],
     },
     exposicion_industria: {
-        title: "Exposición a industrias contaminante",
-        description: "DESCRIPCIÓN PENDIENTE",
+        title: "Kg de contaminantes por kilómetro cuadrado",
+        description: "Cuántos kilogramos de contaminantes totales hay por kilómetro cuadrado de superficie del AGEB/colonia",
         source: "North American Pollutant Release and Transfer Register (PRTR) Initiative",
-        property: "exposición_contaminantes",
+        property: "kg_contaminantes_por_km2",
         tematica: "industria",
-        type: "Categorica",
+        type: "Continua",
         is_lineLayer: false,
         //visualization_type: "Velocimetro",
         //geographic_unit: "AGEB y TIFF",
@@ -299,9 +259,10 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 0) + "%"
+            return formatNumber(x, 0) + " kg"
         },
-        colors:["#f6ede9", "#8c5c47"]
+        colors:["#f6ede9", "#8c5c47"],
+        trimOutliers: true,
     },
     equipamientos: {
         title: "Equipamientos", //"Número y tipos de equipamientos",
@@ -322,7 +283,7 @@ export const LAYERS: any = {
         //metrics: [],
     },
     indice_accesibilidad: {
-        title: "Indice de Accesibilidad a Equipamientos",
+        title: "Índice de Accesibilidad a Equipamientos",
         description: "Índice de accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
         source: "",
         property: "income_pc",
@@ -579,7 +540,7 @@ export const LAYERS: any = {
         geographic_unit: "",
         threshold: "",
         year: null,
-        enabled: true,
+        //enabled: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.indice_marginacion !== null);
             return data;
@@ -685,78 +646,132 @@ export const CAPAS_BASE_CODEBOOK = {
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
         parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     industrias: {
         title: "industrias",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/industries.geojson",
+        enabled: true,
         parent: null,
+        isPointLayer: true,
+        field:"release",
+        colors: ["#7e0000ff", "#ff0000ff"],
+        //colors: ["#927e5eff", "#d88a25ff", "#e76e36ff", "#d42e14ff", "#ff0000ff"],
+        hoverInfo: true,
     },
     parques_industriales: {
         title: "parques industriales",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: true,
-        parent: "industrias"
+        parent: "industrias",
+        isPointLayer: false,
+        //field: "ID_COLO",
+        field: "",
+        colors: [],
+        hoverInfo: false,
     },
     limite_urbano: {
         title: "límite urbano",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
         parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     vias_principales: {
         title: "vias principales",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
-        parent: null
+        parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     equipamientos: {
         title: "equipamientos",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: false,
         parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     educacion:{
         title: "educación",
         url: "...",
         enabled: false,
-        parent: "equipamientos"
+        parent: "equipamientos",
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     salud: {
         title: "salud",
         url: "...",
         enabled: false,
-        parent: "equipamientos"
+        parent: "equipamientos",
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     recreacion: {
         title: "recreación",
         url: "...",
         enabled: false,
-        parent: "equipamientos"
+        parent: "equipamientos",
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     parques: {
         title: "parques",
         url: "...",
         enabled: false,
-        parent: "equipamientos"
+        parent: "equipamientos",
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     vias_ferreas: {
         title: "vías férreas",
         url: "...",
         enabled: false,
-        parent: null
+        parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     islas_calor: {
         title: "islas de calor",
         url: "...",
         enabled: false,
-        parent: null
+        parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
     calidad_aire: {
         title: "calidad del aire",
         url: "...",
         enabled: false,
-        parent: null
+        parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: [],
+        hoverInfo: false,
     },
 }
 

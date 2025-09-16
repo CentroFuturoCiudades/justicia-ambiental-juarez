@@ -54,6 +54,7 @@ const ThemeLayer = () => {
             formatValue: layer.formatValue,
             theme: layer.tematica,
             categorical: layer.type === "Categorica" ? true : false,
+            categories: layer?.categories,
         });
 
         // Copia del geojson universal de agebs/colonias (para aplicar cambios dependiendo del dataProcessing de la capa seleccionada)
@@ -86,7 +87,7 @@ const ThemeLayer = () => {
             data,
             layer?.property || "",
             layer?.is_lineLayer || false,
-            true,
+            layer?.trimOutliers || false,
             handleSelectedElements,
             activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
             selectionMode

@@ -66,4 +66,16 @@
         gap: min(0.5dvh, 0.3dvw);
         width: min(29.35dvh, 17.16dvw);
     }
+
+    &__layerTooltip {
+        position: absolute;
+        z-index: 10;
+        //background-color: rgba(0,0,0,0.8);
+        background-color: rgba(241, 240, 238, 0.8);
+        padding: min(0.5dvh, 0.3dvw) min(1dvh, 0.6dvw);
+        border-radius: var(--border-radius);
+        font-size: var(--font-size-button);
+        font-weight: 700;
+        //maxWidth: 220
+    }
 }
