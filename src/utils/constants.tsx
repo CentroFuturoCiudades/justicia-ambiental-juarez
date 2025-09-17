@@ -47,7 +47,6 @@ export const SECTIONS = {
             "vulnerabilidad_calor",
             "riesgo_inundacion",
             "riesgo_trafico_vehicular",
-            "exposicion_industria"
         ] as LayerKey[],
     },
     industria: {
@@ -56,7 +55,7 @@ export const SECTIONS = {
             "hogares_vulnerables_industria",
             "infantes_vulnerables_industria",
             "adultos_vulnerables_industria",
-            //"exposicion_industria"
+            "exposicion_industria"
         ] as LayerKey[],
     },
     equipamiento: {
@@ -247,7 +246,7 @@ export const LAYERS: any = {
         description: "Cuántos kilogramos de contaminantes totales hay por kilómetro cuadrado de superficie del AGEB/colonia",
         source: "North American Pollutant Release and Transfer Register (PRTR) Initiative",
         property: "kg_contaminantes_por_km2",
-        tematica: "ambiental",
+        tematica: "industria",
         type: "Continua",
         is_lineLayer: false,
         //visualization_type: "Velocimetro",
@@ -653,7 +652,7 @@ export const CAPAS_BASE_CODEBOOK = {
         hoverInfo: false,
     },
     industrias: {
-        title: "industrias",
+        title: "industrias contaminantes",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/industries.geojson",
         enabled: true,
         parent: null,
@@ -667,7 +666,7 @@ export const CAPAS_BASE_CODEBOOK = {
         title: "parques industriales",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
         enabled: true,
-        parent: "industrias",
+        parent: null,
         isPointLayer: false,
         //field: "ID_COLO",
         field: "",

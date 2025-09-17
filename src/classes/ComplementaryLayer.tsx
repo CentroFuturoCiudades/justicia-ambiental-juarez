@@ -32,6 +32,8 @@ export class ComplementaryLayer {
         if (field) {
             const minVal = Math.min(...mappedData) || 0;
             const maxVal = Math.max(...mappedData) || 0;
+            this.minVal = minVal;
+            this.maxVal = maxVal;
             
             const domain = [
             minVal,
@@ -60,7 +62,7 @@ export class ComplementaryLayer {
             }
         } else {
             getColor = (feature: any): [number, number, number, number] => {
-                const bg = [255, 255, 255]; //si no recibe property field, pone gris claro, escoger otro color?
+                const bg = [96, 96, 96]; //si no recibe property field, pone gris claro, escoger otro color?
                 const [r, g, b] = [200, 200, 200]; // Always returns RGBColor
 
                 return [
@@ -84,7 +86,7 @@ export class ComplementaryLayer {
                 const value = f.properties.release;
                 return value ? Math.sqrt(value) * 10 : 4;
             } : undefined,
-            pointRadiusMinPixels: isPointLayer ? 6 : undefined,
+            pointRadiusMinPixels: isPointLayer ? 4 : undefined,
             pointRadiusMaxPixels: isPointLayer ? 60 : undefined,
             onHover: (info) => {
                 if (info.object) {

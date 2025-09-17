@@ -160,7 +160,7 @@ const Visor = () => {
 
                 {layerTooltip &&
                     <div className="visor__layerTooltip" style={{ left: layerTooltip.x + 8, top: layerTooltip.y }}>
-                        {layerTooltip.content.release }
+                        {Math.round(layerTooltip.content.release) + " kg"}
                     </div>
                 }
             </div>

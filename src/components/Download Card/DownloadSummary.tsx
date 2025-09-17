@@ -8,7 +8,7 @@ const DownloadSummary = ( setPopUp : any ) => {
 
     return (
         <div className="downloadCard">
-            <p className="title">| descarga |</p>
+            <p className="title" style={{marginBottom: "1dvh"}}>| descarga |</p>
             {mapLayers.map((instance, index) => (
                 <div className="downloadCard__item" key={index}>
                     <div className="downloadCard__content">

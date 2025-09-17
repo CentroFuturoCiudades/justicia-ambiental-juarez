@@ -143,7 +143,7 @@ export class MapLayer {
           const item = feature.properties[field];
           //para valores de 0, poner gris claro
           if (item == 0) {
-            return [200, 200, 200, 200]; //gris con poca opacidad
+            return [230, 230, 230, 200]; //gris con poca opacidad
           }
           const rgbValue = color(this.colorMap(item))?.rgb();
           return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
