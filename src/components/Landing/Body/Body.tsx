@@ -5,6 +5,7 @@ import ContactIcon from "/assets/Icono CONTACTO.png";
 import MoreIcon from "/assets/Icono MAS_EQUIPO.png";
 import Card from "../Card/Card";
 import {accordionItems} from './AccordionItems';
+import { aboutContent } from './AccordionItems';
 import type { AccordionItemType } from './AccordionItems';
 import { useMediaQuery } from '@chakra-ui/react';
 
@@ -80,14 +81,20 @@ const Body = () => {
         </div>
 
       {/* Info box derecha */}
-      {selectedItem && (
+      {/*selectedItem && (
         <div className="cardContainer">
           <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
         </div>
-      )}
-      {/*<div className="cardContainer">
+      )}*/}
+      {selectedItem ? (
+        <div className="cardContainer">
           <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
-        </div>*/}
+        </div>
+      ):(
+        <div className="cardContainer">
+          <Card content={aboutContent()} />
+        </div>
+      )}
     </div>
   );
 }
