@@ -1,40 +1,34 @@
 .visor {
     width: auto;
-    
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 100dvh;
     color: var(--text-primary);
     font-size: var(--font-size-body);
     border-radius: var(--border-radius);
     overflow: hidden;
 
     &__leftPanel {
-        width: 25.78vw;
+        width: min(44.08dvh, 25.78dvw);
         background: var(--background-d1);
         display: flex;
         justify-content: center;
-        position: relative;
-        padding: 2.5dvh 0;
     }
 
     &__panelContent {
         width: 81.41%;
         display: flex;
         flex-direction: column;
-        gap: 2dvh;
+        gap: min(2dvh, 1.16dvw);
         overflow-y: auto;
-        //padding: 2dvh 0;
+        padding: min(2dvh, 1.16dvw) 0;
     }
 
     &__title {
-        font-size: var(--font-size-header);
-        width: 100%;
         font-family: 'Space Mono', monospace;
-        line-height: 1.2;
-        padding: 0 0 2.5dvh 0;
-        border-bottom: 2px solid var(--text-primary);
-        margin-bottom: 0;
+        font-size: var(--font-size-visor-header);
+        padding-bottom: min(2dvh, 1.16dvw);
+        border-bottom: 0.1em solid var(--text-primary);
 
         .italic {
             font-style: italic;
@@ -45,9 +39,8 @@
     }
 
     &__description {
-        line-height: 1.2;
-        margin-bottom: 1dvh;
-        font-size: var(--font-size-subtitle);
+        //font-size: var(--font-size-body);
+        margin-bottom: min(1dvh, 0.5dvw);
     }
 
     &__mapContainer {
@@ -66,12 +59,23 @@
 
     &__dropDowns {
         position: absolute;
-        top: 2vh;
-        right: 2vw;
+        top: min(3dvh, 1.75dvw);
+        right: min(3dvh, 1.75dvw);
         display: flex;
         flex-direction: column;
-        gap: 0.3rem;
-        width: 17.13vw;
+        gap: min(0.5dvh, 0.3dvw);
+        width: min(29.35dvh, 17.16dvw);
     }
 
+    &__layerTooltip {
+        position: absolute;
+        z-index: 10;
+        //background-color: rgba(0,0,0,0.8);
+        background-color: rgba(241, 240, 238, 0.8);
+        padding: min(0.5dvh, 0.3dvw) min(1dvh, 0.6dvw);
+        border-radius: var(--border-radius);
+        font-size: var(--font-size-body);
+        font-weight: 700;
+        //maxWidth: 220
+    }
 }

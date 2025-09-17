@@ -1,61 +1,50 @@
 .layerCard {
+  background-color: var(--background);
+  padding: 0.7dvw;
+  border: 0.15em solid;
+  border-radius: var(--border-radius);
 
-    background-color: var(--background);
-    padding: 0.5rem;
-    border: 2px solid;
-    //border-radius: 0.4rem;
-    border-radius: 0.3vw;
-    border-color: var(--ambiental-primary);
-    //margin-bottom: 1rem;
-    height: auto;
-    
+  &__header {
+    font-size: var(--font-size-subtitle);
+    font-weight: 500;
+    color: white;
+    text-transform: lowercase;
+    padding: 0.5dvw;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
 
-    &__cardTitle {
-        margin-bottom: 0.5rem;
-        color: white;
-        padding: 0.5rem;
-        border-radius: 2px;
-        //text-align: center;
-        font-size: var(--font-size-subtitle);
-        text-transform: lowercase;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        gap: 0.3rem;
+    &__title {
+      flex: 1;
     }
-
-    .layerCard__infoIconWrapper {
-        position: relative;
-        display: inline-block;
-
-        .layerCard__tooltip {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 105%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.65);
-            color: #222;
-            padding: 0.7em 1.2em;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            font-size: var(--font-size-body);
-
-        }
-
-        &:hover .layerCard__tooltip {
-            display: block;
-        }
-        }
-
-    &__layerCardBody {
-        padding: 0.5rem;
-        font-size: var(--font-size-body);
+    &__icon {
+      font-size: var(--font-size-header);
     }
+  }
 
-    &__source {
-        font-size: var(--font-size-button);
-        font-weight: bold;
-    }
+  &__body {
+    padding: 0.5dvw;
+    font-size: var(--font-size-body);
+  }
+}
 
+.description-bold {
+  font-style: normal;
+  font-weight: bold;
+}
+
+$tematicas: (
+  ambiental: var(--ambiental-primary),
+  industria: var(--industria-primary),
+  equipamiento: var(--equipamiento-primary),
+  poblacion: var(--poblacion-primary)
+);
+
+@each $key, $color in $tematicas {
+  .layerCard--#{$key} {
+    border-color: #{$color};
+  }
+  .layerCard__header.layerCard--#{$key} {
+    background-color: #{$color};
+  }
 }

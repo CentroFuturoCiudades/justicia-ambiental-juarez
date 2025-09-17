@@ -1,34 +1,40 @@
 import { useAppContext } from "../../context/AppContext";
-import { COLORS } from "../../utils/constants";
-import type {Feature} from "geojson";
-import { useRef } from "react";
 import "./LayerCard.scss";
 import { IoInformationCircleSharp } from "react-icons/io5";
-
+import { use, useEffect, useState, type JSX } from "react";
 
 type LayerCardProps = {
     selectedLayerData: any;
-    tematicaData: { features: Feature[] };
-    color: string;
-    mapLayerInstance: any;
     rangeGraphRef: React.RefObject<HTMLDivElement | null>;
-    onInfoHover: any;
+    onInfoHover: React.Dispatch<React.SetStateAction<boolean>>;
+    layerCardRef?: React.RefObject<HTMLDivElement | null>;
 };
 
 
-const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, rangeGraphRef, onInfoHover}: LayerCardProps) => {
+const LayerCard = ({ selectedLayerData, rangeGraphRef, onInfoHover, layerCardRef }: LayerCardProps) => {
 
-    const { selectedAGEBS, selectedColonias, activeLayerKey, selectionMode } = useAppContext();
-    const isRadius = selectionMode === "radius";
+    const { 
+        selectedAGEBS, 
+        selectedColonias, 
+        activeLayerKey, 
+        //selectionMode,
+        mapLayerInstance,
+        tematicaData,
+        filteredFeatures,
+    } = useAppContext();
 
-    const selected = isRadius
-        ? tematicaData.features.map(f => f.properties[activeLayerKey === "agebs" ? "cvegeo" : "name"])
-        : activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
+    useEffect(() => {
+        console.log("Filtered features:", filteredFeatures);
+    }, [filteredFeatures]);
 
-    //const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias;
+    if ( !activeLayerKey || !mapLayerInstance ) return;
 
+    const themeKey = selectedLayerData?.tematica;
+    const selected = activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias; // si esta cambiando cuando agrego colonias
+ 
     const average = mapLayerInstance.getAverage(
-        tematicaData.features, 
+        //tematicaData.features,
+        tematicaData.allFeatures, 
         selected, 
         selectedLayerData.property, 
         activeLayerKey
@@ -37,40 +43,25 @@ const LayerCard = ({ selectedLayerData, tematicaData, color, mapLayerInstance, r
     const description = mapLayerInstance.getDescription(selected, selectedLayerData.title, activeLayerKey, averageFormatted);
 
     return (
-        <div>
-            <div className="layerCard" style={{borderColor: color}}>
-                <div className="layerCard__cardTitle" style={{background: color}}> 
-                    {selected.length === 0 ? 
-                        <p>{selectedLayerData?.title}</p>
-                    : 
-                        <p>{selectedLayerData?.title} por {(activeLayerKey === "agebs" ? "AGEBS" : "Colonias")}</p>
-                    }
-
-                    {/*<div className="layerCard__infoIconWrapper">
-                        <IoInformationCircleSharp className="layerCard__infoIcon" />
-                        <div className="layerCard__tooltip">
-                            Información de la capa.
-                        </div>
-                    </div>*/}
-                    <div
-                        onMouseEnter={onInfoHover}
-                        onMouseLeave={() => onInfoHover(null)}
-                        style={{ display: "inline-block" }}
-                    >
-                        <IoInformationCircleSharp />
-                    </div>
-                </div>
-                <div className="layerCard__layerCardBody">
-                    <div>
-                        <p>{description}</p>
-                    </div>
-                </div>
-                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: "8px"}}>
-                    {mapLayerInstance.getRangeGraph(selected.length > 0 ? average: undefined)}
-                </div>
-                <div>
-                    <p className="layerCard__source">Fuente: XXX </p>
-                </div>
+        <div className={`layerCard layerCard--${themeKey}`} ref={layerCardRef}>
+            <div className={`layerCard__header layerCard--${themeKey}`}> 
+                <p className="layerCard__header__title">
+                    {selected.length === 0 ? selectedLayerData.title : 
+                    `${selectedLayerData?.title} por ${activeLayerKey === "agebs" ? "AGEBS" : "Colonias"}`}
+                </p>
+                <span
+                    onMouseEnter={() => onInfoHover(true)}
+                    onMouseLeave={() => onInfoHover(false)}
+                    style={{ display: "inline-block", cursor: "pointer" }}
+                >
+                    <IoInformationCircleSharp className="layerCard__header__icon"/>
+                </span>
+            </div>
+            <div className="layerCard__body">
+                <p>{description}</p>
+            </div>
+            <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
+                {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)}
             </div>
         </div>
     );

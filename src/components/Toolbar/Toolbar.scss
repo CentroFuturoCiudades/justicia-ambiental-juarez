@@ -1,84 +1,88 @@
-.button-row {
-  display: flex;
-  gap: 0.65vw;
-  justify-content: flex-start;
+.toolbar {
   position: absolute;
-  top: 2vh;
-  left: 2vw;
-  height: 6vh;
+  top: min(3dvh, 1.75dvw);
+  left: min(3dvh, 1.75dvw);
+  display: flex;
+  gap: 0.65dvw;
+  justify-content: flex-start;
+  //height: min(3.65dvh, 2.13dvw);
+  height: min(4.5dvh, 2.6dvw);
+}
+
+.button_group {
+  height: 100%;
 }
 
 .button {
   height: 100%;
-  width: 3vw;
-  min-width: 0;
+  width: 2.8dvw;
+  //width: 2.5dvw;
+  min-width: 2.8dvw;
   padding: 0;
-  border-radius: 0.2em;
+  border-radius: var(--border-radius);
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--background-dark);
-
-  .img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    //display: block;
-  }
 }
-
+.button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .button--thin {
-  width: 2vw;
-  min-width: 0;
+  width: 1.8dvw;
+  min-width: 1.8dvw;
+  background-color: #6f6f6f;
+}
+.button--thin.button--active {
+  background-color: var(--background-dark);
 }
 
-.button-row .button:hover {
+
+.toolbar .button:hover {
   border-color: transparent !important;
   background-color: #32332f;
 }
 
-.button-row .button:focus,
-.button-row .button:focus-visible {
+.toolbar .button:focus,
+.toolbar .button:focus-visible {
   outline: none !important;
 }
 
-.circle {
+// Slider styles
+.slider {
+  max-width: min(32dvh, 18dvw);
+  border-radius: 0.5dvw;
+  background-color: var(--background-dark);
+  padding: min(0.52dvw, 0.89dvh) min(0.78dvw, 1.33dvh);
   position: absolute;
-  top: 0.1vw;
-  right: 0.1vw;
-  width: 0.8vw;
-  height: 0.8vw;
-  border-radius: 50%;
-  background: red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 0.6vw;
+  top: calc(min(2.5dvh, 2.5dvw) + 2.5dvw + 0.5dvw); // toolbar top + toolbar height + gap
+  left: 6dvw;
 }
 
-.slider {
-  position: absolute;
-  top: 10vh;
-  left: 6dvw;
-  background-color: var(--background-dark);
-  border-radius: 0.5dvw;
+.chakra-slider__root {
+  height: 4dvh;
+  min-height: 0;
+}
 
-  &__root {
-    width: 12dvw;
-    padding: 0.3dvh 0.5dvw;
-  }
-  &__track {
-      background-color: var(--background);
-      height: 0.4dvh;
-  }
-  &__range {
-      background-color: var(--background);
-  }
-  &__thumb {
-      background-color: var(--background-medium);
-      border: none;
-      height: 1.8dvh;
-      width: 1.8dvh;
-  }
+.chakra-slider__track {
+  height: 0.4dvh;
+}
+
+.chakra-slider__thumb {
+  width: min(1dvw, 2.5dvh);
+  height: min(1dvw, 2.5dvh);
+  background-color: var(--background-medium);
+  border: none;
+}
+
+.chakra-slider__marker {
+  gap: 0.9vh;
+}
+
+.chakra-slider__marker-label {
+  font-size: min(0.67dvw, 1.15dvh);
+  line-height: 1;
+  color: white;
 }

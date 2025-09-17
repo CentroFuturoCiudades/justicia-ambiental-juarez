@@ -1,5 +1,6 @@
 import { useAppContext } from "../../context/AppContext";
-import { Group, Button } from "@chakra-ui/react";
+import { Group, Button, Float, Circle } from "@chakra-ui/react";
+import { Tooltip } from "../ui/tooltip";
 import { toaster } from "../ui/toaster";
 import html2canvas from "html2canvas";
 import { MapLayer } from "../../classes/MapLayer";
@@ -7,7 +8,6 @@ import { getMapImage, blobToBase64 } from "../../utils/downloadFile";
 import { defaultViewState } from "../../context/AppContext";
 import SaveLayer from '/assets/Icono GUARDAR CAPA.png'
 import IconDownload from '/assets/Icono DESCARGAR.png'
-import { COLORS } from "../../utils/constants"; //pasar a css
 import type { DownloadProps } from "./Toolbar";
 
 const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => {
@@ -18,11 +18,25 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
         selectedAGEBS,
         selectedColonias,
         activeLayerKey,
-        selectedBaseLayers,
+        //selectedBaseLayers,
     } = useAppContext();
+
+    const hasSelection = (
+        (activeLayerKey === "agebs" && selectedAGEBS.length > 0) || 
+        (activeLayerKey === "colonias" && selectedColonias.length > 0)
+    ) ? true : false;
+
+    const hasScreenshots = (mapLayers.length > 0) ? true : false;
 
     const saveLayerScreenshot = async (instance: MapLayer) => {
         setViewState(defaultViewState);
+        const newInstance = { 
+            ...instance,
+            selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
+            //complementarias: selectedBaseLayers,
+            activeKey: activeLayerKey
+        };
+
         setTimeout(async() => {
             const imageUrl = getMapImage(deck.current, map.current, instance);
 
@@ -30,52 +44,59 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                 const response = await fetch(imageUrl);
                 const blobImage = await response.blob();
                 const base64Image = await blobToBase64(blobImage) as string;
-                instance.deckImage = base64Image;
+                newInstance.deckImage = base64Image;
             }
 
             if (rangeGraphRef.current) {
+                //"Unable to clone WebGL context as it has preserveDrawingBuffer=false" ??
                 const canvas = await html2canvas(rangeGraphRef.current);
-                instance.graphImage = canvas.toDataURL("image/png");
+                newInstance.graphImage = canvas.toDataURL("image/png");
             }
 
-            const newInstance = { 
-                ...instance,
-                selected: (activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias),
-                complementarias: selectedBaseLayers,
-                activeKey: activeLayerKey
-            };
             setMapLayers(prev => [...prev, newInstance]);
         }, 300);
     };
 
     return (
         <div>
-            <Group attached style={{ height: "100%" }}>
-                <Button className="button"
-                    position={"relative"}
-                    disabled={(selectedAGEBS.length === 0 && selectedColonias.length === 0)}
-                    background={COLORS.GLOBAL.backgroundDark} 
-                    onClick={() => {
-                        saveLayerScreenshot(mapLayerInstance as MapLayer);
-                        toaster.create({
-                            description: "El indicador se ha guardado correctamente para el reporte.",
-                            type: "info",
-                            duration: 6000,
-                        });
-                    }}
-                >
-                    <img src={SaveLayer} alt="Guardar Capa" />
-                    {mapLayers.length > 0 && <div className="circle">{mapLayers.length}</div>}
-                </Button>
+            <Group attached className="button_group">
+                <Tooltip content="Guardar Capa" disabled={!hasSelection}>
+                    <Button 
+                        className="button"
+                        position={"relative"}
+                        disabled={!hasSelection}
+                        onClick={() => {
+                            saveLayerScreenshot(mapLayerInstance as MapLayer);
+                            toaster.create({
+                                description: "El indicador se ha guardado correctamente para el reporte.",
+                                type: "info",
+                                duration: 6000,
+                            });
+                        }}
+                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
+                    >
+                        <img src={SaveLayer} />
+                        {mapLayers.length > 0 && 
+                            <Float offset="min(0.7dvh, 0.4dvw)">
+                                <Circle bg="red" size="min(1.2dvh, 0.7dvw)" fontSize={"min(0.8dvh, 0.5dvw)"} >
+                                    {mapLayers.length}
+                                </Circle>
+                            </Float>
+                        }
+                    </Button>
+                </Tooltip>
 
-                <Button className="button"
-                    disabled={mapLayers.length === 0}
-                    background={COLORS.GLOBAL.backgroundDark}
-                    onClick={() => {
-                        setPopUp(true);
-                    }}>
-                    <img src={IconDownload} alt="Descargar" />
-                </Button>
+                <Tooltip content="Descargar Resumen" disabled={!hasScreenshots}>
+                    <Button className="button"
+                        disabled={!hasScreenshots}
+                        onClick={() => {
+                            setPopUp(true);
+                        }}
+                        style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
+                    >
+                        <img src={IconDownload} alt="Descargar" />
+                    </Button>
+                </Tooltip>
             </Group>
         </div>
     );

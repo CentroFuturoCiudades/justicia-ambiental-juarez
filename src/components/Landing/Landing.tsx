@@ -1,8 +1,8 @@
 import "./Landing.scss";
-import PageHeader from "./Page-Header/PageHeader";
-import PageFooter from "./Page-Footer/Page-Footer";
+import Header from "./Header/Header";
+import Footer from "./Footer/Footer";
 import LandingBackground from "/assets/Fondo.jpg";
-import Accordion from "./Body-Accordion/Accordion";
+import Body from "./Body/Body";
 
 
 const Landing = () => {
@@ -13,14 +13,14 @@ const Landing = () => {
             <img src={LandingBackground} className="landing__background" />
 
             <div className="landing__main" >
-                <PageHeader />
+                <Header />
                 <div className="landing__body" >
-                    <Accordion />
+                    <Body />
                 </div>
             </div>
 
-            <div className="landing__footer" style={{ width: "100%"}}>
-                <PageFooter />
+            <div className="landing__footer" >
+                <Footer />
             </div>
         </div>
 )

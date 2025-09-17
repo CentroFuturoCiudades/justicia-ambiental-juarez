@@ -1,7 +1,7 @@
 import React from "react"
 import "./Legend.scss"
 import { scaleLinear } from "d3-scale";
-import { COLORS, LAYERS } from "../../utils/constants";
+import { LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 
 type LegendProps = {
@@ -9,29 +9,32 @@ type LegendProps = {
   colors: string[];
   decimalPlaces?: number;
   categorical?: boolean;
-  ranges: number[][];
+  categories?: string[];
+  ranges: number[][] | number[] | string[];
   formatValue: (value: number) => string;
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
-const Legend = ({
-  ranges, title, colors, formatValue, categorical }: LegendProps) => {
+const Legend = ({ ranges, title, colors, formatValue, categorical, categories }: LegendProps) => {
+  //console.log("colors:", colors);
 
   const { selectedLayer } = useAppContext();
   const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
-  const color = selectedLayerData?.tematica ? COLORS[selectedLayerData.tematica as keyof typeof COLORS].primary : COLORS.GLOBAL.backgroundDark;
+  const themeKey = selectedLayerData?.tematica;
 
   // construct the amount of colors based on the colors provided
-  const domain = ranges.map((range) => range[1]);
+  const domain = categorical ? ranges.map((category, index) => category) : ranges.map((range) => range[1]);
   const colorMap = scaleLinear<string>().domain(domain).range(colors);
 
-  const renderLegeindItem = (value: number[], index: number,) => {
+  const renderLegeindItem = (value: number[] | number, index: number,) => {
 
-    const rangeText = `${formatValue(value[1])} - ${formatValue(value[0])}`;
+    const rangeText = categorical ? 
+      `${formatValue(value)} - ${categories && categories[index] ? categories[index] : ""}`
+      : `${formatValue(value[1])} - ${formatValue(value[0])}`;
 
     return (
-      <div key={index} className="legend-item" >
-        <div className="legend-text" >{rangeText}</div>
+      <div key={index} className="legend-body__item">
+        {rangeText}
       </div>
     );
   }
@@ -41,39 +44,40 @@ const Legend = ({
 
   const gradientStyle: React.CSSProperties = {
     background: linearGradient,
-    width: '20px',
+    width: "2vw",
     height: 'auto',
-    borderRadius: '4px',
-    marginRight: "1rem"
+    borderRadius: '0.3dvw',
   };
 
   return (
-    <div className="legend-container" style={{ border: `1px solid ${color}` }}>
-      <div className="legend__title-container" style={{ backgroundColor: color }}>
-        <h6 className="legend__title">{title}</h6>
+    <div className={`legend legend--${themeKey}`}>
+      <div className={`legend__title legend__title--${themeKey}`}>
+        {title}
       </div>
-      <div className="legend-body" >
+      <div className="legend-body">
         {categorical ? <>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "8px",
-              padding: "6px",
-              background: "#fff",
+              justifyContent: "space-between",
+              //gap: "0.5dvh",
+              //padding: "6px",
+              //background: "#fff",
               maxWidth: "80px"
             }}
           >
-            {ranges.map(([min, max], index) => {
-              const mid = (min + max) / 2 || min;
-              const color = colorMap(mid);
+            {ranges.map((category, index) => {
+              //const mid = (min + max) / 2 || min;
+              //const color = colorMap(mid);
               return (
                 <div
                   key={index}
                   style={{
-                    backgroundColor: color,
-                    width: "18px",
-                    height: "18px",
+                    //backgroundColor: color,
+                    backgroundColor: colors[index % colors.length],
+                    width: "min(2dvh, 1dvw)",
+                    height: "min(2dvh, 1dvw)",
                     border: "1px solid rgba(0,0,0,0.1)",
                     borderRadius: "2px",
                     boxShadow: "0 1px 2px rgba(0,0,0,0.04)"

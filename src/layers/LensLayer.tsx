@@ -20,7 +20,10 @@ const LensLayer = () => {
         tematicaData,
         setFilteredFeatures,
         setDragMap,
-        radius
+        radius,
+        flagSlider, setFlagSlider,
+        activeLayerKey,
+        setSelectedAGEBS, setSelectedColonias,
     } = useAppContext();
 
     const [circleCoords, setCircleCoords] = useState({
@@ -28,7 +31,6 @@ const LensLayer = () => {
         longitude: viewState.longitude
     });
     const [polygon, setPolygon] = useState<any>();
-    const [flagDragEnd, setFlagDragEnd] = useState<boolean>(false);
     const allFeatures = tematicaData ? tematicaData.allFeatures : [];
 
     // Crea circulo basado en coordenadas del mapa y valor de radio
@@ -49,11 +51,21 @@ const LensLayer = () => {
     useEffect(() => {
         if (!polygon || !selectedLayer || selectionMode !== "radius") return;
         const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
+        //features dentro del circulo
         const filtered = allFeatures.filter((feature: any) =>
             booleanIntersects(feature, circlePolygon)
         );
-        setFilteredFeatures(filtered);
-    }, [flagDragEnd, selectionMode, radius]);
+        setFilteredFeatures(filtered); //saves all features
+        setFlagSlider(false);
+        //NEW: depending on activeLayerKey, save identifiers of filtered features
+        const identifiers = filtered.map(f => f.properties[activeLayerKey === "agebs" ? "index" : "name"]);
+        if (activeLayerKey === "agebs") {
+            setSelectedAGEBS(identifiers);
+        }
+        else {
+            setSelectedColonias(identifiers);
+        }
+    }, [flagSlider, selectionMode]);
 
     // lensLayer: crea un GeoJsonLayer para el circulo
     const lensLayer = new GeoJsonLayer({
@@ -69,7 +81,7 @@ const LensLayer = () => {
         dashGapPickable: true,
         onDragStart: () => {
             setDragMap(true);
-            setFlagDragEnd(false);
+            setFlagSlider(false);
         },
         onDrag: (info: any) => {
             if (!info || !info.coordinate) return;
@@ -80,7 +92,7 @@ const LensLayer = () => {
         },
         onDragEnd: (info: any, event: any) => {
             setDragMap(false);
-            setFlagDragEnd(true);
+            setFlagSlider(true);
         },
         extensions: [new PathStyleExtension({ dash: true })],
         updateTriggers: {

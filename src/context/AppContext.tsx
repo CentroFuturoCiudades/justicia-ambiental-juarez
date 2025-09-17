@@ -27,6 +27,8 @@ interface AppContextI {
     setDragMap: Dispatch<SetStateAction<boolean>>;
     radius: number;
     setRadius: Dispatch<SetStateAction<number>>;
+    flagSlider: boolean;
+    setFlagSlider: Dispatch<SetStateAction<boolean>>;
     //
     selectedLayer: LayerKey;
     setSelectedLayer: Dispatch<SetStateAction<LayerKey>>;
@@ -50,6 +52,8 @@ interface AppContextI {
     //array de maplayers para el reporte
     mapLayers: any[];
     setMapLayers: Dispatch<SetStateAction<any[]>>;
+    layerTooltip: any | null;
+    setLayerTooltip: Dispatch<SetStateAction<any | null>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -79,7 +83,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [tematicaData, setTematicaData] = useState<any>(null);
     const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
     const [dragMap, setDragMap] = useState<boolean>(false);
-    const [radius, setRadius] = useState<number>(1000);
+    const [radius, setRadius] = useState<number>(2000);
+    const [flagSlider, setFlagSlider] = useState<boolean>(false);
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState<LayerKey>("");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>(null);
@@ -100,6 +105,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //maplayer array for pdf
     const [mapLayers, setMapLayers] = useState<any[]>([]);
 
+    const [layerTooltip, setLayerTooltip] = useState<any | null>(null);
+
     return (
         <AppContext.Provider value={{
             viewState,
@@ -118,6 +125,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setDragMap,
             radius,
             setRadius,
+            flagSlider,
+            setFlagSlider,
             //
             selectedLayer,
             setSelectedLayer,
@@ -139,7 +148,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setColoniasData,
             //
             mapLayers,
-            setMapLayers
+            setMapLayers,
+            layerTooltip,
+            setLayerTooltip
 
         }}
         >

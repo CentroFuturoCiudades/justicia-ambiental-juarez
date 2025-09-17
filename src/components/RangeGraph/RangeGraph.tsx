@@ -1,148 +1,151 @@
-import { formatNumber } from "../../utils/utils";
-import { IoCaretDown } from "react-icons/io5";
+import Triangle from "/assets/Traingulito.png";
 
 type RangeGraph = {
     data: { [ key: string ]: number };
     averageAGEB: number;
     formatValue: (value: number) => string;
     colorsArray: string[];
+    selectedCount: number;
 
 };
 
-//estilos in line para la conversion a imagen
-const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) => {
+// Estilos in line para la conversion a imagen con html2canvas
+const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount }: RangeGraph) => {
 
   return (
-    <div style={{ position: "relative"}}>
-
-      {/* promedio cd juarez */}
-      {(() => {
-        const percent = ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
+    <div style={{ 
+      height: "auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+    }}>
+      {/* INDICADOR de promedio de la selección */}
+      {averageAGEB !=null && selectedCount > 0 && (() => {
+        const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
         const style: React.CSSProperties = {
           position: "absolute",
-          bottom: 0,
-          alignItems: "center",
           display: "flex",
           flexDirection: "column",
-          padding: "0 2vw",
-          alignContent: "center",
-          zIndex: 1,
+          alignItems: "center",
+          zIndex: 2,
+          height: "100%",
+          justifyContent: "space-between",
         };
 
-        if (percent <= 0) {
+        if (percent <= 5) {
           style.left = 0;
           style.transform = "none";
-        } else if (percent >= 100) {
+          //style.alignItems = "flex-start";
+          style.alignItems = "center";
+        } else if (percent >= 90) {
           style.right = 0;
           style.transform = "none";
+          //style.alignItems = "flex-end";
+          style.alignItems = "center";
         } else {
-          style.left = `${percent}%`;
+          style.left = `calc(${percent}% )`;
           style.transform = "translateX(-50%)";
         }
-
+        
         return (
-          <div style={style}>
-            <div style={{
-              width: "0.15vw",
-              height: "54px",
-              background: "black",
-              marginBottom: "4px",
-            }} />
-            <div style={{
-              fontSize: "10px",
-              whiteSpace: "nowrap",
-              alignContent: "center",
-              textAlign: "center",
-              fontWeight: "bold"
-            }}>
-              {formatValue(data.positiveAvg)}
-              <br />
-              Ciudad Juárez
+          <div style={{ position: "relative", width: "100%", height: "min(4.3dvh, 2.5dvw)" }}>
+            <div style={ style }>
+                <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
+                <span style={{ height: "1.5dvw", transform: "translateY(20%)" }}>
+                  <img src={Triangle} style={{ width: "100%", height: "100%", objectFit: "cover"}}/>
+                </span>
             </div>
           </div>
         );
       })()}
-      <div style={{height: "30px"}}>
-        {/* PROMEDIO DE AGEB */}
-        {averageAGEB && !isNaN(averageAGEB) && (() => {
-          const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
-          const style: React.CSSProperties = {
-            position: "absolute",
-            bottom: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            zIndex: 2,
-            fontSize: "14px",
-            fontWeight: "bold",
-            //lineHeight: "1",
-            
-          };
 
-          if (percent <= 5) {
-            style.left = 0;
-            style.transform = "none";
-            style.alignItems = "flex-start";
-          } else if (percent >= 90) {
-            style.right = 0;
-            style.transform = "none";
-            style.alignItems = "flex-end";
-          } else {
-            style.left = `calc(${percent}% )`;
-            style.transform = "translateX(-50%)";
-          }
-          return (
-            <div style={{
-              width: "100%",
-              height: "40px",
-              position: "relative",
-              padding: "0 8px",
-            }}>
-              <div className="rangeGraph__agebLabel" 
-                style={
-                  style
-                }>
-                  <p style={{ fontSize: "14px", fontWeight: "bold", lineHeight:"1"}}>
-                    {formatValue(averageAGEB)}
-                  </p>
-                  <IoCaretDown size={24} style={{ color: "red", display:"block"}} />
+      {/* BARRA DE COLOR */}
+      <div style={{
+          display: "flex",
+          flexDirection: "row",
+          width: "100%",
+          height: "min(5.5dvh, 3.2dvw)",
+          padding: "0 1dvw",
+          position: "relative",
+      }}>
+
+          {/* LINEA - Promedio Cd. Juárez */}
+          {(() => {
+            const percent = ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
+            const style: React.CSSProperties = {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              position: "absolute",
+              zIndex: 1,
+              width: "max-content",
+            };
+
+            if (percent <= 0) {
+              style.left = 0;
+              style.transform = "none";
+            } else if (percent >= 100) {
+              style.right = 0;
+              style.transform = "none";
+            } else {
+              style.left = `${percent}%`;
+              style.transform = "translateX(-50%)";
+            }
+
+            return (
+              <div style={style}>
+                <div style={{
+                  width: "0.14dvw",
+                  //height: "min(9dvh, 9dvw)",
+                  height: "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
+                  background: "black",
+                  //marginTop: "min(-1.8dvh, -0.8dvw)",
+                  marginTop: "calc(-0.5 * min(3.1dvh, 1.8dvw))"
+                }}/>
+                  <div style={{
+                    fontSize: "var(--font-size-button)",
+                    fontWeight: "300",
+                    alignContent: "center",
+                    textAlign: "center",
+                    marginTop: "min(1.5dvh, 0.8dvw)",
+                    lineHeight: "1",
+                  }}>
+                    {formatValue(data.positiveAvg)}
+                    <br />
+                    Ciudad Juárez
+                  </div>
               </div>
-          </div>
-          );
-        })()}
-      </div>
+            );
+          })()}
 
-
-
-      <div >
-        
-        {/* CUADRITOS */}
-        <div style={{
-            display: "flex",
-            width: "100%",
-            height: "100%",
-            padding: "0 8px",
-            marginBottom: "8px",
-          }}>
+          {/* SEGMENTOS DE COLOR */}
           {[...colorsArray].reverse().map((color, idx) => ( 
             <div
               key={idx}
               style={{
                 flex: 1,
                 background: color,
-                height: "30px",
+                height: "100%",
               }}
             />
           ))}
-        </div>
-        { /* mayor y menor */}
-      <div style={{  display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+      </div>
+
+      { /* LABELS - mayor y menor*/}
+      <div style={{ 
+        display: "flex", 
+        flexDirection: "row", 
+        justifyContent: "space-between",
+      }}>
         {[data.minVal, data.maxVal].map((value, index) => (
           <div
             key={index}
             style={{
-              fontSize: "10px",
+              fontSize: "var(--font-size-button)",
+              fontWeight: "300",
               textAlign: "center",
+              lineHeight: "1",
+              paddingTop: "min(0.5dvh, 0.2dvw)",
             }}
           >
             {formatValue(value)}
@@ -151,11 +154,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
           </div>
         ))}
       </div>
-      </div>
-
-      
-      
-    </div>
+    </div>      
   )
 }
 

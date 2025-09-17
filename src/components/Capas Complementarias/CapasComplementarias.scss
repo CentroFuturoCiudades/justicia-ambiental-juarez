@@ -1,0 +1,23 @@
+.dropdown__mainItem--right {
+  background-color: var(--background-light);
+}
+
+.dropdown__subContent--complementarias {
+  padding: min(1dvh, 0.5dvw) min(1.36dvh, 0.8dvw);
+}
+
+.checkbox--right {
+  border: none;
+  padding: 0.1dvh 0;
+
+  .checkbox__label {
+    font-style: normal;
+
+  }
+}
+
+.sub-checkbox {
+  display: flex;
+  flex-direction: column;
+  padding-left: min(2.2dvh, 1.3dvw);
+}

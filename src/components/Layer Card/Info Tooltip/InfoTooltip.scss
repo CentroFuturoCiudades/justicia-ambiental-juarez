@@ -1,0 +1,17 @@
+.info-tooltip {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(254,253,252,0.8); //--background with opacity
+    border: 0.1em solid var(--background-medium);
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-body);
+    font-weight: 300;
+    font-style: italic;
+    padding: 1dvw;
+    z-index: 8;
+}
+
+.source {
+    font-size: var(--font-size-button);
+    font-weight: 700;
+}

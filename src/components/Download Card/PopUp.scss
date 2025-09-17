@@ -1,0 +1,71 @@
+.popUp {
+    position: absolute;
+    top: 10%;
+    left: min(3dvh, 1.75dvw);
+    width: min(68dvh, 40dvw);
+    height: min(64dvh, 37dvw);
+    //display: flex;
+    z-index: 10;
+}
+
+.downloadCard {
+    display: flex;
+    flex-direction: column;
+
+    &__title {
+        font-size: var(--font-size-header);
+        font-weight: 700;
+    }
+    &__item {
+        border-bottom: 1px solid black;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        padding: min(1dvh, 0.5dvw);
+    }
+    &__close {
+        border-radius: 50%;
+        padding: 0;
+        min-width: 0.5dvw;
+        min-height: 0.5dvw;
+        height: 1.5dvw;
+        width: 1.5dvw;
+        background-color: transparent;
+        color: black;
+    }
+}
+.title {
+    font-size: var(--font-size-header);
+    font-weight: 700;
+}
+
+.download-button {
+    border: none;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: transparent;
+    color: black;
+    border-radius: 50%;
+    padding: 0;
+}
+
+.download-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.popUp-button:hover {
+    border-color: transparent !important;
+}
+
+.popUp-button:focus,
+.popUp-button:focus-visible,
+.download-button:focus,
+.download-button:focus-visible {
+   outline: none !important;
+}

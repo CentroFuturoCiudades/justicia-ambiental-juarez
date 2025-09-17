@@ -1,6 +1,6 @@
 .landing {
-    height: 100vh;
-    width: 100vw;
+    height: 100dvh;
+    width: 100dvw;
     display: flex;
     flex-direction: column;
     position: relative;
@@ -10,17 +10,12 @@
         flex-direction: column;
         flex: 1;
         min-height: 0;
-        border: 1px solid purple;
     }
 
     &__body {
-        //flex: 1 1 auto;
         flex: 1;
-        min-height: 0;
-        //z-index: 1;
         display: flex;
         overflow: hidden;
-        border: 1px solid green;
     }
 
     &__footer {
@@ -30,7 +25,7 @@
 
 .landing__background {
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     z-index: 0;
 }
