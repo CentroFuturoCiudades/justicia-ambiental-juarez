@@ -49,7 +49,7 @@ const DownloadSummary = ( setPopUp : any ) => {
                             }
                         }}
                     >
-                       <IoClose style={{ width: "2dvw", height: "2dvw" }}/>
+                       <IoClose style={{ width: "1.5dvw", height: "1.5dvw" }}/>
                     </Button>
                 </div>
             ))}
