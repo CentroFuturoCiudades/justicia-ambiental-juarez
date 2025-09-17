@@ -91,9 +91,11 @@ const Body = () => {
           <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
         </div>
       ):(
-        <div className="cardContainer">
-          <Card content={aboutContent()} />
-        </div>
+        !isMobile && (
+          <div className="cardContainer">
+            <Card content={aboutContent()} />
+          </div>
+        )
       )}
     </div>
   );
