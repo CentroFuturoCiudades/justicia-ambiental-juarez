@@ -97,11 +97,11 @@ export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | Raste
   //console.log("deckglCanvas:", deckglCanvas);
   //console.log("mapboxCanvas:", mapboxCanvas);
 
-  console.log("deckgl", deck)
+  //console.log("deckgl", deck)
 
   const width = deckglCanvas.width;
   const height = deckglCanvas.height;
-  console.log("getMapImage width:", width, "height:", height);
+  //console.log("getMapImage width:", width, "height:", height);
 
   const merge = document.createElement("canvas");
   merge.width = width;
@@ -212,9 +212,10 @@ function buildIndicatorsTable(activeKey: string, y: number) {
     required: true,
     showHead: true,
     head: [`${activeKey}`, "Temática", "Indicador", "Promedio", "Ciudad Juarez"],
-    headWidthPercentages: [26, 18, 20, 18, 18],
+    //headWidthPercentages: [26, 18, 20, 18, 18],
+    headWidthPercentages: [38, 16, 17, 15, 14],
     tableStyles: { borderWidth: 0.1, borderColor: "#4b5544" },
-    headStyles: { fontName: "Roboto", fontSize: 13, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#ffffff", borderColor: "", backgroundColor: "#4b6648", borderWidth: { top: 0, right: 0, bottom: 0, left: 0 }, padding: { top: 5, right: 5, bottom: 5, left: 5 } },
+    headStyles: { fontName: "Roboto", fontSize: 11.5, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#ffffff", borderColor: "", backgroundColor: "#4b6648", borderWidth: { top: 0, right: 0, bottom: 0, left: 0 }, padding: { top: 5, right: 0, bottom: 5, left: 4 } },
     bodyStyles: { fontName: "Roboto", fontSize: 10, characterSpacing: 0, alignment: "left", verticalAlignment: "middle", lineHeight: 1, fontColor: "#000000", borderColor: "#888888", alternateBackgroundColor: "#f5f5f5", borderWidth: { top: 0.1, right: 0.1, bottom: 0.1, left: 0.1 }, padding: { top: 8, right: 5, bottom: 8, left: 5 } },
     columnStyles: { },
     readOnly: false,

@@ -60,8 +60,8 @@ const LayerCard = ({ selectedLayerData, rangeGraphRef, onInfoHover, layerCardRef
             <div className="layerCard__body">
                 <p>{description}</p>
             </div>
-            <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.3dvw 0.5dvw" }}>
-                {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0)}
+            <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
+                {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)}
             </div>
         </div>
     );

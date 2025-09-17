@@ -5,11 +5,12 @@ type RangeGraph = {
     averageAGEB: number;
     formatValue: (value: number) => string;
     colorsArray: string[];
+    selectedCount: number;
 
 };
 
 // Estilos in line para la conversion a imagen con html2canvas
-const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) => {
+const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount }: RangeGraph) => {
 
   return (
     <div style={{ 
@@ -19,7 +20,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
       justifyContent: "center",
     }}>
       {/* INDICADOR de promedio de la selección */}
-      {averageAGEB > 0 && (() => {
+      {averageAGEB !=null && selectedCount > 0 && (() => {
         const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
         const style: React.CSSProperties = {
           position: "absolute",
@@ -34,7 +35,8 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         if (percent <= 5) {
           style.left = 0;
           style.transform = "none";
-          style.alignItems = "flex-start";
+          //style.alignItems = "flex-start";
+          style.alignItems = "center";
         } else if (percent >= 90) {
           style.right = 0;
           style.transform = "none";
@@ -45,7 +47,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: "min(4.3dvh, 4.3dvw)" }}>
+          <div style={{ position: "relative", width: "100%", height: "min(4.3dvh, 2.5dvw)" }}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
                 <span style={{ height: "1.5dvw", transform: "translateY(20%)" }}>
@@ -61,7 +63,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
           display: "flex",
           flexDirection: "row",
           width: "100%",
-          height: "min(5.5dvh, 5.5dvw)",
+          height: "min(5.5dvh, 3.2dvw)",
           padding: "0 1dvw",
           position: "relative",
       }}>
@@ -75,6 +77,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               alignItems: "center",
               position: "absolute",
               zIndex: 1,
+              width: "max-content",
             };
 
             if (percent <= 0) {
@@ -92,16 +95,18 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               <div style={style}>
                 <div style={{
                   width: "0.14dvw",
-                  height: "min(8.5dvh, 8.5dvw)",
+                  //height: "min(9dvh, 9dvw)",
+                  height: "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
                   background: "black",
-                  marginTop: "-1.5dvh",
+                  //marginTop: "min(-1.8dvh, -0.8dvw)",
+                  marginTop: "calc(-0.5 * min(3.1dvh, 1.8dvw))"
                 }}/>
                   <div style={{
                     fontSize: "var(--font-size-button)",
                     fontWeight: "300",
                     alignContent: "center",
                     textAlign: "center",
-                    marginTop: "1dvh",
+                    marginTop: "min(1.5dvh, 0.8dvw)",
                     lineHeight: "1",
                   }}>
                     {formatValue(data.positiveAvg)}
@@ -139,7 +144,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray}: RangeGraph) 
               fontWeight: "300",
               textAlign: "center",
               lineHeight: "1",
-              paddingTop: "0.8dvh",
+              paddingTop: "min(0.5dvh, 0.2dvw)",
             }}
           >
             {formatValue(value)}

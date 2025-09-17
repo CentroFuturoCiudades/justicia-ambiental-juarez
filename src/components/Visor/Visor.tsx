@@ -150,14 +150,13 @@ const Visor = () => {
                     <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} />
                 )}
 
-                {!showDownloadCard && 
                     <InfoTooltip
                         show={showInfoCard}
                         containerRef={mapContainerRef}
                         layerCardRef={layerCardRef}
                         selectedLayerData={selectedLayerData}
                     />
-                }
+                
 
                 {layerTooltip &&
                     <div className="visor__layerTooltip" style={{ left: layerTooltip.x + 8, top: layerTooltip.y }}>

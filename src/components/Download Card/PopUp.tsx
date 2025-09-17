@@ -34,6 +34,7 @@ const PopUp = ({deck, map, setPopUp} : PopupProps) => {
                 width: "40dvw",
                 height: "64dvh", 
                 display: "flex",
+                zIndex: 10,
             }}>
                 <Card 
                     content={DownloadSummary({ setPopUp })}

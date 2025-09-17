@@ -279,7 +279,7 @@ export class MapLayer {
       }
   }
 
-  getRangeGraph = (avg: number) => {
+  getRangeGraph = (avg: number, selected: number) => {
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
 
@@ -295,6 +295,7 @@ export class MapLayer {
       averageAGEB={avg}
       formatValue={this.formatValue || ((value: number) => value.toString())}
       colorsArray={completeColors}
+      selectedCount={selected}
     />
   }
 }
