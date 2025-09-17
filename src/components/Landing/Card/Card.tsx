@@ -8,7 +8,7 @@ import type { JSX } from 'react';
 
 type CardProps = {
     content: JSX.Element | string;
-    setSelectedItem: (item: any) => void;
+    setSelectedItem?: (item: any) => void;
     downloadButton?: JSX.Element;
 };
 
@@ -22,9 +22,11 @@ const Card = ({ content, setSelectedItem, downloadButton } : CardProps) => {
                 >
                     {content}
                 </OverlayScrollbarsComponent>
-                <Button type="button" className="closeButton" onClick={() => setSelectedItem(null)} variant="ghost" p={0} minW={0} height="auto">
-                    <img src={CloseIcon} alt="Cerrar" className="closeIcon" />
-                </Button>
+                { setSelectedItem &&
+                    <Button type="button" className="closeButton" onClick={() => setSelectedItem(null)} variant="ghost" p={0} minW={0} height="auto">
+                        <img src={CloseIcon} alt="Cerrar" className="closeIcon" />
+                    </Button>
+                }
                 {downloadButton &&
                  <div className="downloadButtonContainer">
                      {downloadButton}
