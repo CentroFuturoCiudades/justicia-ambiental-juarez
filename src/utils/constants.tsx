@@ -44,9 +44,10 @@ export const SECTIONS = {
     ambiental: {
         label: "ambiental",
         layers: [
-            "vulnerabilidad_calor", //"islas_calor",
+            "vulnerabilidad_calor",
             "riesgo_inundacion",
             "riesgo_trafico_vehicular",
+            "exposicion_industria"
         ] as LayerKey[],
     },
     industria: {
@@ -55,7 +56,7 @@ export const SECTIONS = {
             "hogares_vulnerables_industria",
             "infantes_vulnerables_industria",
             "adultos_vulnerables_industria",
-            "exposicion_industria"
+            //"exposicion_industria"
         ] as LayerKey[],
     },
     equipamiento: {
@@ -88,7 +89,7 @@ export const LAYERS: any = {
     vulnerabilidad_calor: {
         title: "Índice de vulnerabilidad al calor",
         description: "Evalúa la exposición al calor, la sensibilidad al calor y la capacidad de adaptación para evaluar de manera integral la vulnerabilidad al calor.",
-        source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017",
+        source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017 (CIESIN) Columbia University",
         property: "vulnerabilidad_calor",
         tematica: "ambiental",
         type: "Categorica",
@@ -246,7 +247,7 @@ export const LAYERS: any = {
         description: "Cuántos kilogramos de contaminantes totales hay por kilómetro cuadrado de superficie del AGEB/colonia",
         source: "North American Pollutant Release and Transfer Register (PRTR) Initiative",
         property: "kg_contaminantes_por_km2",
-        tematica: "industria",
+        tematica: "ambiental",
         type: "Continua",
         is_lineLayer: false,
         //visualization_type: "Velocimetro",
@@ -500,7 +501,7 @@ export const LAYERS: any = {
     },
     porcentaje_escolaridad: {
         title: "Población sin preparatoria terminada",
-        description: "Porcentaje de la población total del AGEB que reportó tener menos de 12 años de escolaridad completada (preparatoria)",
+        description: "Porcentaje de la población, mayores de 18 años, total del AGEB que reportó tener menos de 12 años de escolaridad completada (preparatoria)",
         source: "Censo INEGI (2020)",
         property: "porcentaje_menos_prepa_terminada",
         tematica: "poblacion",

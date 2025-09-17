@@ -276,7 +276,7 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
       juarezAvg: layerInstance.formatValue(layerInstance.positiveAvg),
       selected: (layerInstance.selected ?? []).map(s => `• ${s}`).join('\n'),
       //complementarias: (layerInstance.complementarias ?? []).map(c => `• ${c}`).join('\n')
-      activeKey: layerInstance.activeKey
+      activeKey: layerInstance.activeKey.toUpperCase()
     };
 
   }));

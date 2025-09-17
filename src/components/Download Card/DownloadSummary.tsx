@@ -2,26 +2,27 @@ import { useAppContext } from "../../context/AppContext";
 import { Button } from "@chakra-ui/react";
 import { IoClose } from "react-icons/io5";
 
+
 const DownloadSummary = ( setPopUp : any ) => {
     const { mapLayers, setMapLayers } = useAppContext();
 
     return (
-        <div style={{ display: "flex", flexDirection: "column"}}>
-            <p className="title">| descargas |</p>
+        <div className="downloadCard">
+            <p className="title">| descarga |</p>
             {mapLayers.map((instance, index) => (
-                <div style={{ borderBottom: "1px solid black", display: "flex", flexDirection: "row", justifyContent: "space-between" , alignItems: "center"}} key={index}>
-                    <div style={{display: "flex", flexDirection: "column", padding: "1dvh"}}>
-                        <div key={index} style={{ fontWeight: "bold" }}>
+                <div className="downloadCard__item" key={index}>
+                    <div className="downloadCard__content">
+                        <p style={{ fontWeight: "bold", fontSize: "var(--font-size-subtitle)" }}>
                             {instance.title}
-                        </div>
+                        </p>
                                 
                         <div style={{ paddingLeft: "1dvh" }}>
                             {instance.selected.length > 0 && (
                                 
                                 <div >
-                                    <p>Temática: {instance.theme}</p>
-                                    <p>Promedio: {instance.formatValue(instance.selectedAvg)}</p>
-                                    <h3>{instance.activeKey === "colonias" ? "Colonias Seleccionadas:" : "AGEBS Seleccionadas:"}</h3>
+                                    <p> <strong>Temática: </strong>{instance.theme}</p>
+                                    <p> <strong>Promedio: </strong>{instance.formatValue(instance.selectedAvg)}</p>
+                                    <h3> <strong>{instance.activeKey === "colonias" ? "Colonias Seleccionadas:" : "AGEBS Seleccionadas:"}</strong></h3>
                                     <p> {instance.selected.join(", ")} </p>
                                 </div>
                             )}
@@ -40,15 +41,15 @@ const DownloadSummary = ( setPopUp : any ) => {
                         </div>
                     </div>
                 
-                    <Button type="button" className="popUp-button" style={{ borderRadius: "50%", padding: 0, height: "6vh", backgroundColor: "transparent" }}
+                    <Button type="button" className="downloadCard__close"
                         onClick={() => {
                             setMapLayers(prev => prev.filter((_, i) => i !== index));
                             if(mapLayers.length === 1){
                                 setPopUp(false);
                             }
-                        }} variant="ghost"  
+                        }}
                     >
-                        <IoClose />
+                       <IoClose style={{ width: "2dvw", height: "2dvw" }}/>
                     </Button>
                 </div>
             ))}

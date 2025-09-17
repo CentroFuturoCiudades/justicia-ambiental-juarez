@@ -18,6 +18,7 @@
     padding-right: 2.4dvw;
     //flex: 1;
     width: 100%;
+    height: 100%;
 }
 
 .scroll-content .os-scrollbar-vertical {
@@ -25,7 +26,8 @@
   border: 1px solid black;
   padding: 0;
   height: 80%;
-  margin-top: 5.5%;
+  //margin-top: 5.5%;
+  margin-top: calc(0.1 * 100%); // 10% del contenedor
   //right: 0.1vw;
 }
 
@@ -50,14 +52,15 @@
 .closeButton {
     background-color: transparent;
     position: absolute;
-    top: 0.8dvh;
-    right: 0.6dvw;
+    top: 1.5dvh;
+    right: 0.85dvw;
     //height: 100%;
-    width: 3dvw;
+    width: 2.2dvw;
+    height: 2.2dvw;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 100%;
+    border-radius: 50%;
     padding: 0;
     border: none;
 }
@@ -65,23 +68,25 @@
 .downloadButton {
     background-color: transparent;
     position: absolute;
-    bottom: 0.8dvh;
+    bottom: min(1.5dvh, 0.8dvw);
     right: 0.6dvw;
-    //height: 100%;
-    width: 3vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 100%;
+    min-width: 2dvw;
+    min-height: 2dvw;
+    width: 3dvw;
+    height: 3dvw;
+    border-radius: 50%;
     padding: 0;
-    border: none;
-    color: black
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .closeIcon {
     height: 100%;
     width: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .closeButton:hover,

@@ -174,7 +174,8 @@
   }
   .cardContainer {
     width: 100%;
-    height: 100%;
+    //height: 100%;
+    height: 50dvh;
   }
   .subtitle-card {
     font-size: min(2dvh, 3.2dvw);

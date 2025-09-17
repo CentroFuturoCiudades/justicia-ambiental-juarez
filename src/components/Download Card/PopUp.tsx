@@ -5,6 +5,7 @@ import { downloadPdf } from "../../utils/downloadFile";
 import './PopUp.scss'
 import Card from "../Landing/Card/Card";
 import DownloadSummary from "./DownloadSummary";
+import DownloadReport from "/assets/Icono DOWNLOAD.png"
 
 type PopupProps = {
     deck: React.RefObject<HTMLDivElement>;
@@ -27,24 +28,16 @@ const PopUp = ({deck, map, setPopUp} : PopupProps) => {
     }
 
     return (
-        <div className="popUp" style={{
-                position: "absolute",
-                top: "10%",
-                left: "2vw",
-                width: "40dvw",
-                height: "64dvh", 
-                display: "flex",
-                zIndex: 10,
-            }}>
-                <Card 
-                    content={DownloadSummary({ setPopUp })}
-                    setSelectedItem={setPopUp}
-                    downloadButton={
-                        <Button type="button" className="downloadButton" onClick={handleDownload} >
-                            <MdOutlineFolderOpen/>
-                        </Button>
-                    }
-                />
+        <div className="popUp" >
+            <Card 
+                content={DownloadSummary({ setPopUp })}
+                setSelectedItem={setPopUp}
+                downloadButton={
+                    <Button type="button" className="downloadButton" onClick={handleDownload} >
+                        <img src={DownloadReport} className="img" />
+                    </Button>
+                }
+            />
         </div>
     )
 }

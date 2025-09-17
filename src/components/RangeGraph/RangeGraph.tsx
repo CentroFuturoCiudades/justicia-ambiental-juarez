@@ -40,7 +40,8 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         } else if (percent >= 90) {
           style.right = 0;
           style.transform = "none";
-          style.alignItems = "flex-end";
+          //style.alignItems = "flex-end";
+          style.alignItems = "center";
         } else {
           style.left = `calc(${percent}% )`;
           style.transform = "translateX(-50%)";
