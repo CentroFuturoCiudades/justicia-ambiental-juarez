@@ -3,24 +3,23 @@ import LupaIcono from "/assets/Icono LUPA.png";
 import RompecabezasIcono from "/assets/Icono ROMPECABEZAS.png";
 import QuadrantMenu from "../Quadrant-Menu/QuadrantMenu";
 import Card1_img from '/assets/Indicadores Ambientales.png';
+import Card2_img from '/assets/placeholder.png';
 import type { JSX } from "react";
 
 export type AccordionItemType = {
   id: string;                      // Unique identifier
   title: string;                   // Header title shown on the accordion
   content: JSX.Element | string;  // Content shown when item is expanded
-  images: string[];               // Optional images displayed in the panel
-  icon?: any;             // Optional icon next to title
+  icon: any;             // Optional icon next to title
 }; 
 export const accordionItems: AccordionItemType[] = [
     {
         id: "lupa",
-        //title: "¿qué es la \nevaluación ambiental?",
-        title: "¿para qué un visor de indicadores ambientales y sociales?",
+        title: "¿para qué un visor de indicadores ambientales y sociales?", //"¿qué es la \nevaluación ambiental?",
         content: (
-            <div style={{ display: "flex", flexDirection: "column", gap: "2dvh"}}>
-                <p className="subtitle-card">|el contexto fronterizo y sus vulnerabilidades|</p>
-                <p className="bodytext-card">
+            <div className="cardContent">
+                <p className="cardContent__title">|el contexto fronterizo y sus vulnerabilidades|</p>
+                <p className="cardContent__text">
                     El “Visor de Indicadores Ambientales y Sociales” Sirve como un valioso punto de partida 
                     para la identificación y el análisis de áreas que pueden justificar una revisión, 
                     un análisis o un acercamiento comunitario más profundo. Se desarrolló para ayudar a 
@@ -29,29 +28,16 @@ export const accordionItems: AccordionItemType[] = [
                     relacionadas con permisos, regulaciones y solicitudes de subvenciones.
                 </p>
 
-                <p className="subtitle-card">|objetivo|</p>
-                <p className="bodytext-card">
+                <p className="cardContent__title">|objetivo|</p> {/* |indicadores ambientales| */}
+                <p className="cardContent__text">
                     Esta herramienta tiene como objetivo facilitar el uso de las normas de protección ambiental para mejorar 
                     la planificación y para elaborar criterios de igualdad en el desarrollo de actividades como el establecimiento 
                     de nuevas zonas industriales, la emisión de permisos, el desarrollo de infraestructura, proyectos de transporte 
                     y las evaluaciones de impacto relacionadas con la comunidad, la salud o el clima.
                 </p>
 
-                {/*<p className="subtitle-card">|indicadores ambientales|</p>
-                <p className="bodytext-card">
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    when an unknown printer took a galley of type and scrambled it to make a type
-                    specimen book. It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised in
-                    the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
-                    when an unknown printer took a galley of type and scrambled it to make a type
-                    specimen book. It has survived not only five centuries, but also the leap into
-                    electronic typesetting, remaining essentially unchanged. It was popularised in
-                    the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
-                </p>*/}
-
-                <div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                    <p className="bodytext-card" style={{ flex: "1" }}>
+                <div className="cardContent__row">
+                    <p className="cardContent__text" style={{ flex: "1" }}>
                         La importancia del desarrollo de un visor de indicadores ambientales y sociales es para ayudar a identificar 
                         injusticias ambientales que no están documentadas formalmente, desde la ubicación de industrias contaminantes 
                         en zonas marginadas o vulnerables, disposición no regulada de desechos peligrosos, mala calidad del aire en zonas 
@@ -60,24 +46,23 @@ export const accordionItems: AccordionItemType[] = [
                         necesidades y experiencias reales de los ciudadanos. Sirve como insumo para priorizar acciones, desde 
                         infraestructura verde, industrial, nuevos proyectos de construcción y hasta campañas de concientización.
                     </p>
-                    <div style={{ width: "40%"}}>
-                        <img src={Card1_img} alt="Indicadores Ambientales" />
+                    <div className="cardContent__img">
+                        <img src={Card1_img} />
                     </div>
                 </div>
             </div>
         ),
-        images: ["https://via.placeholder.com/150x100"],
         icon: LupaIcono,
     },
     {
         id: "hoja",
         title: "uso de la herramienta",
         content: (
-            <div style={{ display: "flex", flexDirection: "column", gap: "2dvh" }}>
-                <p className="subtitle-card">
+            <div className="cardContent">
+                <p className="cardContent__title">
                     |metodología|
                 </p>
-                <p className="bodytext-card">
+                <p className="cardContent__text">
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
                     Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                     when an unknown printer took a galley of type and scrambled it to make a type 
@@ -93,14 +78,14 @@ export const accordionItems: AccordionItemType[] = [
                     versions of Lorem Ipsum.
                 </p>
 
-                <div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "2dvh",  flex: "1" }}>
-                        <p className="subtitle-card" >
+                <div className="cardContent__row">
+                    <div className="cardContent" style={{ flex: "1" }}>
+                        <p className="cardContent__title">
                             |visualiza, compara y 
                             <br/>
                             toma decisiones informadas|
                         </p>
-                        <p className="bodytext-card">
+                        <p className="cardContent__text">
                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                             when an unknown printer took a galley of type and scrambled it to make a type
@@ -109,37 +94,20 @@ export const accordionItems: AccordionItemType[] = [
                             Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
                         </p>
                     </div>
-                    <div style={{  width: "40%", position: "relative"}}>
-                        <div style={{
-                            width: "8.5dvw",
-                            height: "8.5dvw",
-                            borderRadius: "50%",
-                            background: "#f4cdd3",
-                            position: "absolute",
-                            top: "10%",
-                            right: "0",
-                        }} />
-                        <div style={{
-                            width: "8.5dvw",
-                            height: "8.5dvw",
-                            borderRadius: "50%",
-                            background: "#eeb0ba",
-                            position: "absolute",
-                            bottom: "0",
-                        }} />
+                    <div style={{ width: "40%" }}>
+                        <img src={Card2_img} />
                     </div>
                  </div>
             </div>
         ),
-        images: ["https://via.placeholder.com/150x100"],
         icon: HojaIcono,
     },
     {
         id: "rompecabezas",
         title: "4 ejes temáticos",
         content: (
-            <div style={{ display: "flex", flexDirection: "column", gap: "2dvh"}}>
-                <p className="subtitle-card">
+            <div className="cardContent">
+                <p className="cardContent__title">
                     |datos|
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "1dvh" }}>
@@ -168,24 +136,10 @@ export const accordionItems: AccordionItemType[] = [
                     {
                         title: "ambiental",
                         description: (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "2dvh" }}>
+                            <div className="cardContent">
                                 <p>
                                     <strong>Perspectiva ambiental</strong> en dónde hemos incluido indicadores de: XXXXX
                                 </p>
-                                {/*<div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                                    <p style={{ width: "50%" }}>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in  
-                                    </p>
-                                </div>*/}
                             </div>
                         ),
                         iconUrl: "https://via.placeholder.com/100",
@@ -195,24 +149,10 @@ export const accordionItems: AccordionItemType[] = [
                     {
                         title: "industria",
                         description: (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "2dvw" }}>
+                            <div className="cardContent">
                                 <p>
                                     <strong>Perspectiva Industrial</strong> incluyendo indicadores : XXXX
                                 </p>
-                                {/*<div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                                    <p style={{ width: "50%" }}>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in  
-                                    </p>
-                                </div>*/}
                             </div>
                         ),
                         iconUrl: "https://via.placeholder.com/100",
@@ -222,24 +162,10 @@ export const accordionItems: AccordionItemType[] = [
                     {
                         title: "equipamiento",
                         description: (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "2dvw" }}>
+                            <div className="cardContent">
                                 <p>
                                     <strong>Perspectiva de equipamiento</strong> urbano con indicadores:  XXX
                                 </p>
-                                {/*<div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                                    <p style={{ width: "50%" }}>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in  
-                                    </p>
-                                </div>*/}
                             </div>
                         ),
                         iconUrl: "https://via.placeholder.com/100",
@@ -249,24 +175,10 @@ export const accordionItems: AccordionItemType[] = [
                     {
                         title: "población",
                         description: (
-                            <div style={{ display: "flex", flexDirection: "column", gap: "2dvw" }}>
+                            <div className="cardContent">
                                 <p>
                                    <strong>Perspectiva poblacional</strong> examinando indicadores: XXXXX   
                                 </p>
-                                {/*<div style={{ display: "flex", flexDirection: "row", gap: "2dvw" }}>
-                                    <p style={{ width: "50%" }}>
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in
-                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                                        when an unknown printer took a galley of type and scrambled it to make a type
-                                        specimen book. It has survived not only five centuries, but also the leap into 
-                                        electronic typesetting, remaining essentially unchanged. It was popularised in  
-                                    </p>
-                                </div>*/}
                             </div>
                         ),
                         iconUrl: "https://via.placeholder.com/100",
@@ -300,7 +212,6 @@ export const accordionItems: AccordionItemType[] = [
                 </div>
             </div>
         ),
-        images: [],
         icon: RompecabezasIcono,
     }
 ]

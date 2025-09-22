@@ -10,7 +10,7 @@ const Landing = () => {
     return (
         <div className="landing">
 
-            <img src={LandingBackground} className="landing__background" />
+            {/*<img src={LandingBackground} className="landing__background" />*/}
 
             <div className="landing__main" >
                 <Header />

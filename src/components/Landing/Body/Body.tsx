@@ -81,11 +81,6 @@ const Body = () => {
         </div>
 
       {/* Info box derecha */}
-      {/*selectedItem && (
-        <div className="cardContainer">
-          <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />
-        </div>
-      )}*/}
       {selectedItem ? (
         <div className="cardContainer">
           <Card content={selectedItem.content} setSelectedItem={setSelectedItem} />

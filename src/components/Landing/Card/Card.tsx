@@ -1,9 +1,10 @@
 import './Card.scss'
 import { COLORS } from "../../../utils/constants";
-import { Box, Button } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import 'overlayscrollbars/overlayscrollbars.css';
 import CloseIcon from "/assets/Icono CERRAR.png"
+import Close from "/assets/Cerrar.png"
 import type { JSX } from 'react';
 
 type CardProps = {
@@ -23,9 +24,9 @@ const Card = ({ content, setSelectedItem, downloadButton } : CardProps) => {
                     {content}
                 </OverlayScrollbarsComponent>
                 { setSelectedItem &&
-                    <Button type="button" className="closeButton" onClick={() => setSelectedItem(null)} variant="ghost" p={0} minW={0} height="auto">
-                        <img src={CloseIcon} alt="Cerrar" className="closeIcon" />
-                    </Button>
+                    <button className="closeButton" onClick={() => setSelectedItem(null)} >
+                        <img src={Close} alt="Cerrar"/>
+                    </button>
                 }
                 {downloadButton &&
                  <div className="downloadButtonContainer">

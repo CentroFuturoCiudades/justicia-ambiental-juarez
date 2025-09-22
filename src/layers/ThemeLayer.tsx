@@ -43,7 +43,6 @@ const ThemeLayer = () => {
         };
 
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        console.log("Selected Layer type:", layer.type);
 
         // Crea instancia de MapLayer
         const mapLayerInstance = new MapLayer({
@@ -53,8 +52,9 @@ const ThemeLayer = () => {
             amountOfColors: layer?.amountOfColors,
             formatValue: layer.formatValue,
             theme: layer.tematica,
-            categorical: layer.type === "Categorica" ? true : false,
-            categories: layer?.categories,
+            categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
+            categories: layer?.categories, //los labels de las categorias (si es categorica) (EJ. extremadamente vulnerable, vulnerable, no vulnerable)
+            categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
         });
 
         // Copia del geojson universal de agebs/colonias (para aplicar cambios dependiendo del dataProcessing de la capa seleccionada)
@@ -72,6 +72,7 @@ const ThemeLayer = () => {
         if ( layer?.dataProcesssing ) { 
             jsonData = layer.dataProcesssing(jsonData); //aplica cambios a la copia
         }
+        //console.log("Datos procesados de la capa:", jsonData);
 
         // Data de la capa: todos los features y los filtrados (en caso de que este activado el radio)
         const allFeatures = jsonData.features;

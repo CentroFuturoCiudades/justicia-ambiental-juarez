@@ -26,18 +26,6 @@ const DownloadSummary = ( setPopUp : any ) => {
                                     <p> {instance.selected.join(", ")} </p>
                                 </div>
                             )}
-                            {/*instance.complementarias.length > 0 && (
-                                <div>
-                                    <h3>Capas Complementarias:</h3>
-                                    <ul style={{ paddingLeft: "1dvh" }}>
-                                        {instance.complementarias.map((capa: any, idx: number) => {
-                                            const capaObj = CAPAS_BASE[capa as keyof typeof CAPAS_BASE];
-                                            const titulo = capaObj ? capaObj.title : capa;
-                                            return <li key={idx}>{titulo}</li>;
-                                        })}
-                                    </ul>
-                                </div>
-                            )*/}
                         </div>
                     </div>
                 

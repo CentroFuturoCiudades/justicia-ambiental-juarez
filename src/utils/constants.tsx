@@ -96,12 +96,18 @@ export const LAYERS: any = {
         visualization_type: "Semaforo",
         geographic_unit: "AGEB y Colonia",
         threshold: "1- Menos vulnerable, 2- Ligeramente vulnerable, 3- Moderadamente vulnerable, 4- Muy vulnerable, 5- Más vulnerable",
-        //categories: ["Poco vulnerable", "Ligeramente vulnerable", "Moderadamente vulnerable", "Muy vulnerable", "Extremadamente vulnerable"],
-        categories: ["Extremadamente vulnerable", "Muy vulnerable", "Moderadamente vulnerable", "Ligeramente vulnerable", "Poco vulnerable"],
+        labels : {
+            1: "Poco vulnerable",
+            2: "Ligeramente vulnerable",
+            3: "Moderadamente vulnerable",
+            4: "Muy vulnerable",
+            5: "Extremadamente vulnerable"
+        },
+        //categories: ["Extremadamente vulnerable", "Muy vulnerable", "Moderadamente vulnerable", "Ligeramente vulnerable", "Poco vulnerable"],
         year: 2020,
         enabled: true,
         formatValue: (x: number) => {
-            return formatNumber(x, 0)
+            return formatNumber(x, 2)
         },
         amountOfColors: 5,
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
@@ -540,14 +546,32 @@ export const LAYERS: any = {
         geographic_unit: "",
         threshold: "",
         year: null,
-        //enabled: true,
+        enabled: true,
+        labels : {
+            1: "Muy bajo",
+            2: "Bajo",
+            3: "Medio",
+            4: "Alto",
+            5: "Muy alto"
+        },
         dataProcesssing: (data: any) => {
+            const marginacionMap: any = {
+                "Muy bajo": 1,
+                "Bajo": 2,
+                "Medio": 3,
+                "Alto": 4,
+                "Muy alto": 5
+            }
             data.features = data.features.filter((feature: any) => feature.properties.indice_marginacion !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.indice_marginacion = marginacionMap[feature.properties.indice_marginacion];
+            });
             return data;
         },
-        formatValue: (x: string) => {
-            return x
+        formatValue: (x: number) => {
+            return formatNumber(x, 2)
         },
+        colors: ["#cdd8e6", "#08316b"],
         //map_type: "geometry",
         //metric: "puntaje_0_100",
         //stat_type: "promedio",
@@ -566,6 +590,32 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "",
         year: null,
+        enabled: true,
+        labels : {
+            1: "Muy Bajo",
+            2: "Bajo",
+            3: "Medio",
+            4: "Alto",
+            5: "Muy Alto"
+        },
+        dataProcesssing: (data: any) => {
+            const marginacionMap: any = {
+                "MUY BAJO": 1,
+                "BAJO": 2,
+                "MEDIO": 3,
+                "ALTO": 4,
+                "MUY ALTO": 5
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.indice_bienestar !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.indice_bienestar = marginacionMap[feature.properties.indice_bienestar];
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 2)
+        },
+        colors: ["#cdd8e6", "#08316b"],
         //map_type: "geometry",
         //metric: "puntaje_0_100",
         //stat_type: "promedio",
