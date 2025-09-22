@@ -1,10 +1,11 @@
 .body {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   padding: 4dvh 12dvw 4dvh 4dvw;
+  gap: 4dvw;
 }
 
 .buttonColumn {
@@ -12,24 +13,24 @@
   flex-direction: column;
   justify-content: space-between;
   width: 32dvw;
+  font-size: var(--font-size-header);
   font-family: 'Roboto Mono';
   font-weight: 700;
+  gap: 6dvh;
 
   &__button {
     position: relative;
-    //height: min(15dvh, 8dvw);
-    height: 15dvh;
+    //height: 15dvh;
+    flex: 1;
     display: flex;
     align-items: center;
-    align-content: center;
-    font-size: var(--font-size-header);
     white-space: pre-line;
     border-radius: var(--border-radius);
     border: 1px solid var(--background-dark);
+    background-color: var(--background);
     color: black;
     line-height: 1.2;
     transition: box-shadow 0.05s ease;
-    background-color: var(--background);
 
     &:hover,
     &--selected {
@@ -37,7 +38,6 @@
     }
   }
   
-
   &__icon {
     position: absolute;
     width: min(8dvh, 6dvw);
@@ -47,26 +47,26 @@
     transform: translateY(-50%);
     border-radius: 50%;
     background-color: var(--background);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .img {
+
+    img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
     }
   }
 }
 
 .cardContainer {
-  width: 47dvw;
+  //width: 47dvw;
+  flex: 1;
+  min-width: 0;
 }
 
 .speed-dial {
   position: absolute;
-  right: 4dvw;
-  bottom: 18dvh;
-  gap: 2.5dvh;
+  right: calc(5.5dvw - 0.5 * min(6.8dvh, 4dvw));
+  bottom: min(5dvh, 3dvw);
+  gap: min(2.5dvh, 1.4dvw);
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -76,7 +76,7 @@
       cursor: pointer;
       display: inline-flex;
       border-radius: 2dvw 99px 99px 2dvw;
-      padding: 0 0 0 1dvw;
+      padding: 0 0 0 0.5dvw;
       align-items: center;
       background-color: transparent;
       transition: all 0.3s ease;
@@ -85,15 +85,14 @@
         font-size: var(--font-size-body);
         opacity: 0;
         visibility: hidden;
-        margin-right: 0;
         font-family: 'Playfair Display', serif;
         font-style: italic;
         transition: all 0.3s ease;
       }
 
       .icon {
-        height: min(4.09dvw, 7dvh);
-        width: min(4.09dvw, 7dvh);
+        height: min(6.8dvh, 4dvw);
+        width: min(6.8dvh, 4dvw);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -102,8 +101,9 @@
         transition: transform 0.3s ease;
 
         img {
-          max-width: 90%;
-          max-height: 90%;
+          width: 100%;
+          height: 100%;
+          //object-fit: cover;
           object-fit: contain;
         }
       }
@@ -124,7 +124,7 @@
   .button-text:not(.hidden) {
     visibility: visible;
     opacity: 1;
-    margin-right: 1dvw;
+    margin-right: 0.5dvw;
   }
   .button-text {
     opacity: 0;
@@ -145,38 +145,53 @@
 }
 .bodytext-card {
   font-size: var(--font-size-subtitle);
-  //font-family: 'Roboto';
   font-weight: 300;
 }
 
 @media (max-width: 800px) {
   .body {
     flex-direction: column;
-    //padding: min(12dvw, 6dvh) 4dvw min(12dvw, 6dvh) 4dvw;
     gap: 4dvh;
+    padding-left: 7dvw;
+    padding-right: 15dvw;
   }
   .buttonColumn {
     width: 100%;
     flex: 1;
+    gap: 0;
 
     &__button {
+      flex: none;
       height: min(12dvh, 25dvw);
       font-size: min(2dvh, 3.2dvw);
     }
     &__icon {
-      width: min(6dvh, 5dvw);
-      height: min(6dvh, 5dvw);
-      right: calc(-0.5 * min(6dvh, 5dvw));
+      width: min(7dvh, 8dvw);
+      height: min(7dvh, 8dvw);
+      right: calc(-0.5 * min(7dvh, 8dvw));
     }
   }
   .buttonColumn--single {
     flex: none;
   }
   .cardContainer {
-    width: 100%;
-    height: 100%;
+    min-height: 0;
   }
   .subtitle-card {
     font-size: min(2dvh, 3.2dvw);
+  }
+
+  .speed-dial {
+    right: calc(7.5dvw - 0.5 * min(6dvh, 7dvw));
+    bottom: 3.5dvh;
+    gap: 2dvh;
+    &__item {
+      button {
+        .icon {
+          height: min(6dvh, 7dvw);
+          width: min(6dvh, 7dvw);
+        }
+      }
+    }
   }
 }

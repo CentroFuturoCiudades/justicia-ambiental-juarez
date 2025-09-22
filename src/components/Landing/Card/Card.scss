@@ -1,116 +1,117 @@
 .card {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    font-size: var(--font-size-body);
-    border-radius: 0.15dvw;
-    //display: flex;
-    padding: 1.5vw;
-    border: 1px solid #40423d;
-    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
-    //flex: 1;
-    //flex-direction: column;
+  position: relative;
+  height: 100%;
+  //width: 100%;
+  font-size: var(--font-size-body);
+  border-radius: 0.15dvw;
+  padding: min(2.5dvh, 1.5dvw);
+  border: 1px solid #40423d;
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2);
 }
 
 .scroll-content {
-    overflow-y: scroll;
-    //overflow-y: auto;
-    padding-right: 2.4dvw;
-    //flex: 1;
-    width: 100%;
-    height: 100%;
+  overflow-y: scroll;
+  padding-right: min(3.4dvh, 2dvw);
+  //width: 100%;
+  height: 100%;
 }
 
 .scroll-content .os-scrollbar-vertical {
-  width: 1dvw;
+  width: min(1.7dvh, 1dvw);
   border: 1px solid black;
   padding: 0;
   height: 80%;
-  //margin-top: 5.5%;
-  //margin-top: calc(0.1 * 100%); // 10% del contenedor
-}
-
-.os-scrollbar-vertical {
   align-self: center;
-}
-
-.scroll-content .os-scrollbar-track {
-  border-radius: 0;
 }
 
 .scroll-content .os-scrollbar-handle {
   background: #af6864;
   border-radius: 0;
-  min-height: 5px;
-  max-height: 3dvh;
-  height: 2dvh;
-}
-
-.scroll-content .os-scrollbar-handle:hover,
-.scroll-content .os-scrollbar-handle:active,
-.scroll-content .os-scrollbar-handle:focus {
-  background: #af6864; // mismo color
-}
-
-.closeButton {
-    background-color: transparent;
-    position: absolute;
-    top: 1.5dvh;
-    right: 0.95dvw;
-    //height: 100%;
-    width: 2.2dvw;
-    height: 2.2dvw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    padding: 0;
-    border: none;
-}
-
-.downloadButton {
-    background-color: transparent;
-    position: absolute;
-    bottom: min(1.5dvh, 0.8dvw);
-    right: 0.6dvw;
-    min-width: 2dvw;
-    min-height: 2dvw;
-    width: 3dvw;
-    height: 3dvw;
-    border-radius: 50%;
-    padding: 0;
-  .img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    &:hover {
-      transform: scale(1.1);
-      transition: transform 0.2s ease;
-    }
+  &:hover {
+    background: #af6864;
   }
 }
 
-.closeIcon {
-    height: 100%;
+.closeButton {
+  position: absolute;
+  //right: calc(1.5dvw - 0.5 * 1.1dvw); // 1.5dvw menos la mitad de la scrollbar
+  right: calc(min(2.5dvh, 1.5dvw) - 0.5 * min(1.85dvh, 1.1dvw));
+  //right: calc(1.5dvw - 0.5 * (0.5* min(3.7dvh, 2.2dvw))); // 1.5dvw menos la mitad del botón
+  top: min(1.5dvh, 0.87dvw);
+  width: min(3.7dvh, 2.2dvw);
+  height: min(3.7dvh, 2.2dvw);
+  border-radius: 50%;
+  padding: 0;
+  background-color: transparent;
+  transition: transform 0.3s ease;
+
+  img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+  }
 }
 
-.closeButton:hover,
-.closeButton:active {
-  border-color: transparent !important;
-  border: none !important;
-  background-color: transparent !important;
+.downloadButton {
+  position: absolute;
+  //right: calc(1.5dvw - 0.5 * 1.5dvw);
+  right: calc(min(2.5dvh, 1.5dvw) - 0.5 * min(2.5dvh, 1.5dvw));
+  bottom: min(1.5dvh, 0.8dvw);
+  width: min(5.1dvh, 3dvw);
+  height: min(5.1dvh, 3dvw);
+  border-radius: 50%;
+  padding: 0;
+  background-color: transparent;
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+  }
 }
 
-.closeButton:focus,
-.closeButton:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: transparent !important;
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2dvh;
+
+  &__title {
+    font-family: 'Roboto Mono';
+    font-size: var(--font-size-header);
+    font-weight: 700;
+  }
+  &__text {
+    font-size: var(--font-size-subtitle);
+    font-weight: 300;
+  }
+  &__row {
+    display: flex;
+    flex-direction: row;
+    gap: 2dvw;
+  }
+  &__img {
+    width: 40%;
+  }
 }
 
-.closeIcon:hover {
-  transform: scale(1.1);
-  transition: transform 0.2s ease;
+@media (max-width: 800px) {
+  .closeButton {
+    right: calc(1.5dvw - 0.5 * 1.5dvw);
+    width: 3dvw;
+    height: 3dvw;
+  }
+
+  .cardContent {
+    &__title {
+      font-size: min(2dvh, 3.2dvw);
+    }
+  }
 }

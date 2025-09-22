@@ -33,9 +33,9 @@ const PopUp = ({deck, map, setPopUp} : PopupProps) => {
                 content={DownloadSummary({ setPopUp })}
                 setSelectedItem={setPopUp}
                 downloadButton={
-                    <Button type="button" className="downloadButton" onClick={handleDownload} >
-                        <img src={DownloadReport} className="img" />
-                    </Button>
+                    <button className="downloadButton" onClick={handleDownload} >
+                        <img src={DownloadReport} />
+                    </button>
                 }
             />
         </div>
