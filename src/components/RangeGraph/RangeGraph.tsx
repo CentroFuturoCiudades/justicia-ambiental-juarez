@@ -81,11 +81,16 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
               width: "max-content",
             };
 
-            if (percent <= 0) {
-              style.left = 0;
+            if (percent <= 5) {
+              style.left = '1dvw'; //extreme min
               style.transform = "none";
-            } else if (percent >= 100) {
-              style.right = 0;
+            } else if (percent >= 98) {
+              style.right = '1.1dvw'; //extreme max
+              style.transform = "none";
+              style.alignItems = "flex-end";
+            }
+            else if (percent >= 90) { 
+              style.right = 0; //extreme max
               style.transform = "none";
             } else {
               style.left = `${percent}%`;
@@ -105,8 +110,8 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
                   <div style={{
                     fontSize: "var(--font-size-button)",
                     fontWeight: "300",
-                    alignContent: "center",
-                    textAlign: "center",
+                    alignContent: percent >= 98 ? "flex-end" : "center",
+                    textAlign: percent >= 98 ? "right" : "center",
                     marginTop: "min(1.5dvh, 0.8dvw)",
                     lineHeight: "1",
                   }}>

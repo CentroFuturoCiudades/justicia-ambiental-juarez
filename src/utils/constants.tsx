@@ -139,14 +139,23 @@ export const LAYERS: any = {
         title: "Exposición a alto tráfico vehicular",
         description: "Traffic proximity measures the count of vehicles per day (average annual daily traffic- AADT) divided by distance. EJScreen presents traffic proximity using percentile rank, ranging from 0 (lowest) to 100 (highest). ",
         source: "Datos del IMIP",
-        property: "riesgo_trafico_vehicular",
+        property: "tdpa_density",
         tematica: "ambiental",
-        type: "Categorica",
+        //type: "Categorica",
+        type: "Continua",
         is_lineLayer: false,
         visualization_type: "Semaforo",
         geographic_unit: "Líneas de vialidades principales",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.tdpa_density !== null );
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 1)
+        },
         //map_type: "geometry",
         //metric: "puntaje_0_100",
         //stat_type: "promedio",
@@ -290,16 +299,28 @@ export const LAYERS: any = {
     },
     indice_accesibilidad: {
         title: "Índice de Accesibilidad a Equipamientos",
-        description: "Índice de accesibilidad: modelo gravitacional incorporando acceso a equipamientos de salud, educación, y cuidados",
-        source: "",
-        property: "income_pc",
+        description: "Métrica combinada que toma en cuenta el tiempo de viaje a equipamientos educativos, de salud, y recreativos. Entre más alta, más facil es acceder a ellos.",
+        source: "Elaboración propia con datos de equipamientos y OSM",
+        property: "accessibility_score",
         tematica: "equipamiento",
-        type: "Categorica",
+        //type: "Categorica",
+        type: "Continua",
         is_lineLayer: false,
         visualization_type: "Semaforo",
         geographic_unit: "AGEB",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.accessibility_score !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.accessibility_score = Math.round(feature.properties.accessibility_score * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 1)
+        },
         //map_type: "geometry",
         //metric: "puntaje_0_100",
         //stat_type: "promedio",
@@ -310,7 +331,7 @@ export const LAYERS: any = {
         title: "Tiempo promedio a espacios recreativos",
         description: "Índice que mide el tiempo promedio de acceso a espacios recreativos",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "tiempo_viaje_recreativos",
+        property: "tiempo_parque",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -318,6 +339,14 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "< 5 min: Bueno, 5-20: Medio, > 20: Vulnerable",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.tiempo_parque !== null);
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + " min"
+        },
         //map_type: "geometry",
         //metric: "minutos", 
         //stat_type: "promedio",
@@ -328,7 +357,7 @@ export const LAYERS: any = {
         title: "Tiempo promedio a hospitales o clínicas",
         description: "Índice que mide el tiempo promedio de acceso a equipamientos de salud",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "tiempo_viaje_hospitales",
+        property: "tiempo_clinica_hospital",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -336,6 +365,14 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "< 20 min: Bueno, 20-60: Medio, > 60: Vulnerable",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.tiempo_clinica_hospital !== null);
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + " min"
+        },
         //map_type: "geometry",
         //metric: "minutos",
         //stat_type: "promedio",
@@ -346,7 +383,7 @@ export const LAYERS: any = {
         title: "Tiempo promedio a preparatorias",
         description: "Índice que mide el tiempo promedio de acceso a preparatorias",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "tiempo_viaje_preparatorias",
+        property: "tiempo_preparatoria",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -354,6 +391,14 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "< 15 min: Bueno, 15-45: Medio, > 45: Vulnerable",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.tiempo_preparatoria !== null);
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + " min"
+        },
         //map_type: "geometry",
         //metric: "minutos",
         //stat_type: "promedio",
@@ -364,7 +409,7 @@ export const LAYERS: any = {
         title: "Acceso a espacios recreativos",
         description: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "porcentaje_hogares_recreativos",
+        property: "per_hogares_parque_15mi",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -372,6 +417,17 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.per_hogares_parque_15mi !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.per_hogares_parque_15mi = Math.round(feature.properties.per_hogares_parque_15mi * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
         //map_type: "geometry",
         //metric: "porcentaje_hogares", 
         //stat_type: "promedio",
@@ -382,7 +438,7 @@ export const LAYERS: any = {
         title: "Acceso a hospitales o clínicas",
         description: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "porcentaje_hogares_salud",
+        property: "per_hogares_clinica_hospital_30mi",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -390,6 +446,17 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.per_hogares_clinica_hospital_30mi !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.per_hogares_clinica_hospital_30mi = Math.round(feature.properties.per_hogares_clinica_hospital_30mi * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
         //map_type: "geometry",
         //metric: "porcentaje_hogares", 
         //stat_type: "promedio",
@@ -400,7 +467,7 @@ export const LAYERS: any = {
         title: "Acceso a preparatorias",
         description: "Porcentaje de hogares con acceso a preparatorias a 30 minutos",
         source: "Elaboración propia con datos de equipamientos y OSM",
-        property: "porcentaje_hogares_preparatorias",
+        property: "per_hogares_preparatoria_30mi",
         tematica: "equipamiento",
         type: "Continua",
         is_lineLayer: false,
@@ -408,6 +475,19 @@ export const LAYERS: any = {
         geographic_unit: "AGEB",
         threshold: "",
         year: null,
+        enabled: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.per_hogares_preparatoria_30mi !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.per_hogares_preparatoria_30mi = Math.round(feature.properties.per_hogares_preparatoria_30mi * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        //colors: ["#f4f9ff", "#846b9eff", "#483a57ff"],
+        colors: ["#b7c6e6", "#a58dc0ff", "#846b9eff", "#61457fff","#38264cff"],
         //map_type: "geometry",
         //metric: "porcentaje_hogares",
         //stat_type: "promedio",
@@ -536,7 +616,7 @@ export const LAYERS: any = {
     },
     indice_marginacion: {
         title: "Indice de Marginación Urbana",
-        description: "Indice marg. urbana desc.",
+        description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos",
         source: "CONAPO",
         property: "indice_marginacion",
         tematica: "poblacion",
