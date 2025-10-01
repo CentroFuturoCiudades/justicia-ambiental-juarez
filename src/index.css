@@ -94,7 +94,7 @@ button {
     --font-size-title: min(6dvh, 5.5dvw); 
     --font-size-visor-header: 2.2dvw;
     --font-size-header: min(3dvh, 2.2dvw);
-    --font-size-subtitle: min(2dvh, 1.5dvw);
+    --font-size-subtitle: min(2.8dvh, 2dvw);
     --font-size-body: min(1.4dvh, 1dvw);
   }
 }
