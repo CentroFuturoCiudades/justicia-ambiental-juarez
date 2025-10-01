@@ -34,7 +34,6 @@ const ThemeLayer = () => {
 
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
-
         if(activeLayerKey === null || !selectedLayer) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
@@ -96,7 +95,7 @@ const ThemeLayer = () => {
         setTematicaLayer(geoJsonLayer);
         setMapLayerInstance(mapLayerInstance);
 
-    }, [selectedLayer, activeLayerKey, selectionMode, filteredFeatures]);
+    }, [selectedLayer, activeLayerKey, selectionMode, filteredFeatures, agebsGeoJson]);
     
 
     return { layers: tematicaLayer ? [tematicaLayer] : [] };
