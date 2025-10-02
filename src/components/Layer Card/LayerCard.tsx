@@ -39,8 +39,16 @@ const LayerCard = ({ selectedLayerData, rangeGraphRef, onInfoHover, layerCardRef
         selectedLayerData.property, 
         activeLayerKey
     );
-    const averageFormatted = selectedLayerData.formatValue(average);
-    const description = mapLayerInstance.getDescription(selected, selectedLayerData.title, activeLayerKey, averageFormatted);
+    //const averageFormatted = selectedLayerData.formatValue(average);
+    const category = selectedLayerData.descriptionCategories?.[Math.trunc(average)];
+    const description = mapLayerInstance.getDescription(
+        selected, 
+        activeLayerKey, 
+        selectedLayerData.formatValue(average), 
+        selectedLayerData.juarezCard,
+        selectedLayerData.selectionCard,
+        category,
+    );
 
     return (
         <div className={`layerCard layerCard--${themeKey}`} ref={layerCardRef}>

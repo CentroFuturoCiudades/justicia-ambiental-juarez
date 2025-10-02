@@ -88,7 +88,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //una capa a la vez
     const [selectedLayer, setSelectedLayer] = useState<LayerKey>("vulnerabilidad_calor");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>("agebs");
-    const [selectionMode, setSelectionMode] = useState<string | null>(null);
+    const [selectionMode, setSelectionMode] = useState<string | null>("agebs");
 
     //capas base
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<any[]>([]);
