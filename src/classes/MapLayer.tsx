@@ -263,27 +263,19 @@ export class MapLayer {
       return this.selectedAvg;
   }
 
-  getDescription(selected: string[], key: string, average: string, juarezCard:any, selectionCard:any, category?: string) {
-
-    console.log("category:", category);
+  getDescription(selected: string[], key: string, average: string, juarezCard: any, selectionCard: any, category?: string) {
 
     const singleSelected = key === "agebs" ? "el AGEB seleccionado" : "la colonia seleccionada";
     const multipleSelected = key === "agebs" ? "los AGEBs seleccionados" : "las colonias seleccionadas";
+    const introText = selected.length === 1 ? singleSelected : multipleSelected;
+    const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
 
-    // Juarez Card Description (when no selection)
+    // Juarez Card (no ageb/col selected)
     if (selected.length === 0) {
-        return (
-          <>
-            En Ciudad Juárez, {juarezCard(average, "X", category)}
-          </>
-        );
-    } else { // Selection Card Description (when there is a selection)
-        return (
-          <>
-            En {selected.length === 1 ? singleSelected : multipleSelected}, {selectionCard(average, this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO", "X", category)}
-          </>
-        )
-      }
+      return juarezCard(average, "X", category);
+    } else { // Selection Card (w/ ageb/col selected)
+      return selectionCard(introText, average, comparedToAvg, "X", category);
+    }
   }
 
   getRangeGraph = (avg: number, selected: number) => {
