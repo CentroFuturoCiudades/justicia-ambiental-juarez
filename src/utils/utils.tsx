@@ -11,4 +11,8 @@ const formatNumber = (value: number | undefined, decimalPlaces: number = 2) => {
   }
 }
 
-export { formatNumber };
+const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export { formatNumber, capitalize };

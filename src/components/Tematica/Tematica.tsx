@@ -29,7 +29,7 @@ const Tematica = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible className="dropdown" variant="enclosed" >
+            <Accordion.Root collapsible className="dropdown" variant="enclosed" defaultValue={["tematica"]} multiple={false}>
                 <Accordion.Item value="tematica" className="dropdown__mainItem" >
 
                     <Accordion.ItemTrigger className="trigger" >
@@ -40,11 +40,10 @@ const Tematica = () => {
                     </Accordion.ItemTrigger>
 
                     <Accordion.ItemContent className="dropdown__mainContent" >
-                            
-                        {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
-                            <Accordion.Root collapsible key={sectionKey} >
+                        <Accordion.Root collapsible defaultValue={["ambiental"]} multiple={false}>
+                            {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
                                 <Accordion.Item value={sectionKey} className="dropdown__subItem" >
-                            
+                                
                                     <Accordion.ItemTrigger className={`trigger trigger--light`}>
                                         <Span className="trigger__title"> {section.label} </Span>
                                         <Accordion.ItemIndicator  className="trigger__indicator">
@@ -80,8 +79,8 @@ const Tematica = () => {
                                         ))}
                                     </Accordion.ItemContent>
                                 </Accordion.Item>
-                            </Accordion.Root>
-                        ))}
+                            ))}
+                        </Accordion.Root>
                     </Accordion.ItemContent>
                 </Accordion.Item>
             </Accordion.Root>

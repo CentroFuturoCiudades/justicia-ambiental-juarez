@@ -263,28 +263,19 @@ export class MapLayer {
       return this.selectedAvg;
   }
 
-  getDescription(selected: string[], title: string, key: string, average: string) {
+  getDescription(selected: string[], key: string, average: string, juarezCard: any, selectionCard: any, category?: string) {
 
-    const singleSelected = key === "agebs" ? "El AGEB seleccionado tiene" : "La colonia seleccionada tiene";
-    const multipleSelected = key === "agebs" ? "Los AGEBs seleccionados tienen" : "Las colonias seleccionadas tienen";
-    let description = ""
+    const singleSelected = key === "agebs" ? "el AGEB seleccionado" : "la colonia seleccionada";
+    const multipleSelected = key === "agebs" ? "los AGEBs seleccionados" : "las colonias seleccionadas";
+    const introText = selected.length === 1 ? singleSelected : multipleSelected;
+    const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
 
+    // Juarez Card (no ageb/col selected)
     if (selected.length === 0) {
-        description = `Ciudad Juárez tiene un ${title} de ${average}.`;
-        this.selectedDescription = description;
-        return (
-          <>Ciudad Juárez tiene un {title} de <strong>{average}</strong>.</>
-        );
-
-    } else {
-        description = `${selected.length == 1 ? singleSelected : multipleSelected} un ${title} de ${average}; por ${this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"} de la media de Ciudad Juárez.`;
-        this.selectedDescription = description;
-        return (
-          <span style={{ fontStyle: "italic" }}>
-            {selected.length === 1 ? singleSelected : multipleSelected} un {title} de <strong className="description-bold">{average}</strong>; por <strong className="description-bold"> {this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO"} </strong> de la media de Ciudad Juárez.
-          </span>
-        )
-      }
+      return juarezCard(average, "X", category);
+    } else { // Selection Card (w/ ageb/col selected)
+      return selectionCard(introText, average, comparedToAvg, "X", category);
+    }
   }
 
   getRangeGraph = (avg: number, selected: number) => {
