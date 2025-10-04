@@ -263,18 +263,26 @@ export class MapLayer {
       return this.selectedAvg;
   }
 
-  getDescription(selected: string[], key: string, average: string, juarezCard: any, selectionCard: any, category?: string) {
+  getDescription(selected: string[], key: string, average: number, formatValue: any, descriptionCategories?: any, juarezCard: any, selectionCard: any, category: string) {
 
     const singleSelected = key === "agebs" ? "el AGEB seleccionado" : "la colonia seleccionada";
     const multipleSelected = key === "agebs" ? "los AGEBs seleccionados" : "las colonias seleccionadas";
     const introText = selected.length === 1 ? singleSelected : multipleSelected;
     const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
 
+    const cardData = {
+      avg: formatValue(average),
+      num: "X",
+      category: descriptionCategories?.[Math.trunc(average)] || "",
+      introText: selected.length >= 1 ? introText : "",
+      comparedToAvg: comparedToAvg
+    }
+
     // Juarez Card (no ageb/col selected)
     if (selected.length === 0) {
-      return juarezCard(average, "X", category);
+      return juarezCard(cardData);
     } else { // Selection Card (w/ ageb/col selected)
-      return selectionCard(introText, average, comparedToAvg, "X", category);
+      return selectionCard(cardData);
     }
   }
 

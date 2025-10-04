@@ -117,17 +117,17 @@ export const LAYERS: any = {
             4: "ligeramente alta",
             5: "alta"
         },
-        juarezCard: (avg: string, num: string, category: string) => {
+        juarezCard: (data) => {
             return (
-                <span>En Ciudad Juárez, el índice de vulnerabilidad al calor, es de <strong>{avg}</strong> lo que representa una <strong>vulnerabilidad {category}.</strong></span>
+                <span>En Ciudad Juárez, el índice de vulnerabilidad al calor, es de <strong>{data.avg}</strong> lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
             );
         },
-        selectionCard: (intro: string, avg: string, compared: string, num: string, category: string) => {
+        selectionCard: (data) => {
             return (
             <>
-                <span>{capitalize(intro)} tiene un índice de vulnerabilidad al calor de <strong>{avg}</strong>, lo que representa una <strong>vulnerabilidad {category}.</strong></span>
+                <span>{capitalize(data.introText)} tiene un índice de vulnerabilidad al calor de <strong>{data.avg}</strong>, lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
                 <br/>
-                <span>Este índice esta por <strong>{compared}</strong> del índice promedio de Ciudad Juarez.</span>
+                <span>Este índice esta por <strong>{data.compared}</strong> del índice promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -166,19 +166,18 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 1)
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el promedio de proximidad a vialidades con alto trafico vehicular es de <strong>{avg}</strong> lo que representa una exposición X.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string, category: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el promedio de proximidad a vialidades con alto trafico vehicular es de <strong>{data.avg}</strong> lo que representa una exposición X.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>{capitalize(intro)} tiene <strong>{avg}</strong>, lo que representa una <strong>vulnerabilidad {category}.</strong></span>
+                <span>{capitalize(data.introText)} tiene <strong>{data.avg}</strong>, lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
                 <br/>
-                <span>Este índice esta por <strong>{compared}</strong> del índice promedio de Ciudad Juarez.</span>
+                <span>Este índice esta por <strong>{data.compared}</strong> del índice promedio de Ciudad Juarez.</span>
             </>
             );
         }
     },
-    
     hogares_vulnerables_industria: {
         title: "Hogares expuestos a industrias contaminantes",
         description: "Se dividieron los sitios contaminantes en 5 quintiles, de acuerdo al nivel de emisiones contaminantes. Al primer quintil.",
@@ -203,14 +202,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, hay <strong>{num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong> de los hogares.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong> de los hogares.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -239,14 +238,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, hay <strong>{num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong> de la población.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -275,14 +274,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, hay <strong>{num}</strong> adultos de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong>% de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong>% de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{avg}</strong>% de la población.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong>% de la población.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -305,14 +304,14 @@ export const LAYERS: any = {
         },
         colors:["#f6ede9", "#8c5c47"],
         trimOutliers: true,
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, la exposición promedio a contaminantes industriales es de <strong>{avg}</strong>/km².</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, la exposición promedio a contaminantes industriales es de <strong>{data.avg}</strong>/km².</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} la exposición a contaminantes industriales es de <strong>{avg}/km² </strong>.</span>
+                <span>En {data.introText} la exposición a contaminantes industriales es de <strong>{data.avg}/km² </strong>.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -354,14 +353,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) 
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el índice promedio de accesibilidad a equipamientos es de <strong>{avg}</strong>, lo que representa una accesibilidad X.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el índice promedio de accesibilidad a equipamientos es de <strong>{data.avg}</strong>, lo que representa una accesibilidad X.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el índice promedio de accesibilidad a equipamientos es de <strong>{avg}</strong>.</span>
+                <span>En {data.introText} el índice promedio de accesibilidad a equipamientos es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -386,14 +385,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + " min"
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el tiempo promedio de acceso a espacios recreativos es de <strong>{avg}</strong>.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el tiempo promedio de acceso a espacios recreativos es de <strong>{data.avg}</strong>.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el tiempo promedio de acceso a espacios recreativos es de <strong>{avg}</strong>.</span>
+                <span>En {data.introText} el tiempo promedio de acceso a espacios recreativos es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -418,14 +417,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + " min"
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el tiempo promedio de acceso a hospitales o clínicas es de <strong>{avg}</strong>.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el tiempo promedio de acceso a hospitales o clínicas es de <strong>{data.avg}</strong>.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el tiempo promedio de acceso a hospitales o clínicas es de <strong>{avg}</strong>.</span>
+                <span>En {data.introText} el tiempo promedio de acceso a hospitales o clínicas es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -450,14 +449,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + " min"
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el tiempo promedio de acceso a preparatorias es de <strong>{avg}</strong>.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el tiempo promedio de acceso a preparatorias es de <strong>{data.avg}</strong>.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el tiempo promedio de acceso a preparatorias es de <strong>{avg}</strong>.</span>
+                <span>En {data.introText} el tiempo promedio de acceso a preparatorias es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -485,14 +484,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el <strong>{avg}</strong> de los hogares tienen acceso a espacios recreativos en 15 minutos.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el <strong>{data.avg}</strong> de los hogares tienen acceso a espacios recreativos en 15 minutos.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el <strong>{avg}</strong> de los hogares tienen acceso a espacios recreativos en 15 minutos.</span>
+                <span>En {data.introText} el <strong>{data.avg}</strong> de los hogares tienen acceso a espacios recreativos en 15 minutos.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -520,14 +519,14 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el <strong>{avg}</strong> de los hogares tienen acceso a hospitales o clínicas en 30 minutos.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el <strong>{data.avg}</strong> de los hogares tienen acceso a hospitales o clínicas en 30 minutos.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el <strong>{avg}</strong> de los hogares tienen acceso a hospitales o clínicas en 30 minutos.</span>
+                <span>En {data.introText} el <strong>{data.avg}</strong> de los hogares tienen acceso a hospitales o clínicas en 30 minutos.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -557,19 +556,18 @@ export const LAYERS: any = {
         },
         //colors: ["#f4f9ff", "#846b9eff", "#483a57ff"],
         colors: ["#b7c6e6", "#a58dc0ff", "#846b9eff", "#61457fff","#38264cff"],
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el <strong>{avg}</strong> de los hogares tienen acceso a preparatorias en 30 minutos.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el <strong>{data.avg}</strong> de los hogares tienen acceso a preparatorias en 30 minutos.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el <strong>{avg}</strong> de los hogares tienen acceso a preparatorias en 30 minutos.</span>
+                <span>En {data.introText} el <strong>{data.avg}</strong> de los hogares tienen acceso a preparatorias en 30 minutos.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje esta por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
     },
-
     ingreso: {
         title: "Ingreso promedio per cápita ",
         description: "Ingreso promedio per cápita mensual en pesos mexicanos de la población económicamente activa.",
@@ -594,14 +592,14 @@ export const LAYERS: any = {
             return '$' + formatNumber(x, 0)
         },
         colors: ["#f4f9ff", "#08316b"],
-        juarezCard: (avg: string) =>
-            <span>En Ciudad Juárez, el ingreso promedio per cápita es de <strong>{avg}</strong>.</span>,
-        selectionCard: (intro: string, avg: string, compared: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, el ingreso promedio per cápita es de <strong>{data.avg}</strong>.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} el ingreso promedio per cápita es de <strong>{avg}</strong>.</span>
+                <span>En {data.introText} el ingreso promedio per cápita es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Su ingreso promedio per cápita está por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Su ingreso promedio per cápita está por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -630,14 +628,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors: ["#f4f9ff", "#08316b"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, hay <strong>{num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{avg}</strong> de la población.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población.</span>
                 <br/>
-                <span>Este porcentaje está por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje está por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -666,14 +664,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors: ["#f4f9ff", "#08316b"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, hay <strong>{num}</strong> adultos de 60 años o más, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> adultos de 60 años o más, lo que representa el <strong>{avg}</strong> de la población.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> adultos de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población.</span>
                 <br/>
-                <span>Este porcentaje está por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje está por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -702,14 +700,14 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         colors: ["#f4f9ff", "#08316b"],
-        juarezCard: (avg: string, num: string) =>
-            <span>En Ciudad Juárez, <strong>{num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, <strong>{data.num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{avg}</strong> de la población.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{data.avg}</strong> de la población.</span>
                 <br/>
-                <span>Este porcentaje está por <strong>{compared}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje está por <strong>{data.compared}</strong> del promedio de Ciudad Juarez.</span>
             </>
             );
         }
@@ -759,14 +757,14 @@ export const LAYERS: any = {
             return formatNumber(x, 2)
         },
         colors: ["#cdd8e6", "#08316b"],
-        juarezCard: (avg: string, num: string, category: string) =>
-            <span>En Ciudad Juárez, <strong>{num}</strong> personas tienen un nivel de bienestar <strong>{category}</strong>, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string, category: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>En {intro} hay <strong>{num}</strong> personas tienen un nivel de bienestar <strong>{category}</strong>.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>.</span>
                 <br/>
-                <span>Este nivel está por <strong>{compared}</strong> del nivel de Ciudad Juarez (medio).</span>
+                <span>Este nivel está por <strong>{data.compared}</strong> del nivel de Ciudad Juarez (medio).</span>
             </>
             );
         }
@@ -816,14 +814,14 @@ export const LAYERS: any = {
             return formatNumber(x, 2)
         },
         colors: ["#cdd8e6", "#08316b"],
-        juarezCard: (avg: string, num: string, category: string) =>
-            <span>En Ciudad Juárez, <strong>{num}</strong> personas tienen un índice de marginación urbana <strong>{category}</strong>, lo que representa el <strong>{avg}</strong> de la población.</span>,
-        selectionCard: (intro: string, avg: string, compared: string, num: string, category: string) => {
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, <strong>{data.num}</strong> personas tienen un índice de marginación urbana <strong>{data.category}</strong>, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
             return (
             <>
-                <span>{capitalize(intro)} tiene un nivel de marginación <strong>{category}</strong>.</span>
+                <span>{capitalize(data.introText)} tiene un nivel de marginación <strong>{data.category}</strong>.</span>
                 <br/>
-                <span>Este nivel está por <strong>{compared}</strong> del nivel de Ciudad Juarez.</span>
+                <span>Este nivel está por <strong>{data.compared}</strong> del nivel de Ciudad Juarez.</span>
             </>
             );
         }
