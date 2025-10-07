@@ -15,11 +15,18 @@ import RadiusSlider from "../Toolbar/RadiusSlider";
 import InfoTooltip from "../Layer Card/Info Tooltip/InfoTooltip";
 import PopUp from "../Download Card/PopUp";
 import { Tooltip } from "../ui/tooltip";
+import { useMediaQuery } from '@chakra-ui/react';
+import { BsCardText } from "react-icons/bs";
+import { FaLayerGroup, FaSearch  } from "react-icons/fa";
+
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 const Visor = () => {
+
+    const [isMobile] = useMediaQuery('(max-width: 800px)')
+
 
     const { 
         viewState, setViewState, 
@@ -47,7 +54,36 @@ const Visor = () => {
     const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
 
     const [showDownloadCard, setShowDownloadCard] = useState<boolean>(false);
-    const [showInfoCard, setShowInfoCard] = useState(false);
+    const [infoCardOpen, setInfoCardOpen] = useState(false);
+    const themeKey = selectedLayerData?.tematica;
+    const [mobileVisibleElement, setMobileVisibleElement] = useState("");
+
+    const renderMobilePanel = () => {
+        switch(mobileVisibleElement) {
+            case "layercard":
+                return (
+                    <LayerCard
+                        selectedLayerData={selectedLayerData}
+                        rangeGraphRef={rangeGraphRef}
+                        onInfoHover={setInfoCardOpen}
+                        layerCardRef={layerCardRef}
+                        infoCardOpen={infoCardOpen}
+                    />
+                );
+            case "legend":
+                return mapLayerInstance?.getLegend(selectedLayerData?.title || "");
+            case "tematica":
+                return <Tematica />;
+            case "complementary":
+                return <CapasComplementarias />;
+            case "colonias":
+                return <BusquedaColonia />;
+            case "download":
+                return <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} setMobileVisibleElement={setMobileVisibleElement} />;
+            default:
+                return null;
+        }
+    };
 
     //FETCH AGEBS
     useEffect(() => {
@@ -62,7 +98,7 @@ const Visor = () => {
 
     //FETCH COLONIAS
     useEffect(() => {
-        const coloniaEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/neighborhoods.geojson";
+        const coloniaEndpoint = "https://justiciaambientalstore.blob.core.windows.net/data/colonias.geojson";
 
         (async () => {
             const data = await fetch(`${coloniaEndpoint}?${REACT_APP_SAS_TOKEN}`);
@@ -75,6 +111,7 @@ const Visor = () => {
         <div className="visor">
 
             {/* Panel izquierdo */}
+            {!isMobile && (
             <Box className="visor__leftPanel">
                 <Box className="visor__panelContent" scrollbar="hidden">
 
@@ -90,17 +127,18 @@ const Visor = () => {
 
                     <Tematica />
 
-                    {selectedLayer && tematicaData && mapLayerInstance && (
+                    {selectedLayer && tematicaData && mapLayerInstance && !isMobile && (
                         <LayerCard
                             selectedLayerData={selectedLayerData}
                             rangeGraphRef={rangeGraphRef}
-                            onInfoHover={setShowInfoCard}
+                            onInfoHover={setInfoCardOpen}
                             layerCardRef={layerCardRef}
                         />
                     )}
 
                 </Box>
             </Box>
+            )}
 
             <div className="visor__mapContainer" ref={mapContainerRef}>
                 <DeckGL
@@ -124,34 +162,39 @@ const Visor = () => {
                     />
                 </DeckGL>
 
-                <div className="visor__dropDowns">
-                    <CapasComplementarias />
-                    { activeLayerKey === "colonias" && <BusquedaColonia /> }
-                </div>
+                { !isMobile &&
+                    <div className="visor__dropDowns">
+                        <CapasComplementarias />
+                        { activeLayerKey === "colonias" && <BusquedaColonia /> }
+                    </div>
+                }
 
-                {selectedLayer && mapLayerInstance && (
+                {selectedLayer && mapLayerInstance && !isMobile && (
                     <div className="visor__legend">
                         {mapLayerInstance.getLegend(selectedLayerData?.title || "")}
                     </div>
                 )}
 
-                <Toolbar 
-                    rangeGraphRef={rangeGraphRef}
-                    deck={deck}
-                    map={map}
-                    setPopUp={setShowDownloadCard}
-                />
-                {selectionMode === "radius" && 
-                    <RadiusSlider />
-                }
-
+                {!isMobile && (
+                    <>
+                    <Toolbar
+                        rangeGraphRef={rangeGraphRef}
+                        deck={deck}
+                        map={map}
+                        setPopUp={setShowDownloadCard}
+                    />
+                </>
+                )}
+               
                 {/*Download Summary PopUp */}
-                {showDownloadCard && mapLayers.length > 0 && (
-                    <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} />
+                {showDownloadCard && mapLayers.length > 0 && !isMobile && (
+                    <div className="visor__downloadCard">
+                        <PopUp deck={deck.current} map={map.current} setPopUp={setShowDownloadCard} />
+                    </div>
                 )}
 
                     <InfoTooltip
-                        show={showInfoCard}
+                        show={infoCardOpen}
                         containerRef={mapContainerRef}
                         layerCardRef={layerCardRef}
                         selectedLayerData={selectedLayerData}
@@ -162,6 +205,52 @@ const Visor = () => {
                     <div className="visor__layerTooltip" style={{ left: layerTooltip.x + 8, top: layerTooltip.y }}>
                         {Math.round(layerTooltip.content.release) + " kg"}
                     </div>
+                }
+
+                {isMobile &&
+                    <>
+                        <div className="buttonGroup" style={{ top: "2dvh" }}>
+                            <div className="visor__buttonRow" >
+                                <button className={`topButton ${mobileVisibleElement === "tematica" ? "topButton--selected" : ""}`} onClick={() => setMobileVisibleElement(mobileVisibleElement === "tematica" ? "" : "tematica")} style={{ flex: 1 }}>
+                                    Tematica
+                                </button>
+                                <button className={`topButton ${mobileVisibleElement === "complementary" ? "topButton--selected" : ""}`} onClick={() => setMobileVisibleElement(mobileVisibleElement === "complementary" ? "" : "complementary")}>
+                                    <FaLayerGroup size={18} />
+                                </button>
+                                { activeLayerKey === "colonias" &&
+                                    <button className={`topButton ${mobileVisibleElement === "colonias" ? "topButton--selected" : ""}`} onClick={() => setMobileVisibleElement(mobileVisibleElement === "colonias" ? "" : "colonias")}>
+                                        <FaSearch size={18} />
+                                    </button>
+                                }
+                            </div>
+                            <>
+                                <Toolbar 
+                                    rangeGraphRef={rangeGraphRef}
+                                    deck={deck}
+                                    map={map}
+                                    setPopUp={setShowDownloadCard}
+                                    setMobileVisibleElement={setMobileVisibleElement}
+                                />
+                            </>
+                        </div>
+
+                        <div className="buttonGroup" style={{  bottom: "2dvh" }}>
+                            {mobileVisibleElement && (
+                                <div className={`visor__centerPanel${mobileVisibleElement ? " visor__centerPanel--visible" : ""}`}>
+                                    {renderMobilePanel()}
+                                </div>
+                            )}
+
+                            <div className="visor__buttonRow">
+                                <button style={{ flex: 1 }} className={`lowerButton lowerButton--${themeKey} ${mobileVisibleElement === "layercard" ? "lowerButton--selected" : ""}`} onClick={() => setMobileVisibleElement(mobileVisibleElement === "layercard" ? "" : "layercard")}>
+                                    Ver datos
+                                </button>
+                                <button className={`lowerButton lowerButton--${themeKey} ${mobileVisibleElement === "legend" ? "lowerButton--selected" : ""}`} onClick={() => setMobileVisibleElement(mobileVisibleElement === "legend" ? "" : "legend")}>
+                                    <BsCardText size={18} />
+                                </button>
+                            </div>
+                        </div>
+                    </>
                 }
             </div>
         </div>

@@ -39,7 +39,6 @@
   border-radius: 0;
   border: none;
   font-size: var(--font-size-subtitle);
-  //font-size: var(--font-size-subtitle);
   color: white;
   padding: 0;
   gap: 0;
@@ -145,3 +144,38 @@
 /*.dropdown[aria-expanded="true"] {
   border-radius: 0 0 var(--border-radius) var(--border-radius) ;
 }*/
+
+@media (max-width: 800px) {
+  .dropdown {    
+    //position: absolute;
+    //left: 0;
+    //bottom: 0;
+    &__subContent {
+      padding: 0 1dvw;
+    }
+  }
+  .trigger {
+    min-height: min(5dvh, 6dvw);
+    &__title {
+      padding: 0 1dvw;
+    }
+    &__indicator {
+      width: min(5dvw, 6dvh);
+    }
+  }
+  .checkbox {
+    gap: 1dvw;
+    &__content {
+      min-height: min(2dvh, 3dvw);
+      padding: min(0.3dvh, 0.5dvw) 0;
+    }
+    &__label {
+      font-size: var(--font-size-subtitle);
+    }
+  }
+  .chakra-checkbox__control {
+    width: min(2dvh, 2dvw) ;
+    height: min(2dvh, 2dvw);
+    border-radius: 0.1dvw;
+  }
+}

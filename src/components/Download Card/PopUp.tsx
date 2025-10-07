@@ -11,9 +11,10 @@ type PopupProps = {
     deck: React.RefObject<HTMLDivElement>;
     map: React.RefObject<HTMLDivElement>;
     setPopUp: any;
+    setMobileVisibleElement?: any;
 }
 
-const PopUp = ({deck, map, setPopUp} : PopupProps) => {
+const PopUp = ({deck, map, setPopUp, setMobileVisibleElement} : PopupProps) => {
 
     const { mapLayers, setViewState } = useAppContext();
     const handleDownload = () => {
@@ -37,6 +38,7 @@ const PopUp = ({deck, map, setPopUp} : PopupProps) => {
                         <img src={DownloadReport} />
                     </button>
                 }
+                setMobileVisibleElement={setMobileVisibleElement}
             />
         </div>
     )

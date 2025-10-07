@@ -41,9 +41,9 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, categories }:
 
   const gradientStyle: React.CSSProperties = {
     background: linearGradient,
-    width: "2vw",
-    height: 'auto',
-    borderRadius: '0.3dvw',
+    //width: "2vw",
+    //height: 'auto',
+    //borderRadius: '0.3dvw',
   };
 
   return (
@@ -66,7 +66,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, categories }:
               );
             })}
           </div>
-        : <div style={gradientStyle}></div> }
+        : <div  className="gradientStyle" style={gradientStyle}></div> }
         <div className="legend-ranges">
           {ranges?.length && ranges.map((value, index) => renderLegeindItem(value, index))}
         </div>

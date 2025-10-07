@@ -4,6 +4,8 @@ import "./BusquedaColonia.scss";
 import { useAppContext } from "../../context/AppContext";
 import { VariableSizeList as List } from "react-window";
 import { AiOutlineDown } from "react-icons/ai";
+import { useMediaQuery } from '@chakra-ui/react';
+
 
 const BusquedaColonia = () => {
 
@@ -11,6 +13,7 @@ const BusquedaColonia = () => {
         coloniasGeoJson,
         selectedColonias, setSelectedColonias 
     } = useAppContext();
+    const [isMobile] = useMediaQuery('(max-width: 800px)');
     const [colonias, setColonias] = useState<string[]>([]);
     const [coloniaBuscada, setColoniaBuscada] = useState<string>("");
     const charsPerLine = 29;
@@ -23,7 +26,7 @@ const BusquedaColonia = () => {
 
     useEffect(() => {
         if (coloniasGeoJson && coloniasGeoJson.features) {
-            const nombres = coloniasGeoJson.features.map((f: any) => f.properties.name);
+            const nombres = coloniasGeoJson.features.map((f: any) => f.properties.NOMBRE);
             setColonias(nombres);
         }
     }, [coloniasGeoJson]);
@@ -49,7 +52,7 @@ const BusquedaColonia = () => {
     const getItemSize = (index: number) => {
         const colonia = coloniasFiltradas[index];
         const lines = Math.ceil(colonia.length / charsPerLine);
-        const baseHeight = Math.min(window.innerHeight * 0.04, window.innerWidth * 0.02); // height: min(4dvh, 2dvw)
+        const baseHeight = isMobile ? Math.min(window.innerHeight * 0.04, window.innerWidth * 0.06) : Math.min(window.innerHeight * 0.04, window.innerWidth * 0.02); // height: min(4dvh, 2dvw)
         if (lines === 1) return baseHeight;
         return baseHeight * 1.3;
     }

@@ -48,3 +48,23 @@ $tematicas: (
     background-color: #{$color};
   }
 }
+
+@media (max-width: 800px) {
+  .layerCard {
+    padding: 1.5dvw;
+    display: flex;
+    flex-direction: column;
+    //height: 100%;
+    width: 100%;
+    &__header {
+      //padding: min(0.5dvh, 1dvw);
+      padding: 1dvw;
+      &__icon {
+        font-size: min(4dvh, 5dvw);
+      }
+    }
+    &__body {
+      padding: 1.5dvw;
+    }
+  }
+}

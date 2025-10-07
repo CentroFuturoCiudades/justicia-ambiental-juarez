@@ -1,5 +1,7 @@
 import { useAppContext } from "../../context/AppContext";
 import { Slider } from "@chakra-ui/react";
+import { useMediaQuery } from '@chakra-ui/react';
+
 
 const marks = [
     { value: 500, label: "500m" },
@@ -13,6 +15,7 @@ const RadiusSlider = () => {
   const min = 500;
   const max = 2000;
   const step = 500;
+  const [isMobile] = useMediaQuery('(max-width: 800px)');
 
   //check styles
   return (
@@ -24,7 +27,7 @@ const RadiusSlider = () => {
               step={step}
               onValueChange={e => setRadius(e.value[0])}   
               onValueChangeEnd={() => setFlagSlider(true)}
-              width="12dvw"
+              width= {isMobile ? "30dvw":"12dvw"}
           >
             <Slider.Control>
               <Slider.Track>

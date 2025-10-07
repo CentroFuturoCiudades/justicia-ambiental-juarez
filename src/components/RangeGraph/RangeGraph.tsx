@@ -1,4 +1,5 @@
 import Triangle from "/assets/Traingulito.png";
+import { useMediaQuery } from '@chakra-ui/react';
 
 type RangeGraph = {
     data: { [ key: string ]: number };
@@ -12,12 +13,15 @@ type RangeGraph = {
 // Estilos in line para la conversion a imagen con html2canvas
 const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount }: RangeGraph) => {
 
+  const [isMobile] = useMediaQuery('(max-width: 800px)');
+
   return (
     <div style={{ 
       height: "auto",
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      //border: '1px solid green',
     }}>
       {/* INDICADOR de promedio de la selección */}
       {averageAGEB !=null && selectedCount > 0 && (() => {
@@ -48,10 +52,10 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: "min(4.3dvh, 2.5dvw)" }}>
+          <div style={{ position: "relative", width: "100%", height: isMobile ? "min(5dvh, 10dvw)" : "min(4.3dvh, 2.5dvw)"}}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
-                <span style={{ height: "1.5dvw", transform: "translateY(20%)" }}>
+                <span style={{ height: isMobile ? "min(4dvh, 6dvw)" : "1.5dvw", transform: "translateY(20%)" }}>
                   <img src={Triangle} style={{ width: "100%", height: "100%", objectFit: "cover"}}/>
                 </span>
             </div>
@@ -64,7 +68,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
           display: "flex",
           flexDirection: "row",
           width: "100%",
-          height: "min(5.5dvh, 3.2dvw)",
+          height: isMobile ? "min(10dvh, 14dvw)" : "min(5.5dvh, 3.2dvw)",
           padding: "0 1dvw",
           position: "relative",
       }}>
@@ -100,12 +104,10 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
             return (
               <div style={style}>
                 <div style={{
-                  width: "0.14dvw",
-                  //height: "min(9dvh, 9dvw)",
-                  height: "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
+                  width: isMobile ? "0.5dvw" : "0.14dvw",
+                  height: isMobile ? "calc(min(10dvh, 14dvw) + min(4.1dvh, 2.8dvw))" : "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
                   background: "black",
-                  //marginTop: "min(-1.8dvh, -0.8dvw)",
-                  marginTop: "calc(-0.5 * min(3.1dvh, 1.8dvw))"
+                  marginTop: isMobile ? "calc(-0.5 * min(4.1dvh, 2.8dvw))" : "calc(-0.5 * min(3.1dvh, 1.8dvw))"
                 }}/>
                   <div style={{
                     fontSize: "var(--font-size-button)",
@@ -150,7 +152,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
               fontWeight: "300",
               textAlign: "center",
               lineHeight: "1",
-              paddingTop: "min(0.5dvh, 0.2dvw)",
+              paddingTop: isMobile ? "min(0.8dvh, 1dvw)" : "min(0.5dvh, 0.2dvw)",
             }}
           >
             {formatValue(value)}
