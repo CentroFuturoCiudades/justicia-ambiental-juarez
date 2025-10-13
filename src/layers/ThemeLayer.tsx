@@ -29,7 +29,7 @@ const ThemeLayer = () => {
     const handleSelectedElements = (info: any) => {
         if (info) {
             const isAgeb = activeLayerKey === "agebs";
-            const key = isAgeb ? info.object.properties.index : info.object.properties.name;
+            const key = isAgeb ? info.object.properties.index : info.object.properties.nombre;
             const setSelected = isAgeb ? setSelectedAGEBS : setSelectedColonias;
             setSelected(prev => prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]);
         }

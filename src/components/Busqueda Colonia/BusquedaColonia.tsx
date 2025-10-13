@@ -26,7 +26,8 @@ const BusquedaColonia = () => {
 
     useEffect(() => {
         if (coloniasGeoJson && coloniasGeoJson.features) {
-            const nombres = coloniasGeoJson.features.map((f: any) => f.properties.NOMBRE);
+            const nombres = coloniasGeoJson.features.map((f: any) => f.properties.nombre)
+            .filter((nombre: string) => nombre !== null);
             setColonias(nombres);
         }
     }, [coloniasGeoJson]);

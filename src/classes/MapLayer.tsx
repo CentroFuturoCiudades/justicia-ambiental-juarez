@@ -272,7 +272,7 @@ export class MapLayer {
     }
 
     //If there are selected AGEBS/Colonias, get their average
-    const idField = key === "agebs" ? "index" : "NOMBRE";
+    const idField = key === "agebs" ? "index" : "nombre";
     const selectedValues = features
     .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
     //.map(f => f.properties?.[property])

@@ -165,7 +165,7 @@ export const LAYERS: any = {
             5: "Extremadamente vulnerable"
         },
         enabled: true,
-        colonias: false,
+        colonias: true,
         formatValue: (x: number) => {
             return formatNumber(x, 2)
         },
@@ -208,7 +208,7 @@ export const LAYERS: any = {
         tematica: "ambiental",
         type: "Continua",
         is_lineLayer: false,
-        colonias: false,
+        colonias: true,
         enabled: true,
         //colors: ["#ddecf6", "#133e62"],
         colors: ["#f4f9ff", "#08316b"],
@@ -250,7 +250,7 @@ export const LAYERS: any = {
         },
         tematica: "ambiental",
         is_lineLayer: false,
-        colonias: false,
+        colonias: true,
         enabled: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_area_inundada !== null );
@@ -288,7 +288,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tdpa_density !== null );
             return data;
@@ -419,17 +419,7 @@ export const LAYERS: any = {
         source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
         property: "porcentaje_viviendas_vulnerables_industria",
         propertyAbsolute: "total_viviendas_vulnerables_industria",
-        //totalJuarez: total viviendas???,
         juarezTotal: (data: any) => {
-            /*const total = data.reduce((sum: number, f: Feature) => {
-                const abs_perAGEB = f.properties.total_viviendas_vulnerables_industria;
-                const percentage = f.properties.porcentaje_viviendas_vulnerables_industria;
-                if(abs_perAGEB != null && percentage != null && percentage !== 0) {
-                    return sum + (abs_perAGEB * 100) / percentage; //obtienes el total juarez sumando lo que representa el 100% de cada ageb
-                }
-                return sum;
-            }, 0);
-            return total;*/
             const features = Array.isArray(data) ? data : data?.features;
             if (!features) return 0;
             return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_viviendas || 0), 0);
@@ -442,7 +432,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_viviendas_vulnerables_industria !== null );
             data.features.forEach((feature: any) => {
@@ -486,7 +476,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_infantes_vulnerables_industria !== null);
             data.features.forEach((feature: any) => {
@@ -529,7 +519,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_adultos_mayores_vulnerables_industria !== null);
             data.features.forEach((feature: any) => {
@@ -630,10 +620,6 @@ export const LAYERS: any = {
                         },
           //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
-                            // Centrado horizontal respecto a la barra, arriba del mouse
-                            // size.contentSize[0] es el ancho del tooltip
-                            // point[0] es la posición X del mouse
-                            // point[1] es la posición Y del mouse
                             const tooltipWidth = size.contentSize[0];
                             const x = point[0] - tooltipWidth / 2;
                             const y = point[1] - 50; // 24px arriba del mouse, ajusta si quieres más cerca/lejos
@@ -1121,7 +1107,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.indice_accesibilidad !== null);
             data.features.forEach((feature: any) => {
@@ -1157,7 +1143,7 @@ export const LAYERS: any = {
         threshold: "< 5 min: Bueno, 5-20: Medio, > 20: Vulnerable",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_parque !== null);
             return data;
@@ -1190,7 +1176,7 @@ export const LAYERS: any = {
         threshold: "< 20 min: Bueno, 20-60: Medio, > 60: Vulnerable",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_clinica_hospital !== null);
             return data;
@@ -1223,7 +1209,7 @@ export const LAYERS: any = {
         threshold: "< 15 min: Bueno, 15-45: Medio, > 45: Vulnerable",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_preparatoria !== null);
             return data;
@@ -1270,7 +1256,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_parque_15min !== null);
             data.features.forEach((feature: any) => {
@@ -1320,7 +1306,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_clinica_hospital_30min !== null);
             data.features.forEach((feature: any) => {
@@ -1370,7 +1356,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_preparatoria_30min !== null);
             data.features.forEach((feature: any) => {
@@ -1452,7 +1438,7 @@ export const LAYERS: any = {
         threshold: "0% a 20% continua",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_0a5 !== null);
             data.features.forEach((feature: any) => {
@@ -1496,7 +1482,7 @@ export const LAYERS: any = {
         threshold: "",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_60 !== null);
             data.features.forEach((feature: any) => {
@@ -1541,7 +1527,7 @@ export const LAYERS: any = {
         threshold: "> 60%: Vulnerable",
         year: null,
         enabled: true,
-        colonias: false,
+        colonias: true,
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_menos_prepa_terminada !== null);
             data.features.forEach((feature: any) => {
