@@ -1,6 +1,6 @@
 import { Accordion, Checkbox, Span } from "@chakra-ui/react";
 import "./CapasComplementarias.scss";
-import { COMPLEMENTARY_LAYERS, CAPAS_BASE_CODEBOOK } from "../../utils/constants";
+import {  CAPAS_BASE_CODEBOOK } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMediaQuery } from '@chakra-ui/react';
@@ -28,7 +28,13 @@ const CapasComplementarias = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible={!isMobile} defaultValue={["base"]} variant="enclosed" className="dropdown" >
+            <Accordion.Root
+                collapsible={!isMobile}
+                //{...(isMobile ? { defaultValue: ["base"] } : {})}
+                defaultValue={isMobile ? ["base"] : undefined}
+                variant="enclosed"
+                className="dropdown"
+            >
                 <Accordion.Item value="base" className="dropdown__mainItem  dropdown__mainItem--right" >
 
                     <Accordion.ItemTrigger className="trigger" >

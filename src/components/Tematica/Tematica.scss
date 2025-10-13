@@ -1,6 +1,5 @@
 .dropdown {
   border: 1px solid var(--background-dark);
-  //border-radius: var(--border-radius);
   
   &__mainItem {
     //border-radius: 0;
@@ -18,16 +17,10 @@
     border-radius: 0;
     display: flex;
     flex-direction: column;
-    padding: 0 0.8dvw;
+    padding: 0 min(1.4dvh, 0.8dvw);
   }
   &__body {
     padding: 0;
-  }
-  &__subcontent {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--background);
-    padding: 0 0.8dvw;
   }
 }
 
@@ -141,10 +134,6 @@
   border-color: var(--ambiental-primary);
 }
 
-/*.dropdown[aria-expanded="true"] {
-  border-radius: 0 0 var(--border-radius) var(--border-radius) ;
-}*/
-
 @media (max-width: 800px) {
   .dropdown {    
     //position: absolute;
@@ -157,7 +146,7 @@
   .trigger {
     min-height: min(5dvh, 6dvw);
     &__title {
-      padding: 0 1dvw;
+      padding: 0 2dvw;
     }
     &__indicator {
       width: min(5dvw, 6dvh);
@@ -172,10 +161,13 @@
     &__label {
       font-size: var(--font-size-subtitle);
     }
+    &__image_container {
+      height: min(3dvh, 5dvw);
+    }
   }
   .chakra-checkbox__control {
-    width: min(2dvh, 2dvw) ;
-    height: min(2dvh, 2dvw);
+    width: min(2dvh, 4dvw) ;
+    height: min(2dvh, 4dvw);
     border-radius: 0.1dvw;
   }
 }

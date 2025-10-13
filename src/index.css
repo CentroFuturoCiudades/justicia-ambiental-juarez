@@ -99,7 +99,7 @@ button {
     --font-size-visor-header: 2.2dvw;
     /*--font-size-header: min(5.4dvh, 3.2dvw);*/
     --font-size-header: min(2dvh, 3.2dvw);
-    --font-size-subtitle: min(3dvh, 3.8dvw);
+    --font-size-subtitle: min(3dvh, 3.2dvw);
     --font-size-body: min(2.5dvh, 3dvw);
     --font-size-button: min(2dvh, 2.5dvw);
 

@@ -12,6 +12,9 @@ export class MapLayer {
   minVal = 0;
   positiveAvg = 0;
   negativeAvg = 0;
+  averageJuarez = 0; // igual a positiveAvg
+  absTotal_property = 0;
+  absTotal_juarez = 0;
 
   isLineLayer?: boolean;
   formatValue: (value: number) => string;
@@ -27,20 +30,17 @@ export class MapLayer {
   selectedAvg = 0;
   selectedDescription = "";
   categorical?: boolean;
-  categories?: string[];
   categoryLabels?: any;
   domain?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, theme = "default", categorical = false, categories = [], categoryLabels = {} }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {} }: {
     opacity?: number;
     colors?: string[];
     title?: string;
     amountOfColors?: number;
     formatValue?: (value: number) => string;
-    theme?: string;
     categorical?: boolean;
-    categories?: string[];
     categoryLabels?: any;
   }) {
     this.opacity = opacity;
@@ -48,10 +48,7 @@ export class MapLayer {
     this.title = title;
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
-    this.theme = theme;
     this.categorical = categorical;
-    //this.categories = categories.reverse();
-    this.categories = categories;
     this.categoryLabels = categoryLabels;
   }
 
@@ -74,16 +71,23 @@ export class MapLayer {
     return filteredData;
   }
 
-  getLayer = (data: any, field: string, isLineLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null): GeoJsonLayer => {
+  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null): GeoJsonLayer => {
+
 
     this.isLineLayer = true;
     let getColor: any;
     const featuresForStats = data.allFeatures;
+    const categorias = Array.from(
+      new Set(featuresForStats.map((f: any) => f.properties[field]))
+    ).filter((c) => c != null);
+    console.log("categorias", categorias);
+    console.log("featuresForStats", featuresForStats);
 
     if (field) {
-      let mappedData: number[] = featuresForStats.map((item: any) => { return item.properties[field] });
-      mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
+      let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
+      mappedData = mappedData.filter((value) => value !== null && value !== undefined);
 
+      console.log("mappedData", mappedData);
       if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
       }
@@ -98,6 +102,7 @@ export class MapLayer {
         //domain = categorias unicas
         const categories = Array.from(new Set(mappedData)).sort((a, b) => a - b);
         this.domain = categories;
+        console.log("entro a this.categorical y sus categories", categories);
 
         if (this.colors.length === categories.length) {
           // mapeo directo de colores a categorías (mismo num de colores que categorias)
@@ -121,6 +126,7 @@ export class MapLayer {
           }))
         };
       } else {
+        //not categorical
         //domain = [min, max]
         const domain = [
           minVal,
@@ -129,7 +135,6 @@ export class MapLayer {
           maxVal,
         ];
         this.domain = domain;
-
         this.colorMap = scaleLinear<string>().domain(this.domain).range(this.colors);
 
         this.legend = {
@@ -185,7 +190,10 @@ export class MapLayer {
       autoHighlight: true,
       highlightColor: [250, 200, 0, 100],
       getLineColor: [255, 255, 255, 255],
-      getLineWidth: 20,
+      //getPointRadius: is_PointLayer ? 100 : undefined,
+      pointRadiusMinPixels: is_PointLayer ? 6 : undefined,
+      //pointRadiusMaxPixels: is_PointLayer ? 50 : undefined,
+      getLineWidth: !is_PointLayer ? 20 : undefined,
       onClick: handleFeatureClick,
       updateTriggers: {
         getLineColor: [selectedAGEBS],
@@ -222,10 +230,11 @@ export class MapLayer {
     return validColors.map((color) => rgb(color).formatHex());
   }
 
-  getLegend = (title: string) => {
+  getLegend = (title: string, isPointLayer: boolean) => {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
+    console.log("ranges for legend", ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
@@ -242,37 +251,66 @@ export class MapLayer {
       ranges={legendRanges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
       categorical={this.categorical}
-      categories={this.categories}
+      isPointLayer={isPointLayer}
     />
   }
 
-   getAverage(features: Feature[], selected: string[], property: string, key: string) : number {
+   getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any) : number {
+    //si recibe propertyAbsolute, es que quiere el promedio diferente (suma de propertyAbsolute / total juarez * 100)
 
-      if (selected.length === 0) return this.positiveAvg;
+    this.absTotal_juarez = totalJuarez ? totalJuarez(features) : 0; //total juarez
+    // suma de la property de todas las features (AGEBS/Colonias)
+    this.absTotal_property = totalJuarez ? features.reduce((sum: number, f: Feature) => {
+      const value = f.properties?.[property];
+      return sum + value;
+    }, 0) : 0;
+    this.averageJuarez = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
 
-      const idField = key === "agebs" ? "index" : "name";
-      const values = features
-      .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
-      .map(f => f.properties?.[property])
-      .filter(value => value != null);
-      const average = values.length > 0
-        ? values.reduce((sum: number, num: number) => sum + num, 0) / values.length
-        : 0;
-      this.selectedAvg = average;
+    // If no selected AGEBS/Colonias, return overall average
+    if (selected.length === 0){
+      return this.averageJuarez;
+    }
 
-      return this.selectedAvg;
+    //If there are selected AGEBS/Colonias, get their average
+    const idField = key === "agebs" ? "index" : "NOMBRE";
+    const selectedValues = features
+    .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
+    //.map(f => f.properties?.[property])
+    //.filter(value => value != null);
+    .filter(f => f.properties?.[property] != null)
+
+    console.log("selectedvalues", selectedValues);
+
+    const sum = selectedValues.reduce((sum: number, f: Feature) => sum + f.properties?.[property] || 0, 0);
+    this.absTotal_property = sum;
+    // (this.absTotal_property / this.absTotal_juarez) * 100 o  (this.absTotal_property / this.absTotalAGEB) * 100
+    //const average = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : sum / selectedValues.length;
+    const average = totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
+
+    /*const average = selectedValues.length > 0
+      ? selectedValues.reduce((sum: number, num: number) => sum + num, 0) / selectedValues.length
+      : 0;*/
+    this.selectedAvg = average;
+
+    return this.selectedAvg;
   }
 
-  getDescription(selected: string[], key: string, average: number, formatValue: any, descriptionCategories?: any, juarezCard: any, selectionCard: any, category: string) {
+  getDescription(selected: string[], key: string | null, average: number, descriptionCategories?: any, juarezCard: any, selectionCard: any, category: string) {
 
-    const singleSelected = key === "agebs" ? "el AGEB seleccionado" : "la colonia seleccionada";
-    const multipleSelected = key === "agebs" ? "los AGEBs seleccionados" : "las colonias seleccionadas";
+    //console.log("average", average);
+    let singleSelected = "";
+    let multipleSelected = "";
+    if (key) {
+      singleSelected = key === "agebs" ? "el AGEB seleccionado" : "la colonia seleccionada";
+      multipleSelected = key === "agebs" ? "los AGEBs seleccionados" : "las colonias seleccionadas";
+
+    }
     const introText = selected.length === 1 ? singleSelected : multipleSelected;
     const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
 
     const cardData = {
-      avg: formatValue(average),
-      num: "X",
+      avg: this.formatValue(average),
+      num: this.absTotal_property,
       category: descriptionCategories?.[Math.trunc(average)] || "",
       introText: selected.length >= 1 ? introText : "",
       comparedToAvg: comparedToAvg
@@ -301,7 +339,8 @@ export class MapLayer {
       minVal: this.minVal,
       maxVal: this.maxVal,
       negativeAvg: this.negativeAvg,
-      positiveAvg: this.positiveAvg
+      //positiveAvg = promedio Cd Juarez
+      positiveAvg: this.averageJuarez
     }
 
     return <RangeGraph

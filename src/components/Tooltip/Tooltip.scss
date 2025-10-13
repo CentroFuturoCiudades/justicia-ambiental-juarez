@@ -1,0 +1,38 @@
+.tooltip {
+    position: absolute;
+    z-index: 0;
+    background-color: rgba(254,253,252,0.9);
+    border: 1px solid var(--background-medium);
+  //  background-color: var(--background-light);
+    padding: 0;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-body);
+    font-weight: 700;
+    //min-width: 13dvw;
+    max-height: 20dvw;
+    overflow-y: auto;
+
+    &__title {
+      border-bottom: 1px solid black;
+      padding: min(1dvh, 1dvw);
+    }
+}
+
+.table {
+    font-size: var(--font-size-button);
+    &__header {
+      //padding: 1dvh 1dvw;
+      //padding: min(0.5dvh, 0.3dvw) 0;
+      padding: 0 1dvw;
+      min-height: 0 !important;
+      margin: 0;
+    }
+    &__row {
+      background-color: transparent;
+    }
+}
+
+//.table .chakra-table__row,
+.table .chakra-table__cell {
+  padding: 0 1dvw;
+}

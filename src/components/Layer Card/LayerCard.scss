@@ -1,6 +1,6 @@
 .layerCard {
   background-color: var(--background);
-  padding: 0.7dvw;
+  padding: min(1.1dvh, 0.7dvw);
   border: 0.15em solid;
   border-radius: var(--border-radius);
 
@@ -9,7 +9,7 @@
     font-weight: 500;
     color: white;
     text-transform: lowercase;
-    padding: 0.5dvw;
+    padding: min(0.8dvh, 0.5dvw);
     border-radius: var(--border-radius);
     display: flex;
     align-items: center;
@@ -23,8 +23,22 @@
   }
 
   &__body {
-    padding: 0.5dvw;
+    padding: min(0.8dvh, 0.5dvw);
     font-size: var(--font-size-body);
+  }
+}
+
+.graph {
+  display: flex;
+  height: 40dvh;
+  max-height: 250px;
+  width: 100%;
+  flex-direction: column;
+  //border: 1px solid red;
+  &__title {
+    text-align: left;
+    font-size: var(--font-size-subtitle);
+    font-weight: bold;
   }
 }
 
@@ -52,10 +66,12 @@ $tematicas: (
 @media (max-width: 800px) {
   .layerCard {
     padding: 1.5dvw;
-    display: flex;
-    flex-direction: column;
-    //height: 100%;
+    //display: flex;
+    //flex-direction: column;
+    max-height: 100%;
     width: 100%;
+    overflow-y: auto;
+    z-index: 20;
     &__header {
       //padding: min(0.5dvh, 1dvw);
       padding: 1dvw;

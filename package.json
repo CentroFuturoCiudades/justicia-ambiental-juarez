@@ -16,6 +16,7 @@
     "@fontsource/roboto": "^5.2.6",
     "@fontsource/roboto-mono": "^5.2.6",
     "@fontsource/space-mono": "^5.2.8",
+    "@nivo/circle-packing": "^0.99.0",
     "@pdfme/common": "^5.4.2",
     "@pdfme/generator": "^5.4.2",
     "@pdfme/schemas": "^5.4.2",
@@ -24,6 +25,8 @@
     "@types/d3": "^7.4.3",
     "d3": "^7.9.0",
     "deck.gl": "^9.1.12",
+    "echarts": "^6.0.0",
+    "echarts-for-react": "^3.0.2",
     "framer-motion": "^12.23.3",
     "geotiff": "^2.1.4-beta.0",
     "html2canvas": "^1.4.1",
@@ -37,6 +40,7 @@
     "react-map-gl": "^8.0.4",
     "react-router-dom": "^6.23.1",
     "react-window": "^1.8.11",
+    "recharts": "^3.2.1",
     "sass": "^1.89.2"
   },
   "devDependencies": {

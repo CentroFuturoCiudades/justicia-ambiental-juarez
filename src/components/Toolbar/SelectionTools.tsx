@@ -22,7 +22,9 @@ const SelectionTools = () => {
                     <Button 
                         className={`button button--thin ${selectionMode === "agebs" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("agebs")} 
-                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}>
+                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
+                        disabled={!selectionMode}
+                    >
                         <img src={Selection} alt="Seleccionar" />
                     </Button>
                 </Tooltip>
@@ -31,6 +33,7 @@ const SelectionTools = () => {
                         className={`button button--thin ${selectionMode === "radius" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("radius")} 
                         style={{ borderRadius: 0 }}
+                        disabled={!selectionMode}
                     >
                         <img src={IconRadius} alt="Radio" />
                     </Button>

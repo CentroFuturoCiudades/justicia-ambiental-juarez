@@ -2,7 +2,6 @@ import { useAppContext } from "../../context/AppContext";
 import { Button } from "@chakra-ui/react";
 import { IoClose } from "react-icons/io5";
 
-
 const DownloadSummary = ( setPopUp : any ) => {
     const { mapLayers, setMapLayers } = useAppContext();
 
@@ -37,7 +36,7 @@ const DownloadSummary = ( setPopUp : any ) => {
                             }
                         }}
                     >
-                       <IoClose style={{ width: "1.5dvw", height: "1.5dvw" }}/>
+                       <IoClose/>
                     </Button>
                 </div>
             ))}

@@ -25,7 +25,7 @@ const SelectedLayer = () => {
         const isAgeb = activeLayerKey === "agebs";
         const setSelected = new Set(isAgeb ? selectedAGEBS : selectedColonias);
         return (isAgeb ? agebsGeoJson : coloniasGeoJson)?.features?.filter(
-            (feature: any) => setSelected.has(isAgeb ? feature.properties.index : feature.properties.name)
+            (feature: any) => setSelected.has(isAgeb ? feature.properties.index : feature.properties.NOMBRE)
         );
     }, [selectedAGEBS, selectedColonias, activeLayerKey]);
 
