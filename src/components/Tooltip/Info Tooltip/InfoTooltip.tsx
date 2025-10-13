@@ -1,5 +1,6 @@
 import { Portal } from "@chakra-ui/react";
 import "./InfoTooltip.scss";
+import { useMediaQuery } from '@chakra-ui/react';
 
 type InfoTooltipProps = {
   show: boolean;
@@ -10,15 +11,27 @@ type InfoTooltipProps = {
 
 const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : InfoTooltipProps ) => {
 
-  if (!show || !layerCardRef.current) return null;  
+  if (!show || !layerCardRef.current) return null;
+
   const cardRect = layerCardRef.current.getBoundingClientRect();
+  const [isMobile] = useMediaQuery('(max-width: 800px)')
 
   return (
     <>
       <Portal container={containerRef}>
         <div
           className="info-tooltip"
-          style={{
+          style={ isMobile ? {
+            position: "fixed",
+            //top: 50,
+            //top: cardRect.top + (window.innerHeight * 0.04),
+            //bottom: cardRect.bottom + cardRect.height + (window.innerHeight * 0.04) > window.innerHeight ? (window.innerHeight * 0.04) : cardRect.top + cardRect.height + (window.innerHeight * 0.04),
+            width: cardRect.width,
+            left: cardRect.left,
+            minHeight: cardRect.height,
+              top: Math.max(cardRect.top - cardRect.height - window.innerHeight * 0.04, window.innerHeight * 0.04),
+
+          }: {
             position: "fixed",
             top: cardRect.top,
             left: cardRect.right + (window.innerWidth * 0.04),

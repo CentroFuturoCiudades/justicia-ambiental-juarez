@@ -1,14 +1,16 @@
 import { Accordion, Checkbox, Span } from "@chakra-ui/react";
 import "./CapasComplementarias.scss";
-import { COMPLEMENTARY_LAYERS, CAPAS_BASE_CODEBOOK } from "../../utils/constants";
+import {  CAPAS_BASE_CODEBOOK } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
+import { useMediaQuery } from '@chakra-ui/react';
+
 
 const CapasComplementarias = () => { 
     const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
     const mainLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => !value.parent);
     const subLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => value.parent);
-
+    const [isMobile] = useMediaQuery('(max-width: 800px)');
     /*
         Seleccion y deseleccion de CAPAS COMPLEMENTARIAS
         - Array de keys de capas complementarias
@@ -26,7 +28,13 @@ const CapasComplementarias = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible variant="enclosed" className="dropdown" >
+            <Accordion.Root
+                collapsible={!isMobile}
+                //{...(isMobile ? { defaultValue: ["base"] } : {})}
+                defaultValue={isMobile ? ["base"] : undefined}
+                variant="enclosed"
+                className="dropdown"
+            >
                 <Accordion.Item value="base" className="dropdown__mainItem  dropdown__mainItem--right" >
 
                     <Accordion.ItemTrigger className="trigger" >

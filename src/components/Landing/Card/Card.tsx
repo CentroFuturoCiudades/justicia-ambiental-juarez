@@ -11,12 +11,13 @@ type CardProps = {
     content: JSX.Element | string;
     setSelectedItem?: (item: any) => void;
     downloadButton?: JSX.Element;
+    setMobileVisibleElement?: any;
 };
 
-const Card = ({ content, setSelectedItem, downloadButton } : CardProps) => {
+const Card = ({ content, setSelectedItem, downloadButton, setMobileVisibleElement } : CardProps) => {
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <Box className='card' bg={COLORS.GLOBAL.fondo} >
+            <Box className={`card ${setMobileVisibleElement ? 'mobile' : ''}`} bg={COLORS.GLOBAL.fondo} >
                 <OverlayScrollbarsComponent
                     options={{ scrollbars: { autoHide: 'never', dragScroll: true, clickScroll: true}, }}
                     className="scroll-content"
@@ -24,7 +25,10 @@ const Card = ({ content, setSelectedItem, downloadButton } : CardProps) => {
                     {content}
                 </OverlayScrollbarsComponent>
                 { setSelectedItem &&
-                    <button className="closeButton" onClick={() => setSelectedItem(null)} >
+                    <button className="closeButton" onClick={() => {
+                        if (setMobileVisibleElement) setMobileVisibleElement('')
+                        setSelectedItem(null)
+                    }} >
                         <img src={Close} alt="Cerrar"/>
                     </button>
                 }

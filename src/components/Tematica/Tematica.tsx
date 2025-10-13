@@ -5,6 +5,7 @@ import "./Tematica.scss";
 import SavedLayerIcon from "/assets/Icono CAPA AGREGADA.png"
 import { AiOutlineDown } from "react-icons/ai";
 import type { LayerKey } from "../../utils/constants";
+import { useMediaQuery } from '@chakra-ui/react';
 
 const Tematica = () => {
 
@@ -15,6 +16,8 @@ const Tematica = () => {
         mapLayers, 
         setSelectionMode 
     } = useAppContext();
+
+    const [isMobile] = useMediaQuery('(max-width: 800px)');
 
     /* Al seleccionar una capa de Tematica:
         - Se actualiza la capa seleccionada
@@ -29,7 +32,7 @@ const Tematica = () => {
 
     return (
         <div>
-            <Accordion.Root collapsible className="dropdown" variant="enclosed" defaultValue={["tematica"]} multiple={false}>
+            <Accordion.Root collapsible={!isMobile} className="dropdown" variant="enclosed" defaultValue={["tematica"]} multiple={false}>
                 <Accordion.Item value="tematica" className="dropdown__mainItem" >
 
                     <Accordion.ItemTrigger className="trigger" >

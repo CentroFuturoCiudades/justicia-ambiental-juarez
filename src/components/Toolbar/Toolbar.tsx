@@ -13,9 +13,10 @@ export type DownloadProps = {
     deck: React.RefObject<HTMLDivElement>;
     map: React.RefObject<HTMLDivElement>;
     setPopUp: any;
+    setMobileVisibleElement?: any;
 }
 
-const Toolbar = ({ rangeGraphRef, deck, map, setPopUp }: DownloadProps) => {
+const Toolbar = ({ rangeGraphRef, deck, map, setPopUp, setMobileVisibleElement }: DownloadProps) => {
     const navigate = useNavigate();
     const { selectedLayer } = useAppContext();
     return (
@@ -38,6 +39,7 @@ const Toolbar = ({ rangeGraphRef, deck, map, setPopUp }: DownloadProps) => {
                         deck={deck}
                         map={map}
                         setPopUp={setPopUp}
+                        setMobileVisibleElement={setMobileVisibleElement}
                     />
                 </>
             }

@@ -5,6 +5,7 @@ import Selection from '/assets/Icono SELECCION.png'
 import IconRadius from '/assets/Icono RADIO.png'
 import Deselect from '/assets/Icono DESELECCION.png'
 import "./Toolbar.scss"
+import RadiusSlider from "./RadiusSlider";
 
 const SelectionTools = () => {
     const {
@@ -15,13 +16,15 @@ const SelectionTools = () => {
     } = useAppContext();
 
     return (
-        <div>
+        <div style={{ position: "relative", display: "inline-block"}}>
             <Group attached className="button_group">
                 <Tooltip content="Seleccionar AGEBS o Colonias">
                     <Button 
                         className={`button button--thin ${selectionMode === "agebs" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("agebs")} 
-                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}>
+                        style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
+                        disabled={!selectionMode}
+                    >
                         <img src={Selection} alt="Seleccionar" />
                     </Button>
                 </Tooltip>
@@ -30,6 +33,7 @@ const SelectionTools = () => {
                         className={`button button--thin ${selectionMode === "radius" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("radius")} 
                         style={{ borderRadius: 0 }}
+                        disabled={!selectionMode}
                     >
                         <img src={IconRadius} alt="Radio" />
                     </Button>
@@ -49,6 +53,9 @@ const SelectionTools = () => {
                     </Button>
                 </Tooltip>
             </Group>
+            {selectionMode === "radius" && (
+                <RadiusSlider />
+            )}
         </div>
     );
 }

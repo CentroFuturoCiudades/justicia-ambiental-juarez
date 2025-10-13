@@ -114,4 +114,20 @@
       font-size: min(2dvh, 3.2dvw);
     }
   }
+
+  .card {
+    &.mobile {
+      padding: min(2dvh, 3dvw);
+    }
+  }
+  .scroll-content {
+    padding-right: 3dvw;
+  }
+  .downloadButton{
+    width: 9dvw;
+    height: 9dvw;
+  }
+  .scroll-content .os-scrollbar-vertical {
+    width: 2dvw;
+  }
 }

@@ -52,14 +52,16 @@
 
 // Slider styles
 .slider {
-  max-width: min(32dvh, 18dvw);
   border-radius: 0.5dvw;
   background-color: var(--background-dark);
   padding: min(0.52dvw, 0.89dvh) min(0.78dvw, 1.33dvh);
   position: absolute;
-  top: calc(min(2.5dvh, 2.5dvw) + 2.5dvw + 0.5dvw); // toolbar top + toolbar height + gap
-  left: 6dvw;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  top: 100%;
+  z-index: 10;
 }
+
 
 .chakra-slider__root {
   height: 4dvh;
@@ -85,4 +87,35 @@
   font-size: min(0.67dvw, 1.15dvh);
   line-height: 1;
   color: white;
+}
+
+@media (max-width: 800px) {
+  .toolbar {
+    height: min(6dvh, 8dvw);
+    position: static;
+    justify-content: center;
+  }
+
+  .button {
+    width: min(6dvh, 8dvw);
+    min-width: min(6dvh, 8dvw);
+  }
+  .button--thin {
+    width: min(4dvh, 6dvw);
+    min-width: min(4dvh, 6dvw);
+  }
+
+  //slider styles
+  .slider {
+    padding: min(0.52dvw, 0.89dvh) min(2dvw, 1dvh);
+  }
+
+  .chakra-slider__thumb {
+    width: min(1.5dvw, 2.5dvh);
+    height: min(1.5dvw, 2.5dvh);
+  }
+
+  .chakra-slider__marker-label {
+    font-size: min(2dvw, 1dvh);
+  }
 }

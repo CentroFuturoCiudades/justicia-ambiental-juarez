@@ -12,11 +12,11 @@ type LegendProps = {
   categories?: string[];
   ranges: number[][] | number[] | string[];
   formatValue: (value: number) => string;
+  isPointLayer?: boolean;
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
-const Legend = ({ ranges, title, colors, formatValue, categorical, categories }: LegendProps) => {
-  //console.log("colors:", colors);
+const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer }: LegendProps) => {
 
   const { selectedLayer } = useAppContext();
   const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
@@ -41,9 +41,9 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, categories }:
 
   const gradientStyle: React.CSSProperties = {
     background: linearGradient,
-    width: "2vw",
-    height: 'auto',
-    borderRadius: '0.3dvw',
+    //width: "2vw",
+    //height: 'auto',
+    //borderRadius: '0.3dvw',
   };
 
   return (
@@ -58,15 +58,16 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, categories }:
               return (
                 <div
                   key={index}
-                  className="categoricalStyle__box"
+                  className={`categoricalStyle__box `}
                   style={{
-                    backgroundColor: colors[index % colors.length]
+                    backgroundColor: colors[index % colors.length],
+                    borderRadius: isPointLayer ? '50%' : '0',
                   }}
                 />
               );
             })}
           </div>
-        : <div style={gradientStyle}></div> }
+        : <div  className="gradientStyle" style={gradientStyle}></div> }
         <div className="legend-ranges">
           {ranges?.length && ranges.map((value, index) => renderLegeindItem(value, index))}
         </div>

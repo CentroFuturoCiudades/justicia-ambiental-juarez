@@ -9,8 +9,10 @@ import { defaultViewState } from "../../context/AppContext";
 import SaveLayer from '/assets/Icono GUARDAR CAPA.png'
 import IconDownload from '/assets/Icono DESCARGAR.png'
 import type { DownloadProps } from "./Toolbar";
+import { useMediaQuery } from '@chakra-ui/react';
 
-const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => {
+
+const DownloadTools = ({rangeGraphRef, deck, map, setPopUp, setMobileVisibleElement} : DownloadProps) => {
     const { 
         setViewState,
         mapLayers, setMapLayers,
@@ -20,6 +22,8 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
         activeLayerKey,
         //selectedBaseLayers,
     } = useAppContext();
+    const [isMobile] = useMediaQuery('(max-width: 800px)')
+    
 
     const hasSelection = (
         (activeLayerKey === "agebs" && selectedAGEBS.length > 0) || 
@@ -77,8 +81,8 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                     >
                         <img src={SaveLayer} />
                         {mapLayers.length > 0 && 
-                            <Float offset="min(0.7dvh, 0.4dvw)">
-                                <Circle bg="red" size="min(1.2dvh, 0.7dvw)" fontSize={"min(0.8dvh, 0.5dvw)"} >
+                            <Float offset={isMobile ? "min(1dvh, 1.2dvw)" : "min(0.7dvh, 0.4dvw)"}>
+                                <Circle bg="red" size={isMobile ? "min(1.5dvh, 2dvw)" : "min(1.2dvh, 0.7dvw)"} fontSize={isMobile ? "min(0.8dvh, 1dvw)" : "min(0.8dvh, 0.5dvw)"} >
                                     {mapLayers.length}
                                 </Circle>
                             </Float>
@@ -91,6 +95,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp} : DownloadProps) => 
                         disabled={!hasScreenshots}
                         onClick={() => {
                             setPopUp(true);
+                            if (setMobileVisibleElement) setMobileVisibleElement("download");
                         }}
                         style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
                     >
