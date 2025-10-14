@@ -244,7 +244,7 @@ export class MapLayer {
   }
 
   //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
-  getLegend = (title: string, isPointLayer: boolean) => {
+  getLegend = (title: string, isPointLayer: boolean, legendTitle: string) => {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
@@ -260,7 +260,7 @@ export class MapLayer {
     }
 
     return <Legend
-      title={title}
+      title={legendTitle ? legendTitle : title}
       colors={completeColors}
       ranges={legendRanges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
@@ -273,16 +273,20 @@ export class MapLayer {
     
     //si recibe propertyAbsolute, es que quiere el promedio diferente (suma de propertyAbsolute / total juarez * 100)
 
-    const filteredFeatures = filterFn ? features.filter(f => f.properties.indice_bienestar === Math.trunc(this.positiveAvg)) : features;
+    //const filteredFeatures = filterFn ? features.filter(f => f.properties.indice_bienestar === Math.trunc(this.positiveAvg)) : features;
     //console.log("filteredFeatures", filteredFeatures); //todos los features con indice de marginacion igual al promedio positivo 2
 
     this.absTotal_juarez = totalJuarez ? totalJuarez(features, this.positiveAvg) : 0; //total juarez
+    //console.log('total juarez', this.absTotal_juarez);
+
+
+
     // suma de la property de todas las features (AGEBS/Colonias)
-    this.absTotal_property = totalJuarez ? filteredFeatures.reduce((sum: number, f: Feature) => {
+    this.absTotal_property = totalJuarez ? features.reduce((sum: number, f: Feature) => {
       const value = f.properties?.[property];
       return sum + value;
     }, 0) : 0;
-    console.log('en juarez hay un total de', this.absTotal_juarez, 'personas y la suma de', property, 'con el filtro de cuantos tienen 2 es de', this.absTotal_property);
+    console.log('en juarez hay un total de', this.absTotal_juarez, 'hogares y la suma de', property, 'es de', this.absTotal_property);
     this.averageJuarez = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
 
     // If no selected AGEBS/Colonias, return overall average
@@ -353,6 +357,7 @@ export class MapLayer {
         //legendRanges = reversedCategories.map(cat => cat.value);
     } else {
       const ranges = this.getRanges();
+      console.log("ranges for graph", ranges);
        completeColors = ranges.map((range) => this.colorMap(range[1]));
     }
 

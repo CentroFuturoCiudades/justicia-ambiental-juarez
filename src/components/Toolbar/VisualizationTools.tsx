@@ -11,7 +11,7 @@ const VisualizationTools = () => {
     return (
         <div>
             <Group attached className="button_group">
-                <Tooltip content="AGEBS">
+                <Tooltip content="AGEBS" openDelay={0} closeDelay={0}>
                     <Button 
                         className={`button button--thin ${activeLayerKey === "agebs" ? "button--active" : ""}`} 
                         onClick={() => setActiveLayerKey("agebs")} 
@@ -21,7 +21,7 @@ const VisualizationTools = () => {
                         <img src={IconAGEBS} alt="AGEBS" />
                     </Button>
                 </Tooltip>
-                <Tooltip content="Colonias">
+                <Tooltip content="Colonias" openDelay={0} closeDelay={0}>
                     <Button 
                         className={`button button--thin ${activeLayerKey === "colonias" ? "button--active" : ""}`} 
                         onClick={() => setActiveLayerKey("colonias")} 

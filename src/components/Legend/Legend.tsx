@@ -30,7 +30,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
 
   const renderLegeindItem = (value: number[] | number | string, index: number,) => {
 
-    const rangeText = categorical ? value : `${formatValue(value[1])} - ${formatValue(value[0])}`;
+    const rangeText = categorical ? value : `${formatValue(value[0])} - ${formatValue(value[1])}`;
 
     return (
       <div key={index} className="legend-ranges__item">

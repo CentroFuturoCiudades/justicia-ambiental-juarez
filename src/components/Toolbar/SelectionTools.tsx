@@ -18,7 +18,7 @@ const SelectionTools = () => {
     return (
         <div style={{ position: "relative", display: "inline-block"}}>
             <Group attached className="button_group">
-                <Tooltip content="Seleccionar AGEBS o Colonias">
+                <Tooltip content="Seleccionar AGEBS o Colonias" openDelay={0} closeDelay={0}>
                     <Button 
                         className={`button button--thin ${selectionMode === "agebs" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("agebs")} 
@@ -28,7 +28,7 @@ const SelectionTools = () => {
                         <img src={Selection} alt="Seleccionar" />
                     </Button>
                 </Tooltip>
-                <Tooltip content="Seleccionar Radio">
+                <Tooltip content="Seleccionar Radio" openDelay={0} closeDelay={0}>
                     <Button 
                         className={`button button--thin ${selectionMode === "radius" ? "button--active" : ""}`} 
                         onClick={() => setSelectionMode("radius")} 
@@ -38,7 +38,7 @@ const SelectionTools = () => {
                         <img src={IconRadius} alt="Radio" />
                     </Button>
                 </Tooltip>
-                <Tooltip content="Deseleccionar">
+                <Tooltip content="Deseleccionar" openDelay={0} closeDelay={0}>
                     <Button 
                         className="button button--thin"
                         onClick={() => activeLayerKey === "agebs" ? setSelectedAGEBS([]) : setSelectedColonias([])}

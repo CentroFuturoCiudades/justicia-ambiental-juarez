@@ -155,6 +155,7 @@ export const LAYERS: any = {
         //jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.csv?${REACT_APP_SAS_TOKEN}`, //pedirlo en json
         jsonurl: './assets/data/heat_island_graph.json',
         title: "Islas de calor",
+        legendTitle: "Temperatura",
         description: "Las islas de calor describen áreas urbanas de muchas construcciones que son más calientes que las áreas rurales cercanas. Las islas de calor aumentan el calor y la contaminación, lo que provoca riesgos para la salud y afecta la calidad de vida.",
         source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017 (CIESIN) Columbia University (ver: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5251739)",
         property: "lst",
@@ -170,7 +171,7 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 0) + " kg m2"
+            return formatNumber(x, 0) + "C°"
         },
         trimOutliers: false,
         juarezCard: (data) =>
@@ -276,7 +277,7 @@ export const LAYERS: any = {
         enabled: true,
         colonias: true,
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         amountOfColors: 5,
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
@@ -587,7 +588,7 @@ export const LAYERS: any = {
         colors: [ "#e85e00", "#f4a829", "#db9217", "#a44809"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripcion de industrias en Ciudad Juárez</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -708,7 +709,7 @@ export const LAYERS: any = {
         colors:["#a03a2dff", "#a72e19ff"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripción de industrias en Ciudad Juárez</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -881,7 +882,7 @@ export const LAYERS: any = {
                     tooltip: {
                         show: true,
                         formatter: function (info) {
-                        return `<b>${info.name}</b><br/>${Number(info.value).toFixed(2)} kg/km²`;
+                        return `<b>${info.name}</b><br/>${Number(info.value).toFixed(2)} kg`;
                         },
           //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
@@ -993,7 +994,7 @@ export const LAYERS: any = {
         colors: [ "#e9c46a", "#e76f51", "#8ab17d", "#4abfbd"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripcion de equipamientos</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -1545,7 +1546,7 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
         //quitar fixed!!!
@@ -1620,7 +1621,7 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
         //quitar fixed!!!
