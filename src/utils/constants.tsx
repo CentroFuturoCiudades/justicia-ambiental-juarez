@@ -572,10 +572,10 @@ export const LAYERS: any = {
             "Electronicos maquinaria y equipo": "",
         },
         categoricalLegend: [
-            { value: "Industrias manufactureras de alimentos textiles y tabaco", label: "Industrias manufactureras de alimentos textiles y tabaco", color: "#fef0d9" },
-            { value: "Manufactureras de madera, papel, quimicos y plástico", label: "Manufactureras de madera, papel, quimicos y plástico", color: "#fdcc8a" },
-            { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#fc8d59" },
-            { value: "Electronicos maquinaria y equipo", label: "Electronicos maquinaria y equipo", color: "#e34a33" },
+            { value: "Industrias manufactureras de alimentos textiles y tabaco", label: "Industrias manufactureras de alimentos textiles y tabaco", color: "#f4a829" },
+            { value: "Manufactureras de madera, papel, quimicos y plástico", label: "Manufactureras de madera, papel, quimicos y plástico", color: "#743306" },
+            { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#cc5803" },
+            { value: "Electronicos maquinaria y equipo", label: "Electronicos maquinaria y equipo", color: "#993232ff" },
         ],
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.industria !== null);
@@ -584,7 +584,7 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + " kg m2"
         },
-        colors: [ "#993232ff", "#372516", "#cabe0eff", "#0f4e77"],
+        colors: [ "#e85e00", "#f4a829", "#db9217", "#a44809"],
         trimOutliers: false,
         juarezCard: (data) =>
             <span>Descripcion fixed de capa</span>,
@@ -604,10 +604,10 @@ export const LAYERS: any = {
             option: (data: any) => {
                 const industrias: any = {};
                 const colorMap = {
-                    "Industrias manufactureras de alimentos textiles y tabaco": "#993232ff",
-                    "Manufactureras de madera, papel, quimicos y plástico": "#372516",
-                    "Energía electrica, agua y gas": "#cabe0eff",
-                    "Electronicos maquinaria y equipo": "#0f4e77",
+                    "Industrias manufactureras de alimentos textiles y tabaco": "#f4a829",
+                    "Manufactureras de madera, papel, quimicos y plástico": "#743306",
+                    "Energía electrica, agua y gas": "#cc5803",
+                    "Electronicos maquinaria y equipo": "#993232ff",
                 };
                 Object.values(data).forEach((industry: any) => {
                     const sector = industry.properties["sector"];

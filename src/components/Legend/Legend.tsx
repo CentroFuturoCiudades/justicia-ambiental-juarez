@@ -49,7 +49,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
   };
 
   return (
-    <div className={`legend legend--${themeKey}`}>
+    <div className={`legend legend--${themeKey}`} key={selectedLayerData?.title}>
       <div className={`legend__title legend__title--${themeKey}`}>
         {title}
       </div>
