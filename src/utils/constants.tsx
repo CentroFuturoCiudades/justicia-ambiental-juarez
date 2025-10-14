@@ -276,7 +276,7 @@ export const LAYERS: any = {
         enabled: true,
         colonias: true,
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         amountOfColors: 5,
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
@@ -587,7 +587,7 @@ export const LAYERS: any = {
         colors: [ "#e85e00", "#f4a829", "#db9217", "#a44809"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripcion de industrias en Ciudad Juárez</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -708,7 +708,7 @@ export const LAYERS: any = {
         colors:["#a03a2dff", "#a72e19ff"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripción de industrias en Ciudad Juárez</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -993,7 +993,7 @@ export const LAYERS: any = {
         colors: [ "#e9c46a", "#e76f51", "#8ab17d", "#4abfbd"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion fixed de capa</span>,
+            <span>Descripcion de equipamientos</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -1545,7 +1545,7 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
         //quitar fixed!!!
@@ -1620,7 +1620,7 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 2)
+            return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
         //quitar fixed!!!

@@ -64,7 +64,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp, setMobileVisibleElem
     return (
         <div>
             <Group attached className="button_group">
-                <Tooltip content="Guardar Capa" disabled={!hasSelection}>
+                <Tooltip content="Guardar Capa" disabled={!hasSelection} openDelay={0} closeDelay={0}>
                     <Button 
                         className="button"
                         position={"relative"}
@@ -90,7 +90,7 @@ const DownloadTools = ({rangeGraphRef, deck, map, setPopUp, setMobileVisibleElem
                     </Button>
                 </Tooltip>
 
-                <Tooltip content="Descargar Resumen" disabled={!hasScreenshots}>
+                <Tooltip content="Descargar Resumen" disabled={!hasScreenshots} openDelay={0} closeDelay={0}>
                     <Button className="button"
                         disabled={!hasScreenshots}
                         onClick={() => {
