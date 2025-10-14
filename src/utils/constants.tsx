@@ -728,6 +728,14 @@ export const LAYERS: any = {
         {
             title: "On-site",
             source: "Fuente de ejemplo",
+            legend: {
+                "Plomo (y sus componentes)": "#8C4242",
+                "Mercurio (y sus componentes)": "#592115",
+                "Níquel (y sus componentes)": "#BF964B",
+                "Arsenico (y sus componentes)": "#444b6e",
+                "Cromo (y sus componentes)": "#7c7b7f",
+                "Diisocianatos": "#73722F"
+            },
             option: (data: any) => {
                 const contaminants: any = {};
                 const colorMap = {
@@ -832,6 +840,14 @@ export const LAYERS: any = {
         {
             title: "Off-site",
             source: "Fuente de ejemplo",
+            legend: {
+                "Plomo (y sus componentes)": "#8C4242",
+                "Mercurio (y sus componentes)": "#592115",
+                "Níquel (y sus componentes)": "#BF964B",
+                "Arsenico (y sus componentes)": "#444b6e",
+                "Cromo (y sus componentes)": "#7c7b7f",
+                "Diisocianatos": "#73722F"
+            },
             option: (data: any) => {
                 const contaminants: any = {};
                 const colorMap = {
@@ -939,7 +955,6 @@ export const LAYERS: any = {
         property: "group",
         tematica: "equipamiento",
         type: "Categorica",
-        is_lineLayer: false,
         is_PointLayer: true,
         enabled: true,
         colonias: false,
@@ -1105,13 +1120,7 @@ export const LAYERS: any = {
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "indice_accesibilidad",
         tematica: "equipamiento",
-        //type: "Categorica",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1143,11 +1152,6 @@ export const LAYERS: any = {
         property: "tiempo_parque",
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Numerico",
-        geographic_unit: "AGEB",
-        threshold: "< 5 min: Bueno, 5-20: Medio, > 20: Vulnerable",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1181,11 +1185,6 @@ export const LAYERS: any = {
         property: "tiempo_clinica_hospital",
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Numerico",
-        geographic_unit: "AGEB",
-        threshold: "< 20 min: Bueno, 20-60: Medio, > 60: Vulnerable",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1219,11 +1218,6 @@ export const LAYERS: any = {
         property: "tiempo_preparatoria",
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Numerico",
-        geographic_unit: "AGEB",
-        threshold: "< 15 min: Bueno, 15-45: Medio, > 45: Vulnerable",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1263,11 +1257,6 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1305,11 +1294,6 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1347,11 +1331,6 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1385,11 +1364,6 @@ export const LAYERS: any = {
         property: "ingreso",
         tematica: "poblacion",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: false,
         dataProcesssing: (data: any) => {
@@ -1422,18 +1396,12 @@ export const LAYERS: any = {
         property: "porcentaje_pob_0a5",
         propertyAbsolute: "total_pob_0a5",
         juarezTotal: (data) => {
-            //return total_pob_juarez;
             const features = Array.isArray(data) ? data : data?.features;
             if (!features) return 0;
             return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
         },
         tematica: "poblacion",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "0% a 20% continua",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1466,18 +1434,12 @@ export const LAYERS: any = {
         property: "porcentaje_pob_60",
         propertyAbsolute: "total_pob_60",
         juarezTotal: (data) => {
-           // return total_pob_juarez;
            const features = Array.isArray(data) ? data : data?.features;
             if (!features) return 0;
             return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
         },
         tematica: "poblacion",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1509,7 +1471,6 @@ export const LAYERS: any = {
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
         property: "porcentaje_menos_prepa_terminada",
         propertyAbsolute: "total_menos_prepa_terminada",
-        //juarezTotal: total_pob_juarez, //cambiar al porcentaje de menos prepa terminada
         juarezTotal: (data: any) => {
             //calcula el total sumando la propiedad total_pob_18 de todas las features
             const features = Array.isArray(data) ? data : data?.features;
@@ -1518,11 +1479,6 @@ export const LAYERS: any = {
         },
         tematica: "poblacion",
         type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB",
-        threshold: "> 60%: Vulnerable",
-        year: null,
         enabled: true,
         colonias: true,
         dataProcesssing: (data: any) => {
@@ -1562,11 +1518,6 @@ export const LAYERS: any = {
         },*/
         tematica: "poblacion",
         type: "Categorica",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "AGEB",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: true,
         labels : {
@@ -1630,11 +1581,6 @@ export const LAYERS: any = {
         property: "indice_marginacion",
         tematica: "poblacion",
         type: "Categorica",
-        is_lineLayer: false,
-        visualization_type: "Semaforo",
-        geographic_unit: "",
-        threshold: "",
-        year: null,
         enabled: true,
         colonias: false,
         labels : {

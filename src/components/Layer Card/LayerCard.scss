@@ -27,11 +27,25 @@
     font-size: var(--font-size-body);
   }
 }
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.layerCard__content {
+  animation: slideIn 0.4s;
+}
 
 .graph {
   display: flex;
-  height: 40dvh;
-  max-height: 250px;
+  //height: 40dvh;
+  //max-height: 250px;
   width: 100%;
   flex-direction: column;
   //border: 1px solid red;
@@ -39,6 +53,24 @@
     text-align: left;
     font-size: var(--font-size-subtitle);
     font-weight: bold;
+  }
+  &__legend {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.5dvh;
+    gap: 1dvw;
+    &__item {
+      display: flex;
+      align-items: center;
+      font-size: var(--font-size-button);
+      gap: 0.5dvw;
+    }
+    &__color {
+      width: min(2dvh, 1dvw);
+      height: min(2dvh, 1dvw);
+      border-radius: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
   }
 }
 

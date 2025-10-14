@@ -115,7 +115,7 @@ export class MapLayer {
         //domain = categorias unicas
         const categories = Array.from(new Set(mappedData)).sort((a, b) => a - b);
         this.domain = categories;
-        console.log("entro a this.categorical y sus categories", categories);
+        //console.log("entro a this.categorical y sus categories", categories);
 
         if (this.colors.length === categories.length) {
           // mapeo directo de colores a categorías (mismo num de colores que categorias)
@@ -248,7 +248,7 @@ export class MapLayer {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
-    console.log("ranges for legend", ranges);
+    //console.log("ranges for legend", ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
@@ -293,7 +293,7 @@ export class MapLayer {
     //.filter(value => value != null);
     .filter(f => f.properties?.[property] != null)
 
-    console.log("selectedvalues", selectedValues);
+    //console.log("selectedvalues", selectedValues);
 
     const sum = selectedValues.reduce((sum: number, f: Feature) => sum + f.properties?.[property] || 0, 0);
     this.absTotal_property = sum;
@@ -354,11 +354,8 @@ export class MapLayer {
       minVal: this.minVal,
       maxVal: this.maxVal,
       negativeAvg: this.negativeAvg,
-      //positiveAvg = promedio Cd Juarez
       positiveAvg: this.averageJuarez
     }
-
-    console.log("completeColors", completeColors);
 
     return <RangeGraph
       data={Data}
