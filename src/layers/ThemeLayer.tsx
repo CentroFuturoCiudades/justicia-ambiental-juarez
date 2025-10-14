@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { GeoJsonLayer } from "deck.gl";
 import { MapLayer } from "../classes/MapLayer";
 import { LAYERS } from "../utils/constants";
-import { json } from "d3";
 
 /* THEME LAYER:
     - Crea una capa geojson con la TEMATICA seleccionada
@@ -49,6 +48,11 @@ const ThemeLayer = () => {
 
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
+        //limpiar la vieja mapLayerInstance
+        //setTematicaLayer(null);
+        //setMapLayerInstance(null);
+        //setTematicaData(null);
+
         if( !selectedLayer) {
             setTematicaLayer(null);
             setMapLayerInstance(null);
@@ -58,18 +62,19 @@ const ThemeLayer = () => {
 
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
 
-        // Crea instancia de MapLayer
-        const mapLayerInstance = new MapLayer({
-            opacity: 1,
-            colors: layer?.colors,
-            title: layer.title,
-            amountOfColors: layer?.amountOfColors,
-            formatValue: layer.formatValue,
-            categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
-            categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
-        });
-
         const fetchData = async () => {
+            // Crea instancia de MapLayer
+            const mapLayerInstance = new MapLayer({
+                opacity: 1,
+                colors: layer?.colors,
+                title: layer.title,
+                amountOfColors: layer?.amountOfColors,
+                formatValue: layer.formatValue,
+                categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
+                categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
+                categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
+            });
+
             let jsonData;
             // IF CAPA (con su propio url porq datos no estan en el geojson universal) -> fetch de su url
             if (layer?.url) {

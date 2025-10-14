@@ -31,10 +31,11 @@ export class MapLayer {
   selectedDescription = "";
   categorical?: boolean;
   categoryLabels?: any;
+  categoryLegend?: any;
   domain?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {} }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {}, categoryLegend = [] }: {
     opacity?: number;
     colors?: string[];
     title?: string;
@@ -42,6 +43,7 @@ export class MapLayer {
     formatValue?: (value: number) => string;
     categorical?: boolean;
     categoryLabels?: any;
+    categoryLegend?: any;
   }) {
     this.opacity = opacity;
     this.colors = colors;
@@ -50,6 +52,7 @@ export class MapLayer {
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
     this.categorical = categorical;
     this.categoryLabels = categoryLabels;
+    this.categoryLegend = categoryLegend;
   }
 
   async loadData(url: string) {
@@ -80,14 +83,14 @@ export class MapLayer {
     const categorias = Array.from(
       new Set(featuresForStats.map((f: any) => f.properties[field]))
     ).filter((c) => c != null);
-    console.log("categorias", categorias);
-    console.log("featuresForStats", featuresForStats);
+    //console.log("categorias", categorias);
+    //console.log("featuresForStats", featuresForStats);
 
     if (field) {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
       mappedData = mappedData.filter((value) => value !== null && value !== undefined);
 
-      console.log("mappedData", mappedData);
+      //console.log("mappedData", mappedData);
       if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
       }
@@ -98,11 +101,21 @@ export class MapLayer {
       this.minVal = minVal;
 
       //creas domain
-      if (this.categorical) {
+      if (this.categorical && this.categoryLegend) {
+        this.legend = {
+          title: this.title,
+          categories: this.categoryLegend
+        }
+        this.colorMap = (value: any) => {
+          const category = this.categoryLegend.find((cat: any) => cat.value === value);
+          return category ? category.color : "#ccc"; // color por defecto
+        };
+      }
+      else if (this.categorical) {
         //domain = categorias unicas
         const categories = Array.from(new Set(mappedData)).sort((a, b) => a - b);
         this.domain = categories;
-        console.log("entro a this.categorical y sus categories", categories);
+        //console.log("entro a this.categorical y sus categories", categories);
 
         if (this.colors.length === categories.length) {
           // mapeo directo de colores a categorías (mismo num de colores que categorias)
@@ -230,11 +243,12 @@ export class MapLayer {
     return validColors.map((color) => rgb(color).formatHex());
   }
 
+  //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
   getLegend = (title: string, isPointLayer: boolean) => {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
-    console.log("ranges for legend", ranges);
+    //console.log("ranges for legend", ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
@@ -255,15 +269,20 @@ export class MapLayer {
     />
   }
 
-   getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any) : number {
+   getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any, filterFn: boolean) : number {
+    
     //si recibe propertyAbsolute, es que quiere el promedio diferente (suma de propertyAbsolute / total juarez * 100)
 
-    this.absTotal_juarez = totalJuarez ? totalJuarez(features) : 0; //total juarez
+    const filteredFeatures = filterFn ? features.filter(f => f.properties.indice_bienestar === Math.trunc(this.positiveAvg)) : features;
+    //console.log("filteredFeatures", filteredFeatures); //todos los features con indice de marginacion igual al promedio positivo 2
+
+    this.absTotal_juarez = totalJuarez ? totalJuarez(features, this.positiveAvg) : 0; //total juarez
     // suma de la property de todas las features (AGEBS/Colonias)
-    this.absTotal_property = totalJuarez ? features.reduce((sum: number, f: Feature) => {
+    this.absTotal_property = totalJuarez ? filteredFeatures.reduce((sum: number, f: Feature) => {
       const value = f.properties?.[property];
       return sum + value;
     }, 0) : 0;
+    console.log('en juarez hay un total de', this.absTotal_juarez, 'personas y la suma de', property, 'con el filtro de cuantos tienen 2 es de', this.absTotal_property);
     this.averageJuarez = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
 
     // If no selected AGEBS/Colonias, return overall average
@@ -279,13 +298,13 @@ export class MapLayer {
     //.filter(value => value != null);
     .filter(f => f.properties?.[property] != null)
 
-    console.log("selectedvalues", selectedValues);
+    //console.log("selectedvalues", selectedValues);
 
     const sum = selectedValues.reduce((sum: number, f: Feature) => sum + f.properties?.[property] || 0, 0);
     this.absTotal_property = sum;
     // (this.absTotal_property / this.absTotal_juarez) * 100 o  (this.absTotal_property / this.absTotalAGEB) * 100
     //const average = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : sum / selectedValues.length;
-    const average = totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
+    const average = filterFn ? sum / selectedValues.length :totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
 
     /*const average = selectedValues.length > 0
       ? selectedValues.reduce((sum: number, num: number) => sum + num, 0) / selectedValues.length
@@ -306,14 +325,16 @@ export class MapLayer {
 
     }
     const introText = selected.length === 1 ? singleSelected : multipleSelected;
-    const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
+    const comparedToAvg = this.selectedAvg > this.averageJuarez ? "encima" : "debajo";
 
     const cardData = {
       avg: this.formatValue(average),
-      num: this.absTotal_property,
-      category: descriptionCategories?.[Math.trunc(average)] || "",
+      num: (this.absTotal_property).toLocaleString(),
+      //category: descriptionCategories?.[Math.trunc(average)] || "",
+      category: category || "",
       introText: selected.length >= 1 ? introText : "",
-      comparedToAvg: comparedToAvg
+      comparedToAvg: comparedToAvg,
+      avgMap: this.formatValue(this.positiveAvg)
     }
 
     // Juarez Card (no ageb/col selected)
@@ -339,7 +360,6 @@ export class MapLayer {
       minVal: this.minVal,
       maxVal: this.maxVal,
       negativeAvg: this.negativeAvg,
-      //positiveAvg = promedio Cd Juarez
       positiveAvg: this.averageJuarez
     }
 

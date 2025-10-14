@@ -22,6 +22,8 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
   const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
   const themeKey = selectedLayerData?.tematica;
 
+   if (!ranges || ranges.length === 0) return null;
+
   // construct the amount of colors based on the colors provided
   const domain = categorical ? ranges.map((category, index) => category) : ranges.map((range) => range[1]);
   const colorMap = scaleLinear<string>().domain(domain).range(colors);
@@ -47,7 +49,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
   };
 
   return (
-    <div className={`legend legend--${themeKey}`}>
+    <div className={`legend legend--${themeKey}`} key={selectedLayerData?.title}>
       <div className={`legend__title legend__title--${themeKey}`}>
         {title}
       </div>

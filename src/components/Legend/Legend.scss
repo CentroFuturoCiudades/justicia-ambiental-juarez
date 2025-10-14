@@ -12,12 +12,23 @@
   //flex: 1;
   background-color: var(--background);
   border-radius: var(--border-radius);
+  animation: slideIn 0.4s;
 
   &__title {
     font-size: var(--font-size-body);
     color: white;
     padding: min(1dvh, 1dvw) min(2dvh, 1dvw);
     text-transform: lowercase;
+  }
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -60,7 +71,7 @@
     height: min(2dvh, 1dvw);
     display: flex;
     align-items: center;
-    white-space: nowrap; 
+    //white-space: nowrap; 
     text-overflow: ellipsis; 
   }
 }
