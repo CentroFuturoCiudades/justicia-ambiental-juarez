@@ -244,7 +244,7 @@ export class MapLayer {
   }
 
   //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
-  getLegend = (title: string, isPointLayer: boolean) => {
+  getLegend = (title: string, isPointLayer: boolean, legendTitle: string) => {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
@@ -260,7 +260,7 @@ export class MapLayer {
     }
 
     return <Legend
-      title={title}
+      title={legendTitle ? legendTitle : title}
       colors={completeColors}
       ranges={legendRanges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
@@ -357,6 +357,7 @@ export class MapLayer {
         //legendRanges = reversedCategories.map(cat => cat.value);
     } else {
       const ranges = this.getRanges();
+      console.log("ranges for graph", ranges);
        completeColors = ranges.map((range) => this.colorMap(range[1]));
     }
 
