@@ -599,7 +599,7 @@ export const LAYERS: any = {
         },
         graphs: [
         {
-            title: "On-site",
+            title: "Sectores industriales",
             source: "Fuente de ejemplo",
             option: (data: any) => {
                 const industrias: any = {};
@@ -620,11 +620,6 @@ export const LAYERS: any = {
                 });
                 console.log('industrias', industrias);
                 return {
-                    /*title: {
-                        text: 'On-site',
-                        left: 'center',
-                        textStyle: { fontSize: '18px' },
-                    },*/
                     tooltip: {
                         show: true,
                         formatter: function (info) {
@@ -1509,8 +1504,9 @@ export const LAYERS: any = {
         description: "El Nivel de Bienestar mide las condiciones económicas, sociales y culturales de la población —como educación, vivienda y servicios— y clasifica a cada zona en cinco niveles: muy bajo, bajo, medio, alto y muy alto.",
         source: "Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez, 2020.",
         property: "indice_bienestar",
-        //propertyAbsolute: "indice_bienestar",
-        /*juarezTotal: (data) => {
+        /*propertyAbsolute: "total_poblacion", //para el total de juarez
+        filter: true,
+        juarezTotal: (data, mapProperty_Avg) => {
            // return total_pob_juarez;
            const features = Array.isArray(data) ? data : data?.features;
             if (!features) return 0;
@@ -1552,14 +1548,18 @@ export const LAYERS: any = {
             return formatNumber(x, 2)
         },
         colors: ["#cdd8e6", "#08316b"],
+        //quitar fixed!!!
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+            <span>En Ciudad Juárez, <strong>576,032</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>, lo que representa el <strong>38%</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>.</span>
+                {/*<span>En {data.introText} hay <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>.</span>
                 <br/>
-                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de Ciudad Juarez (medio).</span>
+                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de Ciudad Juarez (medio).</span>*/}
+                <span>{capitalize(data.introText)} tiene un nivel de bienestar <strong>{data.category}</strong>.</span>
+                <br/>
+                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de bienestar promedio de Ciudad Juarez.</span>
             </>
             );
         },
@@ -1578,7 +1578,15 @@ export const LAYERS: any = {
         title: "Indice de Marginación Urbana",
         description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos.",
         source: "Consejo Nacional de Población (CONAPO), 2020.",
-        property: "indice_marginacion",
+        property: "indice_marginacion", //para el mapa
+        /*propertyAbsolute: "total_poblacion", //para el total de juarez
+        filter: true,
+        juarezTotal: (data, mapProperty_Avg) => {
+           // return total_pob_juarez;
+           const features = Array.isArray(data) ? data : data?.features;
+            if (!features) return 0;
+            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
+        },*/
         tematica: "poblacion",
         type: "Categorica",
         enabled: true,
@@ -1615,18 +1623,20 @@ export const LAYERS: any = {
             return formatNumber(x, 2)
         },
         colors: ["#cdd8e6", "#08316b"],
+        //quitar fixed!!!
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, <strong>{data.num}</strong> personas tienen un índice de marginación urbana de <strong>{data.category}</strong>, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+            <span>En Ciudad Juárez, <strong>555,863</strong> personas tienen un índice de marginación urbana <strong>{data.category}</strong>, lo que representa el <strong>37%</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
-                <span>{capitalize(data.introText)} tiene un índice de marginación urbana de <strong>{data.category}</strong>.</span>
+                <span>{capitalize(data.introText)} tiene un índice de marginación urbana <strong>{data.category}</strong>.</span>
                 <br/>
                 <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del índice de marginación urbana promedio de Ciudad Juarez.</span>
             </>
             );
         },
         getAvgThreshold: (avg: number) => {
+            console.log("entro con avg", avg);
             const categories ={
                 1: "muy bajo",
                 2: "bajo",

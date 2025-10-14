@@ -269,15 +269,20 @@ export class MapLayer {
     />
   }
 
-   getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any) : number {
+   getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any, filterFn: boolean) : number {
+    
     //si recibe propertyAbsolute, es que quiere el promedio diferente (suma de propertyAbsolute / total juarez * 100)
 
-    this.absTotal_juarez = totalJuarez ? totalJuarez(features) : 0; //total juarez
+    const filteredFeatures = filterFn ? features.filter(f => f.properties.indice_bienestar === Math.trunc(this.positiveAvg)) : features;
+    //console.log("filteredFeatures", filteredFeatures); //todos los features con indice de marginacion igual al promedio positivo 2
+
+    this.absTotal_juarez = totalJuarez ? totalJuarez(features, this.positiveAvg) : 0; //total juarez
     // suma de la property de todas las features (AGEBS/Colonias)
-    this.absTotal_property = totalJuarez ? features.reduce((sum: number, f: Feature) => {
+    this.absTotal_property = totalJuarez ? filteredFeatures.reduce((sum: number, f: Feature) => {
       const value = f.properties?.[property];
       return sum + value;
     }, 0) : 0;
+    console.log('en juarez hay un total de', this.absTotal_juarez, 'personas y la suma de', property, 'con el filtro de cuantos tienen 2 es de', this.absTotal_property);
     this.averageJuarez = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
 
     // If no selected AGEBS/Colonias, return overall average
@@ -299,7 +304,7 @@ export class MapLayer {
     this.absTotal_property = sum;
     // (this.absTotal_property / this.absTotal_juarez) * 100 o  (this.absTotal_property / this.absTotalAGEB) * 100
     //const average = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : sum / selectedValues.length;
-    const average = totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
+    const average = filterFn ? sum / selectedValues.length :totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
 
     /*const average = selectedValues.length > 0
       ? selectedValues.reduce((sum: number, num: number) => sum + num, 0) / selectedValues.length
@@ -328,7 +333,8 @@ export class MapLayer {
       //category: descriptionCategories?.[Math.trunc(average)] || "",
       category: category || "",
       introText: selected.length >= 1 ? introText : "",
-      comparedToAvg: comparedToAvg
+      comparedToAvg: comparedToAvg,
+      avgMap: this.formatValue(this.positiveAvg)
     }
 
     // Juarez Card (no ageb/col selected)

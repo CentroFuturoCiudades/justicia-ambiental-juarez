@@ -83,11 +83,14 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
             selected, 
             layer.juarezTotal ? layer.propertyAbsolute : layer.property, //property a base de la cual quiero el average (si hay juarez total quiero usar la property absoluta)
             activeLayerKey,
-            layer.juarezTotal
+            layer.juarezTotal,
+            layer.filter
         );
     }
 
-    const category = layer.getAvgThreshold ? layer.getAvgThreshold(average) : null;
+    console.log("average", average);
+    console.log("maplayerinstance positiveAvg", mapLayerInstance.positiveAvg);
+    const category = layer.getAvgThreshold ? layer.getAvgThreshold(layer.filter ? mapLayerInstance.positiveAvg : average) : null;
     const description = mapLayerInstance.getDescription(
         selected, //agebs/colonias
         activeLayerKey, // key
@@ -125,7 +128,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                 <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
                     {/* if there is a defined graph (bar/treemap), else range graph default*/}
                     { layer.graphs ? 
-                        (jsonData ? graphs : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
+                        (jsonData ? <div className="graph-container">{graphs}</div> : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
                     }
                 </div>
             </div>
