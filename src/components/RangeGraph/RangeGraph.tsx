@@ -15,6 +15,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
 
   const [isMobile] = useMediaQuery('(max-width: 800px)');
 
+  //if (!data || !data.positiveAvg) return null;
   return (
     <div style={{ 
       height: "auto",

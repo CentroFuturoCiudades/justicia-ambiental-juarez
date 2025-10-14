@@ -42,31 +42,19 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
         // n graphs to render
         const graphComponents = layer.graphs.map((graph) => {
 
-            let data;
+            //let data;
             //graph configuration
             const option = typeof graph.option === "function"
                 ? graph.option(jsonData)
                 : graph.option;
-            console.log("option for graph:", option);
+            //console.log("option for graph:", option);
 
           return (
-            <div>
-              {graph.nivo === true
-                ? (
-                <>
-                    <MyCirclePacking option={option} data={data}/>
-                </>
-            )
-                : 
-                <div className="graph">
-                    <div className="graph__title">{graph.title}</div>
-                    <EChartsReact  key={`${layer}-${graph.url}`} option={option} style={{ width: "100%", height: "100%"}} />
-                </div>
-                
-              }
+            <div className="graph">
+                <div className="graph__title">{graph.title}</div>
+                <EChartsReact  key={`${layer}-${graph.url}`} option={option} style={{ width: "100%", height: "100%"}} />
             </div>
           );
-        //});
         });
 
         setGraphs(graphComponents);
@@ -74,7 +62,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
 
     useEffect(() => {
         //renderGraph only gets called when jsonData changes
-        console.log("jsonData for renderGraphs:", jsonData);
+        //console.log("jsonData for renderGraphs:", jsonData);
         renderGraphs();
     }, [jsonData]);
 
@@ -98,11 +86,11 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
             selected, 
             layer.juarezTotal ? layer.propertyAbsolute : layer.property, //property a base de la cual quiero el average (si hay juarez total quiero usar la property absoluta)
             activeLayerKey,
-            //layer.propertyAbsolute,
             layer.juarezTotal
         );
     }
-    const category = layer.descriptionCategories?.[Math.trunc(average)];
+    //const category = layer.descriptionCategories?.[Math.trunc(average)];
+    const category = layer.getAvgThreshold ? layer.getAvgThreshold(average) : null;
     const description = mapLayerInstance.getDescription(
         selected, //agebs/colonias
         activeLayerKey, // key

@@ -62,7 +62,7 @@ const Tematica = () => {
                                                 checked={selectedLayer === layerKey}
                                                 onCheckedChange={() => handleLayerToggle(layerKey)}
                                                 disabled={!LAYERS[layerKey]?.enabled}
-                                                className="checkbox"
+                                                className={`checkbox ${LAYERS[layerKey]?.capa ? 'checkbox--capa' : ''}`}
                                             >
                                                 
                                                 <Checkbox.HiddenInput />

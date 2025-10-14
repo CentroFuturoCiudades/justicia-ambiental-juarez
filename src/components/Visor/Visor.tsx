@@ -33,7 +33,7 @@ const Visor = () => {
 
     const { 
         viewState, setViewState, 
-        setAgebsGeoJson,
+        agebsGeoJson,setAgebsGeoJson,
         setColoniasGeoJson,
         mapLayerInstance,
         tematicaData,
@@ -43,6 +43,7 @@ const Visor = () => {
         dragMap,
         layerTooltip, setLayerTooltip,
         jsonData, setJsonData,
+        selectedAGEBS,
     } = useAppContext();
 
     const { layers } = Layers();
@@ -123,6 +124,10 @@ const Visor = () => {
             setJsonData(null);
         }
     }, [selectedLayer]);*/
+
+    useEffect(() => {
+        console.log('selectedagebs', selectedAGEBS);
+    }, [selectedAGEBS]);
 
     if(!hydrated) return null;
 

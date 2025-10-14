@@ -31,10 +31,11 @@ export class MapLayer {
   selectedDescription = "";
   categorical?: boolean;
   categoryLabels?: any;
+  categoryLegend?: any;
   domain?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {} }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {}, categoryLegend = [] }: {
     opacity?: number;
     colors?: string[];
     title?: string;
@@ -42,6 +43,7 @@ export class MapLayer {
     formatValue?: (value: number) => string;
     categorical?: boolean;
     categoryLabels?: any;
+    categoryLegend?: any;
   }) {
     this.opacity = opacity;
     this.colors = colors;
@@ -50,6 +52,7 @@ export class MapLayer {
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
     this.categorical = categorical;
     this.categoryLabels = categoryLabels;
+    this.categoryLegend = categoryLegend;
   }
 
   async loadData(url: string) {
@@ -80,14 +83,14 @@ export class MapLayer {
     const categorias = Array.from(
       new Set(featuresForStats.map((f: any) => f.properties[field]))
     ).filter((c) => c != null);
-    console.log("categorias", categorias);
-    console.log("featuresForStats", featuresForStats);
+    //console.log("categorias", categorias);
+    //console.log("featuresForStats", featuresForStats);
 
     if (field) {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
       mappedData = mappedData.filter((value) => value !== null && value !== undefined);
 
-      console.log("mappedData", mappedData);
+      //console.log("mappedData", mappedData);
       if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
       }
@@ -98,7 +101,17 @@ export class MapLayer {
       this.minVal = minVal;
 
       //creas domain
-      if (this.categorical) {
+      if (this.categorical && this.categoryLegend) {
+        this.legend = {
+          title: this.title,
+          categories: this.categoryLegend
+        }
+        this.colorMap = (value: any) => {
+          const category = this.categoryLegend.find((cat: any) => cat.value === value);
+          return category ? category.color : "#ccc"; // color por defecto
+        };
+      }
+      else if (this.categorical) {
         //domain = categorias unicas
         const categories = Array.from(new Set(mappedData)).sort((a, b) => a - b);
         this.domain = categories;
@@ -230,6 +243,7 @@ export class MapLayer {
     return validColors.map((color) => rgb(color).formatHex());
   }
 
+  //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
   getLegend = (title: string, isPointLayer: boolean) => {
     if (!this.legend) return <></>;
     //const ranges = this.getRanges();
@@ -306,12 +320,13 @@ export class MapLayer {
 
     }
     const introText = selected.length === 1 ? singleSelected : multipleSelected;
-    const comparedToAvg = this.selectedAvg > this.positiveAvg ? "ENCIMA" : "DEBAJO";
+    const comparedToAvg = this.selectedAvg > this.averageJuarez ? "encima" : "debajo";
 
     const cardData = {
       avg: this.formatValue(average),
-      num: this.absTotal_property,
-      category: descriptionCategories?.[Math.trunc(average)] || "",
+      num: (this.absTotal_property).toLocaleString(),
+      //category: descriptionCategories?.[Math.trunc(average)] || "",
+      category: category || "",
       introText: selected.length >= 1 ? introText : "",
       comparedToAvg: comparedToAvg
     }
@@ -342,6 +357,8 @@ export class MapLayer {
       //positiveAvg = promedio Cd Juarez
       positiveAvg: this.averageJuarez
     }
+
+    console.log("completeColors", completeColors);
 
     return <RangeGraph
       data={Data}

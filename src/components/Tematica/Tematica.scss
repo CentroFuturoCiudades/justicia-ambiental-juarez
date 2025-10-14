@@ -79,6 +79,9 @@
 .checkbox {
   border-bottom: 1px solid gray;
   gap: 0.4dvw;
+  &--capa {
+    border-bottom: 2px solid black;
+  }
 
   &__content {
     display: flex;
