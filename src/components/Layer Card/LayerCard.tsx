@@ -69,7 +69,10 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
     }, [jsonData]);
 
 
-    if ( !mapLayerInstance || !layer || selectedLayer === layer) return;
+    //if ( !mapLayerInstance || !layer || selectedLayer === layer) return;
+    if(!mapLayerInstance) return null;
+    if(!layer) return null;
+    if(!tematicaData) return null;
 
     const themeKey = layer?.tematica;
     let selected: string[] = [];
@@ -126,10 +129,9 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                     <p>{description}</p>
                 </div>
                 <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
-                    {/* if there is a defined graph (bar/treemap), else range graph default*/}
-                    { layer.graphs ? 
+                     { layer.graphs ? 
                         (jsonData ? <div className="graph-container">{graphs}</div> : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
-                    }
+                     }                    
                 </div>
             </div>
         </div>

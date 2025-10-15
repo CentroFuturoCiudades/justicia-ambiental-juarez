@@ -17,12 +17,17 @@ type LegendProps = {
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
 const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer }: LegendProps) => {
+  
 
-  const { selectedLayer } = useAppContext();
+  const { selectedLayer, mapLayerInstance, tematicaData } = useAppContext();
   const selectedLayerData = selectedLayer ? LAYERS[selectedLayer as keyof typeof LAYERS] : undefined;
   const themeKey = selectedLayerData?.tematica;
 
    if (!ranges || ranges.length === 0) return null;
+   if(!mapLayerInstance) return null;
+    //if(!layer) return null;
+    if(!tematicaData) return null;
+    if(title === "Industrias contaminantes") return null;
 
   // construct the amount of colors based on the colors provided
   const domain = categorical ? ranges.map((category, index) => category) : ranges.map((range) => range[1]);
@@ -53,7 +58,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
       <div className={`legend__title legend__title--${themeKey}`}>
         {title}
       </div>
-      <div className="legend-body">
+      <div className="legend-body" >
         {categorical ?
           <div className="categoricalStyle">
             {ranges.map((category, index) => {

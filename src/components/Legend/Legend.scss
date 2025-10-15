@@ -21,6 +21,15 @@
     text-transform: lowercase;
   }
 }
+
+.legend-body {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  padding: min(1.5dvh, 1dvw) min(2dvh, 1dvw);
+  gap: 0.5dvw;
+  //animation: slideIn 0.4s;
+}
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -30,14 +39,6 @@
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-.legend-body {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  padding: min(1.5dvh, 1dvw) min(2dvh, 1dvw);
-  gap: 0.5dvw;
 }
 
 .categoricalStyle {

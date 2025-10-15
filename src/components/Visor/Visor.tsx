@@ -125,9 +125,9 @@ const Visor = () => {
         }
     }, [selectedLayer]);*/
 
-    useEffect(() => {
-        console.log('selectedagebs', selectedAGEBS);
-    }, [selectedAGEBS]);
+    /*useEffect(() => {
+        console.log('tematicaData', tematicaData);
+    }, [tematicaData]);*/
 
     if(!hydrated) return null;
 
@@ -243,7 +243,7 @@ const Visor = () => {
                             { activeLayerKey === "colonias" && <BusquedaColonia /> }
                         </div>
 
-                        {selectedLayer && mapLayerInstance && selectedLayer !== "industrias_contaminantes" && (
+                        {selectedLayer && mapLayerInstance && tematicaData&& selectedLayer !== "industrias_contaminantes" && (
                             <div className="visor__legend">
                                 {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle)}
                             </div>
@@ -275,7 +275,7 @@ const Visor = () => {
                 />
                 
                 {layerTooltip && selectedLayer === "industrias_contaminantes" &&
-                    <LayerTooltip categories={selectedLayerData.contaminantes} />
+                    <LayerTooltip />
                 }
             </div>
         </div>

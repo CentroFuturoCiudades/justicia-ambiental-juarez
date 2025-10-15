@@ -5,11 +5,11 @@ import { FaCheck } from "react-icons/fa6";
 import { useEffect } from "react";
 
 
-const LayerTooltip = ({ categories }) => {
+const LayerTooltip = () => {
     const { layerTooltip, jsonData } = useAppContext();
 
 
-    if (!layerTooltip || !categories) return null;
+    if (!layerTooltip) return null;
     const industry = jsonData ? jsonData[layerTooltip.content.ID] : null;
 
     return (
