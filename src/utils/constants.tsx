@@ -1661,7 +1661,6 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: ["#272a28"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
-        categoryColors: {}
     },
     limite_urbano: {
         title: "límite urbano",
@@ -1765,7 +1764,6 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "educacion");
             return data;
         },
-        categoryColors: {}
     },
     salud: {
         title: "salud",
@@ -1806,7 +1804,6 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "salud");
             return data;
         },
-        categoryColors: {}
     },
     recreacion: {
         title: "recreación",
@@ -1847,7 +1844,6 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "recreativo");
             return data;
         },
-        categoryColors: {}
     },
     parques: {
         title: "parques",
@@ -1888,7 +1884,6 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "parque");
             return data;
         },
-        categoryColors: {}
     },
     vias_ferreas: {
         title: "vías férreas",
@@ -1900,7 +1895,6 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: [],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
-        categoryColors: {}
     },
     islas_calor: {
         title: "islas de calor",
@@ -1912,7 +1906,6 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
-        categoryColors: {}
     },
     calidad_aire: {
         title: "calidad del aire",
@@ -1924,7 +1917,6 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: [],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
-        categoryColors: {}
-    },
+   },
 }
-
+    

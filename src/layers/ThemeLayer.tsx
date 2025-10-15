@@ -64,7 +64,7 @@ const ThemeLayer = () => {
         } else {
             setJsonData(tematicaData.features);
         }
-    }, [selectedLayer, tematicaData]);
+    }, [tematicaData]);
 
 
 
