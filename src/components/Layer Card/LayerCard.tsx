@@ -48,7 +48,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
           return (
             <div className="graph">
                 <div className="graph__title">{graph.title}</div>
-                <EChartsReact  key={`${layer}-${graph.url}`} option={option} style={{ width: "100%", height: "40dvh" }} />
+                <EChartsReact  key={`${layer}-${graph.url}`} option={option} style={{ width: "100%", height: "30dvh" }} />
                 <div className="graph__legend">
                     {graph.legend && Object.entries(graph.legend).map(([key, color]) => (
                         <div key={key} className="graph__legend__item">

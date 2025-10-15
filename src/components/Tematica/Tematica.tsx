@@ -69,6 +69,9 @@ const Tematica = () => {
                                                 <Checkbox.Control />
                                                     <Span className="checkbox__content">
                                                     <Checkbox.Label className={`checkbox__label ${selectedLayer === layerKey ? 'checkbox__label--bold' : ''}`} > {LAYERS[layerKey]?.title || layerKey}</Checkbox.Label>
+                                                    {LAYERS[layerKey]?.capa && 
+                                                        <p style={{ fontSize: 'min(1.2dvh, 1dvw)', alignSelf: 'flex-end', fontStyle: 'italic'}}>municipal</p>
+                                                    }
                                                     {mapLayers.some(instance => instance.title === LAYERS[layerKey]?.title) && (
                                                         <span className="checkbox__image_container">
                                                             <img src={SavedLayerIcon} alt="Saved Layer" />

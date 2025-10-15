@@ -13,17 +13,21 @@ export class ComplementaryLayer {
     negativeAvg = 0;
     colors: string[];
     colorMap: any;
+    title: string = "";
 
-    constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"] }: {
+    constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "" }: {
     opacity?: number;
     colors?: string[];
+    title?: string;
   }) {
     this.opacity = opacity;
     this.colors = colors;
+    this.title = title;
   }
 
 
-    getLayer(data: any, field: string, isPointLayer: boolean, handleClick?: (info: any) => void) {
+    getLayer(data: any, field: string, isPointLayer: boolean, handleClick?: (info: any) => void, categoryColors?: any): GeoJsonLayer {
+        console.log('categoryColors', categoryColors);
         let getColor: any;
         let mappedData: number[] = data.features.map((item: any) => { return item.properties[field] });
         mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
@@ -35,15 +39,19 @@ export class ComplementaryLayer {
             this.minVal = minVal;
             this.maxVal = maxVal;
             
-            const domain = [
-            minVal,
-            ...Array.from({ length: this.colors.length - 2 },
-                (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colors.length - 1)),
-            maxVal,
-            ];
-                
-            // color map
-            this.colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+            const domain = this.colors.length > 1 ? [
+                minVal,
+                ...Array.from({ length: this.colors.length - 2 },
+                    (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colors.length - 1)),
+                maxVal,
+            ] : [minVal, maxVal];
+
+            if(categoryColors) {
+                this.colorMap = (value: string) => categoryColors[value] || "#cccccc";
+                console.log('category colormap', this.colorMap);
+            }else {
+                this.colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+            }
     
 
     
@@ -57,11 +65,18 @@ export class ComplementaryLayer {
             
             getColor = (feature: any): [number, number, number, number] => {
                 const item = feature.properties[field];
-                const rgbValue = color(this.colorMap(item))?.rgb();
-                return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, 100] : [255, 255, 255, 150];
+                const rgbValue = this.colors.length === 1 ? color(this.colors[0])?.rgb() : color(this.colorMap(item))?.rgb();
+                const alpha = Math.round(this.opacity * 255);
+                return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, alpha] : [255, 255, 255, 150];
             }
         } else {
             getColor = (feature: any): [number, number, number, number] => {
+                
+                if (this.colors.length === 1) {
+                    const rgbValue = color(this.colors[0])?.rgb();
+                    const alpha = Math.round(this.opacity * 255);
+                    return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, alpha] : [255, 255, 255, 150];
+                }
                 const bg = [96, 96, 96]; //si no recibe property field, pone gris claro, escoger otro color?
                 const [r, g, b] = [200, 200, 200]; // Always returns RGBColor
 
@@ -76,13 +91,13 @@ export class ComplementaryLayer {
         
         
         return new GeoJsonLayer({
-            id: `complementary-${field}`,
+            id: `complementary-${this.title}`,
             data: data,
             pickable: handleClick ? true : false,
             filled: true,
             getFillColor: getColor,
             getLineColor: [255, 255, 255, 180],
-            getRadius: isPointLayer ? f => {
+            getPointRadius: isPointLayer ? f => {
                 const value = f.properties.release;
                 return value ? Math.sqrt(value) * 10 : 4;
             } : undefined,

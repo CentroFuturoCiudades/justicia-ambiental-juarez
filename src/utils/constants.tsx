@@ -423,136 +423,6 @@ export const LAYERS: any = {
             </span>
         )}
     },
-    hogares_vulnerables_industria: {
-        title: "Hogares expuestos a industrias contaminantes",
-        description: "Porcentaje de hogares cercanos a una industria que emite contaminantes in-situ.",
-        source: " Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
-        property: "porcentaje_viviendas_vulnerables_industria",
-        propertyAbsolute: "total_viviendas_vulnerables_industria",
-        juarezTotal: (data: any) => {
-            const features = Array.isArray(data) ? data : data?.features;
-            if (!features) return 0;
-            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_viviendas || 0), 0);
-        },
-        tematica: "industria",
-        type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB y TIFF",
-        threshold: "",
-        year: null,
-        enabled: true,
-        colonias: true,
-        dataProcesssing: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_viviendas_vulnerables_industria !== null );
-            data.features.forEach((feature: any) => {
-                feature.properties.porcentaje_viviendas_vulnerables_industria = Math.round(feature.properties.porcentaje_viviendas_vulnerables_industria * 100);
-            });
-            return data;
-        },
-        formatValue: (x: number) => {
-            return formatNumber(x, 0) + "%"
-        },
-        colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (data) =>
-            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
-        selectionCard: (data) => {
-            return (
-            <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
-                <br/>
-                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
-            </>
-            );
-        },
-    },
-    infantes_vulnerables_industria: {
-        title: "Infancias expuestas a industrias contaminantes",
-        description: "Porcentaje de niños menores a 5 años cercanos a una industria que emite contaminantes in-situ.",
-        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
-        property: "porcentaje_infantes_vulnerables_industria",
-        propertyAbsolute: "total_infantes_vulnerables_industria",
-        juarezTotal: (data) => {
-            const features = Array.isArray(data) ? data : data?.features;
-            if (!features) return 0;
-            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_pob_0a5 || 0), 0);
-        },
-        tematica: "industria",
-        type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB y TIFF",
-        threshold: "",
-        year: null,
-        enabled: true,
-        colonias: true,
-        dataProcesssing: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_infantes_vulnerables_industria !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.porcentaje_infantes_vulnerables_industria = Math.round(feature.properties.porcentaje_infantes_vulnerables_industria * 100);
-            });
-            return data;
-        },
-        formatValue: (x: number) => {
-            return formatNumber(x, 0) + "%"
-        },
-        colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (data) =>
-            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
-        selectionCard: (data) => {
-            return (
-            <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
-                <br/>
-                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
-            </>
-            );
-        }
-    },
-    adultos_vulnerables_industria: {
-        title: "Adultos mayores expuestos a industrias contaminantes",
-        description: "% de infantes y adultos mayores que tienen en un radio de 5 km al menos 1 industria",
-        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
-        property: "porcentaje_adultos_mayores_vulnerables_industria",
-        propertyAbsolute: "total_adultos_mayores_vulnerables_industria",
-        juarezTotal: (data) => {
-            const features = Array.isArray(data) ? data : data?.features;
-            if (!features) return 0;
-            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_pob_60 || 0), 0);
-        },
-        tematica: "industria",
-        type: "Continua",
-        is_lineLayer: false,
-        visualization_type: "Velocimetro",
-        geographic_unit: "AGEB y TIFF",
-        threshold: "",
-        year: null,
-        enabled: true,
-        colonias: true,
-        dataProcesssing: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_adultos_mayores_vulnerables_industria !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.porcentaje_adultos_mayores_vulnerables_industria = Math.round(feature.properties.porcentaje_adultos_mayores_vulnerables_industria * 100);
-            });
-            return data;
-        },
-        formatValue: (x: number) => {
-            return formatNumber(x, 0) + "%"
-        },
-        colors:["#f6ede9", "#8c5c47"],
-        juarezCard: (data) =>
-            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
-        selectionCard: (data) => {
-            return (
-            <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>
-                <br/>
-                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
-            </>
-            );
-        }
-    },
-    //EJEMPLO DE CAPA
     industrias: {
         capa: true,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -562,7 +432,6 @@ export const LAYERS: any = {
         property: "sector",
         tematica: "industria",
         type: "Categorica",
-        is_lineLayer: false,
         is_PointLayer: true,
         enabled: true,
         colonias: false,
@@ -588,7 +457,7 @@ export const LAYERS: any = {
         colors: [ "#e85e00", "#f4a829", "#db9217", "#a44809"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion de industrias en Ciudad Juárez</span>,
+            <span>X</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -682,7 +551,6 @@ export const LAYERS: any = {
         },
     ]
     },
-    //EJEMPLO DE CAPA
     industrias_contaminantes: {
         //url de layer
         capa: true,
@@ -694,9 +562,7 @@ export const LAYERS: any = {
         property: "ID",
         tematica: "industria",
         type: "Continua",
-        is_lineLayer: false,
         is_PointLayer: true,
-        contaminantes: ['ID', 'CVEGEO', 'release', 'bin'],
         enabled: true,
         colonias: false,
         dataProcesssing: (data: any) => {
@@ -709,7 +575,7 @@ export const LAYERS: any = {
         colors:["#a03a2dff", "#a72e19ff"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripción de industrias en Ciudad Juárez</span>,
+            <span>x</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -941,13 +807,127 @@ export const LAYERS: any = {
         }
         ]
     },
+    hogares_vulnerables_industria: {
+        title: "Hogares expuestos a industrias contaminantes",
+        description: "Porcentaje de hogares cercanos a una industria que emite contaminantes in-situ.",
+        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
+        property: "porcentaje_viviendas_vulnerables_industria",
+        propertyAbsolute: "total_viviendas_vulnerables_industria",
+        juarezTotal: (data: any) => {
+            const features = Array.isArray(data) ? data : data?.features;
+            if (!features) return 0;
+            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_viviendas || 0), 0);
+        },
+        tematica: "industria",
+        type: "Continua",
+        enabled: true,
+        colonias: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_viviendas_vulnerables_industria !== null );
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_viviendas_vulnerables_industria = Math.round(feature.properties.porcentaje_viviendas_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"],
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
+        selectionCard: (data) => {
+            return (
+            <>
+                <span>En {data.introText} hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
+                <br/>
+                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+            </>
+            );
+        },
+    },
+    infantes_vulnerables_industria: {
+        title: "Infancias expuestas a industrias contaminantes",
+        description: "Porcentaje de niños menores a 5 años cercanos a una industria que emite contaminantes in-situ.",
+        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
+        property: "porcentaje_infantes_vulnerables_industria",
+        propertyAbsolute: "total_infantes_vulnerables_industria",
+        juarezTotal: (data) => {
+            const features = Array.isArray(data) ? data : data?.features;
+            if (!features) return 0;
+            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_pob_0a5 || 0), 0);
+        },
+        tematica: "industria",
+        type: "Continua",
+        enabled: true,
+        colonias: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_infantes_vulnerables_industria !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_infantes_vulnerables_industria = Math.round(feature.properties.porcentaje_infantes_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"],
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
+            return (
+            <>
+                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <br/>
+                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
+            </>
+            );
+        }
+    },
+    adultos_vulnerables_industria: {
+        title: "Adultos mayores expuestos a industrias contaminantes",
+        description: "Porcentaje de adultos mayores a 60 años cercanos a una industria que emite contaminantes in-situ.",
+        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
+        property: "porcentaje_adultos_mayores_vulnerables_industria",
+        propertyAbsolute: "total_adultos_mayores_vulnerables_industria",
+        juarezTotal: (data) => {
+            const features = Array.isArray(data) ? data : data?.features;
+            if (!features) return 0;
+            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_pob_60 || 0), 0);
+        },
+        tematica: "industria",
+        type: "Continua",
+        enabled: true,
+        colonias: true,
+        dataProcesssing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.porcentaje_adultos_mayores_vulnerables_industria !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.porcentaje_adultos_mayores_vulnerables_industria = Math.round(feature.properties.porcentaje_adultos_mayores_vulnerables_industria * 100);
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0) + "%"
+        },
+        colors:["#f6ede9", "#8c5c47"],
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
+        selectionCard: (data) => {
+            return (
+            <>
+                <span>En {data.introText} hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>
+                <br/>
+                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+            </>
+            );
+        }
+    },
     //capa
     equipamientos: {
         capa: true,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson?${REACT_APP_SAS_TOKEN}`,
         title: "Equipamientos", //"Número y tipos de equipamientos",
-        description: "Numero de equipamientos por tipo (salud, educación, recreativos y cuidados)",
-        source: "Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez",
+        description: "Numero de equipamientos por tipo: - salud (hospitales y clínicas) – educación (escuelas primarias, secundarias,...) – espacios recreativos (bibliotecas, XXXX) – parques",
+        source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez.",
         property: "group",
         tematica: "equipamiento",
         type: "Categorica",
@@ -961,7 +941,7 @@ export const LAYERS: any = {
             "parque": "",
         },
         categoricalLegend: [
-            { value: "educacion", label: "Educación", color: "#e9c46a" },
+            { value: "educacion", label: "Educación y cuidados", color: "#e9c46a" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
             { value: "parque", label: "Parque", color: "#8ab17d" }
@@ -994,19 +974,15 @@ export const LAYERS: any = {
         colors: [ "#e9c46a", "#e76f51", "#8ab17d", "#4abfbd"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Descripcion de equipamientos</span>,
+            <span>En Ciudad Juárez los equipamientos se distribuyen de la siguiente forma:</span>,
         selectionCard: (data) => {
             return (
-            <>
-                <span>En {data.introText} la exposición a contaminantes industriales es de <strong>{data.avg}/km² </strong>.</span>
-                <br/>
-                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
-            </>
+            <></>
             );
         },
         graphs: [
         {
-            title: "Total de equipamientos por tipo",
+            //title: "Total de equipamientos por tipo",
             source: "Fuente de ejemplo",
             option: (data: any) => {
                 const equipamientos: any = {};
@@ -1143,7 +1119,7 @@ export const LAYERS: any = {
     },
     tiempo_recreativos: {
         title: "Tiempo promedio a espacios recreativos",
-        description: "Índice que mide el tiempo promedio de acceso a espacios recreativos.",
+        description: "X",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_parque",
         tematica: "equipamiento",
@@ -1176,7 +1152,7 @@ export const LAYERS: any = {
     },
     tiempo_hospitales: {
         title: "Tiempo promedio a hospitales o clínicas",
-        description: "Índice que mide el tiempo promedio de acceso a equipamientos de salud",
+        description: "X",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_clinica_hospital",
         tematica: "equipamiento",
@@ -1209,7 +1185,7 @@ export const LAYERS: any = {
     },
     tiempo_preparatorias: {
         title: "Tiempo promedio a preparatorias",
-        description: "Índice que mide el tiempo promedio de acceso a preparatorias",
+        description: "X",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_preparatoria",
         tematica: "equipamiento",
@@ -1307,7 +1283,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} el <strong>{data.avg}</strong> de los hogares tienen acceso a hospitales o clínicas en 30 minutos.</span>
+                <span>En {data.introText} hay <strong>{data.num}</strong> hogares con al menos un hospital o clínica a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
@@ -1650,71 +1626,6 @@ export const LAYERS: any = {
     },
 }
 
-//segun canva
-export type ComplementaryKey = keyof typeof COMPLEMENTARY_LAYERS;
-export const COMPLEMENTARY_LAYERS = {
-    hidrografia: {
-        title: "hidrografía",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
-        parent: null,
-    },
-    equipamientos: {
-        title: "equipamientos",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
-        parent: null,
-    },
-    salud: {
-        title: "salud",
-        url: "...",
-        enabled: false,
-        parent: "equipamientos",
-    },
-    educacion:{
-        title: "educación",
-        url: "...",
-        enabled: false,
-        parent: "equipamientos"
-    },
-    recreacion: {
-        title: "recreación",
-        url: "...",
-        enabled: false,
-        parent: "equipamientos"
-    },
-    industrias: {
-        title: "industrias",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
-        parent: null,
-    },
-    parques_industriales: {
-        title: "parques industriales",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: true,
-        parent: "industrias"
-    },
-    maquilas: {
-        title: "maquilas",
-        url: "...",
-        enabled: false,
-        parent: "industrias"
-    },
-    fabricas: {
-        title: "fábricas",
-        url: "...",
-        enabled: false,
-        parent: "industrias"
-    },
-    vialidades: {
-        title: "vialidades",
-        url: "...",
-        enabled: false,
-        parent: null,
-    },
-}
-
 //segun codebook
 export const CAPAS_BASE_CODEBOOK = {
     hidrografia: {
@@ -1726,6 +1637,7 @@ export const CAPAS_BASE_CODEBOOK = {
         field: null,
         colors: [],
         hoverInfo: false,
+        categoryColors: {}
     },
     /*industrias: {
         title: "industrias contaminantes",
@@ -1746,8 +1658,10 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: false,
         //field: "ID_COLO",
         field: "",
-        colors: [],
+        colors: ["#272a28"],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        categoryColors: {}
     },
     limite_urbano: {
         title: "límite urbano",
@@ -1758,6 +1672,8 @@ export const CAPAS_BASE_CODEBOOK = {
         field: null,
         colors: [],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        categoryColors: {}
     },
     vias_principales: {
         title: "vias principales",
@@ -1768,56 +1684,211 @@ export const CAPAS_BASE_CODEBOOK = {
         field: null,
         colors: [],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return  data},
+        categoryColors: {}
     },
     equipamientos: {
         title: "equipamientos",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
+        enabled: true,
         parent: null,
-        isPointLayer: false,
-        field: null,
+        isPointLayer: true,
+        field: "group",
         colors: [],
+        categoryColors: {
+            "educacion": "#e9c46a",
+            "salud": "#4abfbd",
+            "recreativo": "#e76f51",
+            "parque": "#8ab17d"
+        },
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        dataProcessing: (data: any) => {
+            const equipamiento_Groups: any = {
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
+                "auditorio": "recreativo",
+                "biblioteca": "recreativo",
+                "cine": "recreativo",
+                "parque": "parque",
+                "unidad_deportiva": "recreativo",
+                "centro_salud": "salud",
+                "hospital": "salud",
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+            });
+            return data;
+        }
     },
     educacion:{
         title: "educación",
-        url: "...",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
+        enabled: true,
         parent: "equipamientos",
-        isPointLayer: false,
-        field: null,
-        colors: [],
+        dataFiltering: (data: any) => {
+            const filteredData = data.features.filter((feature: any) => feature.properties.group === "educacion");
+            return {
+                ...data,
+                features: filteredData
+            };
+        },
+        isPointLayer: true,
+        field: "group",
+        colors: ["#e9c46a"],
         hoverInfo: false,
+        dataProcessing: (data: any) => {
+            const equipamiento_Groups: any = {
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
+                "auditorio": "recreativo",
+                "biblioteca": "recreativo",
+                "cine": "recreativo",
+                "parque": "parque",
+                "unidad_deportiva": "recreativo",
+                "centro_salud": "salud",
+                "hospital": "salud",
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+            });
+            data.features = data.features.filter((feature: any) => feature.properties.group === "educacion");
+            return data;
+        },
+        categoryColors: {}
     },
     salud: {
         title: "salud",
-        url: "...",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
+        enabled: true,
         parent: "equipamientos",
-        isPointLayer: false,
-        field: null,
-        colors: [],
+        isPointLayer: true,
+        field: "group",
+        colors: ["#4abfbd"],
         hoverInfo: false,
+        dataFiltering: (data: any) => {
+            const filteredData = data.features.filter((feature: any) => feature.properties.group === "salud");
+            return {
+                ...data,
+                features: filteredData
+            };
+        },
+        dataProcessing: (data: any) => {
+            const equipamiento_Groups: any = {
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
+                "auditorio": "recreativo",
+                "biblioteca": "recreativo",
+                "cine": "recreativo",
+                "parque": "parque",
+                "unidad_deportiva": "recreativo",
+                "centro_salud": "salud",
+                "hospital": "salud",
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+            });
+            data.features = data.features.filter((feature: any) => feature.properties.group === "salud");
+            return data;
+        },
+        categoryColors: {}
     },
     recreacion: {
         title: "recreación",
-        url: "...",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
+        enabled: true,
         parent: "equipamientos",
-        isPointLayer: false,
-        field: null,
-        colors: [],
+        isPointLayer: true,
+        field: "group",
+        colors: ["#e76f51"],
         hoverInfo: false,
+        dataFiltering: (data: any) => {
+            const filteredData = data.features.filter((feature: any) => feature.properties.group === "recreativo");
+            return {
+                ...data,
+                features: filteredData
+            };
+        },
+        dataProcessing: (data: any) => {
+            const equipamiento_Groups: any = {
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
+                "auditorio": "recreativo",
+                "biblioteca": "recreativo",
+                "cine": "recreativo",
+                "parque": "parque",
+                "unidad_deportiva": "recreativo",
+                "centro_salud": "salud",
+                "hospital": "salud",
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+            });
+            data.features = data.features.filter((feature: any) => feature.properties.group === "recreativo");
+            return data;
+        },
+        categoryColors: {}
     },
     parques: {
         title: "parques",
-        url: "...",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
+        enabled: true,
         parent: "equipamientos",
-        isPointLayer: false,
-        field: null,
-        colors: [],
+        isPointLayer: true,
+        field: "group",
+        colors: ["#8ab17d"],
         hoverInfo: false,
+        dataFiltering: (data: any) => {
+            const filteredData = data.features.filter((feature: any) => feature.properties.group === "parque");
+            return {
+                ...data,
+                features: filteredData
+            };
+        },
+        dataProcessing: (data: any) => {
+            const equipamiento_Groups: any = {
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
+                "auditorio": "recreativo",
+                "biblioteca": "recreativo",
+                "cine": "recreativo",
+                "parque": "parque",
+                "unidad_deportiva": "recreativo",
+                "centro_salud": "salud",
+                "hospital": "salud",
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+            });
+            data.features = data.features.filter((feature: any) => feature.properties.group === "parque");
+            return data;
+        },
+        categoryColors: {}
     },
     vias_ferreas: {
         title: "vías férreas",
@@ -1825,19 +1896,23 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: false,
         parent: null,
         isPointLayer: false,
-        field: null,
+        field: "group",
         colors: [],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data },
+        categoryColors: {}
     },
     islas_calor: {
         title: "islas de calor",
-        url: "...",
-        enabled: false,
+        url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson`,
+        enabled: true,
         parent: null,
         isPointLayer: false,
-        field: null,
-        colors: [],
+        field: "lst",
+        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data },
+        categoryColors: {}
     },
     calidad_aire: {
         title: "calidad del aire",
@@ -1848,6 +1923,8 @@ export const CAPAS_BASE_CODEBOOK = {
         field: null,
         colors: [],
         hoverInfo: false,
+        dataFiltering: (data: any) => { return data },
+        categoryColors: {}
     },
 }
 
