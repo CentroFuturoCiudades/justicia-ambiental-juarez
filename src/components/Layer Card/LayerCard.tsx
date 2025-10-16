@@ -29,7 +29,6 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
 
     const [isMobile] = useMediaQuery('(max-width: 800px)');
     const [graphs, setGraphs] = useState([]); // if there is more than 1 graph
-    const [layerChange, setLayerChange] = useState(false);
 
     // ya no usa fetch, usa jsonData del context
     const renderGraphs = () => {
@@ -91,8 +90,8 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
         );
     }
 
-    console.log("average", average);
-    console.log("maplayerinstance positiveAvg", mapLayerInstance.positiveAvg);
+    //console.log("average", average);
+    //console.log("maplayerinstance positiveAvg", mapLayerInstance.positiveAvg);
     const category = layer.getAvgThreshold ? layer.getAvgThreshold(layer.filter ? mapLayerInstance.positiveAvg : average) : null;
     const description = mapLayerInstance.getDescription(
         selected, //agebs/colonias
@@ -133,6 +132,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                         (jsonData ? <div className="graph-container">{graphs}</div> : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
                      }                    
                 </div>
+                {/*<div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>*/}
             </div>
         </div>
     );
