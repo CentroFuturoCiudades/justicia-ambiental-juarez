@@ -290,8 +290,6 @@ export const LAYERS: any = {
             return (
             <>
                 <span>{capitalize(data.introText)} tiene un índice de vulnerabilidad al calor de <strong>{data.avg}</strong>, lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
-                {/*<br/>
-                <span>Este índice esta por <strong>{data.compared}</strong> del índice promedio de Ciudad Juarez.</span>*/}
             </>
             );
         },

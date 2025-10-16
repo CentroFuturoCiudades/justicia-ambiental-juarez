@@ -48,7 +48,7 @@ const ThemeLayer = () => {
     };
 
     //useEffect json for graphs
-    useEffect(() => {
+    /*useEffect(() => {
         setJsonData(null);
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
         if (!selectedLayer || !layer?.capa || !tematicaData) return;
@@ -64,7 +64,7 @@ const ThemeLayer = () => {
         } else {
             setJsonData(tematicaData.features);
         }
-    }, [tematicaData]);
+    }, [tematicaData, selectedLayer]);*/
 
 
 
@@ -76,6 +76,7 @@ const ThemeLayer = () => {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
+            setJsonData(null);
             return;
         };
 
@@ -87,6 +88,7 @@ const ThemeLayer = () => {
         if(!layer.url) {
             setMapLayerInstance(null);
             setTematicaData(null);
+            setJsonData(null);
         }
 
         const fetchData = async () => {
@@ -127,8 +129,23 @@ const ThemeLayer = () => {
                 if(layer?.url) {
                     setTematicaData(null);
                     setMapLayerInstance(null);
+                    setJsonData(null);
                 }
                 setTematicaData(data);
+
+                //2do fetch de datos para graphs (si hay, solo para las capas municipales)
+                if(layer.graphs){
+                    if(layer?.jsonurl){
+                        fetch(layer.jsonurl)
+                        .then(response => response.json())
+                        .then(data => {
+                            setJsonData(data);
+                        })
+                        .catch(err => console.error("Error fetching jsonData:", err));
+                    } else {
+                        setJsonData(data.features);
+                    }
+                }
                 // Crea instancia de MapLayer
                 const mapLayerInstance = new MapLayer({
                     opacity: 1,
