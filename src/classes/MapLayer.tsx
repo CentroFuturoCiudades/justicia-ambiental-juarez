@@ -35,10 +35,11 @@ export class MapLayer {
   domain?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {}, categoryLegend = [] }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {}, categoryLegend = [] }: {
     opacity?: number;
     colors?: string[];
     title?: string;
+    theme?: string;
     amountOfColors?: number;
     formatValue?: (value: number) => string;
     categorical?: boolean;
@@ -48,6 +49,7 @@ export class MapLayer {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
+    this.theme = theme;
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
     this.categorical = categorical;
@@ -74,8 +76,9 @@ export class MapLayer {
     return filteredData;
   }
 
-  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null): GeoJsonLayer => {
+  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean): GeoJsonLayer => {
 
+    //console.log("ispickable", isPickable);
 
     this.isLineLayer = true;
     let getColor: any;
@@ -83,8 +86,6 @@ export class MapLayer {
     const categorias = Array.from(
       new Set(featuresForStats.map((f: any) => f.properties[field]))
     ).filter((c) => c != null);
-    //console.log("categorias", categorias);
-    //console.log("featuresForStats", featuresForStats);
 
     if (field) {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
@@ -170,6 +171,7 @@ export class MapLayer {
         (feature: any): [number, number, number, number?] => {
 
           const item = feature.properties[field];
+          //console.log("item clicked", item);
           //para valores de 0, poner gris claro
           if (item == 0) {
             return [230, 230, 230, 200]; //gris con poca opacidad
@@ -195,7 +197,7 @@ export class MapLayer {
     const geojsonLayer = new GeoJsonLayer({
       id: "geojson-layer",
       data: data,
-      pickable: selectionMode === "radius" ? false : true,
+      pickable: (selectionMode === "radius" || !isPickable) ? false : true,
       filled: true,
       stroked: true,
       opacity: this.opacity,
@@ -286,7 +288,7 @@ export class MapLayer {
       const value = f.properties?.[property];
       return sum + value;
     }, 0) : 0;
-    console.log('en juarez hay un total de', this.absTotal_juarez, 'hogares y la suma de', property, 'es de', this.absTotal_property);
+    //console.log('en juarez hay un total de', this.absTotal_juarez, 'hogares y la suma de', property, 'es de', this.absTotal_property);
     this.averageJuarez = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
 
     // If no selected AGEBS/Colonias, return overall average
@@ -296,19 +298,21 @@ export class MapLayer {
 
     //If there are selected AGEBS/Colonias, get their average
     const idField = key === "agebs" ? "index" : "nombre";
+    console.log("selected", selected);
+
     const selectedValues = features
     .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
-    //.map(f => f.properties?.[property])
-    //.filter(value => value != null);
-    .filter(f => f.properties?.[property] != null)
+    //.filter(f => f.properties?.[property] != null)
 
-    //console.log("selectedvalues", selectedValues);
+    console.log("selectedvalues", selectedValues);
 
     const sum = selectedValues.reduce((sum: number, f: Feature) => sum + f.properties?.[property] || 0, 0);
     this.absTotal_property = sum;
-    // (this.absTotal_property / this.absTotal_juarez) * 100 o  (this.absTotal_property / this.absTotalAGEB) * 100
-    //const average = totalJuarez ? (this.absTotal_property / this.absTotal_juarez) * 100 : sum / selectedValues.length;
-    const average = filterFn ? sum / selectedValues.length :totalJuarez ? (this.absTotal_property / totalJuarez(selectedValues)) * 100 : sum / selectedValues.length;
+
+    // if absolutes, divide by totalJuarez(selected), else divide by selectedValues.length
+    const divisor = totalJuarez ? totalJuarez(selectedValues) : selectedValues.length;
+    //if divisor is 0, average is 0 (to avoid division by 0 and nans)
+    const average = divisor > 0 ? (totalJuarez ? (this.absTotal_property / divisor) * 100 : sum / divisor) : 0;
 
     /*const average = selectedValues.length > 0
       ? selectedValues.reduce((sum: number, num: number) => sum + num, 0) / selectedValues.length
@@ -333,7 +337,7 @@ export class MapLayer {
 
     const cardData = {
       avg: this.formatValue(average),
-      num: (this.absTotal_property).toLocaleString(),
+      num: Math.round(this.absTotal_property).toLocaleString(),
       //category: descriptionCategories?.[Math.trunc(average)] || "",
       category: category || "",
       introText: selected.length >= 1 ? introText : "",

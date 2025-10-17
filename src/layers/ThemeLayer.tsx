@@ -18,6 +18,7 @@ const ThemeLayer = () => {
         selectionMode, setSelectionMode,
         selectedAGEBS, setSelectedAGEBS,
         selectedColonias, setSelectedColonias,
+        selectedPoint, setSelectedPoint,
         filteredFeatures,
         setLayerTooltip,
         setJsonData,
@@ -42,8 +43,16 @@ const ThemeLayer = () => {
                 y: info.y,
                 content: info.object.properties
             });
+            //console.log("prev:", selectedPoint, "clicked ID:", info.object.properties.ID);
+            //setSelectedPoint(prev => prev === info.object.properties.ID ? null : info.object.properties.ID);
+            //console.log("selected point:", selectedPoint);
+            setSelectedPoint(info.object.properties.ID);
+            /*setSelectedPoint(prev =>
+            prev === info.object.properties.ID ? null : info.object.properties.ID
+        );*/
         } else {
             setLayerTooltip(null);
+            setSelectedPoint(null);
         }
     };
 
@@ -71,6 +80,7 @@ const ThemeLayer = () => {
 
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
+        setLayerTooltip(null); //cerrar tooltip al cambiar de capa
 
         if( !selectedLayer) {
             setTematicaLayer(null);
@@ -90,6 +100,7 @@ const ThemeLayer = () => {
             setTematicaData(null);
             setJsonData(null);
         }
+
 
         const fetchData = async () => {
             let jsonData;
@@ -114,6 +125,7 @@ const ThemeLayer = () => {
             if ( layer?.dataProcesssing ) { 
                 jsonData = layer.dataProcesssing(jsonData); //aplica cambios a la copia
             }
+            console.log("Fetched capa data:", jsonData);
 
 
             // Data de la capa: todos los features y los filtrados (en caso de que este activado el radio)
@@ -139,7 +151,9 @@ const ThemeLayer = () => {
                         fetch(layer.jsonurl)
                         .then(response => response.json())
                         .then(data => {
-                            setJsonData(data);
+                            const processedData = layer.jsonDataProcessing ? layer.jsonDataProcessing(data) : data;
+                            //console.log("processed json data", processedData);
+                            setJsonData(processedData);
                         })
                         .catch(err => console.error("Error fetching jsonData:", err));
                     } else {
@@ -151,6 +165,7 @@ const ThemeLayer = () => {
                     opacity: 1,
                     colors: layer?.colors,
                     title: layer.title,
+                    theme: layer?.tematica,
                     amountOfColors: layer?.amountOfColors,
                     formatValue: layer.formatValue,
                     categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
@@ -164,8 +179,10 @@ const ThemeLayer = () => {
                     layer?.is_PointLayer || false,
                     layer?.trimOutliers || false,
                     layer?.url ? (selectedLayer === "industrias_contaminantes" ? handleClick : () => {}) : handleSelectedElements,
+                    //layer?.capa ? (layer?.featureInfo ? handleClick : () => {}) : handleSelectedElements,
                     activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
-                    selectionMode
+                    selectionMode,
+                    layer?.capa ? layer.pickable : true,
                 );
                 setTematicaLayer(geoJsonLayer);
                 setMapLayerInstance(mapLayerInstance);

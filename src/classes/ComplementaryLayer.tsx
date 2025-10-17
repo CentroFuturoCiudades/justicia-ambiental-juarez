@@ -103,7 +103,7 @@ export class ComplementaryLayer {
             } : undefined,
             pointRadiusMinPixels: isPointLayer ? 4 : undefined,
             pointRadiusMaxPixels: isPointLayer ? 60 : undefined,
-            onHover: (info) => {
+            /*onHover: (info) => {
                 if (info.object) {
                     // Mostrar tooltip
                     handleClick?.(info);
@@ -111,7 +111,14 @@ export class ComplementaryLayer {
                     // Ocultar tooltip
                     handleClick?.(null);
                 }
-            }
+            }*/
+           onClick: (info) => {
+                if (info.object) {
+                    handleClick?.(info);
+                } else {
+                    handleClick?.(null);
+                }
+            },
         });
     }
 }

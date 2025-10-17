@@ -27,7 +27,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
    if(!mapLayerInstance) return null;
     //if(!layer) return null;
     if(!tematicaData) return null;
-    if(title === "Industrias contaminantes") return null;
+    //if(title === "Industrias contaminantes") return null;
 
   // construct the amount of colors based on the colors provided
   const domain = categorical ? ranges.map((category, index) => category) : ranges.map((range) => range[1]);

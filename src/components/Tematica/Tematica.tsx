@@ -14,7 +14,8 @@ const Tematica = () => {
         setSelectedLayer, 
         setActiveLayerKey, 
         mapLayers, 
-        setSelectionMode 
+        setSelectionMode,
+        setSelectedPoint
     } = useAppContext();
 
     const [isMobile] = useMediaQuery('(max-width: 800px)');
@@ -25,9 +26,17 @@ const Tematica = () => {
         - Se establece el modo de selección
     */
     const handleLayerToggle = (layerKey: LayerKey) => {
-        setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
-        setActiveLayerKey( layerKey === selectedLayer ? null : "agebs");
-        setSelectionMode( layerKey === selectedLayer ? null : "agebs");
+        if (selectedLayer === layerKey) {
+            setSelectedLayer("");
+            setActiveLayerKey(null);
+            setSelectionMode(null);
+            setSelectedPoint(null);
+        } else {
+            setSelectedLayer(layerKey);
+            setActiveLayerKey(prev => prev ?? "agebs");
+            setSelectionMode(prev => prev ?? "agebs");
+            setSelectedPoint(null);
+        }
     }
 
     return (

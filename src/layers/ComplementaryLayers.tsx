@@ -52,7 +52,7 @@ const ComplementaryLayers = () => {
                     data = complementary.dataFiltering(data);
 
                     const complementaryLayer = new ComplementaryLayer({ colors: complementary?.colors, title: complementary.title });
-                    const newLayer = complementaryLayer.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.hoverInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
+                    const newLayer = complementaryLayer.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.clickInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
                     setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }) );
                     return;
                 }
@@ -67,19 +67,30 @@ const ComplementaryLayers = () => {
                 const urlBlob = `${url}?${REACT_APP_SAS_TOKEN}`;
 
                 fetch(urlBlob)
+                .then(res => res.json())
+                .then(data => {
+                    const complementaryLayer = new ComplementaryLayer({ colors: complementary?.colors || ["#f4f9ff", "#08316b"], title: complementary.title });
+                    //for filtering or processing data before creating layer
+                    if(complementary?.dataProcessing) {
+                        data = complementary.dataProcessing(data);
+                    }
+                    const newLayer = complementaryLayer.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.clickInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
+                    setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
+                })
+                .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
+
+                //segundo fetch de jsonurl si exise (para tooltip ej.industrias contaminantes)
+                if(complementary?.jsonurl) {
+                    fetch(`${complementary.jsonurl}?${REACT_APP_SAS_TOKEN}`)
                     .then(res => res.json())
                     .then(data => {
-                        const complementaryLayer = new ComplementaryLayer({ colors: complementary?.colors || ["#f4f9ff", "#08316b"], title: complementary.title });
-                        //for filtering or processing data before creating layer
-                        if(complementary?.dataProcessing) {
-                            data = complementary.dataProcessing(data);
-                        }
-                        const newLayer = complementaryLayer.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.hoverInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
-                        setBaseLayers(prev => ({ ...prev, [layerKey]: newLayer }));
+                        complementary.jsonData = data;
                     })
-                    .catch(error => console.error(`Error loading GeoJSON for layer ${layerKey}:`, error));
+                    .catch(error => console.error(`Error loading jsonurl for layer ${layerKey}:`, error));
                 }
-            });
+                console.log('complementary jsondata', complementary.jsonData);
+            }
+        });
         }, [selectedBaseLayers]);
 
     return { layers: Object.values(baseLayers) };
