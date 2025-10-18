@@ -71,7 +71,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
     //if ( !mapLayerInstance || !layer || selectedLayer === layer) return;
     if(!mapLayerInstance) return null;
     if(!layer) return null;
-    if(!tematicaData) return null;
+    if(!tematicaData || !tematicaData.allFeatures || !tematicaData.allFeatures.length) return null;
 
     const themeKey = layer?.tematica;
     let selected: string[] = [];
@@ -103,7 +103,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
         category, //category string
     );
 
-    if(average === null || isNaN(average)) return null;
+    //if(average === null || isNaN(average)) return null;
 
 
     return (
@@ -114,9 +114,10 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                     `${layer?.title} por ${activeLayerKey === "agebs" ? "AGEBS" : "Colonias"}`}
                 </p>
                 <span
-                    onMouseEnter={() => onInfoHover(true)}
-                    onMouseLeave={() => onInfoHover(false)}
-                    onClick={() => isMobile ? onInfoHover(!infoCardOpen) : null}
+                    //onMouseEnter={() => onInfoHover(prev => !prev)}
+                    //onMouseLeave={() => onInfoHover(false)}
+                    onMouseEnter={() => onInfoHover(!infoCardOpen)}
+                    onClick={() => onInfoHover(!infoCardOpen)}
 
                     style={{ display: "inline-block", cursor: "pointer" }}
                 >
@@ -127,7 +128,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                 <div className="layerCard__body">
                     <p>{description}</p>
                 </div>
-                <div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
+                <div ref={rangeGraphRef} style={{  padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
                      { layer.graphs ? 
                         (jsonData ? <div className="graph-container">{graphs}</div> : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
                      }                    

@@ -44,6 +44,8 @@ interface AppContextI {
     setSelectedAGEBS: Dispatch<SetStateAction<string[]>>;
     selectedColonias: string[];
     setSelectedColonias: Dispatch<SetStateAction<string[]>>;
+    selectedPoint: number | null;
+    setSelectedPoint: Dispatch<SetStateAction<number | null>>;
     //
     selectedColonias_SET: Set<string>;
     setSelectedColonias_SET: Dispatch<SetStateAction<Set<string>>>;
@@ -102,6 +104,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
+    const [selectedPoint, setSelectedPoint] = useState<number | null>(null);
     //
     const [selectedColonias_SET, setSelectedColonias_SET] = useState<Set<string>>(new Set());
     const [coloniasData, setColoniasData] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
@@ -147,6 +150,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setSelectedAGEBS,
             selectedColonias,
             setSelectedColonias,
+            selectedPoint,
+            setSelectedPoint,
             selectedColonias_SET,
             setSelectedColonias_SET,
             coloniasData,

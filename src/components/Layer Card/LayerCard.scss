@@ -3,6 +3,8 @@
   padding: min(1.1dvh, 0.7dvw);
   border: 0.15em solid;
   border-radius: var(--border-radius);
+  //position: relative;
+  //overflow: visible;
 
   &__header {
     font-size: var(--font-size-subtitle);
@@ -53,6 +55,7 @@
   }
   &__legend {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     margin-top: 0.5dvh;
     gap: 0.5dvw;

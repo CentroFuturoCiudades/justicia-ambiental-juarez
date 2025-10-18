@@ -25,9 +25,14 @@ export class ComplementaryLayer {
     this.title = title;
   }
 
+  async loadData(url: string) {
+    const data = await fetch(url);
+    return await data.json();
+  }
 
-    getLayer(data: any, field: string, isPointLayer: boolean, handleClick?: (info: any) => void, categoryColors?: any): GeoJsonLayer {
-        console.log('categoryColors', categoryColors);
+
+    getLayer(data: any, field: string, isPointLayer: boolean, isLineLayer: boolean, handleClick?: (info: any) => void, categoryColors?: any): GeoJsonLayer {
+        //console.log('data', data);
         let getColor: any;
         let mappedData: number[] = data.features.map((item: any) => { return item.properties[field] });
         mappedData = mappedData.filter((value) => value !== null && value !== undefined && !isNaN(value));
@@ -94,16 +99,16 @@ export class ComplementaryLayer {
             id: `complementary-${this.title}`,
             data: data,
             pickable: handleClick ? true : false,
-            filled: true,
+            filled: isLineLayer ? false : true,
+            stroked: true,
             getFillColor: getColor,
-            getLineColor: [255, 255, 255, 180],
-            getPointRadius: isPointLayer ? f => {
-                const value = f.properties.release;
-                return value ? Math.sqrt(value) * 10 : 4;
-            } : undefined,
+            //getLineColor: [255, 255, 255, 180],
+            getLineColor: getColor,
+            getLineWidth: 1,
+            lineWidthMinPixels: isLineLayer ? 4 : undefined,
             pointRadiusMinPixels: isPointLayer ? 4 : undefined,
-            pointRadiusMaxPixels: isPointLayer ? 60 : undefined,
-            onHover: (info) => {
+            //pointRadiusMaxPixels: isPointLayer ? 60 : undefined,
+            /*onHover: (info) => {
                 if (info.object) {
                     // Mostrar tooltip
                     handleClick?.(info);
@@ -111,7 +116,14 @@ export class ComplementaryLayer {
                     // Ocultar tooltip
                     handleClick?.(null);
                 }
-            }
+            }*/
+           onClick: (info) => {
+                if (info.object) {
+                    handleClick?.(info);
+                } else {
+                    handleClick?.(null);
+                }
+            },
         });
     }
 }

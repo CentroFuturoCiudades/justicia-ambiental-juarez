@@ -35,6 +35,7 @@ const Visor = () => {
         viewState, setViewState, 
         agebsGeoJson,setAgebsGeoJson,
         setColoniasGeoJson,
+        selectedPoint, setSelectedPoint,
         mapLayerInstance,
         tematicaData,
         selectedLayer,  
@@ -136,7 +137,7 @@ const Visor = () => {
 
             {/* Panel izquierdo */}
             {!isMobile && (
-                <Box className="visor__leftPanel">
+                <Box className="visor__leftPanel" scrollbar="hidden">
                     <Box className="visor__panelContent" scrollbar="hidden">
 
                         <div className="visor__title">
@@ -157,6 +158,7 @@ const Visor = () => {
                                 rangeGraphRef={rangeGraphRef}
                                 onInfoHover={setInfoCardOpen}
                                 layerCardRef={layerCardRef}
+                                infoCardOpen={infoCardOpen}
                             />
                         )}
 
@@ -180,8 +182,10 @@ const Visor = () => {
                     onClick={info => {
                         if (!info.object) {
                             setLayerTooltip(null);
+                            setSelectedPoint(null);
                         }
                     }}
+                    onDrag={() => setSelectedPoint(null)}
                 >
                     <Map
                         mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
@@ -243,7 +247,7 @@ const Visor = () => {
                             { activeLayerKey === "colonias" && <BusquedaColonia /> }
                         </div>
 
-                        {selectedLayer && mapLayerInstance && tematicaData&& selectedLayer !== "industrias_contaminantes" && (
+                        {selectedLayer && mapLayerInstance && tematicaData && (
                             <div className="visor__legend">
                                 {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle)}
                             </div>
@@ -274,7 +278,7 @@ const Visor = () => {
                     selectedLayerData={selectedLayerData}
                 />
                 
-                {layerTooltip && selectedLayer === "industrias_contaminantes" &&
+                {layerTooltip && selectedPoint &&
                     <LayerTooltip />
                 }
             </div>

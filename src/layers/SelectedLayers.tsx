@@ -1,9 +1,10 @@
 import { useAppContext } from "../context/AppContext";
 import { GeoJsonLayer } from "deck.gl";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { dissolve } from "@turf/dissolve";
 import { flatten } from "@turf/flatten";
 import { featureCollection } from "@turf/turf";
+import { LAYERS } from "../utils/constants";
 
 /*
     SELECTED LAYER:
@@ -15,10 +16,18 @@ const SelectedLayer = () => {
         activeLayerKey,
         selectedAGEBS,
         selectedColonias,
-        selectionMode
+        selectedPoint, setSelectedPoint,
+        selectionMode,
+        selectedLayer,
+        tematicaData,
     } = useAppContext();
 
+    useEffect(() => {
+        console.log("selected point", selectedPoint);
+    }, [selectedPoint]);
+
    let dissolvedLayer: GeoJsonLayer[] = [];
+   let pointLayer: GeoJsonLayer[] | null = null;
 
     // Obtiene features a base de los identificadores (cvegeos/nombre) seleccionados para agebs/colonias
     const selectedGeometries = useMemo(() => {
@@ -28,6 +37,12 @@ const SelectedLayer = () => {
             (feature: any) => setSelected.has(isAgeb ? feature.properties.index : feature.properties.nombre)
         );
     }, [selectedAGEBS, selectedColonias, activeLayerKey]);
+
+    const pointFeature = useMemo(() => {
+        if(!selectedPoint || !tematicaData) return null;
+        const found = tematicaData.allFeatures.filter((f: any) => f.properties.ID === selectedPoint) || null;
+        return found
+    }, [selectedPoint]);
 
     // Si hubo agebs/colonias seleccionadas, se disuelven en una sola geometria y se hace la capa
     if(selectedGeometries && selectedGeometries.length > 0) {
@@ -39,7 +54,7 @@ const SelectedLayer = () => {
             dissolvedLayer = [new GeoJsonLayer({
                 id: 'dissolved',
                 data: dissolved,
-                pickable: false,
+                pickable: true,
                 filled: false,
                 getLineColor: [250, 200, 0, 255],
                 getLineWidth: 70,
@@ -49,7 +64,29 @@ const SelectedLayer = () => {
         }
     }
 
-    return { layers: selectionMode === "agebs" ? dissolvedLayer : [] };
+    // If a point is selected, create a layer for it
+    if(pointFeature && pointFeature.length > 0) {
+        const pointFc = featureCollection(pointFeature);
+        pointLayer = [new GeoJsonLayer({
+            id: 'point',
+            data: pointFc,
+            pickable: true,
+            filled: true,
+            getFillColor: [255, 0, 0, 255],
+            getRadius: 100,
+            pointRadiusMinPixels: 6,
+            onClick: () => setSelectedPoint(null),
+        })];
+    }
+
+    //return { layers: ((layer.capa && layer.pickable) || selectionMode === "agebs") ? dissolvedLayer : [] };
+    if(selectionMode === "agebs"){
+        return { layers: dissolvedLayer };
+    } else if(selectionMode === null && pointFeature){
+        return {layers: pointLayer}
+    } else {
+        return { layers: [] };
+    }
 }
 
 export default SelectedLayer;

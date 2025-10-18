@@ -6,7 +6,7 @@ import IconColonias from '/assets/Icono COLONIAS.png'
 import { LAYERS } from "../../utils/constants";
 
 const VisualizationTools = () => {
-    const { activeLayerKey, setActiveLayerKey, selectedLayer } = useAppContext();
+    const { activeLayerKey, setActiveLayerKey, selectedLayer, selectionMode } = useAppContext();
 
     return (
         <div>
@@ -16,7 +16,7 @@ const VisualizationTools = () => {
                         className={`button button--thin ${activeLayerKey === "agebs" ? "button--active" : ""}`} 
                         onClick={() => setActiveLayerKey("agebs")} 
                         style={{borderTopRightRadius: 0, borderBottomRightRadius: 0}}
-                        disabled={!activeLayerKey}
+                        disabled={!activeLayerKey || selectionMode === "radius"}
                     >
                         <img src={IconAGEBS} alt="AGEBS" />
                     </Button>
@@ -26,7 +26,7 @@ const VisualizationTools = () => {
                         className={`button button--thin ${activeLayerKey === "colonias" ? "button--active" : ""}`} 
                         onClick={() => setActiveLayerKey("colonias")} 
                         style={{borderTopLeftRadius: 0, borderBottomLeftRadius: 0}}
-                        disabled={!activeLayerKey || !LAYERS[selectedLayer].colonias}
+                        disabled={!activeLayerKey || !LAYERS[selectedLayer].colonias || selectionMode === "radius"}
                     >
                         <img src={IconColonias} alt="Colonias" />
                     </Button>

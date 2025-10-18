@@ -6,22 +6,22 @@ import { useEffect } from "react";
 
 
 const LayerTooltip = () => {
-    const { layerTooltip, jsonData } = useAppContext();
+    const { layerTooltip, jsonData, mapLayerInstance } = useAppContext();
 
 
-    if (!layerTooltip) return null;
+    if (!layerTooltip || !jsonData || !mapLayerInstance) return null;
     const industry = jsonData ? jsonData[layerTooltip.content.ID] : null;
 
     return (
         <div className="tooltip" style={{ left: layerTooltip.x, top: layerTooltip.y }} >
             {/*Math.round(layerTooltip.content.release) + " kg"*/}
-            <p className="tooltip__title"> {layerTooltip.content.ID} </p>
+            <p className="tooltip__title"> {layerTooltip.content.industries.join(", ")} </p>
             <Table.Root className="table" showColumnBorder>
                 <Table.Header style={{ backgroundColor: "var(--background-dark)" }}>
                     <Table.Row className="table__row">
                         <Table.ColumnHeader className="table__header" style={{color: "white"}}> Contaminante </Table.ColumnHeader>
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> On-Site </Table.ColumnHeader>
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Off-Site </Table.ColumnHeader>
+                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> En el sitio </Table.ColumnHeader>
+                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Fuera del sitio </Table.ColumnHeader>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -39,9 +39,9 @@ const LayerTooltip = () => {
                         </Table.Row>
                     ))}
                     <Table.Row>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> Total (kg) </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {industry.total_releases["On-site releases"]} </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {industry.total_releases["Off-site releases"]} </Table.Cell>
+                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> Total emitidos </Table.Cell>
+                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["On-site releases"])} kg </Table.Cell>
+                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["Off-site releases"])} kg </Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table.Root>

@@ -14,7 +14,8 @@ const Tematica = () => {
         setSelectedLayer, 
         setActiveLayerKey, 
         mapLayers, 
-        setSelectionMode 
+        setSelectionMode,
+        setSelectedPoint
     } = useAppContext();
 
     const [isMobile] = useMediaQuery('(max-width: 800px)');
@@ -25,9 +26,17 @@ const Tematica = () => {
         - Se establece el modo de selección
     */
     const handleLayerToggle = (layerKey: LayerKey) => {
-        setSelectedLayer(prev => prev === layerKey ? "" : layerKey);
-        setActiveLayerKey( layerKey === selectedLayer ? null : "agebs");
-        setSelectionMode( layerKey === selectedLayer ? null : "agebs");
+        if (selectedLayer === layerKey) {
+            setSelectedLayer("");
+            setActiveLayerKey(null);
+            setSelectionMode(null);
+            setSelectedPoint(null);
+        } else {
+            setSelectedLayer(layerKey);
+            setActiveLayerKey(prev => prev ?? "agebs");
+            setSelectionMode(prev => prev ?? "agebs");
+            setSelectedPoint(null);
+        }
     }
 
     return (
@@ -55,7 +64,15 @@ const Tematica = () => {
                                     </Accordion.ItemTrigger>
 
                                     <Accordion.ItemContent className="dropdown__subContent" >
-                                        {section.layers.map((layerKey) => (
+                                        {section.layers.map((layerKey, index) => {
+                                            const firstCapa = LAYERS[layerKey]?.capa && section.layers.findIndex(key => LAYERS[key]?.capa) === index;
+                                            return (
+                                            <>
+                                            {firstCapa && (
+                                                <div style={{ borderBottom: '2px solid black', padding:0 }}>
+                                                    Visión Global Ciudad Juárez
+                                                </div>
+                                            )}
                                             <Checkbox.Root 
                                                 cursor={"pointer"} 
                                                 variant={"solid"} 
@@ -82,7 +99,9 @@ const Tematica = () => {
                                                         </span>*/}
                                                 </Span>
                                             </Checkbox.Root>
-                                        ))}
+                                            </>
+                                            );
+                                        })}
                                     </Accordion.ItemContent>
                                 </Accordion.Item>
                             ))}
