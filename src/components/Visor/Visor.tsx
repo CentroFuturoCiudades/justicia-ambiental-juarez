@@ -137,7 +137,7 @@ const Visor = () => {
 
             {/* Panel izquierdo */}
             {!isMobile && (
-                <Box className="visor__leftPanel">
+                <Box className="visor__leftPanel" scrollbar="hidden">
                     <Box className="visor__panelContent" scrollbar="hidden">
 
                         <div className="visor__title">

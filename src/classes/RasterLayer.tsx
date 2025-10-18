@@ -33,7 +33,7 @@ export class RasterLayer {
     const img = await tiff.getImage();
     const [wX, wY, eX, eY] = img.getBoundingBox();
     const width = img.getWidth();
-    const height = img.getHeight();
+    const height = img.getHeight();    
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;

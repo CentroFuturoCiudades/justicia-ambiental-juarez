@@ -1,6 +1,6 @@
 //import { geoAlbers, lab } from "d3"
 
-import { tree, type format } from "d3";
+import { max, tree, type format } from "d3";
 import { formatNumber, capitalize } from "./utils";
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
@@ -104,34 +104,34 @@ export const SECTIONS = {
     ambiental: {
         label: "riesgos ambientales",
         layers: [
-            "islas_de_calor",
             "vulnerabilidad_calor",
             "pob_afectada_inundaciones",
             "superficie_inundada",
             "riesgo_trafico_vehicular",
+            "islas_de_calor",
         ] as LayerKey[],
     },
     industria: {
         label: "riesgos relacionados a la industria",
         layers: [
-            "industrias",
-            "industrias_contaminantes",
             "hogares_vulnerables_industria",
             "infantes_vulnerables_industria",
             "adultos_vulnerables_industria",
+            "industrias",
+            "industrias_contaminantes",
         ] as LayerKey[],
     },
     equipamiento: {
         label: "acceso a equipamientos",
         layers: [
-            "equipamientos",
             "indice_accesibilidad",
             "tiempo_recreativos",
             "tiempo_hospitales",
             "tiempo_preparatorias",
             "acceso_recreativos",
             "acceso_hospitales",
-            "acceso_preparatorias"
+            "acceso_preparatorias",
+            "equipamientos",
         ] as LayerKey[],
     },
     poblacion: {
@@ -493,12 +493,12 @@ export const LAYERS: any = {
                         industrias[sector] += 1;
                     }
                 });
-                console.log('industrias', industrias);
+
                 return {
                     tooltip: {
                         show: true,
                         formatter: function (info) {
-                        return `<b>${info.name}</b><br/>${(info.value)}`;
+                        return `<b>${info.name}</b><br/>${(info.value).toLocaleString()}`;
                         },
           //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
@@ -513,7 +513,13 @@ export const LAYERS: any = {
                             color: '#fff',
                             fontSize: 10,
                             fontFamily: 'Roboto, sans-serif',
-                        }
+                            width: 8,
+                            maxWidth: 8,
+                            overflow: 'break',
+                        },
+                        appendToBody: true,
+                        width: 8,
+                        overflow: 'break',
                     },
                     series: [
                         {
@@ -536,10 +542,6 @@ export const LAYERS: any = {
                             //fontSize: 'var(--font-size-button)',
                             overflow: 'breakAll'
                         },
-                        /*upperLabel: {
-                            show: true,
-                            height: 30
-                        },*/
                         itemStyle: {
                             borderColor: '#fff',
                         },
@@ -557,36 +559,58 @@ export const LAYERS: any = {
     ]
     },
     industrias_contaminantes: {
-        //url de layer
         capa: true,
         pickable: true,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson?${REACT_APP_SAS_TOKEN}`,
+        extraLayerUrl: `https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson?${REACT_APP_SAS_TOKEN}`,
         jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json?${REACT_APP_SAS_TOKEN}`,
         title: "Industrias contaminantes",
         description: "Industrias en el perímetro urbano de Ciudad Juárez que reportan su producción de sustancias contaminantes.",
         source: "Elaboración propia con datos de la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
-        property: "industries",
+        property: "industry_group",
         tematica: "industria",
         type: "Categorica",
         categoricalLegend: [
-            { value: "Otras industrias manufactureras", label: "Otras industrias manufactureras", color: "#f4a829" },
-            { value: "Fabricación de computadoras y equipo periférico", label: "Fabricación de computadoras y equipo periférico", color: "#743306" },
-            { value: "Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas", label: "Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas", color: "#cc5803" },
-            { value: "Recubrimientos y terminados metálicos", label: "Recubrimientos y terminados metálicos", color: "#993232ff" },
-            { value: "Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores", label: "Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores", color: "#993232ff" },
-            { value: "Fabricación de otros productos eléctricos", label: "Fabricación de otros productos eléctricos", color: "#993232ff" },
-            { value: "Fabricación de componentes electrónicos", label: "Fabricación de componentes electrónicos", color: "#993232ff" },
-
+            { value: "grupo electronic", label: "Industrias electrónicas", color: "#f4a829" },
+            { value: "grupo automotriz", label: "Industrias automotrices", color: "#743306" },
+            { value: "grupo energia/combustion", label: "Industrias de energía y combustión", color: "#cc5803" },
+            { value: "otras", label: "Otras industrias", color: "#993232ff" }
         ],
         is_PointLayer: true,
         enabled: true,
         colonias: false,
         dataProcesssing: (data: any) => {
+            const industry_groups: any = {
+                "grupo electronic": ['Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas', 'Fabricación de equipo y aparatos de distribución de energía eléctrica', 'Fabricación de componentes electrónicos', 'Fabricación de otros productos eléctricos', ],
+                "grupo automotriz": ['Recubrimientos y terminados metálicos', 'Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores', 'Industria básica del aluminio', 'Fabricación de otros productos metálicos', 'Maquinado de piezas para maquinaria y equipo en general', 'Fabricación de asientos y accesorios interiores para vehículos automotores'],
+                "grupo energia/combustion": ['Fabricación de motores de combustión interna, turbinas y transmisiones', 'Fabricación de equipo y aparatos de distribución de energía eléctrica'],
+                //"grupo otros": ['Tapicería de automóviles y camiones', 'Fabricación de otros productos de plástico sin reforzamiento', 'Fabricación de motocicletas', ],
+            }
             data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
-            //split industries
+            //split industries by +
             data.features.forEach((feature: any) => {
                 const industries = feature.properties.industries ? feature.properties.industries.split("+") : [];
                 feature.properties.industries = industries;
+            });
+            //asign group to industries
+            /*data.features.forEach((feature: any) => {
+                const industries: string[] = feature.properties.industries; //industries of the feature
+                feature.properties.industry_group = Object.keys(industry_groups).find(group => industry_groups[group].some(industry => industries.includes(industry))) || 'otras';
+            });*/
+
+            data.features.forEach((feature: any) => {
+                const industries = feature.properties.industries;
+                let bestMatchGroup = 'otras';
+                let maxMatches = 0;
+                Object.keys(industry_groups).forEach(group => {
+                    const groupIndustries = industry_groups[group];
+                    const matches = industries.filter((industry: string) => groupIndustries.includes(industry)).length;
+                    if (matches > maxMatches) {
+                        maxMatches = matches;
+                        bestMatchGroup = group;
+                    }
+                });
+                feature.properties.industry_group = bestMatchGroup;
             });
             return data;
         },
@@ -679,7 +703,7 @@ export const LAYERS: any = {
                     tooltip: {
                         show: true,
                         formatter: function (info) {
-                        return `<b>${info.name}</b><br/>${Number(info.value).toFixed(2)} kg`;
+                        return `<b>${info.name}</b><br/>${Number((info.value).toFixed(2)).toLocaleString()} kg`;
                         },
           //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
@@ -698,7 +722,10 @@ export const LAYERS: any = {
                             color: '#fff',
                             fontSize: 10,
                             fontFamily: 'Roboto, sans-serif',
-                        }
+                        },
+                        width: 20,
+                        overflow: 'breakAll',
+                        appendToBody: true,
                     },
                     series: [
                         {
@@ -714,7 +741,7 @@ export const LAYERS: any = {
                         //width: '100%',
                         //visibleMin: 100,
                         label: {
-                            show: true,
+                            show: false,
                             //formatter: '{b}',
                             formatter: function(params) {
                                 // params.value es el valor del nodo
@@ -791,9 +818,8 @@ export const LAYERS: any = {
                     tooltip: {
                         show: true,
                         formatter: function (info) {
-                        return `<b>${info.name}</b><br/>${Number(info.value).toFixed(2)} kg`;
+                            return `<b>${info.name}</b><br/>${Number((info.value).toFixed(2)).toLocaleString()} kg`;
                         },
-          //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
                             // Centrado horizontal respecto a la barra, arriba del mouse
                             // size.contentSize[0] es el ancho del tooltip
@@ -810,7 +836,10 @@ export const LAYERS: any = {
                             color: '#fff',
                             fontSize: 10,
                             fontFamily: 'Roboto, sans-serif',
-                        }
+                        },
+                        width: 20,
+                        overflow: 'breakAll',
+                        appendToBody: true,
                     },
                 series: [
                     {
@@ -824,7 +853,7 @@ export const LAYERS: any = {
                     bottom: 0,
                     height: '100%',
                     label: {
-                        show: true,
+                        show: false,
                         //formatter: '{b}',
                         formatter: function(params) {
                             // params.value es el valor del nodo
@@ -988,19 +1017,20 @@ export const LAYERS: any = {
             "parque": "",
         },
         categoricalLegend: [
-            { value: "educacion", label: "Educación y cuidados", color: "#e9c46a" },
+            { value: "educacion basica", label: "Educación y cuidados", color: "#f4e1b0ff" },
+            { value: "educacion superior", label: "Educación superior", color: "#e9c46a" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
             { value: "parque", label: "Parque", color: "#8ab17d" }
         ],
         dataProcesssing: (data: any) => {
             const equipamiento_Groups: any = {
-                "guarderia": "educacion",
-                "preescolar": "educacion",
-                "primaria": "educacion",
-                "secundaria": "educacion",
-                "preparatoria": "educacion",
-                "universidad": "educacion",
+                "guarderia": "educacion basica",
+                "preescolar": "educacion basica",
+                "primaria": "educacion basica",
+                "secundaria": "educacion basica",
+                "preparatoria": "educacion superior",
+                "universidad": "educacion superior",
                 "auditorio": "recreativo",
                 "biblioteca": "recreativo",
                 "cine": "recreativo",
@@ -1012,6 +1042,7 @@ export const LAYERS: any = {
             data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
+                //feature.properties.subgroup = equipamiento_Groups[feature.properties.equipamiento][1];
             });
             return data;
         },
@@ -1029,52 +1060,63 @@ export const LAYERS: any = {
         },
         graphs: [
         {
-            //title: "Total de equipamientos por tipo",
+            title: "Total de equipamientos por tipo",
             source: "Fuente de ejemplo",
+            legend: {
+                "Educación y cuidados": "#f4e1b0ff",
+                "Educación superior": "#e5c26aff",
+                "Espacios recreativos": "#e76f51",
+                "Salud": "#4abfbd",
+                "Parques": "#8ab17d",
+            },
             option: (data: any) => {
+                console.log('equipamientos data', data);
                 const equipamientos: any = {};
                 //agrupar por categoria
                 const equip_byCategory = Object.groupBy(data, (item: any) => item.properties.group);
-                console.log('equip_byCategory', equip_byCategory);
                 //const categories = Object.keys(equip_byCategory);
-                const colorMap = {
-                    "educacion": "#e9c46a",
+                /*const colorMap = {
+                    "basica": "#f4e1b0ff",
+                    "superior": "#e5c26aff",
+                    "cultural": "#eda96eff",
+                    "diversion": "#f09448ff",
+                    "deportivo": "#e57d06ff",
+                    "salud": "#4abfbd",
+                    //"recreativo": "#e76f51",
+                    "parque": "#8ab17d",
+                };*/
+                const colorMap= {
+                    "educacion superior": "#e9c46a",
+                    "educacion basica": "#f4e1b0ff",
                     "salud": "#4abfbd",
                     "recreativo": "#e76f51",
                     "parque": "#8ab17d",
                 };
                 //recorrer categorias y contar por
                 const treeData = Object.entries(equip_byCategory).map(([category, items]) => {
-                    const counts: Record<string, number> = {};
+                    const counts: any = {};
                     items.forEach((item: any) => {
                         const tipo = item.properties.equipamiento;
                         if (!tipo) return;
-                        counts[tipo] = (counts[tipo] || 0) + 1;
+                        const group = category; // usa subgroup si existe
+                        if (!counts[tipo]) counts[tipo] = { value: 0, group };
+                        counts[tipo].value += 1;
                     });
                     return {
                         name: category,
-                        children: Object.entries(counts).map(([tipo, value]) => ({
-                        name: tipo,
-                        value,
-                        itemStyle: { color: colorMap[category] || '#000' }
+                        children: Object.entries(counts).map(([tipo, info]: any) => ({
+                            name: tipo,
+                            value: info.value,
+                            itemStyle: { color: colorMap[category] || '#000' }
                         }))
                     };
                 });
-                /*Object.values(data).forEach((industry: any) => {
-                    const group = industry.properties["group"];
-                    if(group) {
-                        if(!equipamientos[group]) {
-                            equipamientos[group] = 0;
-                        }
-                        equipamientos[group] += 1;
-                    }
-                });
-                console.log('equipamientos', equipamientos);*/
+
                 return {
                     tooltip: {
                         show: true,
                         formatter: function (info) {
-                        return `<b>${info.name}</b><br/>${info.value}`;
+                        return `<b>${info.name}</b><br/>${info.value.toLocaleString()}`;
                         },
           //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
@@ -1109,7 +1151,7 @@ export const LAYERS: any = {
                         //width: '100%',
                         //visibleMin: 100,
                         label: {
-                            show: true,
+                            show: false,
                             formatter: '{b}',
                             
                             //fontSize: 10,
@@ -1682,19 +1724,22 @@ export const LAYERS: any = {
 //segun codebook
 export const CAPAS_BASE_CODEBOOK = {
     hidrografia: {
-        title: "hidrografía",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
+        title: "arroyos y ríos",
+        url: "./assets/data/arroyos_rios.geojson",
+        enabled: true,
         parent: null,
         isPointLayer: false,
         field: null,
-        colors: [],
+        colors: ["#89cff0"],
         hoverInfo: false,
-        categoryColors: {}
+        dataFiltering: (data: any) => { return data},
+        categoryColors: {},
+        isLine: true,
     },
     industrias_contaminantes: {
         title: "industrias contaminantes",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
+        extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',
         jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json`,
         jsonData: null,
         enabled: true,
@@ -1717,6 +1762,7 @@ export const CAPAS_BASE_CODEBOOK = {
             }
         }*/
        featureInfo: true,
+       isLine: false
     },
     industrias: {
         title: "industrias",
@@ -1734,6 +1780,7 @@ export const CAPAS_BASE_CODEBOOK = {
         },
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
+        isLine: false,
     },
     parques_industriales: {
         title: "parques industriales",
@@ -1746,30 +1793,33 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: ["#272a28"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
+        isLine: false,
     },
     limite_urbano: {
         title: "límite urbano",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/limite_urbano.geojson",
+        enabled: true,
         parent: null,
         isPointLayer: false,
         field: null,
-        colors: [],
+        colors: ["#000000"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
-        categoryColors: {}
+        categoryColors: {},
+        isLine: true,
     },
     vias_principales: {
         title: "vias principales",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/vialidades.geojson",
+        enabled: true,
         parent: null,
         isPointLayer: false,
-        field: null,
-        colors: [],
+        field: "ID",
+        colors: ["#272a28"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return  data},
-        categoryColors: {}
+        categoryColors: {},
+        isLine: true,
     },
     equipamientos: {
         title: "equipamientos",
@@ -1808,7 +1858,8 @@ export const CAPAS_BASE_CODEBOOK = {
                 feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
             });
             return data;
-        }
+        },
+        isLine: false,
     },
     educacion:{
         title: "educación",
@@ -1849,6 +1900,7 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "educacion");
             return data;
         },
+        isLine: false,
     },
     salud: {
         title: "salud",
@@ -1889,6 +1941,7 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "salud");
             return data;
         },
+        isLine: false,
     },
     recreacion: {
         title: "recreación",
@@ -1929,6 +1982,7 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "recreativo");
             return data;
         },
+        isLine: false
     },
     parques: {
         title: "parques",
@@ -1969,6 +2023,7 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features = data.features.filter((feature: any) => feature.properties.group === "parque");
             return data;
         },
+        isLine: false,
     },
     vias_ferreas: {
         title: "vías férreas",
@@ -1980,6 +2035,7 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: [],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
+        isLine: true
     },
     islas_calor: {
         title: "islas de calor",
@@ -1989,10 +2045,25 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: false,
         field: "lst",
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
+        opacity: 0.7,
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
+        isLine: false
     },
-    calidad_aire: {
+    lineas_drenaje: {
+        title: "líneas de drenaje",
+        url: "./assets/data/Lineas_drenaje4.geojson",
+        enabled: false,
+        parent: null,
+        isPointLayer: false,
+        field: null,
+        colors: ["#18515bff"],
+        hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        categoryColors: {},
+        isLine: true,
+    },
+    /*calidad_aire: {
         title: "calidad del aire",
         url: "...",
         enabled: false,
@@ -2002,6 +2073,33 @@ export const CAPAS_BASE_CODEBOOK = {
         colors: [],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
-   },
+        isLine: false
+   },*/
+   inundaciones: {
+        title: "inundaciones",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/cd_juarez_inundacion_60min.tif",
+        raster: true,
+        enabled: false,
+        parent: null,
+        isPointLayer: true,
+        field: "ID",
+        colors: ["#ff0000"],
+        clickInfo: true,
+        dataFiltering: (data: any) => { return data},
+        /*featureInfo: (info: any) => {
+            if(info){
+                console.log("info", info);
+                return ({
+                    x: info.x,
+                    y: info.y,
+                    content: info.object.properties
+                })
+            } else {
+                return null;
+            }
+        }*/
+       featureInfo: true,
+       isLine: false
+    },
 }
     

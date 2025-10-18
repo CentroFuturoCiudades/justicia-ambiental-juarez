@@ -64,7 +64,15 @@ const Tematica = () => {
                                     </Accordion.ItemTrigger>
 
                                     <Accordion.ItemContent className="dropdown__subContent" >
-                                        {section.layers.map((layerKey) => (
+                                        {section.layers.map((layerKey, index) => {
+                                            const firstCapa = LAYERS[layerKey]?.capa && section.layers.findIndex(key => LAYERS[key]?.capa) === index;
+                                            return (
+                                            <>
+                                            {firstCapa && (
+                                                <div style={{ borderBottom: '2px solid black', padding:0 }}>
+                                                    Visión Global Ciudad Juárez
+                                                </div>
+                                            )}
                                             <Checkbox.Root 
                                                 cursor={"pointer"} 
                                                 variant={"solid"} 
@@ -91,7 +99,9 @@ const Tematica = () => {
                                                         </span>*/}
                                                 </Span>
                                             </Checkbox.Root>
-                                        ))}
+                                            </>
+                                            );
+                                        })}
                                     </Accordion.ItemContent>
                                 </Accordion.Item>
                             ))}
