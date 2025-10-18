@@ -19,7 +19,7 @@ const LayerTooltip = () => {
             <Table.Root className="table" showColumnBorder>
                 <Table.Header style={{ backgroundColor: "var(--background-dark)" }}>
                     <Table.Row className="table__row">
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Contaminante </Table.ColumnHeader>
+                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Tipo de contaminante </Table.ColumnHeader>
                         <Table.ColumnHeader className="table__header" style={{color: "white"}}> En el sitio </Table.ColumnHeader>
                         <Table.ColumnHeader className="table__header" style={{color: "white"}}> Fuera del sitio </Table.ColumnHeader>
                     </Table.Row>
@@ -40,8 +40,8 @@ const LayerTooltip = () => {
                     ))}
                     <Table.Row>
                         <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> Total emitidos </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["On-site releases"])} kg </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["Off-site releases"])} kg </Table.Cell>
+                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["On-site releases"]).toLocaleString()} kg </Table.Cell>
+                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> {Math.round(industry.total_releases["Off-site releases"]).toLocaleString()} kg </Table.Cell>
                     </Table.Row>
                 </Table.Body>
             </Table.Root>
