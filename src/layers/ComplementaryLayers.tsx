@@ -89,6 +89,7 @@ const ComplementaryLayers = () => {
                         let data = await complementaryLayerInstance.loadData(urlBlob);
                         if(complementary?.dataProcessing) {
                             data = complementary.dataProcessing(data);
+                            console.log('processed data for', layerKey, data);
                         }
                         const newLayer = complementaryLayerInstance.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.isLine, complementary.clickInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
 

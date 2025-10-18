@@ -1745,22 +1745,45 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: true,
-        field: "ID",
-        colors: ["#ff0000"],
+        field: "industry_group",
+        colors: [],
+        categoryColors: {
+            "grupo electronic": "#f4a829",
+            "grupo automotriz": "#743306",
+            "grupo energia/combustion": "#cc5803",
+            "otras": "#993232ff"
+        },
         clickInfo: true,
-        dataFiltering: (data: any) => { return data},
-        /*featureInfo: (info: any) => {
-            if(info){
-                console.log("info", info);
-                return ({
-                    x: info.x,
-                    y: info.y,
-                    content: info.object.properties
-                })
-            } else {
-                return null;
+        dataProcessing: (data: any) => {
+            const industry_groups: any = {
+                "grupo electronic": ['Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas', 'Fabricación de equipo y aparatos de distribución de energía eléctrica', 'Fabricación de componentes electrónicos', 'Fabricación de otros productos eléctricos', ],
+                "grupo automotriz": ['Recubrimientos y terminados metálicos', 'Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores', 'Industria básica del aluminio', 'Fabricación de otros productos metálicos', 'Maquinado de piezas para maquinaria y equipo en general', 'Fabricación de asientos y accesorios interiores para vehículos automotores'],
+                "grupo energia/combustion": ['Fabricación de motores de combustión interna, turbinas y transmisiones', 'Fabricación de equipo y aparatos de distribución de energía eléctrica'],
+                //"grupo otros": ['Tapicería de automóviles y camiones', 'Fabricación de otros productos de plástico sin reforzamiento', 'Fabricación de motocicletas', ],
             }
-        }*/
+            data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
+            //split industries by +
+            data.features.forEach((feature: any) => {
+                const industries = feature.properties.industries ? feature.properties.industries.split("+") : [];
+                feature.properties.industries = industries;
+            });
+
+            data.features.forEach((feature: any) => {
+                const industries = feature.properties.industries;
+                let bestMatchGroup = 'otras';
+                let maxMatches = 0;
+                Object.keys(industry_groups).forEach(group => {
+                    const groupIndustries = industry_groups[group];
+                    const matches = industries.filter((industry: string) => groupIndustries.includes(industry)).length;
+                    if (matches > maxMatches) {
+                        maxMatches = matches;
+                        bestMatchGroup = group;
+                    }
+                });
+                feature.properties.industry_group = bestMatchGroup;
+            });
+            return data;
+        },
        featureInfo: true,
        isLine: false
     },
