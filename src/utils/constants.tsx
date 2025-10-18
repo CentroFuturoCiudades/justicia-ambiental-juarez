@@ -642,7 +642,7 @@ export const LAYERS: any = {
         colors:["#a03a2dff", "#a72e19ff"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>x</span>,
+            <span>En Ciudad Juárez, el desglose de emisiones por contaminante es</span>,
         selectionCard: (data) => {
             return (
             <>
