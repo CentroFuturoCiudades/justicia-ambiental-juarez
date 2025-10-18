@@ -2100,9 +2100,9 @@ export const CAPAS_BASE_CODEBOOK = {
    },*/
    inundaciones: {
         title: "inundaciones",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/cd_juarez_inundacion_60min.tif",
+        url: "./assets/data/cd_juarez_inundacion_60min_sm.tiff",
         raster: true,
-        enabled: false,
+        enabled: true,
         parent: null,
         isPointLayer: true,
         field: "ID",
