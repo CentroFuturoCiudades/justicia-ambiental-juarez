@@ -5,6 +5,7 @@ import { formatNumber, capitalize } from "./utils";
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 export const total_pob_juarez = 1503616.0;
+export const codebook_url= " https://tecmx.sharepoint.com/:x:/r/sites/JusticiaAmbiental/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B427c6ade-f673-4dc2-a13e-980acd3f4a3f%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1760901839077&web=1";
  /*function getLevelOption() {
     return [
       {

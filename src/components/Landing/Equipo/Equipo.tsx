@@ -49,7 +49,7 @@ const Equipo = () => {
                     </div>
                 </div>
 
-                <p>
+                <p style={{ marginTop: '4dvh'}}>
                     *Los errores u omisiones contenidos en esta página son responsabilidad exclusiva del Centro para el Futuro de las Ciudades del Tecnológico de Monterrey. Para correcciones, comentarios o aclaraciones, favor de contactar a <strong>Ivonne Cruz (ic23@rice.edu)</strong> y <strong>Roberto Ponce (rpl@tec.mx)</strong>.*
                 </p>
             </div>
