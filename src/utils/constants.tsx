@@ -1,67 +1,8 @@
-//import { geoAlbers, lab } from "d3"
-
-import { max, tree, type format } from "d3";
 import { formatNumber, capitalize } from "./utils";
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 export const total_pob_juarez = 1503616.0;
 export const codebook_url= " https://tecmx.sharepoint.com/:x:/r/sites/JusticiaAmbiental/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B427c6ade-f673-4dc2-a13e-980acd3f4a3f%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1760901839077&web=1";
- /*function getLevelOption() {
-    return [
-      {
-        itemStyle: {
-          borderColor: '#777',
-          borderWidth: 0,
-          gapWidth: 1
-        },
-        upperLabel: {
-          show: false
-        }
-      },
-      {
-        itemStyle: {
-          borderColor: '#555',
-          borderWidth: 5,
-          gapWidth: 1
-        },
-        emphasis: {
-          itemStyle: {
-            borderColor: '#ddd'
-          }
-        }
-      },
-      {
-        colorSaturation: [0.35, 0.5],
-        itemStyle: {
-          borderWidth: 5,
-          gapWidth: 1,
-          borderColorSaturation: 0.6
-        }
-      }
-    ];
-  }*/
- function getLevelOption() {
-    return [
-      {
-        itemStyle: {
-          borderWidth: 0,
-          gapWidth: 5
-        }
-      },
-      {
-        itemStyle: {
-          gapWidth: 1
-        }
-      },
-      {
-        colorSaturation: [0.35, 0.5],
-        itemStyle: {
-          gapWidth: 1,
-          borderColorSaturation: 0.6
-        }
-      }
-    ];
-  }
 
 export const COLORS = {
     GLOBAL: {
@@ -109,6 +50,7 @@ export const SECTIONS = {
             "pob_afectada_inundaciones",
             "superficie_inundada",
             "riesgo_trafico_vehicular",
+            "indice_marginacion",
             "islas_de_calor",
         ] as LayerKey[],
     },
@@ -143,7 +85,6 @@ export const SECTIONS = {
             "porcentaje_pob_60",
             "porcentaje_escolaridad",
             "indice_bienestar",
-            "indice_marginacion",
         ] as LayerKey[],
     }
 }
@@ -200,9 +141,6 @@ export const LAYERS: any = {
                 },
                 xAxis : {
                     type: 'category',
-                    //name: 'Rango de temperatura (°C)',
-                    //nameLocation: 'middle',
-                    //nameGap: 60,
                     data: data.map((d: any) => `${Number(d.from_temperature).toFixed(1)}°C - ${Number(d.to_temperature).toFixed(1)}°C`),
                     axisLabel: {
                         interval: 0,
@@ -213,7 +151,6 @@ export const LAYERS: any = {
                 tooltip: {
                     show: true,
                     formatter: (params: any) => `${Number(params.value).toFixed(2)} km²`,
-                    //trigger: 'axis',
                     position: function (point, params, dom, rect, size) {
 
                         const tooltipWidth = size.contentSize[0];
@@ -261,13 +198,6 @@ export const LAYERS: any = {
         tematica: "ambiental",
         type: "Categorica",
         is_lineLayer: false,
-        labels : {
-            1: "Poco vulnerable",
-            2: "Ligeramente vulnerable",
-            3: "Moderadamente vulnerable",
-            4: "Muy vulnerable",
-            5: "Extremadamente vulnerable"
-        },
         categoricalLegend: [
             { value: 1, label: "1 - Baja", color: "#fef0d9" },
             { value: 2, label: "2 - Ligera", color: "#fdcc8a" },
@@ -284,13 +214,15 @@ export const LAYERS: any = {
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         juarezCard: (data) => {
             return (
-                <span>En Ciudad Juárez, el índice promedio de vulnerabilidad al calor, es de <strong>{data.avg}</strong> lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
+                <span>En Ciudad Juárez, el Índice promedio de Vulnerabilidad al Calor, es de <strong>{data.avg}</strong> lo que representa una vulnerabilidad <strong>{data.category}.</strong></span>
             );
         },
         selectionCard: (data) => {
             return (
             <>
-                <span>{capitalize(data.introText)} tiene un índice de vulnerabilidad al calor de <strong>{data.avg}</strong>, lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
+                <span>En {data.introText}, el Índice de Vulnerabilidad al Calor es de <strong>{data.avg}</strong>, lo que representa una vulnerabilidad <strong>{data.category}.</strong></span>
+                <br/>
+                <span>Este índice está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
             );
         },
@@ -307,8 +239,8 @@ export const LAYERS: any = {
     },
     pob_afectada_inundaciones: {
         title: "Población afectada por inundaciones",
-        description: "Porcetaje de la población que durante una lluvia de 60 minutos se ve afectada por un nivel de agua superior a 25 centimetros.",
-        source: "X",
+        description: "Porcentaje de la población que durante una lluvia de 60 minutos se ve afectada por un nivel de agua superior a 25 centímetros.",
+        source: "Elaboración propia con datos  del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y del  Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ. (ver: https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "porcentaje_poblacion_inundada",
         propertyAbsolute: "total_poblacion_inundada",
         juarezTotal: (data: any) => {
@@ -322,7 +254,6 @@ export const LAYERS: any = {
         is_lineLayer: false,
         colonias: true,
         enabled: true,
-        //colors: ["#ddecf6", "#133e62"],
         colors: ["#f4f9ff", "#08316b"],
         dataProcesssing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_poblacion_inundada !== null );
@@ -340,16 +271,18 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span> En {capitalize(data.introText)} <strong>{data.num}</strong> personas se ven afectadas por las inundaciones lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <span> En {data.introText}, <strong>{data.num}</strong> personas se ven afectadas por las inundaciones lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <br />
+                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
             </>
             );
         },
 
     },
     superficie_inundada: {
-        title: "Porcentaje de superficie inundada",
-        description: "Porcetaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
-        source: "X",
+        title: "Porcentaje de superficie inundado",
+        description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
+        source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "porcentaje_area_inundada",
         propertyAbsolute: "area_inundada_m2",
         juarezTotal: (data: any) => {
@@ -378,17 +311,18 @@ export const LAYERS: any = {
             return (
             <>
                 <span>En {data.introText}, <strong>{data.num}</strong> metros cuadrados se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
+                <br />
+                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
             </>
             );
         }
     },
     riesgo_trafico_vehicular: {
-        title: "Proximidad a vialidades de alto tráfico vehicular",
-        description: "La proximidad al tráfico mide la cantidad de vehículos que circulan a 500 metros de un área determinada (AGEB, colonia).",
+        title: "Proximidad a alto tráfico vehicular",
+        description: "La proximidad al alto tráfico vehicular representa el total de vehículos que circulan diariamente en las vialidades principales ubicadas a menos de 500 metros de cada AGEB o colonia.",
         source: "Elaboración propia con datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez",
         property: "tdpa_density",
         tematica: "ambiental",
-        //type: "Categorica",
         type: "Continua",
         is_lineLayer: false,
         visualization_type: "Semaforo",
@@ -406,41 +340,95 @@ export const LAYERS: any = {
         },
         juarezCard: (data) =>
             <span>En Ciudad Juárez, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.</span>,
-        /*selectionCard: (data) => {
-            return (
-            <>
-                <span>{capitalize(data.introText)} tiene <strong>{data.avg}</strong>, lo que representa una <strong>vulnerabilidad {data.category}.</strong></span>
-                <br/>
-                <span>Este índice esta por <strong>{data.comparedToAvg}</strong> del índice promedio de Ciudad Juarez.</span>
-            </>
-            );
-        }*/
        selectionCard: (data) => {
         return (
             <span>
-               En {data.introText} los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.
-            </span>
+               En {data.introText}, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.
+               <br />
+               <span>Este flujo vehicular está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
+           </span>
         )}
     },
+    indice_marginacion: {
+        title: "Indice de Marginación Urbana",
+        description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos.",
+        source: "Consejo Nacional de Población (CONAPO), 2020.",
+        property: "indice_marginacion", //para el mapa
+        /*propertyAbsolute: "total_poblacion", //para el total de juarez
+        filter: true,
+        juarezTotal: (data, mapProperty_Avg) => {
+           // return total_pob_juarez;
+           const features = Array.isArray(data) ? data : data?.features;
+            if (!features) return 0;
+            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
+        },*/
+        tematica: "ambiental",
+        type: "Categorica",
+        enabled: true,
+        colonias: false,
+        categoricalLegend: [
+            { value: 1, label: "1 - Muy Bajo", color: "#a5b6ce" },
+            { value: 2, label: "2 - Bajo", color: "#7e95b5" },
+            { value: 3, label: "3 - Medio", color: "#57749c" },
+            { value: 4, label: "4 - Alto", color: "#2f5284" },
+            { value: 5, label: "5 - Muy Alto", color: "#08316b" }
+        ],
+        dataProcesssing: (data: any) => {
+            const marginacionMap: any = {
+                "muy bajo": 1,
+                "bajo": 2,
+                "medio": 3,
+                "alto": 4,
+                "muy alto": 5
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.indice_marginacion !== null);
+            data.features.forEach((feature: any) => {
+                feature.properties.indice_marginacion = marginacionMap[feature.properties.indice_marginacion.toLowerCase()];
+            });
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0)
+        },
+        colors: ["#cdd8e6", "#08316b"],
+        //quitar fixed!!!
+        juarezCard: (data) =>
+            <span>En Ciudad Juárez, <strong>555,863</strong> personas tienen un índice de marginación urbana <strong>{data.category}</strong>, lo que representa el <strong>37%</strong> de la población.</span>,
+        selectionCard: (data) => {
+            return (
+            <>
+                <span>{capitalize(data.introText)} tiene un índice de marginación urbana <strong>{data.category}</strong>.</span>
+                <br/>
+                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del índice de marginación urbana promedio de Ciudad Juarez.</span>
+            </>
+            );
+        },
+        getAvgThreshold: (avg: number) => {
+            console.log("entro con avg", avg);
+            const categories ={
+                1: "muy bajo",
+                2: "bajo",
+                3: "medio",
+                4: "alto",
+                5: "muy alto"
+            }
+            return categories[Math.trunc(avg)] || "N/A";
+        }
+    },
+    //RIESGOS RELACIONADOS A LA INDUSTRIA
     industrias: {
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson?${REACT_APP_SAS_TOKEN}`,
         title: "Industrias",
-        description: "Industrias de las categorías: - Energía electrica, agua y gas (22), – Industrias manufactureras de alimentos textiles y tabaco (31), – Manufactureras de madera, papel, quimicos y plástico (33), – Electronicos maquinaria y equipo (56) que están localizadas en el perímetro urbano de Ciudad Juárez.",
-        source: "Elaboración propia con base en datos del Instituto Nacional de Estadística y Geografía (INEGI).",
+        description: "Industrias ubicadas en el perímetro urbano de Ciudad Juárez, con su respectiva clasificación: \n– Energía electrica, agua y gas (22) \n– Industrias manufactureras de alimentos textiles y tabaco (31) \n– Manufactureras de madera, papel, quimicos y plástico (33) \n– Electronicos maquinaria y equipo (56)",
+        source: "Directorio Estadístico Nacional de Unidades Económicas (DENUE), por parte del Instituto Nacional de Estadística y Geografía (INEGI).",
         property: "sector",
         tematica: "industria",
         type: "Categorica",
         is_PointLayer: true,
         enabled: true,
         colonias: false,
-        labels : {
-            "Industrias manufactureras de alimentos textiles y tabaco": "",
-            "Manufactureras de madera, papel, quimicos y plástico": "",
-            "Energía electrica, agua y gas": "",
-            "Electronicos maquinaria y equipo": "",
-        },
         categoricalLegend: [
             { value: "Industrias manufactureras de alimentos textiles y tabaco", label: "Industrias manufactureras de alimentos textiles y tabaco", color: "#f4a829" },
             { value: "Manufactureras de madera, papel, quimicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#743306" },
@@ -457,19 +445,19 @@ export const LAYERS: any = {
         colors: [ "#e85e00", "#f4a829", "#db9217", "#a44809"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>X</span>,
+            <span>En Ciudad Juárez, las industrias están clasificadas de la siguiente forma:</span>,
         selectionCard: (data) => {
             return (
-            <>
-                <span>En {data.introText} la exposición a contaminantes industriales es de <strong>{data.avg}/km² </strong>.</span>
-                <br/>
-                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
-            </>
+                <>
+                    <span>En {data.introText} la exposición a contaminantes industriales es de <strong>{data.avg}/km² </strong>.</span>
+                    <br/>
+                    <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+                </>
             );
         },
         graphs: [
         {
-            title: "Sectores industriales",
+            //title: "Sectores industriales",
             source: "Fuente de ejemplo",
             legend: {
                 "Industrias manufactureras de alimentos textiles y tabaco": "#f4a829",
@@ -501,7 +489,6 @@ export const LAYERS: any = {
                         formatter: function (info) {
                         return `<b>${info.name}</b><br/>${(info.value).toLocaleString()}`;
                         },
-          //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
                             const tooltipWidth = size.contentSize[0];
                             const x = point[0] - tooltipWidth / 2;
@@ -533,14 +520,9 @@ export const LAYERS: any = {
                         right: 0,
                         bottom: 0,
                         height: '100%',
-                        //width: '100%',
-                        //visibleMin: 100,
                         label: {
                             show: false,
                             formatter: '{b}',
-                            
-                            //fontSize: 10,
-                            //fontSize: 'var(--font-size-button)',
                             overflow: 'breakAll'
                         },
                         itemStyle: {
@@ -566,7 +548,7 @@ export const LAYERS: any = {
         extraLayerUrl: `https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson?${REACT_APP_SAS_TOKEN}`,
         jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json?${REACT_APP_SAS_TOKEN}`,
         title: "Industrias contaminantes",
-        description: "Industrias en el perímetro urbano de Ciudad Juárez que reportan su producción de sustancias contaminantes.",
+        description: "Industrias ubicadas en el perímetro urbano de Ciudad Juárez que reportan su producción de sustancias contaminantes.",
         source: "Elaboración propia con datos de la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
         property: "industry_group",
         tematica: "industria",
@@ -643,7 +625,11 @@ export const LAYERS: any = {
         colors:["#a03a2dff", "#a72e19ff"],
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el desglose de emisiones por contaminante es</span>,
+            <span>
+                En Ciudad Juárez, las industrias que reportan sustancias contaminantes están clasificadas según el tipo de contaminante y la cantidad emitida, expresada en kilogramos.
+                <br/>
+                Además, se distingue el tipo de manejo de los desechos, ya que cada uno representa un impacto distinto:
+            </span>,
         selectionCard: (data) => {
             return (
             <>
@@ -656,7 +642,8 @@ export const LAYERS: any = {
         featureInfo: true,
         graphs: [
         {
-            title: "On-site",
+            title: "En sitio:",
+            description: "cuando los contaminantes se liberan o tratan en el mismo lugar donde se lleva a cabo la actividad industrial.",
             source: "Fuente de ejemplo",
             legend: {
                 "Plomo (y sus componentes)": "#8C4242",
@@ -696,22 +683,12 @@ export const LAYERS: any = {
                     }
                 });
                 return {
-                    /*title: {
-                        text: 'On-site',
-                        left: 'center',
-                        textStyle: { fontSize: '18px' },
-                    },*/
                     tooltip: {
                         show: true,
                         formatter: function (info) {
                         return `<b>${info.name}</b><br/>${Number((info.value).toFixed(2)).toLocaleString()} kg`;
                         },
-          //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
-                            // Centrado horizontal respecto a la barra, arriba del mouse
-                            // size.contentSize[0] es el ancho del tooltip
-                            // point[0] es la posición X del mouse
-                            // point[1] es la posición Y del mouse
                             const tooltipWidth = size.contentSize[0];
                             const x = point[0] - tooltipWidth / 2;
                             const y = point[1] - 50; // 24px arriba del mouse, ajusta si quieres más cerca/lejos
@@ -739,23 +716,11 @@ export const LAYERS: any = {
                         right: 0,
                         bottom: 0,
                         height: '100%',
-                        //width: '100%',
-                        //visibleMin: 100,
                         label: {
                             show: false,
-                            //formatter: '{b}',
-                            formatter: function(params) {
-                                // params.value es el valor del nodo
-                                return params.value > 1500 ? params.name : '';
-                            },
-                            //fontSize: 10,
-                            //fontSize: 'var(--font-size-button)',
+                            formatter: '{b}',
                             overflow: 'breakAll'
                         },
-                        /*upperLabel: {
-                            show: true,
-                            height: 30
-                        },*/
                         itemStyle: {
                             borderColor: '#fff',
                         },
@@ -771,7 +736,8 @@ export const LAYERS: any = {
         }
         },
         {
-            title: "Off-site",
+            title: "Fuera del sitio:",
+            description: "cuando los desechos se trasladan a otro sitio para ser liberados o tratados fuera de las instalaciones de la industria.",
             source: "Fuente de ejemplo",
             legend: {
                 "Plomo (y sus componentes)": "#8C4242",
@@ -811,21 +777,12 @@ export const LAYERS: any = {
                     }
                 });
                 return {
-                    /*title: {
-                        text: 'Off-site',
-                        left: 'center',
-                        textStyle: { fontSize: '18px' },
-                    },*/
                     tooltip: {
                         show: true,
                         formatter: function (info) {
                             return `<b>${info.name}</b><br/>${Number((info.value).toFixed(2)).toLocaleString()} kg`;
                         },
                         position: function (point, params, dom, rect, size) {
-                            // Centrado horizontal respecto a la barra, arriba del mouse
-                            // size.contentSize[0] es el ancho del tooltip
-                            // point[0] es la posición X del mouse
-                            // point[1] es la posición Y del mouse
                             const tooltipWidth = size.contentSize[0];
                             const x = point[0] - tooltipWidth / 2;
                             const y = point[1] - 50; // 24px arriba del mouse, ajusta si quieres más cerca/lejos
@@ -855,13 +812,7 @@ export const LAYERS: any = {
                     height: '100%',
                     label: {
                         show: false,
-                        //formatter: '{b}',
-                        formatter: function(params) {
-                            // params.value es el valor del nodo
-                            return params.value > 1500 ? params.name : '';
-                        },
-                        //fontSize: 10,
-                        //fontSize: 'var(--font-size-button)',
+                        formatter: '{b}',
                         overflow: 'breakAll'
                     },
                     itemStyle: {
@@ -882,7 +833,7 @@ export const LAYERS: any = {
     },
     hogares_vulnerables_industria: {
         title: "Hogares expuestos a industrias contaminantes",
-        description: "Porcentaje de hogares cercanos a una industria que emite contaminantes in-situ.",
+        description: "Porcentaje de hogares cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
         source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
         property: "porcentaje_viviendas_vulnerables_industria",
         propertyAbsolute: "total_viviendas_vulnerables_industria",
@@ -912,7 +863,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
@@ -921,8 +872,8 @@ export const LAYERS: any = {
     },
     infantes_vulnerables_industria: {
         title: "Infancias expuestas a industrias contaminantes",
-        description: "Porcentaje de niños menores a 5 años cercanos a una industria que emite contaminantes in-situ.",
-        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
+        description: "Porcentaje de niños menores a 5 años cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
+        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
         property: "porcentaje_infantes_vulnerables_industria",
         propertyAbsolute: "total_infantes_vulnerables_industria",
         juarezTotal: (data) => {
@@ -951,7 +902,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
@@ -960,8 +911,8 @@ export const LAYERS: any = {
     },
     adultos_vulnerables_industria: {
         title: "Adultos mayores expuestos a industrias contaminantes",
-        description: "Porcentaje de adultos mayores a 60 años cercanos a una industria que emite contaminantes in-situ.",
-        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023 ",
+        description: "Porcentaje de adultos mayores a 60 años cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
+        source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
         property: "porcentaje_adultos_mayores_vulnerables_industria",
         propertyAbsolute: "total_adultos_mayores_vulnerables_industria",
         juarezTotal: (data) => {
@@ -990,39 +941,33 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
-                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
             );
         }
     },
-    //capa
+    //ACCESO A EQUIPAMIENTOS
     equipamientos: {
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson?${REACT_APP_SAS_TOKEN}`,
-        title: "Equipamientos", //"Número y tipos de equipamientos",
-        description: "Numero de equipamientos por tipo: - salud (hospitales y clínicas) – educación (escuelas primarias, secundarias,...) – espacios recreativos (bibliotecas, XXXX) – parques",
-        source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez.",
+        title: "Equipamientos",
+        description: "Numero de equipamientos por tipo: \n– Salud (hospitales y clínicas)\n– Educación y cuidados (guarderías, primarias, secundarias, preparatorias y universidades)\n– Espacios recreativos (bibliotecas, auditorios, cines, unidades deportivas)\n– Parques",
+        source: "Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez.",
         property: "group",
         tematica: "equipamiento",
         type: "Categorica",
         is_PointLayer: true,
         enabled: true,
         colonias: false,
-        labels : {
-            "educacion": "",
-            "salud": "",
-            "recreativo": "",
-            "parque": "",
-        },
         categoricalLegend: [
-            { value: "educacion basica", label: "Educación y cuidados", color: "#f4e1b0ff" },
-            { value: "educacion superior", label: "Educación superior", color: "#e9c46a" },
+            { value: "parque", label: "Parque", color: "#8ab17d" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
-            { value: "parque", label: "Parque", color: "#8ab17d" }
+            { value: "educacion superior", label: "Educación superior", color: "#e9c46a" },
+            { value: "educacion basica", label: "Educación y cuidados", color: "#f4e1b0ff" },
         ],
         dataProcesssing: (data: any) => {
             const equipamiento_Groups: any = {
@@ -1075,17 +1020,6 @@ export const LAYERS: any = {
                 const equipamientos: any = {};
                 //agrupar por categoria
                 const equip_byCategory = Object.groupBy(data, (item: any) => item.properties.group);
-                //const categories = Object.keys(equip_byCategory);
-                /*const colorMap = {
-                    "basica": "#f4e1b0ff",
-                    "superior": "#e5c26aff",
-                    "cultural": "#eda96eff",
-                    "diversion": "#f09448ff",
-                    "deportivo": "#e57d06ff",
-                    "salud": "#4abfbd",
-                    //"recreativo": "#e76f51",
-                    "parque": "#8ab17d",
-                };*/
                 const colorMap= {
                     "educacion superior": "#e9c46a",
                     "educacion basica": "#f4e1b0ff",
@@ -1119,15 +1053,10 @@ export const LAYERS: any = {
                         formatter: function (info) {
                         return `<b>${info.name}</b><br/>${info.value.toLocaleString()}`;
                         },
-          //              textStyle : { fontSize: 'var(--font-size-body)' },
                         position: function (point, params, dom, rect, size) {
-                            // Centrado horizontal respecto a la barra, arriba del mouse
-                            // size.contentSize[0] es el ancho del tooltip
-                            // point[0] es la posición X del mouse
-                            // point[1] es la posición Y del mouse
                             const tooltipWidth = size.contentSize[0];
                             const x = point[0] - tooltipWidth / 2;
-                            const y = point[1] - 50; // 24px arriba del mouse, ajusta si quieres más cerca/lejos
+                            const y = point[1] - 50; // 50px arriba del mouse, ajusta si quieres más cerca/lejos
                             return [x, y];
                         },
                         padding: [5, 10],
@@ -1149,24 +1078,14 @@ export const LAYERS: any = {
                         right: 0,
                         bottom: 0,
                         height: '100%',
-                        //width: '100%',
-                        //visibleMin: 100,
                         label: {
                             show: false,
                             formatter: '{b}',
-                            
-                            //fontSize: 10,
-                            //fontSize: 'var(--font-size-button)',
                             overflow: 'breakAll'
                         },
-                        /*upperLabel: {
-                            show: true,
-                            height: 30
-                        },*/
                         itemStyle: {
                             borderColor: '#fff',
                         },
-                        //levels: getLevelOption(),
                         data: treeData,
                     }, 
 
@@ -1178,7 +1097,7 @@ export const LAYERS: any = {
     },
     indice_accesibilidad: {
         title: "Índice de Accesibilidad a Equipamientos",
-        description: "Métrica combinada que toma en cuenta el tiempo de viaje a equipamientos educativos, de salud, y recreativos. Entre más alta, más facil es acceder a ellos.",
+        description: "Métrica combinada que toma en cuenta el tiempo de viaje caminando a equipamientos educativos y de cuidados, de salud, recreativos y parques. Entre más alta, más facil es acceder a ellos.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "indice_accesibilidad",
         tematica: "equipamiento",
@@ -1196,20 +1115,20 @@ export const LAYERS: any = {
             return formatNumber(x, 0) 
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el índice promedio de accesibilidad es de <strong>{data.avg}</strong> puntos sobre 100.</span>,
+            <span>En Ciudad Juárez, el Índice promedio de Accesibilidad es de <strong>{data.avg}</strong> puntos sobre 100.</span>,
         selectionCard: (data) => {
             return (
-            <>
-                <span>En {data.introText} el índice promedio de accesibilidad es de <strong>{data.avg}</strong> puntos sobre 100.</span>
-                <br/>
-                <span>Este índice está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
-            </>
+                <>
+                    <span>En {data.introText}, el Índice promedio de Accesibilidad es de <strong>{data.avg}</strong> puntos sobre 100.</span>
+                    <br/>
+                    <span>Este índice está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
+                </>
             );
         }
     },
     tiempo_recreativos: {
         title: "Tiempo promedio a espacios recreativos",
-        description: "X",
+        description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al parque más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_parque",
         tematica: "equipamiento",
@@ -1224,25 +1143,25 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + " min"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al espacio recreativo más cercano es de <strong>{data.avg}</strong>. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
+            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al parque más cercano es de {data.avg}. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
         selectionCard: (data) => {
             return (
-            <>
-                <span>En {data.introText} el tiempo promedio de viaje a pieal espacio recreativo más cercano es de <strong>{data.avg}</strong>.</span>
-                <br/>
-                <span>Este tiempo es considerado <strong>{data.category}</strong></span>
-            </>
+                <>
+                    <span>En {data.introText}, el tiempo promedio de viaje a pie al parque más cercano es de {data.avg}.</span>
+                    <br/>
+                    <span>Este tiempo es considerado <strong>{data.category}.</strong></span>
+                </>
             );
         },
         getAvgThreshold: (avg: number) => {
-            if(avg < 5) return "muy accesible (a pie)";
-            if(avg >= 5 && avg < 20) return "accesible";
+            if(avg < 5) return "muy accesible";
+            if(avg >= 5 && avg <= 20) return "accesible";
             else return "poco accesible";
         },
     },
     tiempo_hospitales: {
         title: "Tiempo promedio a hospitales o clínicas",
-        description: "X",
+        description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al hospital o clínica más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_clinica_hospital",
         tematica: "equipamiento",
@@ -1257,25 +1176,25 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + " min"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al hospital o clinica más cercana es de <strong>{data.avg}</strong>. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
+            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al hospital o clinica más cercana es de {data.avg}. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
         selectionCard: (data) => {
             return (
-            <>
-                <span>En {data.introText} el tiempo promedio de viaje a pie al hospital o clinica más cercana es de <strong>{data.avg}</strong>.</span>
-                <br/>
-                <span>Este tiempo es considerado <strong>{data.category}</strong></span>
-            </>
+                <>
+                    <span>En {data.introText}, el tiempo promedio de viaje a pie al hospital o clinica más cercano es de {data.avg}.</span>
+                    <br/>
+                    <span>Este tiempo es considerado <strong>{data.category}</strong>.</span>
+                </>
             );
         },
         getAvgThreshold: (avg: number) => {
             if(avg < 20) return "muy accesible";
-            if(avg >= 20 && avg < 60) return "accesible";
+            if(avg >= 20 && avg <= 60) return "accesible";
             else return "poco accesible";
         },
     },
     tiempo_preparatorias: {
         title: "Tiempo promedio a preparatorias",
-        description: "X",
+        description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando a la preparatoria más cercana.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_preparatoria",
         tematica: "equipamiento",
@@ -1294,21 +1213,21 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} el tiempo promedio de viaje a pie a la preparatoria más cercana es de <strong>{data.avg}</strong>.</span>
+                <span>En {data.introText} el tiempo promedio de viaje a pie a la preparatoria más cercana es de {data.avg}.</span>
                 <br/>
-                <span>Este tiempo es considerado <strong>{data.category}</strong></span>
+                <span>Este tiempo es considerado <strong>{data.category}</strong>.</span>
             </>
             );
         },
         getAvgThreshold: (avg: number) => {
             if(avg < 15) return "muy accesible";
-            if(avg >= 15 && avg < 45) return "accesible";
+            if(avg >= 15 && avg <= 45) return "accesible";
             else return "poco accesible";
         },
     },
     acceso_recreativos: {
-        title: "Acceso a espacios recreativos",
-        description: "Porcentaje de hogares con acceso a espacio recreativo a 15 minutos.",
+        title: "Acceso a parques",
+        description: "Porcentaje de hogares con acceso a un parque a no más de 15 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "porcentaje_hogares_parque_15min",
         propertyAbsolute: "total_hogares_parque_15min",
@@ -1333,11 +1252,11 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares con al menos un espacio recreativo a 15 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
+            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares con al menos un parque a 15 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> hogares con al menos un espacio recreativo a 15 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos un parque a 15 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
@@ -1346,7 +1265,7 @@ export const LAYERS: any = {
     },
     acceso_hospitales: {
         title: "Acceso a hospitales o clínicas",
-        description: "Porcentaje de hogares con acceso a hospitales o clinicas a 30 minutos.",
+        description: "Porcentaje de hogares con acceso a un hospital o clínica a no más de 30 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "porcentaje_hogares_clinica_hospital_30min",
         propertyAbsolute: "total_hogares_clinica_hospital_30min",
@@ -1375,7 +1294,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> hogares con al menos un hospital o clínica a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos un hospital o clínica a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
@@ -1384,7 +1303,7 @@ export const LAYERS: any = {
     },
     acceso_preparatorias: {
         title: "Acceso a preparatorias",
-        description: "Porcentaje de hogares con acceso a preparatorias a 30 minutos.",
+        description: "Porcentaje de hogares con acceso a una preparatoria a no más de 30 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "porcentaje_hogares_preparatoria_30min",
         propertyAbsolute: "total_hogares_preparatoria_30min",
@@ -1415,13 +1334,14 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> hogares con al menos una preparatoria a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos una preparatoria a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
             );
         }
     },
+    //POBLACIÓN
     ingreso: {
         title: "Ingreso promedio per cápita ",
         description: "Ingreso promedio per cápita mensual en pesos mexicanos de la población económicamente activa.",
@@ -1447,9 +1367,9 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} el ingreso promedio per cápita es de <strong>{data.avg}</strong>.</span>
+                <span>En {data.introText}, el ingreso promedio per cápita es de <strong>{data.avg}</strong>.</span>
                 <br/>
-                <span>Su ingreso promedio per cápita está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+                <span>Su ingreso promedio per cápita está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
             );
         }
@@ -1486,7 +1406,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
@@ -1525,7 +1445,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> adultos de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <span>En {data.introText}, hay <strong>{data.num}</strong> adultos mayores de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
@@ -1565,7 +1485,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} hay <strong>{data.num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
+                <span>En {data.introText}, <strong>{data.num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
@@ -1589,13 +1509,6 @@ export const LAYERS: any = {
         type: "Categorica",
         enabled: true,
         colonias: true,
-        labels : {
-            1: "Muy Bajo",
-            2: "Bajo",
-            3: "Medio",
-            4: "Alto",
-            5: "Muy Alto"
-        },
         categoricalLegend: [
             { value: 1, label: "1 - Muy Bajo", color: "#a5b6ce" },
             { value: 2, label: "2 - Bajo", color: "#7e95b5" },
@@ -1630,86 +1543,13 @@ export const LAYERS: any = {
                 {/*<span>En {data.introText} hay <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>.</span>
                 <br/>
                 <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de Ciudad Juarez (medio).</span>*/}
-                <span>{capitalize(data.introText)} tiene un nivel de bienestar <strong>{data.category}</strong>.</span>
+                <span>En {data.introText}, el Nivel de Bienestar es <strong>{data.category}</strong>.</span>
                 <br/>
-                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de bienestar promedio de Ciudad Juarez.</span>
+                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de bienestar predominante de Ciudad Juarez (Medio).</span>
             </>
             );
         },
         getAvgThreshold: (avg: number) => {
-            const categories ={
-                1: "muy bajo",
-                2: "bajo",
-                3: "medio",
-                4: "alto",
-                5: "muy alto"
-            }
-            return categories[Math.trunc(avg)] || "N/A";
-        }
-    },
-    indice_marginacion: {
-        title: "Indice de Marginación Urbana",
-        description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos.",
-        source: "Consejo Nacional de Población (CONAPO), 2020.",
-        property: "indice_marginacion", //para el mapa
-        /*propertyAbsolute: "total_poblacion", //para el total de juarez
-        filter: true,
-        juarezTotal: (data, mapProperty_Avg) => {
-           // return total_pob_juarez;
-           const features = Array.isArray(data) ? data : data?.features;
-            if (!features) return 0;
-            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
-        },*/
-        tematica: "poblacion",
-        type: "Categorica",
-        enabled: true,
-        colonias: false,
-        labels : {
-            1: "Muy bajo",
-            2: "Bajo",
-            3: "Medio",
-            4: "Alto",
-            5: "Muy alto"
-        },
-        categoricalLegend: [
-            { value: 1, label: "1 - Muy Bajo", color: "#a5b6ce" },
-            { value: 2, label: "2 - Bajo", color: "#7e95b5" },
-            { value: 3, label: "3 - Medio", color: "#57749c" },
-            { value: 4, label: "4 - Alto", color: "#2f5284" },
-            { value: 5, label: "5 - Muy Alto", color: "#08316b" }
-        ],
-        dataProcesssing: (data: any) => {
-            const marginacionMap: any = {
-                "muy bajo": 1,
-                "bajo": 2,
-                "medio": 3,
-                "alto": 4,
-                "muy alto": 5
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.indice_marginacion !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.indice_marginacion = marginacionMap[feature.properties.indice_marginacion.toLowerCase()];
-            });
-            return data;
-        },
-        formatValue: (x: number) => {
-            return formatNumber(x, 0)
-        },
-        colors: ["#cdd8e6", "#08316b"],
-        //quitar fixed!!!
-        juarezCard: (data) =>
-            <span>En Ciudad Juárez, <strong>555,863</strong> personas tienen un índice de marginación urbana <strong>{data.category}</strong>, lo que representa el <strong>37%</strong> de la población.</span>,
-        selectionCard: (data) => {
-            return (
-            <>
-                <span>{capitalize(data.introText)} tiene un índice de marginación urbana <strong>{data.category}</strong>.</span>
-                <br/>
-                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del índice de marginación urbana promedio de Ciudad Juarez.</span>
-            </>
-            );
-        },
-        getAvgThreshold: (avg: number) => {
-            console.log("entro con avg", avg);
             const categories ={
                 1: "muy bajo",
                 2: "bajo",

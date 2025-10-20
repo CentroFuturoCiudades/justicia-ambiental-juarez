@@ -188,7 +188,7 @@ const ThemeLayer = () => {
                     amountOfColors: layer?.amountOfColors,
                     formatValue: layer.formatValue,
                     categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
-                    categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
+                    //categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
                     categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
                 });
                 // Crea la capa geojson de tematica (con todos los features o los filtrados dentro del radio)
