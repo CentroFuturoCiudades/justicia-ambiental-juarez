@@ -1143,11 +1143,11 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + " min"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al parque más cercano es de {data.avg}. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
+            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al parque más cercano es de <strong>{data.avg}</strong>. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
         selectionCard: (data) => {
             return (
                 <>
-                    <span>En {data.introText}, el tiempo promedio de viaje a pie al parque más cercano es de {data.avg}.</span>
+                    <span>En {data.introText}, el tiempo promedio de viaje a pie al parque más cercano es de <strong>{data.avg}</strong>.</span>
                     <br/>
                     <span>Este tiempo es considerado <strong>{data.category}.</strong></span>
                 </>
@@ -1158,6 +1158,7 @@ export const LAYERS: any = {
             if(avg >= 5 && avg <= 20) return "accesible";
             else return "poco accesible";
         },
+        textRangesLegend: ["Poco accesible (>20 min)", "Accesible (5-20 min)", "Muy accesible (<5 min)"],
     },
     tiempo_hospitales: {
         title: "Tiempo promedio a hospitales o clínicas",
@@ -1176,11 +1177,11 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + " min"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al hospital o clinica más cercana es de {data.avg}. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
+            <span>En Ciudad Juárez, el tiempo promedio de viaje a pie al hospital o clinica más cercana es de <strong>{data.avg}</strong>. Este tiempo es considerado <strong>{data.category}</strong>.</span>,
         selectionCard: (data) => {
             return (
                 <>
-                    <span>En {data.introText}, el tiempo promedio de viaje a pie al hospital o clinica más cercano es de {data.avg}.</span>
+                    <span>En {data.introText}, el tiempo promedio de viaje a pie al hospital o clinica más cercana es de <strong>{data.avg}</strong>.</span>
                     <br/>
                     <span>Este tiempo es considerado <strong>{data.category}</strong>.</span>
                 </>
@@ -1191,6 +1192,7 @@ export const LAYERS: any = {
             if(avg >= 20 && avg <= 60) return "accesible";
             else return "poco accesible";
         },
+        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20-60 min)", "Muy accesible (<20 min)"],
     },
     tiempo_preparatorias: {
         title: "Tiempo promedio a preparatorias",
@@ -1213,7 +1215,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText} el tiempo promedio de viaje a pie a la preparatoria más cercana es de {data.avg}.</span>
+                <span>En {data.introText} el tiempo promedio de viaje a pie a la preparatoria más cercana es de <strong>{data.avg}</strong>.</span>
                 <br/>
                 <span>Este tiempo es considerado <strong>{data.category}</strong>.</span>
             </>
@@ -1224,6 +1226,7 @@ export const LAYERS: any = {
             if(avg >= 15 && avg <= 45) return "accesible";
             else return "poco accesible";
         },
+        textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15-45 min)", "Muy accesible (<15 min)"],
     },
     acceso_recreativos: {
         title: "Acceso a parques",

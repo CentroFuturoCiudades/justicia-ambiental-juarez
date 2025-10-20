@@ -3,6 +3,7 @@ import "./Legend.scss"
 import { scaleLinear } from "d3-scale";
 import { LAYERS } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
+import { text } from "d3";
 
 type LegendProps = {
   title: string;
@@ -13,10 +14,11 @@ type LegendProps = {
   ranges: number[][] | number[] | string[];
   formatValue: (value: number) => string;
   isPointLayer?: boolean;
+  textRanges?: string[];
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
-const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer }: LegendProps) => {
+const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer, textRanges }: LegendProps) => {
   
 
   const { selectedLayer, mapLayerInstance, tematicaData } = useAppContext();
@@ -76,7 +78,13 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer 
           </div>
         : <div  className="gradientStyle" style={gradientStyle}></div> }
         <div className="legend-ranges">
-          {ranges?.length && ranges.map((value, index) => renderLegeindItem(value, index))}
+          {textRanges ? 
+            textRanges.map((text, index) => (
+              <div key={index} className="legend-ranges__item">
+                {text}
+              </div>
+          )) 
+          : ranges?.length > 0 && ranges.map((value, index) => renderLegeindItem(value, index))} 
         </div>
       </div>
     </div>

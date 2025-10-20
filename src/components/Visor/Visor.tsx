@@ -76,7 +76,7 @@ const Visor = () => {
                     />
                 );
             case "legend":
-                return mapLayerInstance?.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle);
+                return mapLayerInstance?.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend);
             case "tematica":
                 return <Tematica />;
             case "complementary":
@@ -231,7 +231,7 @@ const Visor = () => {
 
                         {selectedLayer && mapLayerInstance && tematicaData && (
                             <div className="visor__legend">
-                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle)}
+                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend)}
                             </div>
                         )}
 
