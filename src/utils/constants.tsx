@@ -1158,7 +1158,7 @@ export const LAYERS: any = {
             if(avg >= 5 && avg <= 20) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (>20 min)", "Accesible (5-20 min)", "Muy accesible (<5 min)"],
+        textRangesLegend: ["Poco accesible (> 20 min)", "Accesible (5 - 20 min)", "Muy accesible (< 5 min)"],
     },
     tiempo_hospitales: {
         title: "Tiempo promedio a hospitales o clínicas",
@@ -1192,7 +1192,7 @@ export const LAYERS: any = {
             if(avg >= 20 && avg <= 60) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20-60 min)", "Muy accesible (<20 min)"],
+        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20 - 60 min)", "Muy accesible (<20 min)"],
     },
     tiempo_preparatorias: {
         title: "Tiempo promedio a preparatorias",
@@ -1226,7 +1226,7 @@ export const LAYERS: any = {
             if(avg >= 15 && avg <= 45) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15-45 min)", "Muy accesible (<15 min)"],
+        textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15 - 45 min)", "Muy accesible (<15 min)"],
     },
     acceso_recreativos: {
         title: "Acceso a parques",
