@@ -293,6 +293,7 @@ export const LAYERS: any = {
         is_lineLayer: false,
         colonias: true,
         enabled: true,
+        trimOutliers: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_area_inundada !== null );
             data.features.forEach((feature: any) => {
@@ -1391,6 +1392,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
+        trimOutliers: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_0a5 !== null);
             data.features.forEach((feature: any) => {
@@ -1430,6 +1432,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
+        trimOutliers: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_60 !== null);
             data.features.forEach((feature: any) => {
@@ -1823,8 +1826,8 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     lineas_drenaje: {
         title: "líneas de drenaje",
-        url: "./assets/data/Lineas_drenaje_v3.geojson",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/drenajes.geojson",
+        enabled: true,
         parent: null,
         isPointLayer: false,
         field: null,
