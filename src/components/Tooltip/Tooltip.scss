@@ -2,19 +2,21 @@
     position: absolute;
     z-index: 0;
     background-color: rgba(254,253,252,0.9);
-    border: 1px solid var(--background-medium);
-  //  background-color: var(--background-light);
-    padding: 0;
+    border: 1px solid var(--background-dark);
+   // padding: 0 0.5dvw;
     border-radius: var(--border-radius);
     font-size: var(--font-size-body);
-    //font-weight: 700;
     //min-width: 13dvw;
-    max-height: 20dvw;
+    //max-height: 20dvw;
     overflow-y: auto;
 
     &__title {
-      border-bottom: 1px solid black;
-      padding: min(1dvh, 1dvw);
+      //padding: min(1dvh, 1dvw);
+      //border: 1px solid red;
+      font-size: var(--font-size-button);
+      font-weight: 500;
+      //margin-bottom: 0.5dvh;
+      padding: min(1dvh, 0.8dvw);
     }
 }
 
@@ -23,7 +25,7 @@
     &__header {
       //padding: 1dvh 1dvw;
       //padding: min(0.5dvh, 0.3dvw) 0;
-      padding: 0 1dvw;
+      //padding: 0 1dvw;
       min-height: 0 !important;
       margin: 0;
     }
@@ -35,4 +37,36 @@
 //.table .chakra-table__row,
 .table .chakra-table__cell {
   padding: 0 1dvw;
+}
+
+/////
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-button);
+
+  th {
+    background-color: var(--background-dark);
+    color: white;
+    padding: min(1dvh, 0.8dvw);
+    text-align: center;
+  }
+  tr {
+    border-bottom: 1px solid var(--background-dark);
+  }
+
+  td {
+    padding: min(1dvh, 0.8dvw);
+    align-items: center;
+  }
+
+  .table__footer {
+    font-weight: bold;
+    background-color: var(--background-light);
+    text-align: center;
+  }
+
+  tr:hover{
+    background-color: var(--background-medium);
+  }
 }
