@@ -108,7 +108,7 @@ export const LAYERS: any = {
         colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         enabled: true,
         colonias: false,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
             return data;
         },
@@ -255,7 +255,7 @@ export const LAYERS: any = {
         colonias: true,
         enabled: true,
         colors: ["#f4f9ff", "#08316b"],
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_poblacion_inundada !== null );
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_poblacion_inundada = Math.round(feature.properties.porcentaje_poblacion_inundada * 100);
@@ -294,7 +294,7 @@ export const LAYERS: any = {
         is_lineLayer: false,
         colonias: true,
         enabled: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_area_inundada !== null );
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_area_inundada = Math.round(feature.properties.porcentaje_area_inundada * 100);
@@ -331,7 +331,7 @@ export const LAYERS: any = {
         year: null,
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tdpa_density !== null );
             return data;
         },
@@ -373,7 +373,7 @@ export const LAYERS: any = {
             { value: 4, label: "4 - Alto", color: "#2f5284" },
             { value: 5, label: "5 - Muy Alto", color: "#08316b" }
         ],
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             const marginacionMap: any = {
                 "muy bajo": 1,
                 "bajo": 2,
@@ -435,7 +435,7 @@ export const LAYERS: any = {
             { value: "Energía electrica, agua y gas", label: "Energía eléctrica, agua y gas", color: "#cc5803" },
             { value: "Electronicos maquinaria y equipo", label: "Electrónicos maquinaria y equipo", color: "#993232ff" },
         ],
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.industria !== null);
             return data;
         },
@@ -562,7 +562,7 @@ export const LAYERS: any = {
         is_PointLayer: true,
         enabled: true,
         colonias: false,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             const industry_groups: any = {
                 "grupo electronic": ['Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas', 'Fabricación de equipo y aparatos de distribución de energía eléctrica', 'Fabricación de componentes electrónicos', 'Fabricación de otros productos eléctricos', ],
                 "grupo automotriz": ['Recubrimientos y terminados metálicos', 'Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores', 'Industria básica del aluminio', 'Fabricación de otros productos metálicos', 'Maquinado de piezas para maquinaria y equipo en general', 'Fabricación de asientos y accesorios interiores para vehículos automotores'],
@@ -846,7 +846,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_viviendas_vulnerables_industria !== null );
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_viviendas_vulnerables_industria = Math.round(feature.properties.porcentaje_viviendas_vulnerables_industria * 100);
@@ -885,7 +885,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_infantes_vulnerables_industria !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_infantes_vulnerables_industria = Math.round(feature.properties.porcentaje_infantes_vulnerables_industria * 100);
@@ -924,7 +924,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_adultos_mayores_vulnerables_industria !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_adultos_mayores_vulnerables_industria = Math.round(feature.properties.porcentaje_adultos_mayores_vulnerables_industria * 100);
@@ -969,7 +969,7 @@ export const LAYERS: any = {
             { value: "educacion superior", label: "Educación superior", color: "#e9c46a" },
             { value: "educacion basica", label: "Educación y cuidados", color: "#f4e1b0ff" },
         ],
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             const equipamiento_Groups: any = {
                 "guarderia": "educacion basica",
                 "preescolar": "educacion basica",
@@ -1104,7 +1104,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.indice_accesibilidad !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.indice_accesibilidad = Math.round(feature.properties.indice_accesibilidad * 100);
@@ -1135,7 +1135,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_parque !== null);
             return data;
         },
@@ -1169,7 +1169,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_clinica_hospital !== null);
             return data;
         },
@@ -1203,7 +1203,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_preparatoria !== null);
             return data;
         },
@@ -1243,7 +1243,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_parque_15min !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_hogares_parque_15min = Math.round(feature.properties.porcentaje_hogares_parque_15min * 100);
@@ -1281,7 +1281,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_clinica_hospital_30min !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_hogares_clinica_hospital_30min = Math.round(feature.properties.porcentaje_hogares_clinica_hospital_30min * 100);
@@ -1319,7 +1319,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_preparatoria_30min !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_hogares_preparatoria_30min = Math.round(feature.properties.porcentaje_hogares_preparatoria_30min * 100);
@@ -1354,7 +1354,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: false,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.ingreso > 0);
             data.features.forEach((feature: any) => {
                 feature.properties.ingreso = Math.round(feature.properties.ingreso * 19 * 1000 / 12);
@@ -1392,7 +1392,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_0a5 !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_pob_0a5 = Math.round(feature.properties.porcentaje_pob_0a5 * 100);
@@ -1431,7 +1431,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_pob_60 !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_pob_60 = Math.round(feature.properties.porcentaje_pob_60 * 100);
@@ -1471,7 +1471,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_menos_prepa_terminada !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.porcentaje_menos_prepa_terminada = Math.round(feature.properties.porcentaje_menos_prepa_terminada * 100);
@@ -1519,7 +1519,7 @@ export const LAYERS: any = {
             { value: 4, label: "4 - Alto", color: "#2f5284" },
             { value: 5, label: "5 - Muy Alto", color: "#08316b" }
         ],
-        dataProcesssing: (data: any) => {
+        dataProcessing: (data: any) => {
             const marginacionMap: any = {
                 "muy bajo": 1,
                 "bajo": 2,

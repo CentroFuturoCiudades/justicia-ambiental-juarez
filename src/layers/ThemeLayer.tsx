@@ -43,44 +43,20 @@ const ThemeLayer = () => {
                 y: info.y,
                 content: info.object.properties
             });
-            //console.log("prev:", selectedPoint, "clicked ID:", info.object.properties.ID);
-            //setSelectedPoint(prev => prev === info.object.properties.ID ? null : info.object.properties.ID);
-            //console.log("selected point:", selectedPoint);
             setSelectedPoint(info.object.properties.ID);
-            /*setSelectedPoint(prev =>
-            prev === info.object.properties.ID ? null : info.object.properties.ID
-        );*/
         } else {
             setLayerTooltip(null);
             setSelectedPoint(null);
         }
     };
 
-    //useEffect json for graphs
-    /*useEffect(() => {
-        setJsonData(null);
-        const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        if (!selectedLayer || !layer?.capa || !tematicaData) return;
-
-        if(layer?.jsonurl){
-            //no estoy esperando los datos antes de seguir
-            fetch(layer.jsonurl)
-            .then(response => response.json())
-            .then(data => {
-                setJsonData(data);
-            })
-            .catch(err => console.error("Error fetching jsonData:", err));
-        } else {
-            setJsonData(tematicaData.features);
-        }
-    }, [tematicaData, selectedLayer]);*/
-
-
-
-
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
         setLayerTooltip(null); //cerrar tooltip al cambiar de capa
+        //setTematicaLayer(null);
+        //setJsonData(null);
+        //setMapLayerInstance(null);
+        //setTematicaData(null);
 
         if( !selectedLayer) {
             setTematicaLayer(null);
@@ -91,127 +67,96 @@ const ThemeLayer = () => {
         };
 
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        let isEffectActive = true; // race condition flag (evitar datos de capa anterior si se cambia rapido de capa)
+        let layerData; //feature collection object in order to create de layer
+        let newGeoJsonLayer;
+        let extraGeoJsonLayer;
+        let graphData = null;
 
-        //limpiar la vieja mapLayerInstance (para no ver datos de la capa anterior mientras carga la nueva)
-        //solo las capas tematicas sin url se limpian al inicio
-        if(!layer.url) {
-            setMapLayerInstance(null);
-            setTematicaData(null);
-            setJsonData(null);
-        }
+        //fetch data de capa tematica
+        (async () => {
+            //1. create mapLayerInstance (but dont update context variable yet)
+            const mapLayerInstance = new MapLayer({
+                opacity: 1,
+                colors: layer?.colors,
+                title: layer.title,
+                theme: layer?.tematica,
+                amountOfColors: layer?.amountOfColors,
+                formatValue: layer.formatValue,
+                categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
+                categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
+            });
 
-
-        const fetchData = async () => {
-            let jsonData;
-            let extraLayer;
-            // si la capa tiene su url (capas municipales), hacer fetch porque sus datos no vienen en el geojson universal
-            if (layer?.url) {
-                try {
-                    const response = await fetch(layer.url);
-                    jsonData = await response.json();
-                } catch (err) {
-                    console.error("Error fetching capa GEOJSON data:", err);
-                    return;
-                }
-                //bloquear selection y visualization tools
+            //2. Get data for layer
+            //if capa, fetch data
+            if(layer.url) {
                 setSelectionMode(null);
                 setActiveLayerKey(null);
-            } else {
-                // Copia del geojson universal de agebs/colonias (para aplicar cambios dependiendo del dataProcessing de la capa seleccionada)
-                jsonData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson));
-            }
 
-            // Si hay que cambiar algo en los datos de la capa (ej. porcentajes)
-            if ( layer?.dataProcesssing ) { 
-                jsonData = layer.dataProcesssing(jsonData); //aplica cambios a la copia
-            }
-
-            if(layer.extraLayerUrl) {
-                try {
-                    const response = await fetch(layer.extraLayerUrl);
-                    const extraData = await response.json();
-                    console.log("extraLayer data", extraData);
-                    extraLayer = new GeoJsonLayer({
+                layerData = await mapLayerInstance.loadData(`${layer.url}`);
+                //industrias contaminantes que viene con 2 capas
+                if(layer.extraLayerUrl) {
+                    const extraLayerData = await mapLayerInstance.loadData(`${layer.extraLayerUrl}`);
+                    //create extra GeoJsonLayer
+                    extraGeoJsonLayer = new GeoJsonLayer({
                         id: 'extra-layer',
-                        data: extraData,
+                        data: extraLayerData,
                         stroked: true,
                         filled: true,
                         getFillColor: [196, 196, 196, 100],
                         getLineColor: [0, 0, 0, 200],
                         getLineWidth: 10,
                     });
-                } catch (err) {
-                    console.error("Error fetching extraLayer GEOJSON data:", err);
                 }
+            } else {
+                //if regular indicator, just copy agebs/colonias geojson from context
+                layerData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson));
             }
-            console.log('extraLayer', extraLayer);
 
+            //2. dataProcessing (if any)
+            if(layer.dataProcessing) {
+                //console.log("entro a data processing");
+                layerData = layer.dataProcessing(layerData);
+            }
+
+            //3.
             // Data de la capa: todos los features y los filtrados (en caso de que este activado el radio)
-            const allFeatures = jsonData.features;
+            const allFeatures = layerData.features;
             const data = {
-                ...jsonData, 
-                features: selectionMode === "radius" ? filteredFeatures : jsonData.features,
+                ...layerData, 
+                features: selectionMode === "radius" ? filteredFeatures : layerData.features,
                 allFeatures,
             };
-            //setTematicaData(data);
 
-            if(isEffectActive) {
-                if(layer?.url) {
-                    setTematicaData(null);
-                    setMapLayerInstance(null);
-                    setJsonData(null);
-                }
-                setTematicaData(data);
+            //4. create GeoJsonLayer
+            newGeoJsonLayer = mapLayerInstance.getLayer(
+                data,
+                layer?.property || "",
+                layer?.is_PointLayer || false,
+                layer?.trimOutliers || false,
+                layer?.url ? (selectedLayer === "industrias_contaminantes" ? handleClick : () => {}) : handleSelectedElements,
+                activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
+                selectionMode,
+                layer?.capa ? layer.pickable : true,
+            )
 
-                //2do fetch de datos para graphs (si hay, solo para las capas municipales)
-                if(layer.graphs){
-                    if(layer?.jsonurl){
-                        fetch(layer.jsonurl)
-                        .then(response => response.json())
-                        .then(data => {
-                            const processedData = layer.jsonDataProcessing ? layer.jsonDataProcessing(data) : data;
-                            //console.log("processed json data", processedData);
-                            setJsonData(processedData);
-                        })
-                        .catch(err => console.error("Error fetching jsonData:", err));
-                    } else {
-                        setJsonData(data.features);
-                    }
+            //5. fetch jsonData for graphs (if any)
+            if(layer.graphs){
+                if(layer.jsonurl) {
+                    const data = await fetch(layer.jsonurl);
+                    graphData = await data.json();
+                    graphData = layer.jsonDataProcessing ? layer.jsonDataProcessing (graphData) : graphData;
+                } else {
+                    graphData = data.features;
                 }
-                // Crea instancia de MapLayer
-                const mapLayerInstance = new MapLayer({
-                    opacity: 1,
-                    colors: layer?.colors,
-                    title: layer.title,
-                    theme: layer?.tematica,
-                    amountOfColors: layer?.amountOfColors,
-                    formatValue: layer.formatValue,
-                    categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
-                    //categoryLabels: layer?.labels, //los labels personalizados para las categorias (si es categorica) (EJ. 1: "Muy bajo", 2: "Bajo", etc)
-                    categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
-                });
-                // Crea la capa geojson de tematica (con todos los features o los filtrados dentro del radio)
-                const geoJsonLayer = mapLayerInstance.getLayer(
-                    data,
-                    layer?.property || "",
-                    layer?.is_PointLayer || false,
-                    layer?.trimOutliers || false,
-                    layer?.url ? (selectedLayer === "industrias_contaminantes" ? handleClick : () => {}) : handleSelectedElements,
-                    //layer?.capa ? (layer?.featureInfo ? handleClick : () => {}) : handleSelectedElements,
-                    activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
-                    selectionMode,
-                    layer?.capa ? layer.pickable : true,
-                );
-                setTematicaLayer(
-                    extraLayer ? [geoJsonLayer, extraLayer] : [geoJsonLayer]
-                );
-                setMapLayerInstance(mapLayerInstance);
             }
-        };
 
-        fetchData();
-        return () => { isEffectActive = false; };
+            //6. set context variables
+            setMapLayerInstance(mapLayerInstance);
+            setTematicaData(data);
+            setTematicaLayer( extraGeoJsonLayer ? [newGeoJsonLayer, extraGeoJsonLayer] : [newGeoJsonLayer] );
+            setJsonData(graphData);
+            
+        })();
 
     }, [selectedLayer, activeLayerKey, selectionMode, filteredFeatures, agebsGeoJson]);
     

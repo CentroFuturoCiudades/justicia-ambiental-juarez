@@ -333,7 +333,6 @@ export class MapLayer {
         //legendRanges = reversedCategories.map(cat => cat.value);
     } else {
       const ranges = this.getRanges();
-      console.log("ranges for graph", ranges);
        completeColors = ranges.map((range) => this.colorMap(range[1]));
     }
 

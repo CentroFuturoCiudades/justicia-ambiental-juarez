@@ -77,7 +77,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer,
             })}
           </div>
         : <div  className="gradientStyle" style={gradientStyle}></div> }
-        <div className="legend-ranges">
+        <div className="legend-ranges" style={{ gap: ranges.length > 5 ? '0.2dvw' : ranges.length === 5 ? '0.4dvw' : '1dvw'}}>
           {textRanges ? 
             textRanges.map((text, index) => (
               <div key={index} className="legend-ranges__item">
