@@ -117,13 +117,14 @@ export class ComplementaryLayer {
                     handleClick?.(null);
                 }
             }*/
-           onClick: (info) => {
+           /*onClick: (info) => {
                 if (info.object) {
                     handleClick?.(info);
                 } else {
                     handleClick?.(null);
                 }
-            },
+            },*/
+            onClick: handleClick,
         });
     }
 }

@@ -78,8 +78,6 @@ export class MapLayer {
 
   getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean): GeoJsonLayer => {
 
-    //console.log("ispickable", isPickable);
-
     this.isLineLayer = true;
     let getColor: any;
     const featuresForStats = data.allFeatures;
@@ -91,7 +89,6 @@ export class MapLayer {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
       mappedData = mappedData.filter((value) => value !== null && value !== undefined);
 
-      //console.log("mappedData", mappedData);
       if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
       }

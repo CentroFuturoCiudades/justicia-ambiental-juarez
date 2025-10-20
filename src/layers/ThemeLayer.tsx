@@ -114,7 +114,6 @@ const ThemeLayer = () => {
 
             //2. dataProcessing (if any)
             if(layer.dataProcessing) {
-                //console.log("entro a data processing");
                 layerData = layer.dataProcessing(layerData);
             }
 

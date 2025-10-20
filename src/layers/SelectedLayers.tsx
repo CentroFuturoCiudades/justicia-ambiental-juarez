@@ -24,6 +24,7 @@ const SelectedLayer = () => {
 
     useEffect(() => {
         console.log("selected point", selectedPoint);
+        //console.log('layer tooltip', layerTooltip);
     }, [selectedPoint]);
 
    let dissolvedLayer: GeoJsonLayer[] = [];
@@ -66,6 +67,7 @@ const SelectedLayer = () => {
 
     // If a point is selected, create a layer for it
     if(pointFeature && pointFeature.length > 0) {
+        console.log('entro a la capa de point selected')
         const pointFc = featureCollection(pointFeature);
         pointLayer = [new GeoJsonLayer({
             id: 'point',

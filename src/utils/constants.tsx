@@ -94,8 +94,7 @@ export const LAYERS: any = {
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson?${REACT_APP_SAS_TOKEN}`,
-        //jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.csv?${REACT_APP_SAS_TOKEN}`, //pedirlo en json
-        jsonurl: './assets/data/heat_island_graph.json',
+        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.json?${REACT_APP_SAS_TOKEN}`,
         title: "Islas de calor",
         legendTitle: "Temperatura",
         description: "Las islas de calor describen áreas urbanas de muchas construcciones que son más calientes que las áreas rurales cercanas. Las islas de calor aumentan el calor y la contaminación, lo que provoca riesgos para la salud y afecta la calidad de vida.",
@@ -1595,12 +1594,12 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     vias_ferreas: {
         title: "vías férreas",
-        url: "...",
-        enabled: false,
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/vias_ferreas.geojson",
+        enabled: true,
         parent: null,
         isPointLayer: false,
-        field: "group",
-        colors: [],
+        field: "",
+        colors: ["#272a28"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
         isLine: true
@@ -1811,7 +1810,7 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     hidrografia: {
         title: "arroyos y ríos",
-        url: "./assets/data/arroyos_rios.geojson",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/arroyos_rios.geojson",
         enabled: true,
         parent: null,
         isPointLayer: false,
@@ -1824,7 +1823,7 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     lineas_drenaje: {
         title: "líneas de drenaje",
-        url: "./assets/data/Lineas_drenaje4.geojson",
+        url: "./assets/data/Lineas_drenaje_v3.geojson",
         enabled: false,
         parent: null,
         isPointLayer: false,
@@ -1837,7 +1836,8 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     inundaciones: {
         title: "riesgo de inundaciones",
-        url: "./assets/data/cd_juarez_inundacion_60min_sm.tif",
+        //url: "https://justiciaambientalstore.blob.core.windows.net/data/cd_juarez_inundacion_60min_sm.tif",
+        url: './assets/data/cd_juarez_inundacion_60min_sm.tif',
         raster: true,
         enabled: true,
         parent: null,
@@ -1884,7 +1884,7 @@ export const CAPAS_BASE_CODEBOOK = {
         title: "industrias contaminantes",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
         extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',
-        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json`,
+        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json?${REACT_APP_SAS_TOKEN}`,
         jsonData: null,
         enabled: true,
         parent: null,
