@@ -194,8 +194,7 @@ export const accordionItems: AccordionItemType[] = [
                 <div style={{ display: "flex", flexDirection: "column", gap: "1dvh" }}>
                     <p className="bodytext-card">
                         Para obtener mayor información sobre los indicadores disponibles en el visor, 
-                        fuentes de datos y metodologías utilizadas para su cálculo, descarga el 
-                        <a href={codebook_url}> catálogo de datos</a>. 
+                        fuentes de datos y metodologías utilizadas para su cálculo, descarga el <a href={codebook_url} style={{ textDecoration: "underline" }}>catálogo de datos</a>. 
                     </p>
                 </div>
             </div>

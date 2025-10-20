@@ -50,7 +50,7 @@ const Equipo = () => {
                 </div>
 
                 <p style={{ marginTop: '4dvh'}}>
-                    *Los errores u omisiones contenidos en esta página son responsabilidad exclusiva del Centro para el Futuro de las Ciudades del Tecnológico de Monterrey. Para correcciones, comentarios o aclaraciones, favor de contactar a <strong>Ivonne Cruz (ic23@rice.edu)</strong> y <strong>Roberto Ponce (rpl@tec.mx)</strong>.*
+                    *Los errores u omisiones contenidos en esta página son responsabilidad exclusiva del Centro para el Futuro de las Ciudades del Tecnológico de Monterrey. Para correcciones, comentarios o aclaraciones, favor de contactar a <strong>Ivonne Cruz <span style={{ textDecoration: "underline" }}>(ic23@rice.edu)</span></strong> y <strong>Roberto Ponce <span style={{ textDecoration: "underline" }}>(rpl@tec.mx)</span></strong>.*
                 </p>
             </div>
             <div className="landing__footer" >

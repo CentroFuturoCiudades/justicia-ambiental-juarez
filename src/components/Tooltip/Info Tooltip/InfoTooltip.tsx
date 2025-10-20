@@ -1,6 +1,7 @@
 import { Portal } from "@chakra-ui/react";
 import "./InfoTooltip.scss";
 import { useMediaQuery } from '@chakra-ui/react';
+import { codebook_url } from "../../../utils/constants";
 
 type InfoTooltipProps = {
   show: boolean;
@@ -42,8 +43,11 @@ const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : 
           <p style={{ flex: 1 }}>
             {selectedLayerData?.description || "Información no disponible para esta capa."}
           </p>
-          <p className="source"> Fuente: {selectedLayerData?.source || "XXX"} </p>
-          <p className="source"><a href="https://tecmx.sharepoint.com/:x:/r/sites/JusticiaAmbiental/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B427c6ade-f673-4dc2-a13e-980acd3f4a3f%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1760626723342&web=1">Codebook</a></p>
+          <div className="source"> 
+            <span style={{ fontWeight: 700 }}>Fuente: </span>
+            <span>{selectedLayerData?.source} </span>
+          </div>
+          <p className="source">Para más información metodológica sobre este indicador, consulta el <a href={codebook_url} style={{ textDecoration: "underline" }}>Catálogo de datos</a>.</p>
         </div>
       </Portal>
       <div ref={containerRef} />

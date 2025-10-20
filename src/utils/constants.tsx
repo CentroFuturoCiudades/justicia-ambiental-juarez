@@ -1564,101 +1564,6 @@ export const LAYERS: any = {
 
 //segun codebook
 export const CAPAS_BASE_CODEBOOK = {
-    hidrografia: {
-        title: "arroyos y ríos",
-        url: "./assets/data/arroyos_rios.geojson",
-        enabled: true,
-        parent: null,
-        isPointLayer: false,
-        field: null,
-        colors: ["#89cff0"],
-        hoverInfo: false,
-        dataFiltering: (data: any) => { return data},
-        categoryColors: {},
-        isLine: true,
-    },
-    industrias_contaminantes: {
-        title: "industrias contaminantes",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
-        extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',
-        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json`,
-        jsonData: null,
-        enabled: true,
-        parent: null,
-        isPointLayer: true,
-        field: "industry_group",
-        colors: [],
-        categoryColors: {
-            "grupo electronic": "#f4a829",
-            "grupo automotriz": "#743306",
-            "grupo energia/combustion": "#cc5803",
-            "otras": "#993232ff"
-        },
-        clickInfo: true,
-        dataProcessing: (data: any) => {
-            const industry_groups: any = {
-                "grupo electronic": ['Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas', 'Fabricación de equipo y aparatos de distribución de energía eléctrica', 'Fabricación de componentes electrónicos', 'Fabricación de otros productos eléctricos', ],
-                "grupo automotriz": ['Recubrimientos y terminados metálicos', 'Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores', 'Industria básica del aluminio', 'Fabricación de otros productos metálicos', 'Maquinado de piezas para maquinaria y equipo en general', 'Fabricación de asientos y accesorios interiores para vehículos automotores'],
-                "grupo energia/combustion": ['Fabricación de motores de combustión interna, turbinas y transmisiones', 'Fabricación de equipo y aparatos de distribución de energía eléctrica'],
-                //"grupo otros": ['Tapicería de automóviles y camiones', 'Fabricación de otros productos de plástico sin reforzamiento', 'Fabricación de motocicletas', ],
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
-            //split industries by +
-            data.features.forEach((feature: any) => {
-                const industries = feature.properties.industries ? feature.properties.industries.split("+") : [];
-                feature.properties.industries = industries;
-            });
-
-            data.features.forEach((feature: any) => {
-                const industries = feature.properties.industries;
-                let bestMatchGroup = 'otras';
-                let maxMatches = 0;
-                Object.keys(industry_groups).forEach(group => {
-                    const groupIndustries = industry_groups[group];
-                    const matches = industries.filter((industry: string) => groupIndustries.includes(industry)).length;
-                    if (matches > maxMatches) {
-                        maxMatches = matches;
-                        bestMatchGroup = group;
-                    }
-                });
-                feature.properties.industry_group = bestMatchGroup;
-            });
-            return data;
-        },
-       featureInfo: true,
-       isLine: false
-    },
-    industrias: {
-        title: "industrias",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson",
-        enabled: true,
-        parent: null,
-        isPointLayer: true,
-        field: "sector",
-        colors: [],
-        categoryColors: {
-            "Industrias manufactureras de alimentos textiles y tabaco": "#f4a829",
-            "Manufactureras de madera, papel, quimicos y plástico": "#743306",
-            "Energía electrica, agua y gas": "#cc5803",
-            "Electronicos maquinaria y equipo": "#993232ff"
-        },
-        hoverInfo: false,
-        dataFiltering: (data: any) => { return data},
-        isLine: false,
-    },
-    parques_industriales: {
-        title: "parques industriales",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
-        enabled: true,
-        parent: null,
-        isPointLayer: false,
-        //field: "ID_COLO",
-        field: "",
-        colors: ["#272a28"],
-        hoverInfo: false,
-        dataFiltering: (data: any) => { return data},
-        isLine: false,
-    },
     limite_urbano: {
         title: "límite urbano",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/limite_urbano.geojson",
@@ -1684,6 +1589,18 @@ export const CAPAS_BASE_CODEBOOK = {
         dataFiltering: (data: any) => { return  data},
         categoryColors: {},
         isLine: true,
+    },
+    vias_ferreas: {
+        title: "vías férreas",
+        url: "...",
+        enabled: false,
+        parent: null,
+        isPointLayer: false,
+        field: "group",
+        colors: [],
+        hoverInfo: false,
+        dataFiltering: (data: any) => { return data },
+        isLine: true
     },
     equipamientos: {
         title: "equipamientos",
@@ -1889,30 +1806,18 @@ export const CAPAS_BASE_CODEBOOK = {
         },
         isLine: false,
     },
-    vias_ferreas: {
-        title: "vías férreas",
-        url: "...",
-        enabled: false,
-        parent: null,
-        isPointLayer: false,
-        field: "group",
-        colors: [],
-        hoverInfo: false,
-        dataFiltering: (data: any) => { return data },
-        isLine: true
-    },
-    islas_calor: {
-        title: "islas de calor",
-        url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson`,
+    hidrografia: {
+        title: "arroyos y ríos",
+        url: "./assets/data/arroyos_rios.geojson",
         enabled: true,
         parent: null,
         isPointLayer: false,
-        field: "lst",
-        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
-        opacity: 0.7,
+        field: null,
+        colors: ["#89cff0"],
         hoverInfo: false,
-        dataFiltering: (data: any) => { return data },
-        isLine: false
+        dataFiltering: (data: any) => { return data},
+        categoryColors: {},
+        isLine: true,
     },
     lineas_drenaje: {
         title: "líneas de drenaje",
@@ -1927,43 +1832,114 @@ export const CAPAS_BASE_CODEBOOK = {
         categoryColors: {},
         isLine: true,
     },
-    /*calidad_aire: {
-        title: "calidad del aire",
-        url: "...",
-        enabled: false,
-        parent: null,
-        isPointLayer: false,
-        field: null,
-        colors: [],
-        hoverInfo: false,
-        dataFiltering: (data: any) => { return data },
-        isLine: false
-   },*/
-   inundaciones: {
-        title: "inundaciones",
-        url: "./assets/data/cd_juarez_inundacion_60min_sm.tiff",
+    inundaciones: {
+        title: "riesgo de inundaciones",
+        url: "./assets/data/cd_juarez_inundacion_60min_sm.tif",
         raster: true,
         enabled: true,
         parent: null,
         isPointLayer: true,
         field: "ID",
-        colors: ["#ff0000"],
+        //colors: ["#ff0000"],
         clickInfo: true,
         dataFiltering: (data: any) => { return data},
-        /*featureInfo: (info: any) => {
-            if(info){
-                console.log("info", info);
-                return ({
-                    x: info.x,
-                    y: info.y,
-                    content: info.object.properties
-                })
-            } else {
-                return null;
-            }
-        }*/
        featureInfo: true,
        isLine: false
+    },
+    islas_calor: {
+        title: "islas de calor",
+        url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson`,
+        enabled: true,
+        parent: null,
+        isPointLayer: false,
+        field: "lst",
+        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
+        opacity: 0.7,
+        hoverInfo: false,
+        dataFiltering: (data: any) => { return data },
+        isLine: false
+    },
+    industrias: {
+        title: "industrias",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson",
+        enabled: true,
+        parent: null,
+        isPointLayer: true,
+        field: "sector",
+        colors: [],
+        categoryColors: {
+            "Industrias manufactureras de alimentos textiles y tabaco": "#f4a829",
+            "Manufactureras de madera, papel, quimicos y plástico": "#743306",
+            "Energía electrica, agua y gas": "#cc5803",
+            "Electronicos maquinaria y equipo": "#993232ff"
+        },
+        hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        isLine: false,
+    },
+    industrias_contaminantes: {
+        title: "industrias contaminantes",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
+        extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',
+        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/releases.json`,
+        jsonData: null,
+        enabled: true,
+        parent: null,
+        isPointLayer: true,
+        field: "industry_group",
+        colors: [],
+        categoryColors: {
+            "grupo electronic": "#f4a829",
+            "grupo automotriz": "#743306",
+            "grupo energia/combustion": "#cc5803",
+            "otras": "#993232ff"
+        },
+        clickInfo: true,
+        dataProcessing: (data: any) => {
+            const industry_groups: any = {
+                "grupo electronic": ['Fabricación de enchufes, contactos, fusibles y otros accesorios para instalaciones eléctricas', 'Fabricación de equipo y aparatos de distribución de energía eléctrica', 'Fabricación de componentes electrónicos', 'Fabricación de otros productos eléctricos', ],
+                "grupo automotriz": ['Recubrimientos y terminados metálicos', 'Fabricación de equipo eléctrico y electrónico y sus partes para vehículos automotores', 'Industria básica del aluminio', 'Fabricación de otros productos metálicos', 'Maquinado de piezas para maquinaria y equipo en general', 'Fabricación de asientos y accesorios interiores para vehículos automotores'],
+                "grupo energia/combustion": ['Fabricación de motores de combustión interna, turbinas y transmisiones', 'Fabricación de equipo y aparatos de distribución de energía eléctrica'],
+                //"grupo otros": ['Tapicería de automóviles y camiones', 'Fabricación de otros productos de plástico sin reforzamiento', 'Fabricación de motocicletas', ],
+            }
+            data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
+            //split industries by +
+            data.features.forEach((feature: any) => {
+                const industries = feature.properties.industries ? feature.properties.industries.split("+") : [];
+                feature.properties.industries = industries;
+            });
+
+            data.features.forEach((feature: any) => {
+                const industries = feature.properties.industries;
+                let bestMatchGroup = 'otras';
+                let maxMatches = 0;
+                Object.keys(industry_groups).forEach(group => {
+                    const groupIndustries = industry_groups[group];
+                    const matches = industries.filter((industry: string) => groupIndustries.includes(industry)).length;
+                    if (matches > maxMatches) {
+                        maxMatches = matches;
+                        bestMatchGroup = group;
+                    }
+                });
+                feature.properties.industry_group = bestMatchGroup;
+            });
+            return data;
+        },
+       featureInfo: true,
+       isLine: false
+    },
+    parques_industriales: {
+        title: "parques industriales",
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/parques_industriales.geojson",
+        enabled: true,
+        parent: null,
+        isPointLayer: false,
+        //field: "ID_COLO",
+        field: "",
+        colors: ["#272a28"],
+        hoverInfo: false,
+        dataFiltering: (data: any) => { return data},
+        isLine: false,
     },
 }
     
