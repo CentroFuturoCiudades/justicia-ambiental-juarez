@@ -76,7 +76,7 @@ const Visor = () => {
                     />
                 );
             case "legend":
-                return mapLayerInstance?.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle);
+                return mapLayerInstance?.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend);
             case "tematica":
                 return <Tematica />;
             case "complementary":
@@ -112,24 +112,6 @@ const Visor = () => {
         })();
     }, []);
 
-    //For every selectedLayer change, if layer.capafetch jsonData if jsonurl exists else 
-    /*useEffect(() => {
-        if (!selectedLayer) return;
-        const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
-        if(layer.jsonurl){
-            fetch(layer.jsonurl)
-            .then(response => response.json())
-            .then(setJsonData)
-            .catch(err => console.error("Error fetching jsonData:", err));
-        } else {
-            setJsonData(null);
-        }
-    }, [selectedLayer]);*/
-
-    /*useEffect(() => {
-        console.log('tematicaData', tematicaData);
-    }, [tematicaData]);*/
-
     if(!hydrated) return null;
 
     return (
@@ -147,7 +129,7 @@ const Visor = () => {
                         </div>
 
                         <div className="visor__description">
-                            <p> Selecciona una temática y haz click en la tarjeta correspondiente para visualizar la capa en el mapa. </p>
+                            <p> Selecciona una temática y haz click en el indicador de interés para visualizarlo en el mapa. </p>
                         </div>
 
                         <Tematica />
@@ -249,7 +231,7 @@ const Visor = () => {
 
                         {selectedLayer && mapLayerInstance && tematicaData && (
                             <div className="visor__legend">
-                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle)}
+                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend)}
                             </div>
                         )}
 

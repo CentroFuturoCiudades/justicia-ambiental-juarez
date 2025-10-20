@@ -75,7 +75,7 @@ const ComplementaryLayers = () => {
                             opacity: 0.7,
                             title: complementary.title
                         });
-                        await rasterLayerInstance.loadRaster('./assets/data/cd_juarez_inundacion_60min_sm.tif');
+                        await rasterLayerInstance.loadRaster(urlBlob);
                         const newLayer = rasterLayerInstance.getBitmapLayer();
                         setBaseLayers(prev => ({ ...prev, [layerKey]: [newLayer] }));
                     } 

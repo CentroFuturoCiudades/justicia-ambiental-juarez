@@ -8,15 +8,18 @@ import {accordionItems} from './AccordionItems';
 import { aboutContent } from './AccordionItems';
 import type { AccordionItemType } from './AccordionItems';
 import { useMediaQuery } from '@chakra-ui/react';
+import { link } from 'd3';
 
 const speedDialButtons = [
   {
     icon: ContactIcon,
     label: "contacto",
+    link: "/visor"
   },
   {
     icon: MoreIcon,
     label: "equipo",
+    link: "/equipo"
   }
 ]
 
@@ -40,7 +43,7 @@ const Body = () => {
         <div className="speed-dial">
           {speedDialButtons.map((button, index) => (
             <div className="speed-dial__item" key={index}>
-              <button type="button" onClick={() => window.location.href = "/visor"}>
+              <button type="button" onClick={() => window.location.href = button.link}>
                 <span className={`button-text${selectedItem ? " hidden" : ""}`}>{button.label}</span>
                 <span className="icon">
                   <img src={button.icon} alt={`${button.label} icon`} />

@@ -1,9 +1,4 @@
 .legend {
-  //position: absolute;
-  //right: min(3dvh, 1.75dvw);
-  //bottom: min(3dvh, 1.75dvw);
- // width: min(29.30dvh, 17.13dvw);
- // min-height: min(24.3dvh, 14.22dvw);
   display: flex;
   flex-direction: column;
   //height: 100%;
@@ -26,7 +21,7 @@
   display: flex;
   flex-direction: row;
   flex: 1;
-  padding: min(1.5dvh, 1dvw) min(2dvh, 1dvw);
+  padding: min(1.5dvh, 1dvw) min(1.5dvh, 1dvw);
   gap: 0.5dvw;
   //animation: slideIn 0.4s;
 }
@@ -66,6 +61,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 0.8dvw;
+  //border: 1px solid red;
 
   &__item {
     font-size: var(--font-size-button);
@@ -74,6 +71,7 @@
     align-items: center;
     //white-space: nowrap; 
     text-overflow: ellipsis; 
+    //border: 1px solid blue;
   }
 }
 

@@ -30,12 +30,12 @@ export class MapLayer {
   selectedAvg = 0;
   selectedDescription = "";
   categorical?: boolean;
-  categoryLabels?: any;
+  //categoryLabels?: any;
   categoryLegend?: any;
   domain?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLabels = {}, categoryLegend = [] }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLegend = [] }: {
     opacity?: number;
     colors?: string[];
     title?: string;
@@ -43,7 +43,7 @@ export class MapLayer {
     amountOfColors?: number;
     formatValue?: (value: number) => string;
     categorical?: boolean;
-    categoryLabels?: any;
+    //categoryLabels?: any;
     categoryLegend?: any;
   }) {
     this.opacity = opacity;
@@ -53,7 +53,7 @@ export class MapLayer {
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
     this.categorical = categorical;
-    this.categoryLabels = categoryLabels;
+    //this.categoryLabels = categoryLabels;
     this.categoryLegend = categoryLegend;
   }
 
@@ -112,34 +112,7 @@ export class MapLayer {
           return category ? category.color : "#ccc"; // color por defecto
         };
       }
-      else if (this.categorical) {
-        //domain = categorias unicas
-        const categories = Array.from(new Set(mappedData)).sort((a, b) => a - b);
-        this.domain = categories;
-        //console.log("entro a this.categorical y sus categories", categories);
-
-        if (this.colors.length === categories.length) {
-          // mapeo directo de colores a categorías (mismo num de colores que categorias)
-          this.colorMap = scaleOrdinal<string>()
-            .domain(categories.map(String))
-            .range(this.colors);
-        } else {
-          //interpolacion de colores para categorias (diferente num de colores que categorias)
-          this.colorMap = scaleLinear<string>()
-            .domain([categories[0], categories[categories.length - 1]])
-            .range(this.colors);
-        }
-
-        this.legend = {
-          title: this.title,
-          categories: categories.map((cat, i) => ({
-            //label: cat.toString(),
-            label: cat.toString() + " - " + this.categoryLabels?.[cat] || cat.toString(),
-            color: this.colorMap(cat),
-            value: cat
-          }))
-        };
-      } else {
+      else {
         //not categorical
         //domain = [min, max]
         const domain = [
@@ -246,11 +219,9 @@ export class MapLayer {
   }
 
   //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
-  getLegend = (title: string, isPointLayer: boolean, legendTitle: string) => {
+  getLegend = (title: string, isPointLayer: boolean, legendTitle: string, textRanges?: string[]) => {
     if (!this.legend) return <></>;
-    //const ranges = this.getRanges();
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
-    //console.log("ranges for legend", ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
@@ -268,6 +239,7 @@ export class MapLayer {
       formatValue={this.formatValue || ((value: number) => value.toString())}
       categorical={this.categorical}
       isPointLayer={isPointLayer}
+      textRanges={textRanges}
     />
   }
 
@@ -361,7 +333,6 @@ export class MapLayer {
         //legendRanges = reversedCategories.map(cat => cat.value);
     } else {
       const ranges = this.getRanges();
-      console.log("ranges for graph", ranges);
        completeColors = ranges.map((range) => this.colorMap(range[1]));
     }
 
