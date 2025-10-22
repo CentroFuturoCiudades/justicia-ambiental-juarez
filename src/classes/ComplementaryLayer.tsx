@@ -31,7 +31,7 @@ export class ComplementaryLayer {
   }
 
 
-    getLayer(data: any, field: string, isPointLayer: boolean, isLineLayer: boolean, handleClick?: (info: any) => void, categoryColors?: any): GeoJsonLayer {
+    getLayer(data: any, field: string, isPointLayer: boolean, isLineLayer: boolean, handleClick?: (info: any) => void, categoryColors?: any, units?: string, lineWidth?: number, radius?: number): GeoJsonLayer {
         //console.log('data', data);
         let getColor: any;
         let mappedData: number[] = data.features.map((item: any) => { return item.properties[field] });
@@ -104,26 +104,14 @@ export class ComplementaryLayer {
             getFillColor: getColor,
             //getLineColor: [255, 255, 255, 180],
             getLineColor: getColor,
-            getLineWidth: 1,
-            lineWidthMinPixels: isLineLayer ? 4 : undefined,
-            pointRadiusMinPixels: isPointLayer ? 4 : undefined,
-            //pointRadiusMaxPixels: isPointLayer ? 60 : undefined,
-            /*onHover: (info) => {
-                if (info.object) {
-                    // Mostrar tooltip
-                    handleClick?.(info);
-                } else {
-                    // Ocultar tooltip
-                    handleClick?.(null);
-                }
-            }*/
-           /*onClick: (info) => {
-                if (info.object) {
-                    handleClick?.(info);
-                } else {
-                    handleClick?.(null);
-                }
-            },*/
+            getLineWidth: lineWidth ? lineWidth : (feature: any) => {
+                const item = feature.properties[field];
+                console.log('line width item', item);
+                return item ? item * 2: 3;
+            },
+            lineWidthUnits:  units === "meters" ? 'meters' : 'pixels',
+            getPointRadius: radius ? radius : 2,
+            pointRadiusUnits: 'pixels',
             onClick: handleClick,
         });
     }

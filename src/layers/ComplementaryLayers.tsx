@@ -99,7 +99,17 @@ const ComplementaryLayers = () => {
                             console.log('processed data for', layerKey, data);
                         }
                         
-                        const newLayer = complementaryLayerInstance.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.isLine, complementary.clickInfo ? handleClick(layerKey) : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
+                        const newLayer = complementaryLayerInstance.getLayer(
+                            data, 
+                            complementary.field, 
+                            complementary.isPointLayer, 
+                            complementary.isLine,
+                            complementary.title === "industrias contaminantes" ? handleClick(layerKey) : undefined, 
+                            complementary.categoryColors ? complementary.categoryColors : undefined, 
+                            complementary.units,
+                            complementary.lineWidth,
+                            complementary.radius
+                        );
 
                         let extraLayer: GeoJsonLayer | null = null;
                         //extra layer if extraurl (circles for industries)

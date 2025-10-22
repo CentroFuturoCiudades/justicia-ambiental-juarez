@@ -129,7 +129,8 @@ const Visor = () => {
                 stroked: true,
                 filled: false,
                 getLineColor: [0, 0, 0, 200],
-                getLineWidth: 10,
+                getLineWidth: 1,
+                lineWidthUnits: 'pixels',
 
             });
             setLimiteUrbanoLayer(limiteUrbano);
