@@ -7,7 +7,7 @@ import Home from "/assets/Icono HOME.png";
 const Equipo = () => {
     return (
         <div className="landing"  >
-            {/*<img src={LandingBackground} className="landing__background" />*/}
+            <img src={LandingBackground} className="landing__background" />
             <div className="landing__main equipo" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative'}} >
             
                 <button type="button" className='home' onClick={() => window.location.href = '/'}>

@@ -14,7 +14,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
-    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData } = useAppContext();
+    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
 
    /* const handleClick = (info: any) => {
@@ -28,12 +28,13 @@ const ComplementaryLayers = () => {
             setLayerTooltip(null);
         }
     };*/
-    const handleClick = (info: any) => {
+    const handleClick = (layerKey: string) => (info: any) => {
         if (info) {
             setLayerTooltip({
                 x: info.x,
                 y: info.y,
-                content: info.object.properties
+                content: info.object.properties,
+                layerKey: layerKey
             });
             setSelectedPoint(info.object.properties.ID);
         } else {
@@ -50,9 +51,13 @@ const ComplementaryLayers = () => {
             );
             return filtered;
         });
+        //setLayerInfoData({});
+        setLayerTooltip(null);
+        setSelectedPoint(null);
     
         if (selectedBaseLayers.length === 0) {
             setBaseLayers({});
+           // setLayerInfoData({});
             return;
         }
     
@@ -67,7 +72,7 @@ const ComplementaryLayers = () => {
                 }
                 const urlBlob = `${url}?${REACT_APP_SAS_TOKEN}`;
 
-                let graphData = null;
+                let graphData : any = null;
 
                 (async () => {
                     //if complementary is raster
@@ -94,7 +99,7 @@ const ComplementaryLayers = () => {
                             console.log('processed data for', layerKey, data);
                         }
                         
-                        const newLayer = complementaryLayerInstance.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.isLine, complementary.clickInfo ? handleClick : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
+                        const newLayer = complementaryLayerInstance.getLayer(data, complementary.field || "", complementary.isPointLayer || false, complementary.isLine, complementary.clickInfo ? handleClick(layerKey) : undefined, complementary.categoryColors ? complementary.categoryColors : undefined);
 
                         let extraLayer: GeoJsonLayer | null = null;
                         //extra layer if extraurl (circles for industries)
@@ -102,7 +107,7 @@ const ComplementaryLayers = () => {
                             const extraUrlBlob = `${complementary.extraUrl}?${REACT_APP_SAS_TOKEN}`;
                             const extraData = await complementaryLayerInstance.loadData(extraUrlBlob);
                             extraLayer = new GeoJsonLayer({
-                                id: 'extra-layer',
+                                id: 'extra-layer-complementary',
                                 data: extraData,
                                 stroked: true,
                                 filled: true,
@@ -119,7 +124,16 @@ const ComplementaryLayers = () => {
                         graphData = await data.json();
                     }
 
-                    setJsonData(graphData)
+                   // setJsonData(graphData)
+                   if(graphData != null){
+                       console.log("graphData", graphData);
+                       console.log("layerKey", layerKey);
+                        setLayerInfoData(prev => ({
+                            ...prev,
+                            [layerKey]: graphData
+                        }));
+                    }
+                    console.log('layerInfoData', layerInfoData)
 
                 })();
         }});

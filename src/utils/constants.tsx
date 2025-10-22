@@ -1983,7 +1983,7 @@ export const CAPAS_BASE_CODEBOOK = {
         dataFiltering: (data: any) => { return data},
         isLine: false,
     },
-    industrias_contaminantes: {
+    industrias_contaminantes_complementary: {
         title: "industrias contaminantes",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
         extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',

@@ -47,6 +47,7 @@ const Visor = () => {
         layerTooltip, setLayerTooltip,
         jsonData, setJsonData,
         selectedAGEBS,
+        layerInfoData
         
     } = useAppContext();
 
@@ -66,15 +67,7 @@ const Visor = () => {
     const themeKey = selectedLayerData?.tematica;
     const [mobileVisibleElement, setMobileVisibleElement] = useState("layercard");
     const [limiteUrbanoLayer, setLimiteUrbanoLayer] = useState<any>(null);
-    const adjustedViewState = {
-        ...viewState,
-        zoom: isMobile ? 9.7 : viewState.zoom, // Ajustar el zoom según el dispositivo
-    };
-
-    const [processedViewState, setProcessedViewState] = useState({
-        ...viewState,
-        zoom: isMobile ? 9.7 : viewState.zoom, 
-    });
+    
 
     const renderMobilePanel = () => {
         switch(mobileVisibleElement) {
@@ -147,6 +140,12 @@ const Visor = () => {
         console.log('selectedAGEBS changed:', selectedAGEBS);
     }, [selectedAGEBS]);
 
+    useEffect(() => {
+        console.log('selectedPoint changed:', layerInfoData);
+        console.log('layertooltip changed:', layerTooltip);
+        console.log('layerinfodata', layerInfoData);
+    }, [layerInfoData, layerTooltip]);
+
 
   /*useEffect(() => {
     console.log('viewstate changed:', viewState);
@@ -195,7 +194,6 @@ const Visor = () => {
                     initialViewState={viewState}
                     viewState={viewState} //es
                     onViewStateChange={({ viewState }) => {
-                        console.log('onViewStateChange viewState:', viewState);
                         let { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
                         latitude = Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], latitude));
                         longitude = Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], longitude));
@@ -310,7 +308,7 @@ const Visor = () => {
                     selectedLayerData={selectedLayerData}
                 />
                 
-                {layerTooltip && selectedPoint &&
+                {layerTooltip && selectedPoint && layerInfoData &&
                     <LayerTooltip />
                 }
             </div>

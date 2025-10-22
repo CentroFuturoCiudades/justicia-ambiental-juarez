@@ -149,9 +149,9 @@ export class MapLayer {
       }
       else {
         //not categorical
-        console.log('it had thresholds:', this.thresholds);
+       // console.log('it had thresholds:', this.thresholds);
         this.domain = this.getDomain(mappedData);
-        console.log('Domain:', this.domain);
+        //console.log('Domain:', this.domain);
 
         //colormap
         this.colorMap = this.getColorMap(this.domain);
@@ -284,18 +284,18 @@ export class MapLayer {
   getLegend = (title: string, isPointLayer: boolean, legendTitle: string, textRanges?: string[]) => {
     if (!this.legend) return <></>;
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
-    console.log('Generating legend with ranges:', ranges);
+    //console.log('Generating legend with ranges:', ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
         completeColors = ranges.map(cat => cat.color);
         legendRanges = ranges.map(cat => cat.label);
     } else {
-        console.log('colors,', this.colors);
-        console.log('Legend ranges:', ranges);
+        //console.log('colors,', this.colors);
+        //console.log('Legend ranges:', ranges);
         //completeColors = ranges.map((range) => this.colorMap(range[1]));
         completeColors = this.scaleType === "quantile" ? ranges.map((_, i) => this.colors[i]).reverse() : ranges.map((range) => this.colorMap(range[1]));
-        console.log('Legend colors:', completeColors);
+       // console.log('Legend colors:', completeColors);
         legendRanges = ranges;
     }
 

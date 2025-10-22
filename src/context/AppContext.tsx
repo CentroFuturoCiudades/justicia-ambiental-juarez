@@ -60,6 +60,8 @@ interface AppContextI {
     //json data for CAPA (diferentes)
     jsonData: any;
     setJsonData: Dispatch<SetStateAction<any>>;
+    layerInfoData: any;
+    setLayerInfoData: Dispatch<SetStateAction<Record<string, any>>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -132,6 +134,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [layerTooltip, setLayerTooltip] = useState<any | null>(null);
     //json data for CAPA (diferentes)
     const [jsonData, setJsonData] = useState<any>(null);
+    const [layerInfoData, setLayerInfoData] = useState<Record<string, any>>({});
 
     return (
         <AppContext.Provider value={{
@@ -181,7 +184,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setLayerTooltip,
             //json data for CAPA (diferentes)
             jsonData,
-            setJsonData
+            setJsonData,
+            layerInfoData,
+            setLayerInfoData,
         }}
         >
             {children}
