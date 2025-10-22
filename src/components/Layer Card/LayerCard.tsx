@@ -115,8 +115,6 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                     `${layer?.title} por ${activeLayerKey === "agebs" ? "AGEBS" : "Colonias"}`}
                 </p>
                 <span
-                    //onMouseEnter={() => onInfoHover(prev => !prev)}
-                    //onMouseLeave={() => onInfoHover(false)}
                     onMouseEnter={() => onInfoHover(!infoCardOpen)}
                     onClick={() => onInfoHover(!infoCardOpen)}
 
@@ -129,11 +127,18 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                 <div className="layerCard__body">
                     <p>{description}</p>
                 </div>
-                <div ref={rangeGraphRef} style={{  padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>
+                <div ref={rangeGraphRef} >
                      { layer.graphs ? 
-                        (jsonData ? <div className="graph-container">{graphs}</div> : null) : mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)
+                        (jsonData ? 
+                            <div className="graph-container">{graphs}</div> : null
+                        ) 
+                        :
+                        <div style={{ border: '1px solid red' }}>
+                            {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)}
+                        </div>
                      }                    
                 </div>
+                
                 {/*<div ref={rangeGraphRef} style={{ overflow: "hidden", padding: " 1dvw 0.5dvw 1.5dvw 0.5dvw" }}>*/}
             </div>
         </div>

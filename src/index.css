@@ -86,11 +86,10 @@ button {
   transition: border-color 0.25s;
 }
 
-/*img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}*/
+@font-face {
+  font-family: 'Lovelo Black';
+  src: url('./assets/fonts/Lovelo Black.otf') format('opentype');
+}
 
 @media (max-width: 800px) {
   :root {

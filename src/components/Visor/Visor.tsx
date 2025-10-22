@@ -3,7 +3,7 @@ import DeckGL from "deck.gl";
 import Map from "react-map-gl/mapbox";
 import { useAppContext } from "../../context/AppContext";
 import { useEffect, useState, useRef, use } from "react";
-import { LAYERS } from "../../utils/constants";
+import { LAYERS, CAPAS_BASE_CODEBOOK } from "../../utils/constants";
 import { Box } from "@chakra-ui/react";
 import Layers from "../Layers/Layers";
 import Tematica from "../Tematica/Tematica";
@@ -18,6 +18,8 @@ import { useMediaQuery } from '@chakra-ui/react';
 import { BsCardText } from "react-icons/bs";
 import { FaLayerGroup, FaSearch  } from "react-icons/fa";
 import LayerTooltip from "../Tooltip/LayerTooltip";
+import { GeoJsonLayer } from "deck.gl";
+import { LATITUDE_RANGE, LONGITUDE_RANGE, ZOOM_RANGE } from "../../context/AppContext";
 
 const REACT_APP_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
@@ -45,6 +47,7 @@ const Visor = () => {
         layerTooltip, setLayerTooltip,
         jsonData, setJsonData,
         selectedAGEBS,
+        
     } = useAppContext();
 
     const { layers } = Layers();
@@ -62,6 +65,16 @@ const Visor = () => {
     const [infoCardOpen, setInfoCardOpen] = useState(false);
     const themeKey = selectedLayerData?.tematica;
     const [mobileVisibleElement, setMobileVisibleElement] = useState("layercard");
+    const [limiteUrbanoLayer, setLimiteUrbanoLayer] = useState<any>(null);
+    const adjustedViewState = {
+        ...viewState,
+        zoom: isMobile ? 9.7 : viewState.zoom, // Ajustar el zoom según el dispositivo
+    };
+
+    const [processedViewState, setProcessedViewState] = useState({
+        ...viewState,
+        zoom: isMobile ? 9.7 : viewState.zoom, 
+    });
 
     const renderMobilePanel = () => {
         switch(mobileVisibleElement) {
@@ -112,6 +125,33 @@ const Visor = () => {
         })();
     }, []);
 
+    //fetch limite urbano de juarez
+    useEffect(() => {
+        (async () => {
+            const data = await fetch(CAPAS_BASE_CODEBOOK["limite_urbano"].url + `?${REACT_APP_SAS_TOKEN}`);
+            const json = await data.json();
+            const limiteUrbano = new GeoJsonLayer({
+                id: 'limite-urbano-layer',
+                data: json,
+                stroked: true,
+                filled: false,
+                getLineColor: [0, 0, 0, 200],
+                getLineWidth: 10,
+
+            });
+            setLimiteUrbanoLayer(limiteUrbano);
+        })();
+    }, []);
+
+    useEffect(() => {
+        console.log('selectedAGEBS changed:', selectedAGEBS);
+    }, [selectedAGEBS]);
+
+
+  /*useEffect(() => {
+    console.log('viewstate changed:', viewState);
+  }, [viewState]);*/
+
     if(!hydrated) return null;
 
     return (
@@ -153,12 +193,16 @@ const Visor = () => {
                     controller={{ dragPan: !dragMap }}
                     ref={deck}
                     initialViewState={viewState}
-                    viewState={viewState}
+                    viewState={viewState} //es
                     onViewStateChange={({ viewState }) => {
-                        const { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
+                        console.log('onViewStateChange viewState:', viewState);
+                        let { latitude, longitude, zoom } = viewState as { latitude: number; longitude: number; zoom: number };
+                        latitude = Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], latitude));
+                        longitude = Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], longitude));
+                        zoom = Math.min(ZOOM_RANGE[1], Math.max(ZOOM_RANGE[0], zoom));
                         setViewState({ latitude, longitude, zoom });
                     }}
-                    layers={ layers }
+                    layers={ limiteUrbanoLayer ? [ ...layers, limiteUrbanoLayer ] : layers } //las layers y limite urbano (siempre visible)
                     style={{ height: "100%", width: "100%", position: "relative" }}
                     getCursor={({ isDragging, isHovering }) => (isDragging ? "grabbing" : isHovering ? "pointer" : "grab")}
                     onClick={info => {
@@ -224,23 +268,29 @@ const Visor = () => {
                     </>
                 ) : (
                     <>
-                        <div className="visor__dropDowns">
-                            <CapasComplementarias />
-                            { activeLayerKey === "colonias" && <BusquedaColonia /> }
-                        </div>
-
-                        {selectedLayer && mapLayerInstance && tematicaData && (
-                            <div className="visor__legend">
-                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend)}
-                            </div>
-                        )}
-
+                    <div style={{position: 'absolute', top: 'min(3dvh, 1.75dvw)', left: ' min(3dvh, 1.75dvw)', right: 'min(3dvh, 1.75dvw)', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                         <Toolbar
                             rangeGraphRef={rangeGraphRef}
                             deck={deck}
                             map={map}
                             setPopUp={setShowDownloadCard}
                         />
+
+                        <div className="visor__cdJuarez">
+                            <p style={{borderLeft:'2px solid white', borderRight: '2px solid white', padding: '0 min(0.6dvh, 0.4dvw'}}>CIUDAD JUAREZ</p>
+                        </div>
+
+                        <div className="visor__dropDowns">
+                            <CapasComplementarias />
+                            { activeLayerKey === "colonias" && <BusquedaColonia /> }
+                        </div>
+                    </div>
+
+                        {selectedLayer && mapLayerInstance && tematicaData && (
+                            <div className="visor__legend">
+                                {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend)}
+                            </div>
+                        )}
                
                         {/*Download Summary PopUp */}
                         {showDownloadCard && mapLayers.length > 0 && (

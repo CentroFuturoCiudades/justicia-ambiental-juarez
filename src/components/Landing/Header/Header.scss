@@ -9,11 +9,15 @@
     width: 100%;
     padding: 3dvh 0; //padding: min(1.75dvh, 3dvh) 0;
     border-bottom: 3px solid black;
+    display: flex;
+    flex-direction: row;
   }
 
   &__title {
     font-family: 'Space Mono', monospace;
     font-size: var(--font-size-title);
+    border-right: 3px solid black;
+    width: 50%;
     
     &__italic {
       font-style: italic;

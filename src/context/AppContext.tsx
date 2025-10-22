@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, type Dispatch, type ReactEl
 import type { FeatureCollection } from "geojson";
 import { MapLayer } from "../classes/MapLayer";
 import type { LayerKey } from "../utils/constants";
+import { max } from "d3";
 
 type ViewState = {
     latitude: number;
@@ -71,10 +72,17 @@ export const useAppContext = () => {
     return context;
 };
 
+export const LONGITUDE_RANGE = [-106.5, -106.4];
+export const LATITUDE_RANGE = [31.62, 31.7];
+export const ZOOM_RANGE = [9.8, 12];
+
+
 export const defaultViewState = {
     latitude: 31.66,
     longitude: -106.4245,
     zoom: 10.8,
+    maxZoom: 14,
+    minZoom: 9,
 }
 
 
@@ -99,8 +107,18 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<any[]>([]);
 
     //zoom
-    const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
-    const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
+    const zoomIn = () => setViewState(prev => ({
+        ...prev,
+        longitude: Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], prev.longitude)),
+        latitude: Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], prev.latitude)),
+        zoom: Math.min(prev.zoom + 1, ZOOM_RANGE[1])
+    }))
+    const zoomOut = () => setViewState(prev => ({
+        ...prev,
+        longitude: Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], prev.longitude)),
+        latitude: Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], prev.latitude)),
+        zoom: Math.max(prev.zoom - 1, ZOOM_RANGE[0])
+    }))
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);

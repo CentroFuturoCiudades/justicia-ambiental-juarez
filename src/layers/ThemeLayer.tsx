@@ -84,6 +84,8 @@ const ThemeLayer = () => {
                 formatValue: layer.formatValue,
                 categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
                 categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
+                scaleType: layer?.scaleType,
+                thresholds: layer?.thresholds
             });
 
             //2. Get data for layer

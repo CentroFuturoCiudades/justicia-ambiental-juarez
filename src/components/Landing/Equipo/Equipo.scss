@@ -1,0 +1,30 @@
+.equipo {
+    z-index: 2;
+    padding: 3dvh 4dvw;
+    gap: 2dvh;
+    font-size: var(--font-size-header);
+
+    &__title {
+        font-weight: bold;
+        font-family: 'Space Mono, monospace';
+        font-size: min(7dvh, 5dvw);
+        text-align: center;
+        margin-bottom: min(2dvh, 1dvw);
+    }
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: min(3.5dvh, 2dvw);
+    }
+    &__row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    &__col {
+        display: flex;
+        flex-direction: column;
+        gap: min(2dvh, 1dvw);
+        max-width: min(30dvh, 20dvw);
+    }
+}

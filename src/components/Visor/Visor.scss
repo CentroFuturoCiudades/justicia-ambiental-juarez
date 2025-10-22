@@ -62,9 +62,9 @@
     }
 
     &__dropDowns {
-        position: absolute;
-        top: min(3dvh, 1.75dvw);
-        right: min(3dvh, 1.75dvw);
+        //position: absolute;
+        //top: min(3dvh, 1.75dvw);
+        //right: min(3dvh, 1.75dvw);
         display: flex;
         flex-direction: column;
         gap: min(0.5dvh, 0.3dvw);
@@ -92,6 +92,18 @@
         height: min(24.3dvh, 14.22dvw);
         //border: 1px solid red;
         //min-height: min(20dvh, 10dvw);
+    }
+    &__cdJuarez {
+        //background-color: var(--background-medium);
+        background-color: rgba(64, 66, 61, 0.5);
+        color: white;
+        font-family: 'Lovelo Black';
+        font-size: var(--font-size-visor-header);
+        //height: min(6dvh, 8dvw);
+        padding: min(0.4dvh, 0.2dvw) min(2dvh, 1.16dvw);
+        display: flex;
+        align-items: center;
+        border-radius: var(--border-radius);
     }
     &__downloadCard {
         position: absolute;
