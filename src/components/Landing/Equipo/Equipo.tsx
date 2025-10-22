@@ -1,12 +1,18 @@
 import LandingBackground from "/assets/Fondo.jpg";
 import Footer from "../Footer/Footer";
 import './Equipo.scss'
+import Home from "/assets/Icono HOME.png";
+
 
 const Equipo = () => {
     return (
         <div className="landing"  >
             {/*<img src={LandingBackground} className="landing__background" />*/}
-            <div className="landing__main equipo" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}} >
+            <div className="landing__main equipo" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative'}} >
+            
+                <button type="button" className='home' onClick={() => window.location.href = '/'}>
+                    <img src={Home} alt="Home" style={{width:'100%', height: '100%', objectFit: 'contain'}}/>
+                </button>
                 <div >
                     <p className="equipo__title"> Red de Colaboración</p>
                     <div className="equipo__content" >

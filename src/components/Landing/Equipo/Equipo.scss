@@ -1,12 +1,12 @@
 .equipo {
     z-index: 2;
-    padding: 3dvh 4dvw;
+    padding: 4dvh 7.5dvw 4dvh 4dvw;
     gap: 2dvh;
     font-size: var(--font-size-header);
 
     &__title {
         font-weight: bold;
-        font-family: 'Space Mono, monospace';
+        font-family: 'Space Mono', monospace;
         font-size: min(7dvh, 5dvw);
         text-align: center;
         margin-bottom: min(2dvh, 1dvw);
@@ -26,5 +26,22 @@
         flex-direction: column;
         gap: min(2dvh, 1dvw);
         max-width: min(30dvh, 20dvw);
+    }
+}
+.home {
+    position: absolute;
+    right: calc(5.5dvw - 0.5 * min(6.8dvh, 4dvw));
+    bottom: min(5dvh, 3dvw);
+    border-radius: 50%;
+    height: min(7.8dvh, 5dvw);
+    width: min(7.8dvh, 5dvw);
+    padding: 0.4dvw;
+    align-content: center;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    &:hover{
+        transform: scale(1.1);
     }
 }
