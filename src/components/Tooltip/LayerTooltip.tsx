@@ -6,11 +6,16 @@ import { useEffect } from "react";
 
 
 const LayerTooltip = () => {
-    const { layerTooltip, jsonData, mapLayerInstance } = useAppContext();
+    const { layerTooltip, layerInfoData, mapLayerInstance } = useAppContext();
 
 
-    if (!layerTooltip || !jsonData || !mapLayerInstance) return null;
-    const industry = jsonData ? jsonData[layerTooltip.content.ID] : null;
+    if (!layerTooltip || !layerInfoData){
+        console.log("no layerTooltip or no layerInfoData or no mapLayerInstance");
+        return null;
+    }
+    console.log("layerinfoData", layerInfoData);
+    const jsonForLayer = layerInfoData[layerTooltip.layerKey || selectedLayer];
+    const industry = jsonForLayer ? jsonForLayer[layerTooltip.content.ID] : null;
 
     return (
         <div className="tooltip" style={{ left: layerTooltip.x, top: layerTooltip.y }} >
@@ -53,39 +58,6 @@ const LayerTooltip = () => {
                     </tr>
                 </tbody>
             </table>
-            {/*<Table.Root className="table" border={'none'}>
-                <Table.Header style={{ backgroundColor: "var(--background-dark)" }}>
-                    <Table.Row className="table__row">
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Tipo de contaminante </Table.ColumnHeader>
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> En el sitio </Table.ColumnHeader>
-                        <Table.ColumnHeader className="table__header" style={{color: "white"}}> Fuera del sitio </Table.ColumnHeader>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {industry && Object.keys(industry.risks["On-site releases"]).map((risk) => (
-                        <Table.Row key={risk} className="table__row" >
-                            <Table.Cell >
-                                {risk}
-                            </Table.Cell>
-                            <Table.Cell>
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    {industry.risks["On-site releases"][risk] === true ? <FaCheck /> : ""}
-                                </div>
-                            </Table.Cell>
-                            <Table.Cell>
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                    {industry.risks["Off-site releases"][risk] === true ? <FaCheck /> : ""}
-                                </div>
-                            </Table.Cell>
-                        </Table.Row>
-                    ))}
-                    <Table.Row border={'none'}>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold" }}> Total emitidos </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold", textAlign: "center" }}> {Math.round(industry.total_releases["On-site releases"]).toLocaleString()} kg </Table.Cell>
-                        <Table.Cell className="table__footer" style={{ fontWeight: "bold", textAlign: "center" }}> {Math.round(industry.total_releases["Off-site releases"]).toLocaleString()} kg </Table.Cell>
-                    </Table.Row>
-                </Table.Body>
-            </Table.Root>*/}
         
         </div>
     );

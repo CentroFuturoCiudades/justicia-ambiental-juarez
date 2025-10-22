@@ -56,7 +56,7 @@ const Tematica = () => {
                             {Object.entries(SECTIONS).map(([sectionKey, section], idx, arr) => (
                                 <Accordion.Item value={sectionKey} className="dropdown__subItem" >
                                 
-                                    <Accordion.ItemTrigger className={`trigger trigger--light`}>
+                                    <Accordion.ItemTrigger className={`trigger trigger--light trigger--${sectionKey}`}>
                                         <Span className="trigger__title"> {section.label} </Span>
                                         <Accordion.ItemIndicator  className="trigger__indicator">
                                             <AiOutlineDown/>

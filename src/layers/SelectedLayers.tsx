@@ -20,6 +20,7 @@ const SelectedLayer = () => {
         selectionMode,
         selectedLayer,
         tematicaData,
+        layerTooltip
     } = useAppContext();
 
     useEffect(() => {
@@ -28,7 +29,7 @@ const SelectedLayer = () => {
     }, [selectedPoint]);
 
    let dissolvedLayer: GeoJsonLayer[] = [];
-   let pointLayer: GeoJsonLayer[] | null = null;
+   let pointLayer: GeoJsonLayer[] = [];
 
     // Obtiene features a base de los identificadores (cvegeos/nombre) seleccionados para agebs/colonias
     const selectedGeometries = useMemo(() => {
@@ -75,7 +76,7 @@ const SelectedLayer = () => {
             pickable: true,
             filled: true,
             getFillColor: [255, 0, 0, 255],
-            getRadius: 100,
+            getPointRadius: 100,
             pointRadiusMinPixels: 6,
             onClick: () => setSelectedPoint(null),
         })];

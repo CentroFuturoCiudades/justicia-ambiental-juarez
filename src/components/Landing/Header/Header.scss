@@ -9,11 +9,15 @@
     width: 100%;
     padding: 3dvh 0; //padding: min(1.75dvh, 3dvh) 0;
     border-bottom: 3px solid black;
+    display: flex;
+    flex-direction: row;
   }
 
   &__title {
     font-family: 'Space Mono', monospace;
     font-size: var(--font-size-title);
+    border-right: 3px solid black;
+    width: 40%;
     
     &__italic {
       font-style: italic;
@@ -56,6 +60,9 @@
   .page-header {
     padding-left: 7dvw;
     padding-right: 15dvw;
+    &__title {
+      width: 55%;
+    }
   }
   .button_visor {
     width: min(18dvh, 11dvw);

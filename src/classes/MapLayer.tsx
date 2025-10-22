@@ -1,10 +1,10 @@
 import { GeoJsonLayer } from "@deck.gl/layers";
-import { color, rgb, selection } from "d3";
+import { color, min, range, rgb, selection } from "d3";
 import Legend from "./../components/Legend/Legend";
 import RangeGraph from "../components/RangeGraph/RangeGraph";
-import { scaleLinear, scaleOrdinal } from "d3-scale";
+import { scaleLinear, scaleOrdinal, scaleQuantile, scaleThreshold } from "d3-scale";
 import { formatNumber } from "../utils/utils";
-import { ascending, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize,  type ScaleQuantile, scaleQuantile } from "d3";
+import { ascending, interpolateRgb, interpolateRgbBasis, quantileSorted, quantize} from "d3";
 
 export class MapLayer {
   opacity: number;
@@ -33,9 +33,11 @@ export class MapLayer {
   //categoryLabels?: any;
   categoryLegend?: any;
   domain?: number[];
+  scaleType?: string;
+  thresholds?: number[];
 
 
-  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLegend = [] }: {
+  constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLegend = [], scaleType = "linear", thresholds = [] }: {
     opacity?: number;
     colors?: string[];
     title?: string;
@@ -45,6 +47,8 @@ export class MapLayer {
     categorical?: boolean;
     //categoryLabels?: any;
     categoryLegend?: any;
+    scaleType?: string;
+    thresholds?: number[];
   }) {
     this.opacity = opacity;
     this.colors = colors;
@@ -55,6 +59,8 @@ export class MapLayer {
     this.categorical = categorical;
     //this.categoryLabels = categoryLabels;
     this.categoryLegend = categoryLegend;
+    this.scaleType = scaleType;
+    this.thresholds = thresholds;
   }
 
   async loadData(url: string) {
@@ -76,9 +82,40 @@ export class MapLayer {
     return filteredData;
   }
 
-  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean): GeoJsonLayer => {
+  //get domain (for lineal and quantile scales)
+  getDomain = (mappedData: number[]) => {
+    let domain;
+    if(this.scaleType === "linear"){ //lineal domain [min, max]
+      domain = [
+          this.minVal,
+          ...Array.from({ length: this.colors.length - 2 },
+            (_, i) => this.minVal + (this.maxVal - this.minVal) * (i + 1) / (this.colors.length - 1)),
+          this.maxVal,
+        ];
+    } else if (this.thresholds && this.thresholds.length > 0) { //quantile domain (thresholds)
+      domain = this.thresholds;
+    } else { //quantile domain (every value)
+      domain = mappedData;
+    }
+    return domain;
+  }
 
-    this.isLineLayer = true;
+  //get color map (for lineal and quantile scales)
+  getColorMap = (domain: number[]) => {
+    let colorMap;
+    if(this.scaleType === "linear"){
+      colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+    } else if (this.thresholds && this.thresholds.length > 0) {
+      //console.log('entro al elseif thresholds colormap', this.thresholds.length - 1 === this.colors.length);
+      colorMap = scaleThreshold<number, string>().domain(domain).range(this.colors);
+    } else {
+      colorMap = scaleQuantile<string>().domain(domain).range(this.colors);
+    }
+    return colorMap;
+  }
+
+  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean): GeoJsonLayer => {
+    //this.isLineLayer = true;
     let getColor: any;
     const featuresForStats = data.allFeatures;
     const categorias = Array.from(
@@ -89,10 +126,11 @@ export class MapLayer {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
       mappedData = mappedData.filter((value) => value !== null && value !== undefined);
 
-      if( trimOutliers ){
+      /*if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
-      }
+      }*/
 
+      //get min and max
       const minVal = Math.min(...mappedData) || 0;
       const maxVal = Math.max(...mappedData) || 0;
       this.maxVal = maxVal;
@@ -111,44 +149,40 @@ export class MapLayer {
       }
       else {
         //not categorical
-        //domain = [min, max]
-        const domain = [
-          minVal,
-          ...Array.from({ length: this.colors.length - 2 },
-            (_, i) => minVal + (maxVal - minVal) * (i + 1) / (this.colors.length - 1)),
-          maxVal,
-        ];
-        this.domain = domain;
-        this.colorMap = scaleLinear<string>().domain(this.domain).range(this.colors);
+       // console.log('it had thresholds:', this.thresholds);
+        this.domain = this.getDomain(mappedData);
+        //console.log('Domain:', this.domain);
+
+        //colormap
+        this.colorMap = this.getColorMap(this.domain);
 
         this.legend = {
           title: this.title,
           categories: this.colors.map((color, i) => ({
-            label: domain[i].toFixed(2),
-            color,
-            value: domain[i].toFixed(2)
+            label: this.domain[i],
+            color,  
+            value: this.domain[i]
           }))
         };
       }
       const positiveAvg = mappedData.filter(n => n > 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n > 0).length;
-      const negativeAvg = mappedData.filter(n => n < 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n < 0).length;
-
       this.positiveAvg = positiveAvg;
-      this.negativeAvg = negativeAvg;
+      //const negativeAvg = mappedData.filter(n => n < 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n < 0).length;
+      //this.negativeAvg = negativeAvg;
 
 
       getColor =
         (feature: any): [number, number, number, number?] => {
 
           const item = feature.properties[field];
-          //console.log("item clicked", item);
+
           //para valores de 0, poner gris claro
-          if (item == 0) {
+          /*if (item == 0) {
             return [230, 230, 230, 200]; //gris con poca opacidad
-          }
+          }*/
           const rgbValue = color(this.colorMap(item))?.rgb();
-          return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b] : [255, 255, 255];
-         // }
+          const opacityFirstRange = this.scaleType === "quantile" && item <= this.colorMap.domain()[0] ? 200 : 255;
+          return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, opacityFirstRange] : [255, 255, 255, 255];
         }
     } else {
       getColor = (feature: any): [number, number, number] => {
@@ -189,19 +223,45 @@ export class MapLayer {
   }
 
   getRanges = (amountOfColors: number = 6) => {
-    const domain = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
-    let quantiles = [this.minVal, ...domain, this.maxVal];
-    quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
+    let quantiles: number[] = [];
+    if(this.scaleType === "linear"){
+        const domain = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+        quantiles = [this.minVal, ...domain, this.maxVal];
+        quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
+    } else if (this.thresholds && this.thresholds.length > 0) {
+      quantiles = [this.minVal, ...this.thresholds, this.maxVal];
+    }
+    else {
+      quantiles = this.colorMap.quantiles();
+      quantiles = [this.minVal, ...quantiles, this.maxVal];
+    }
 
-    return quantiles
-      .slice(0, -1)
-      .map((num, i) => [num, quantiles[i + 1]])
-      .reverse(); // Reverse the order of the ranges
+  //pares de rangos (inicio y fin) y revierte el orden
+  return quantiles
+    .slice(0, -1)
+    .map((num, i) => [num, quantiles[i + 1]])
+    .reverse(); // Opcional: invertir el orden si es necesario
   }
 
   getColors = (amountOfColors: number = 6) => {
     const ranges = this.getRanges(amountOfColors);
-    const min = this.minVal;
+    if(this.scaleType === "linear"){
+      const domain = [
+        this.minVal,
+        ...Array.from({ length: this.colors.length - 2 },
+          (_, i) => this.minVal + (this.maxVal - this.minVal) * (i + 1) / (this.colors.length - 1)),
+        this.maxVal,
+      ];
+      const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+      //const colors = ranges.map((range) => colorMap(range[1]));
+      //const validColors = colors.filter((color) => color !== undefined);
+      //return validColors.map((color) => rgb(color).formatHex());
+      return ranges.map((range)=> colorMap(range[1]));
+    } else {
+      return ranges.map((range) => this.colorMap(range[1]));
+      //return colors.filter((color) => color !== undefined).map((color) => rgb(color).formatHex());
+    }
+    /*const min = this.minVal;
     const max = this.maxVal;
     const domain = [
       min,
@@ -212,20 +272,30 @@ export class MapLayer {
     const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
     const colors = ranges.map((range) => colorMap(range[1]));
     const validColors = colors.filter((color) => color !== undefined);
-    return validColors.map((color) => rgb(color).formatHex());
+    return validColors.map((color) => rgb(color).formatHex());*/
+    // Mapea cada rango al color correspondiente en el colorMap
+  //const colors = ranges.map((range) => this.colorMap(range[1]));
+
+  // Filtra colores válidos y conviértelos a formato hexadecimal
+  //return colors.filter((color) => color !== undefined).map((color) => rgb(color).formatHex());
   }
 
   //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
   getLegend = (title: string, isPointLayer: boolean, legendTitle: string, textRanges?: string[]) => {
     if (!this.legend) return <></>;
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
+    //console.log('Generating legend with ranges:', ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
         completeColors = ranges.map(cat => cat.color);
         legendRanges = ranges.map(cat => cat.label);
     } else {
-        completeColors = ranges.map((range) => this.colorMap(range[1]));
+        //console.log('colors,', this.colors);
+        //console.log('Legend ranges:', ranges);
+        //completeColors = ranges.map((range) => this.colorMap(range[1]));
+        completeColors = this.scaleType === "quantile" ? ranges.map((_, i) => this.colors[i]).reverse() : ranges.map((range) => this.colorMap(range[1]));
+       // console.log('Legend colors:', completeColors);
         legendRanges = ranges;
     }
 
@@ -324,13 +394,17 @@ export class MapLayer {
 
   getRangeGraph = (avg: number, selected: number) => {
     let completeColors;
+    const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
+
     if (this.categorical) {
         const reversedCategories = [...this.legend.categories].reverse();
         completeColors = reversedCategories.map(cat => cat.color);
         //legendRanges = reversedCategories.map(cat => cat.value);
     } else {
       const ranges = this.getRanges();
-       completeColors = ranges.map((range) => this.colorMap(range[1]));
+        //completeColors = ranges.map((_, i) => this.colors[i]).reverse();
+      completeColors = this.scaleType === "quantile" ? ranges.map((_, i) => this.colors[i]).reverse() : ranges.map((range) => this.colorMap(range[1]));
+      // completeColors = ranges.map((range) => this.colorMap(range[1]));
     }
 
     const Data = {
@@ -346,6 +420,9 @@ export class MapLayer {
       formatValue={this.formatValue || ((value: number) => value.toString())}
       colorsArray={completeColors}
       selectedCount={selected}
+      ranges={ranges}
+      layerType={this.categorical ? "categorical" : "continuous"}
+      colorMap={this.colorMap}
     />
   }
 }

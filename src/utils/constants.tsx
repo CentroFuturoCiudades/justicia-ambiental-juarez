@@ -44,7 +44,7 @@ export const COLORS = {
 export type LayerKey = keyof typeof LAYERS;
 export const SECTIONS = {
     ambiental: {
-        label: "riesgos ambientales",
+        label: "ambiental",
         layers: [
             "vulnerabilidad_calor",
             "pob_afectada_inundaciones",
@@ -55,7 +55,7 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     industria: {
-        label: "riesgos relacionados a la industria",
+        label: "industria",
         layers: [
             "hogares_vulnerables_industria",
             "infantes_vulnerables_industria",
@@ -65,15 +65,15 @@ export const SECTIONS = {
         ] as LayerKey[],
     },
     equipamiento: {
-        label: "acceso a equipamientos",
+        label: "equipamientos",
         layers: [
             "indice_accesibilidad",
-            "tiempo_recreativos",
-            "tiempo_hospitales",
-            "tiempo_preparatorias",
             "acceso_recreativos",
             "acceso_hospitales",
             "acceso_preparatorias",
+            "tiempo_recreativos",
+            "tiempo_hospitales",
+            "tiempo_preparatorias",
             "equipamientos",
         ] as LayerKey[],
     },
@@ -90,7 +90,9 @@ export const SECTIONS = {
 }
 
 export const LAYERS: any = {
-    islas_de_calor: {
+    islas_de_calor: {   //quintil default (sin puntos corte)
+        scaleType: "quantile",
+        colors: ["#ffed85ff", "#fbaf52ff", "#f6711fff", "#c33910ff", "#910000ff"],
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -104,7 +106,7 @@ export const LAYERS: any = {
         type: "Continua",
         is_lineLayer: false,
         is_PointLayer: false,
-        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
+        //colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         enabled: true,
         colonias: false,
         dataProcessing: (data: any) => {
@@ -116,7 +118,7 @@ export const LAYERS: any = {
         },
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, la temperatura promedio del cuatrimestre más caluroso del año (Mayo a Agosto) es de <strong>48.54 grados centigrados.</strong></span>,
+            <span>En Ciudad Juárez, la temperatura promedio del cuatrimestre más caluroso del año (Mayo a Agosto) es de <strong>48.5 grados centigrados.</strong></span>,
         selectionCard: (data) => {
             return (
             <>
@@ -189,7 +191,7 @@ export const LAYERS: any = {
         }
         ]
     },
-    vulnerabilidad_calor: {
+    vulnerabilidad_calor: { //categorica
         title: "Índice de vulnerabilidad al calor",
         description: "Índice que evalúa la exposición al calor, la sensibilidad al calor y la capacidad de adaptación para evaluar de manera integral la vulnerabilidad al calor.",
         source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017 (CIESIN) Columbia University (ver: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5251739)",
@@ -236,7 +238,10 @@ export const LAYERS: any = {
             return categories[Math.trunc(avg)] || "N/A";
         }
     },
-    pob_afectada_inundaciones: {
+    pob_afectada_inundaciones: { //quintil con puntos corte (revisar cortes)
+        scaleType: "quantile",
+        thresholds: [10, 25, 50, 75],
+        colors: ["#fffffeff","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
         title: "Población afectada por inundaciones",
         description: "Porcentaje de la población que durante una lluvia de 60 minutos se ve afectada por un nivel de agua superior a 25 centímetros.",
         source: "Elaboración propia con datos  del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y del  Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ. (ver: https://www.inegi.org.mx/app/mapas/?tg=1015)",
@@ -253,7 +258,7 @@ export const LAYERS: any = {
         is_lineLayer: false,
         colonias: true,
         enabled: true,
-        colors: ["#f4f9ff", "#08316b"],
+        //colors: ["#f4f9ff", "#08316b"],
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_poblacion_inundada !== null );
             data.features.forEach((feature: any) => {
@@ -270,15 +275,23 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
+            {data.avg == 0 || data.num == 0 ?
+                <span>En {data.introText}, no hay población afectada por las inundaciones </span>
+                :
+                <>
                 <span> En {data.introText}, <strong>{data.num}</strong> personas se ven afectadas por las inundaciones lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br />
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
+                </>
+            }
             </>
             );
         },
-
     },
-    superficie_inundada: {
+    superficie_inundada: {  //quintil con puntos corte (revisar cortes)
+        scaleType: "quantile",
+        thresholds: [5, 10, 15, 20],
+        colors: ["#fffffeff","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
         title: "Porcentaje de superficie inundado",
         description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
         source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
@@ -306,18 +319,21 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, hay <strong>{data.num}</strong> metros cuadrados afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>,
+            <span>En Ciudad Juárez, hay <strong>{data.num} m<sup>2</sup></strong> afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>,
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText}, <strong>{data.num}</strong> metros cuadrados se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
+                <span>En {data.introText}, <strong>{data.num} m<sup>2</sup></strong> se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
                 <br />
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
             </>
             );
-        }
+        },
     },
-    riesgo_trafico_vehicular: {
+    riesgo_trafico_vehicular: { //quintil sin puntos corte
+        scaleType: "quantile",
+        //thresholds: [50, 75, 100, 150], //que me defina los quintiles o yo defino los thresholds?
+        colors: ["#dfe1e6ff","#bbbfc9ff", "#b39e93ff", "#c4703eff", "#8c4a23ff",],
         title: "Proximidad a alto tráfico vehicular",
         description: "La proximidad al alto tráfico vehicular representa el total de vehículos que circulan diariamente en las vialidades principales ubicadas a menos de 500 metros de cada AGEB o colonia.",
         source: "Elaboración propia con datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez",
@@ -342,14 +358,20 @@ export const LAYERS: any = {
             <span>En Ciudad Juárez, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.</span>,
        selectionCard: (data) => {
         return (
-            <span>
-               En {data.introText}, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.
+            <>
+                {data.avg == 0 || data.num == 0 ?
+                <span>En {data.introText}, no hay exposición al tráfico vehicular </span>
+                :
+                <>
+               <span>En {data.introText}, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.</span>
                <br />
                <span>Este flujo vehicular está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
-           </span>
+               </>
+            }
+           </>
         )}
     },
-    indice_marginacion: {
+    indice_marginacion: { //categorica
         title: "Indice de Marginación Urbana",
         description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos.",
         source: "Consejo Nacional de Población (CONAPO), 2020.",
@@ -367,11 +389,11 @@ export const LAYERS: any = {
         enabled: true,
         colonias: false,
         categoricalLegend: [
-            { value: 1, label: "1 - Muy Bajo", color: "#a5b6ce" },
-            { value: 2, label: "2 - Bajo", color: "#7e95b5" },
-            { value: 3, label: "3 - Medio", color: "#57749c" },
-            { value: 4, label: "4 - Alto", color: "#2f5284" },
-            { value: 5, label: "5 - Muy Alto", color: "#08316b" }
+            { value: 1, label: "1 - Muy Bajo", color: "#d9d8c3ff" },
+            { value: 2, label: "2 - Bajo", color: "#ccc992ff" },
+            { value: 3, label: "3 - Medio", color: "#c0bb62ff" },
+            { value: 4, label: "4 - Alto", color: "#969131ff" },
+            { value: 5, label: "5 - Muy Alto", color: "#807900ff" }
         ],
         dataProcessing: (data: any) => {
             const marginacionMap: any = {
@@ -416,7 +438,7 @@ export const LAYERS: any = {
         }
     },
     //RIESGOS RELACIONADOS A LA INDUSTRIA
-    industrias: {
+    industrias: {   //FALTA COLORES CATEGORICA
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -541,7 +563,7 @@ export const LAYERS: any = {
         },
     ]
     },
-    industrias_contaminantes: {
+    industrias_contaminantes: { //FALTA COLORES Y DEFINIR GRUPOS CATEGORICA
         capa: true,
         pickable: true,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -831,7 +853,10 @@ export const LAYERS: any = {
         }
         ]
     },
-    hogares_vulnerables_industria: {
+    hogares_vulnerables_industria: { //quintil con puntos corte
+        scaleType: "quantile",
+        thresholds: [10, 25, 50, 75],
+        colors: ["#ffefdcff","#d99f88ff", "#b34e34ff", "#7d271aff", "#470000ff"],
         title: "Hogares expuestos a industrias contaminantes",
         description: "Porcentaje de hogares cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
         source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
@@ -857,20 +882,28 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay hogares expuestos a industrias contaminantes.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> hogares expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+                </>
+            }
             </>
             );
         },
     },
-    infantes_vulnerables_industria: {
+    infantes_vulnerables_industria: { //quintil con puntos corte
+        scaleType: "quantile",
+        colors: ["#ffefdcff","#d99f88ff", "#b34e34ff", "#7d271aff", "#470000ff"],
+        thresholds: [10, 25, 50, 75],
         title: "Infancias expuestas a industrias contaminantes",
         description: "Porcentaje de niños menores a 5 años cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
         source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
@@ -896,20 +929,28 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay infantes de 0 a 5 años expuestos a industrias contaminantes.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> infantes de 0 a 5 años expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
+        }
+        </>
             );
         }
     },
-    adultos_vulnerables_industria: {
+    adultos_vulnerables_industria: { //quintil con puntos corte
+        scaleType: "quantile",
+        thresholds: [10, 25, 50, 75],
+        colors: ["#ffefdcff","#d99f88ff", "#b34e34ff", "#7d271aff", "#470000ff"],
         title: "Adultos mayores expuestos a industrias contaminantes",
         description: "Porcentaje de adultos mayores a 60 años cercanos a una industria que emite contaminantes en el sitio de la actividad industrial.",
         source: "Elaboración propia con datos del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y la Comisión para la Cooperación Ambiental (CEC). (2025). Taking Stock: North American PRTR Database — Mapa interactivo de emisiones y transferencias [Plataforma en línea]. Recuperado de https://takingstock.cec.org/Map?Culture=en-US&IndustryLevel=4&Measure=3&MediaTypes=29&ReportType=1&ResultType=1&Years=2023",
@@ -935,21 +976,26 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors:["#f6ede9", "#8c5c47"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay adultos mayores de 60 años o más expuestos a industrias contaminantes.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> adultos mayores de 60 años o más expuestos a industrias contaminantes, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
+        }
+        </>
             );
         }
     },
     //ACCESO A EQUIPAMIENTOS
-    equipamientos: {
+    equipamientos: {    //definir colores categorica
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -1095,7 +1141,10 @@ export const LAYERS: any = {
         },
     ]
     },
-    indice_accesibilidad: {
+    indice_accesibilidad: { //cuartil con puntos corte
+        scaleType: "quantile",
+        colors: ["#d5d9c3", "#b1bb82", "#8e9e41", "#6a8000"],
+        thresholds: [25, 50, 75],
         title: "Índice de Accesibilidad a Equipamientos",
         description: "Métrica combinada que toma en cuenta el tiempo de viaje caminando a equipamientos educativos y de cuidados, de salud, recreativos y parques. Entre más alta, más facil es acceder a ellos.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1127,6 +1176,8 @@ export const LAYERS: any = {
         }
     },
     tiempo_recreativos: {
+        scaleType: "linear",
+        //thresholds: [5, 20],
         title: "Tiempo promedio a espacios recreativos",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al parque más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1135,6 +1186,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
+        colors : ["#f0e8e8ff", "#6c350bff"],
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_parque !== null);
             return data;
@@ -1158,10 +1210,11 @@ export const LAYERS: any = {
             if(avg >= 5 && avg <= 20) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (> 20 min)", "Accesible (5 - 20 min)", "Muy accesible (< 5 min)"],
+       textRangesLegend: ["Poco accesible (> 20 min)", "Accesible (5 - 20 min)", "Muy accesible (< 5 min)"],
     },
     tiempo_hospitales: {
-        title: "Tiempo promedio a hospitales o clínicas",
+        scaleType: "linear",
+        title: "Tiempo promedio a hospitales y clínicas",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al hospital o clínica más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_clinica_hospital",
@@ -1169,6 +1222,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
+        colors : ["#e6edf0ff", "#0b3f69ff"],
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_clinica_hospital !== null);
             return data;
@@ -1192,9 +1246,10 @@ export const LAYERS: any = {
             if(avg >= 20 && avg <= 60) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20 - 60 min)", "Muy accesible (<20 min)"],
+       textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20 - 60 min)", "Muy accesible (<20 min)"],
     },
     tiempo_preparatorias: {
+        scaleType: "linear",
         title: "Tiempo promedio a preparatorias",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando a la preparatoria más cercana.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1226,9 +1281,13 @@ export const LAYERS: any = {
             if(avg >= 15 && avg <= 45) return "accesible";
             else return "poco accesible";
         },
-        textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15 - 45 min)", "Muy accesible (<15 min)"],
+        colors : ["#f1f2eaff","#caa201ff"],
+       textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15 - 45 min)", "Muy accesible (<15 min)"],
     },
     acceso_recreativos: {
+        scaleType: "quantile",
+        thresholds: [10, 25, 50, 75],
+        colors: ["#ffefdcff","#d99f88ff", "#b34e34ff", "#7d271aff", "#470000ff"],
         title: "Acceso a parques",
         description: "Porcentaje de hogares con acceso a un parque a no más de 15 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1259,15 +1318,24 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay hogares con al menos un parque a 15 minutos caminando.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos un parque a 15 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
+        }
+        </>
             );
         }
     },
     acceso_hospitales: {
-        title: "Acceso a hospitales o clínicas",
+        scaleType: "quantile",
+                thresholds: [10, 25, 50, 75],
+        colors: ["#dee3eaff","#9eb8ddff", "#6391d5ff", "#26569cff", "#001847ff"],
+        title: "Acceso a hospitales y clínicas",
         description: "Porcentaje de hogares con acceso a un hospital o clínica a no más de 30 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "porcentaje_hogares_clinica_hospital_30min",
@@ -1297,14 +1365,23 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay hogares con al menos un hospital o clínica a 30 minutos caminando.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos un hospital o clínica a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
             </>
+        }
+        </>
             );
         }
     },
     acceso_preparatorias: {
+        scaleType: "quantile",
+        thresholds: [10, 25, 50, 75],
+        colors: ["#eae8deff","#f0e7adff", "#fae57cff", "#f0d55eff", "#e5bb00ff"],
         title: "Acceso a preparatorias",
         description: "Porcentaje de hogares con acceso a una preparatoria a no más de 30 minutos caminando.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1331,21 +1408,29 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
         //colors: ["#f4f9ff", "#846b9eff", "#483a57ff"],
-        colors: ["#b7c6e6", "#a58dc0ff", "#846b9eff", "#61457fff","#38264cff"],
+        //colors: ["#b7c6e6", "#a58dc0ff", "#846b9eff", "#61457fff","#38264cff"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares con al menos una preparatoria a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay hogares con al menos una preparatoria a 30 minutos caminando.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> hogares con al menos una preparatoria a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
+        }
+        </>
             );
         }
     },
     //POBLACIÓN
     ingreso: {
+        scaleType: "quantile",
+        colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
         title: "Ingreso promedio per cápita ",
         description: "Ingreso promedio per cápita mensual en pesos mexicanos de la población económicamente activa.",
         source: "Elaboración propia con base en datos del INEGI; Encuesta Nacional de Ingresos y Gastos de los Hogares (ENIGH), 2018; y Censo de Población y Vivienda, 2020.",
@@ -1364,7 +1449,6 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return '$' + formatNumber(x, 0)
         },
-        colors: ["#f4f9ff", "#08316b"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, el ingreso promedio per cápita es de <strong>{data.avg}</strong>.</span>,
         selectionCard: (data) => {
@@ -1378,6 +1462,7 @@ export const LAYERS: any = {
         }
     },
     porcentaje_pob_0a5: {
+        scaleType: "quantile",
         title: "Infancias",
         description: "Porcentaje de población de 0 y 5 años.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
@@ -1404,20 +1489,29 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors: ["#f4f9ff", "#08316b"],
+       // colors: ["#f4f9ff", "#08316b"],
+       colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay infantes de 0 a 5 años.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
+        }
+        </>
             );
         }
     },
     porcentaje_pob_60: {
+        scaleType: "quantile",
+        colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
         title: "Adultos mayores",
         description: "Porcentaje de población de 60 años o más.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
@@ -1444,20 +1538,27 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors: ["#f4f9ff", "#08316b"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> adultos de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
+            {data.num == 0 || data.avg == "0%" ?
+                <span>En {data.introText}, no hay adultos mayores de 60 años o más.</span>
+            :
+            <>
                 <span>En {data.introText}, hay <strong>{data.num}</strong> adultos mayores de 60 años o más, lo que representa el <strong>{data.avg}</strong> de la población dentro de esta área.</span>
                 <br/>
                 <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
             </>
+        }
+        </>
             );
         }
     },
     porcentaje_escolaridad: {
+        scaleType: "quantile",
+        colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
         title: "Población sin preparatoria terminada",
         description: "Porcentaje de la población mayor de 18 años que reportó tener menos de 12 años de escolaridad (preparatoria).",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
@@ -1484,7 +1585,6 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        colors: ["#f4f9ff", "#08316b"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, <strong>{data.num}</strong> personas no cuentan con la preparatoria terminada, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
@@ -1839,7 +1939,7 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     inundaciones: {
         title: "riesgo de inundaciones",
-        //url: "https://justiciaambientalstore.blob.core.windows.net/data/cd_juarez_inundacion_60min_sm.tif",
+        //url: "https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif",
         url: './assets/data/cd_juarez_inundacion_60min_sm.tif',
         raster: true,
         enabled: true,
@@ -1883,7 +1983,7 @@ export const CAPAS_BASE_CODEBOOK = {
         dataFiltering: (data: any) => { return data},
         isLine: false,
     },
-    industrias_contaminantes: {
+    industrias_contaminantes_complementary: {
         title: "industrias contaminantes",
         url: "https://justiciaambientalstore.blob.core.windows.net/data/industry_points.geojson",
         extraUrl: 'https://justiciaambientalstore.blob.core.windows.net/data/industry_circles.geojson',

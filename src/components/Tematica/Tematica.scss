@@ -43,7 +43,7 @@
     align-items: center;
     padding: 0 0.5dvw;
     border-right: 1px solid white;
-    font-weight: 400;
+    font-weight: 500; //si esta muy bold, 400
   }
   &__indicator {
     width: min(2.2dvw, 3.76dvh);
@@ -59,21 +59,34 @@
   }
   
   &--light {
-    background-color: var(--background-medium);
+    //background-color: var(--background-medium);
     border-radius: 0;
 
     .trigger__title {
       border-right: 1px solid gray;
-      font-weight: 300;
+      font-weight: 500; //si esta muy bold, 400
     }
     .trigger__indicator {
       color: gray;
     }
+  }
+}
+
+$tematicas: (
+  ambiental: var(--ambiental-primary),
+  industria: var(--industria-primary),
+  equipamiento: var(--equipamiento-primary),
+  poblacion: var(--poblacion-primary)
+);
+
+@each $key, $color in $tematicas {
+  .trigger--#{$key} {
+    background-color: #{$color};
     &:hover {
-      background: #b3b3b3;
-      border-color: #b3b3b3 ;
+      background-color: #{$color};
     }
   }
+  
 }
 
 .checkbox {

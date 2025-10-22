@@ -273,7 +273,7 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
       theme: layerInstance.theme ?? "",
       description: layerInstance.selectedDescription,
       puntaje: layerInstance.formatValue(layerInstance.selectedAvg),
-      juarezAvg: layerInstance.formatValue(layerInstance.positiveAvg),
+      juarezAvg: layerInstance.formatValue(layerInstance.averageJuarez),
       selected: (layerInstance.selected ?? []).map(s => `• ${s}`).join('\n'),
       //complementarias: (layerInstance.complementarias ?? []).map(c => `• ${c}`).join('\n')
       activeKey: layerInstance.activeKey.toUpperCase()

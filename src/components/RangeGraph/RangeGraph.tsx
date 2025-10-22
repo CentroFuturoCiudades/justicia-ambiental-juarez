@@ -7,23 +7,41 @@ type RangeGraph = {
     formatValue: (value: number) => string;
     colorsArray: string[];
     selectedCount: number;
-
+    layerType?: string;
 };
 
 // Estilos in line para la conversion a imagen con html2canvas
-const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount }: RangeGraph) => {
+const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount, layerType }: RangeGraph) => {
 
   const [isMobile] = useMediaQuery('(max-width: 800px)');
+  /*const domain = ranges.map((range) => range[1]);
+  const colorMap = scaleLinear<string>().domain(domain).range(colorsArray);
+  const linearGradient = `linear-gradient(to left, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[i])} ${i * 100 / ranges.length}%`).join(", ")})`;
+
+  const gradientStyle: React.CSSProperties = {
+    background: linearGradient,
+    width: "100%",
+    height: isMobile ? "min(10dvh, 14dvw)" : "min(5.5dvh, 3.2dvw)",
+    padding: "0 1dvw",
+  };*/
+  
 
   //if (!data || !data.positiveAvg) return null;
   return (
     <div style={{ 
-      height: "auto",
+      //height: "auto",
       display: "flex",
       flexDirection: "column",
+      alignContent: "center",
+      alignItems: "center",
       justifyContent: "center",
-      //border: '1px solid green',
+      padding: 'min(1.5dvh, 1dvw) 0',
+     // border: '1px solid blue',
+      position: "relative",
+      //minHeight: '15dvh'
     }}>
+        
+          
       {/* INDICADOR de promedio de la selección */}
       {averageAGEB !=null && selectedCount > 0 && (() => {
         const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
@@ -33,27 +51,24 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
           flexDirection: "column",
           alignItems: "center",
           zIndex: 2,
-          height: "100%",
+          //height: "100%",
           justifyContent: "space-between",
+          //border: '1px solid green',
         };
 
         if (percent <= 5) {
           style.left = 0;
           style.transform = "none";
-          //style.alignItems = "flex-start";
-          style.alignItems = "center";
-        } else if (percent >= 90) {
+        } else if (percent >= 80) {
           style.right = 0;
           style.transform = "none";
-          //style.alignItems = "flex-end";
-          style.alignItems = "center";
         } else {
           style.left = `calc(${percent}% )`;
           style.transform = "translateX(-50%)";
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: isMobile ? "min(5dvh, 10dvw)" : "min(4.3dvh, 2.5dvw)"}}>
+          <div style={{ position: "relative", display: "flex", width: "100%", height: 'auto', minHeight: isMobile ? 'min(10dvh, 5dvw)':'min(1.5dvh, 3dvw)'}}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
                 <span style={{ height: isMobile ? "min(4dvh, 6dvw)" : "1.5dvw", transform: "translateY(20%)" }}>
@@ -64,26 +79,27 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         );
       })()}
 
-      {/* BARRA DE COLOR */}
-      <div style={{
-          display: "flex",
-          flexDirection: "row",
-          width: "100%",
-          height: isMobile ? "min(10dvh, 14dvw)" : "min(5.5dvh, 3.2dvw)",
-          padding: "0 1dvw",
-          position: "relative",
-      }}>
-
-          {/* LINEA - Promedio Cd. Juárez */}
+<div style={{ position: 'relative', display: 'flex', width:"100%", minHeight: 'min(15dvh, 8.7dvw)', alignItems: 'center'}}>
+    <div style={{ position: 'absolute', height: '100%', left: "1dvw", right: '1dvw'}}>
+      
+      {/* LINEA - Promedio Cd. Juárez */}
           {(() => {
             const percent = ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
             const style: React.CSSProperties = {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              justifyContent: "center", // o center
               position: "absolute",
-              zIndex: 1,
+              top: 0,
+              height: "100%",
+              //transform: "translateY(-50%)",
+              zIndex: 2,
               width: "max-content",
+              //alignSelf: "center",
+              //transform: "translateY(10%)",
+              //height: "100%",
+              //justifyContent: "space-between",
             };
 
             if (percent <= 5) {
@@ -106,17 +122,20 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
               <div style={style}>
                 <div style={{
                   width: isMobile ? "0.5dvw" : "0.14dvw",
-                  height: isMobile ? "calc(min(10dvh, 14dvw) + min(4.1dvh, 2.8dvw))" : "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
+                  //height: isMobile ? "calc(min(10dvh, 14dvw) + min(4.1dvh, 2.8dvw))" : "calc(min(5.5dvh, 3.2dvw) + min(3.1dvh, 1.8dvw))",
+                  height: "100%",
                   background: "black",
-                  marginTop: isMobile ? "calc(-0.5 * min(4.1dvh, 2.8dvw))" : "calc(-0.5 * min(3.1dvh, 1.8dvw))"
+                  flexGrow: 1,
+                  //marginTop: isMobile ? "calc(-0.5 * min(4.1dvh, 2.8dvw))" : "calc(-0.5 * min(3.1dvh, 1.8dvw))"
                 }}/>
                   <div style={{
                     fontSize: "var(--font-size-button)",
                     fontWeight: "300",
                     alignContent: percent >= 98 ? "flex-end" : "center",
                     textAlign: percent >= 98 ? "right" : "center",
-                    marginTop: "min(1.5dvh, 0.8dvw)",
+                    //marginTop: "min(1.5dvh, 0.8dvw)",
                     lineHeight: "1",
+                    paddingTop: '0.4dvw'
                   }}>
                     {formatValue(data.positiveAvg)}
                     <br />
@@ -125,6 +144,20 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
               </div>
             );
           })()}
+        
+          </div>
+      <div style={{  display: 'flex', flexDirection: 'column', width: '100%' }}>
+
+      {/* BARRA DE COLOR */}
+      <div style={{
+          display: "flex",
+          flexDirection: "row",
+          //width: "100%",
+          height: isMobile ? "min(10dvh, 14dvw)" : "min(5.5dvh, 3.2dvw)",
+          padding: "0 1dvw",
+          //border: '1px solid black',
+          //position: "relative",
+      }}>
 
           {/* SEGMENTOS DE COLOR */}
           {[...colorsArray].reverse().map((color, idx) => ( 
@@ -162,7 +195,9 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
           </div>
         ))}
       </div>
-    </div>      
+    </div>    
+    </div>  
+    </div>
   )
 }
 

@@ -21,7 +21,8 @@ const ThemeLayer = () => {
         selectedPoint, setSelectedPoint,
         filteredFeatures,
         setLayerTooltip,
-        setJsonData,
+        setJsonData,    //for graphs
+        setLayerInfoData,   //for layer tooltio (copy of jsonData but for layer info)
     } = useAppContext();
 
     const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer[] | null>(null);
@@ -41,7 +42,8 @@ const ThemeLayer = () => {
             setLayerTooltip({
                 x: info.x,
                 y: info.y,
-                content: info.object.properties
+                content: info.object.properties,
+                layerKey: selectedLayer,
             });
             setSelectedPoint(info.object.properties.ID);
         } else {
@@ -53,6 +55,7 @@ const ThemeLayer = () => {
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
         setLayerTooltip(null); //cerrar tooltip al cambiar de capa
+       // setLayerInfoData({});
         //setTematicaLayer(null);
         //setJsonData(null);
         //setMapLayerInstance(null);
@@ -62,7 +65,7 @@ const ThemeLayer = () => {
             setTematicaLayer(null);
             setMapLayerInstance(null);
             setTematicaData(null);
-            setJsonData(null);
+            setJsonData(null); 
             return;
         };
 
@@ -84,6 +87,8 @@ const ThemeLayer = () => {
                 formatValue: layer.formatValue,
                 categorical: layer.type === "Categorica" ? true : false,    //determinar si es categorica o continua
                 categoryLegend: layer?.categoricalLegend, // los colores y labels personalizados para las categorias (si es categorica) (EJ. {value: "educacion", label: "Educación", color: "#e9c46a"}, etc)
+                scaleType: layer?.scaleType,
+                thresholds: layer?.thresholds
             });
 
             //2. Get data for layer
@@ -154,7 +159,13 @@ const ThemeLayer = () => {
             setTematicaData(data);
             setTematicaLayer( extraGeoJsonLayer ? [newGeoJsonLayer, extraGeoJsonLayer] : [newGeoJsonLayer] );
             setJsonData(graphData);
-            
+            if(graphData != null && selectedLayer==="industrias_contaminantes") {
+                setLayerInfoData(prev => ({
+                    ...prev,
+                    [selectedLayer]: graphData
+                })); //same data for layer tooltip
+            }
+
         })();
 
     }, [selectedLayer, activeLayerKey, selectionMode, filteredFeatures, agebsGeoJson]);

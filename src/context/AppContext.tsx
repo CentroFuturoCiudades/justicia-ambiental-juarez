@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, type Dispatch, type ReactEl
 import type { FeatureCollection } from "geojson";
 import { MapLayer } from "../classes/MapLayer";
 import type { LayerKey } from "../utils/constants";
+import { max } from "d3";
 
 type ViewState = {
     latitude: number;
@@ -59,6 +60,8 @@ interface AppContextI {
     //json data for CAPA (diferentes)
     jsonData: any;
     setJsonData: Dispatch<SetStateAction<any>>;
+    layerInfoData: any;
+    setLayerInfoData: Dispatch<SetStateAction<Record<string, any>>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -71,10 +74,17 @@ export const useAppContext = () => {
     return context;
 };
 
+export const LONGITUDE_RANGE = [-106.6, -106.3];
+export const LATITUDE_RANGE = [31.5, 31.8];
+export const ZOOM_RANGE = [9.8, 12];
+
+
 export const defaultViewState = {
     latitude: 31.66,
     longitude: -106.4245,
     zoom: 10.8,
+    maxZoom: 14,
+    minZoom: 9,
 }
 
 
@@ -99,8 +109,18 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [selectedBaseLayers, setSelectedBaseLayers] = useState<any[]>([]);
 
     //zoom
-    const zoomIn = () => setViewState(prev => ({...prev, zoom: prev.zoom + 1}))
-    const zoomOut = () => setViewState(prev => ({...prev, zoom: prev.zoom - 1}))
+    const zoomIn = () => setViewState(prev => ({
+        ...prev,
+        longitude: Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], prev.longitude)),
+        latitude: Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], prev.latitude)),
+        zoom: Math.min(prev.zoom + 1, ZOOM_RANGE[1])
+    }))
+    const zoomOut = () => setViewState(prev => ({
+        ...prev,
+        longitude: Math.min(LONGITUDE_RANGE[1], Math.max(LONGITUDE_RANGE[0], prev.longitude)),
+        latitude: Math.min(LATITUDE_RANGE[1], Math.max(LATITUDE_RANGE[0], prev.latitude)),
+        zoom: Math.max(prev.zoom - 1, ZOOM_RANGE[0])
+    }))
 
     const [selectedAGEBS, setSelectedAGEBS] = useState<string[]>([]);
     const [selectedColonias, setSelectedColonias] = useState<string[]>([]);
@@ -114,6 +134,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [layerTooltip, setLayerTooltip] = useState<any | null>(null);
     //json data for CAPA (diferentes)
     const [jsonData, setJsonData] = useState<any>(null);
+    const [layerInfoData, setLayerInfoData] = useState<Record<string, any>>({});
 
     return (
         <AppContext.Provider value={{
@@ -163,7 +184,9 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setLayerTooltip,
             //json data for CAPA (diferentes)
             jsonData,
-            setJsonData
+            setJsonData,
+            layerInfoData,
+            setLayerInfoData,
         }}
         >
             {children}
