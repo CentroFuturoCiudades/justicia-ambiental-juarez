@@ -35,6 +35,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
       alignContent: "center",
       alignItems: "center",
       justifyContent: "center",
+      padding: 'min(1.5dvh, 1dvw) 0',
      // border: '1px solid blue',
       position: "relative",
       //minHeight: '15dvh'
@@ -50,8 +51,9 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
           flexDirection: "column",
           alignItems: "center",
           zIndex: 2,
-          height: "100%",
+          //height: "100%",
           justifyContent: "space-between",
+          //border: '1px solid green',
         };
 
         if (percent <= 5) {
@@ -70,7 +72,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         }
         
         return (
-          <div style={{ position: "relative", width: "100%", height: isMobile ? "min(5dvh, 10dvw)" : "min(4.3dvh, 2.5dvw)"}}>
+          <div style={{ position: "relative", display: "flex", width: "100%", height: 'auto', minHeight: isMobile ? 'min(10dvh, 5dvw)':'min(1.5dvh, 3dvw)'}}>
             <div style={ style }>
                 <p style={{fontWeight: 700, fontSize: "var(--font-size-body)", lineHeight: "1"}}>{formatValue(averageAGEB)}</p>
                 <span style={{ height: isMobile ? "min(4dvh, 6dvw)" : "1.5dvw", transform: "translateY(20%)" }}>
@@ -81,8 +83,8 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         );
       })()}
 
-<div style={{position: 'relative', display: 'flex', width:"100%", minHeight: '15dvh', alignItems: 'center'}}>
-      <div style={{ position: 'absolute', height: '100%', left: "1dvw", right: '1dvw'}}>
+<div style={{ position: 'relative', display: 'flex', width:"100%", minHeight: 'min(15dvh, 8.7dvw)', alignItems: 'center'}}>
+    <div style={{ position: 'absolute', height: '100%', left: "1dvw", right: '1dvw'}}>
       
       {/* LINEA - Promedio Cd. Juárez */}
           {(() => {
@@ -102,7 +104,6 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
               //transform: "translateY(10%)",
               //height: "100%",
               //justifyContent: "space-between",
-             // border: '1px solid green',
             };
 
             if (percent <= 5) {

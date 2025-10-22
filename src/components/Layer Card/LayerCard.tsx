@@ -127,13 +127,13 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
                 <div className="layerCard__body">
                     <p>{description}</p>
                 </div>
-                <div ref={rangeGraphRef} >
+                <div >
                      { layer.graphs ? 
                         (jsonData ? 
                             <div className="graph-container">{graphs}</div> : null
                         ) 
                         :
-                        <div style={{ border: '1px solid red' }}>
+                        <div ref={rangeGraphRef} >
                             {mapLayerInstance?.getRangeGraph(selected.length > 0 ? average: 0, selected.length)}
                         </div>
                      }                    
