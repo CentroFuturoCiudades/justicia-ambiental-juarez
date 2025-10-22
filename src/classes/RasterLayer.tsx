@@ -29,8 +29,11 @@ export class RasterLayer {
   }
 
   async loadRaster(url: string) {
+    try {
     const tiff = await fromUrl(url);
+    console.log("TIFF loaded from", url);
     const img = await tiff.getImage();
+    console.log("TIFF image read", img.getWidth(), "x", img.getHeight());
     const [wX, wY, eX, eY] = img.getBoundingBox();
     const width = img.getWidth();
     const height = img.getHeight();    
@@ -38,6 +41,7 @@ export class RasterLayer {
     canvas.width = width;
     canvas.height = height;
     const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("Failed to get canvas context");
     const imageData = ctx?.createImageData(width, height);
     const rasters = await img.readRasters();
     const raster = rasters[0] as any;
@@ -78,10 +82,17 @@ export class RasterLayer {
         value: domain[i].toFixed(2)
       }))
     };
+    console.log("Raster image created", this.image, this.bounds);
+  } catch (error) {
+    console.error("Error loading raster:", error);
+  }
   }
 
   getBitmapLayer() {
-    if (!this.image || !this.bounds) return null;
+    if (!this.image || !this.bounds){
+      console.error("Raster image or bounds not loaded");
+      return null;
+    };
     return new BitmapLayer({
       id: this.title,
       image: this.image,

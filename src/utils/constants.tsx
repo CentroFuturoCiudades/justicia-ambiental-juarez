@@ -1939,7 +1939,7 @@ export const CAPAS_BASE_CODEBOOK = {
     },
     inundaciones: {
         title: "riesgo de inundaciones",
-        //url: "https://justiciaambientalstore.blob.core.windows.net/data/cd_juarez_inundacion_60min_sm.tif",
+        //url: "https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif",
         url: './assets/data/cd_juarez_inundacion_60min_sm.tif',
         raster: true,
         enabled: true,
