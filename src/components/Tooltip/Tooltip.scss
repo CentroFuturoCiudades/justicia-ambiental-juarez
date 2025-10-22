@@ -8,14 +8,12 @@
     font-size: var(--font-size-body);
     //min-width: 13dvw;
     //max-height: 20dvw;
+    max-width: 25dvw;
     overflow-y: auto;
 
     &__title {
-      //padding: min(1dvh, 1dvw);
-      //border: 1px solid red;
       font-size: var(--font-size-button);
       font-weight: 500;
-      //margin-bottom: 0.5dvh;
       padding: min(1dvh, 0.8dvw);
     }
 }
@@ -23,9 +21,6 @@
 .table {
     font-size: var(--font-size-button);
     &__header {
-      //padding: 1dvh 1dvw;
-      //padding: min(0.5dvh, 0.3dvw) 0;
-      //padding: 0 1dvw;
       min-height: 0 !important;
       margin: 0;
     }

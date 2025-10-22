@@ -74,8 +74,8 @@ export const useAppContext = () => {
     return context;
 };
 
-export const LONGITUDE_RANGE = [-106.5, -106.4];
-export const LATITUDE_RANGE = [31.62, 31.7];
+export const LONGITUDE_RANGE = [-106.6, -106.3];
+export const LATITUDE_RANGE = [31.5, 31.8];
 export const ZOOM_RANGE = [9.8, 12];
 
 
