@@ -1,3 +1,4 @@
+import { line } from "d3";
 import { formatNumber, capitalize } from "./utils";
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
@@ -91,8 +92,8 @@ export const SECTIONS = {
 
 export const LAYERS: any = {
     islas_de_calor: {   //quintil default (sin puntos corte)
-        scaleType: "quantile",
-        colors: ["#ffed85ff", "#fbaf52ff", "#f6711fff", "#c33910ff", "#910000ff"],
+        scaleType: "linear",
+        colors: ["#ffed85ff", "#910000ff"],
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -106,7 +107,6 @@ export const LAYERS: any = {
         type: "Continua",
         is_lineLayer: false,
         is_PointLayer: false,
-        //colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
         enabled: true,
         colonias: false,
         dataProcessing: (data: any) => {
@@ -200,11 +200,11 @@ export const LAYERS: any = {
         type: "Categorica",
         is_lineLayer: false,
         categoricalLegend: [
-            { value: 1, label: "1 - Baja", color: "#fef0d9" },
-            { value: 2, label: "2 - Ligera", color: "#fdcc8a" },
-            { value: 3, label: "3 - Media", color: "#fc8d59" },
-            { value: 4, label: "4 - Alta", color: "#e34a33" },
-            { value: 5, label: "5 - Extrema", color: "#b30000" },
+            { value: 1, label: "1 - Baja", color: "#ffed85ff" },
+            { value: 2, label: "2 - Ligera", color: "#fbaf52ff" },
+            { value: 3, label: "3 - Media", color: "#f6711fff" },
+            { value: 4, label: "4 - Alta", color: "#c33910ff" },
+            { value: 5, label: "5 - Extrema", color: "#910000ff" },
         ],
         enabled: true,
         colonias: true,
@@ -212,7 +212,7 @@ export const LAYERS: any = {
             return formatNumber(x, 0)
         },
         amountOfColors: 5,
-        colors: ["#fef0d9", "#fdcc8a", "#fc8d59", "#e34a33", "#b30000"],
+        colors: ["#ffed85ff", "#fbaf52ff", "#f6711fff", "#c33910ff", "#910000ff"],
         juarezCard: (data) => {
             return (
                 <span>En Ciudad Juárez, el Índice promedio de Vulnerabilidad al Calor, es de <strong>{data.avg}</strong> lo que representa una vulnerabilidad <strong>{data.category}.</strong></span>
@@ -1559,6 +1559,7 @@ export const LAYERS: any = {
     porcentaje_escolaridad: {
         scaleType: "quantile",
         colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
+        thresholds: [10, 25, 50, 75],
         title: "Población sin preparatoria terminada",
         description: "Porcentaje de la población mayor de 18 años que reportó tener menos de 12 años de escolaridad (preparatoria).",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
@@ -1675,12 +1676,13 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: false,
-        field: null,
-        colors: ["#000000"],
+        field: "",
+        colors: ["#cacacaff"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         categoryColors: {},
-        isLine: true,
+        isLine: false,
+        opacity: 0.5,
     },
     vias_principales: {
         title: "vias principales",
@@ -1688,12 +1690,13 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: false,
-        field: "ID",
+        field: "ANCHO_DE_C",
         colors: ["#272a28"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return  data},
         categoryColors: {},
         isLine: true,
+        units: "meters",
     },
     vias_ferreas: {
         title: "vías férreas",
@@ -1917,12 +1920,13 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: false,
-        field: null,
-        colors: ["#89cff0"],
+        field: "",
+        colors: ["#92d3f1ff"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         categoryColors: {},
         isLine: true,
+        lineWidth: 8,
     },
     lineas_drenaje: {
         title: "líneas de drenaje",
@@ -1930,17 +1934,19 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: false,
-        field: null,
+        field: "",
         colors: ["#18515bff"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         categoryColors: {},
         isLine: true,
+        lineWidth: 20,
+        units: "meters",
     },
     inundaciones: {
         title: "riesgo de inundaciones",
-        //url: "https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif",
-        url: './assets/data/cd_juarez_inundacion_60min_sm.tif',
+        url: "https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif",
+        //url: './assets/data/cd_juarez_inundacion_60min_sm.tif',
         raster: true,
         enabled: true,
         parent: null,
@@ -1963,7 +1969,8 @@ export const CAPAS_BASE_CODEBOOK = {
         opacity: 0.7,
         hoverInfo: false,
         dataFiltering: (data: any) => { return data },
-        isLine: false
+        isLine: false,
+        lineWidth: 1,
     },
     industrias: {
         title: "industrias",
@@ -2032,7 +2039,8 @@ export const CAPAS_BASE_CODEBOOK = {
             return data;
         },
        featureInfo: true,
-       isLine: false
+       isLine: false,
+       radius: 5
     },
     parques_industriales: {
         title: "parques industriales",
@@ -2040,7 +2048,6 @@ export const CAPAS_BASE_CODEBOOK = {
         enabled: true,
         parent: null,
         isPointLayer: false,
-        //field: "ID_COLO",
         field: "",
         colors: ["#272a28"],
         hoverInfo: false,
