@@ -4,7 +4,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 export const total_pob_juarez = 1503616.0;
 export const codebook_url= " https://tecmx.sharepoint.com/:x:/r/sites/JusticiaAmbiental/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7B427c6ade-f673-4dc2-a13e-980acd3f4a3f%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1760901839077&web=1";
-
+export const webpage_url="https://salmon-field-079add61e.1.azurestaticapps.net/";
 export const COLORS = {
     GLOBAL: {
         primary: "",
@@ -51,7 +51,6 @@ export const SECTIONS = {
             "pob_afectada_inundaciones",
             "superficie_inundada",
             "riesgo_trafico_vehicular",
-            "indice_marginacion",
             "islas_de_calor",
         ] as LayerKey[],
     },
@@ -86,6 +85,7 @@ export const SECTIONS = {
             "porcentaje_pob_60",
             "porcentaje_escolaridad",
             "indice_bienestar",
+            "indice_marginacion",
         ] as LayerKey[],
     }
 }
@@ -296,7 +296,7 @@ export const LAYERS: any = {
         scaleType: "quantile",
         thresholds: [5, 10, 15, 20],
         colors: ["#fffffeff","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
-        title: "Porcentaje de superficie inundado",
+        title: "Porcentaje de superficie inundada",
         description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
         source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "porcentaje_area_inundada",
@@ -388,16 +388,16 @@ export const LAYERS: any = {
             if (!features) return 0;
             return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
         },*/
-        tematica: "ambiental",
+        tematica: "poblacion",
         type: "Categorica",
         enabled: true,
         colonias: false,
         categoricalLegend: [
-            { value: 1, label: "1 - Muy Bajo", color: "#d9d8c3ff" },
-            { value: 2, label: "2 - Bajo", color: "#ccc992ff" },
-            { value: 3, label: "3 - Medio", color: "#c0bb62ff" },
-            { value: 4, label: "4 - Alto", color: "#969131ff" },
-            { value: 5, label: "5 - Muy Alto", color: "#807900ff" }
+            { value: 1, label: "1 - Muy Bajo", color: "#dae6c8" },
+            { value: 2, label: "2 - Bajo", color: "#c2d182" },
+            { value: 3, label: "3 - Medio", color: "#97ba66" },
+            { value: 4, label: "4 - Alto", color: "#5c997c" },
+            { value: 5, label: "5 - Muy Alto", color: "#2c8499" }
         ],
         dataProcessing: (data: any) => {
             const marginacionMap: any = {
@@ -447,7 +447,7 @@ export const LAYERS: any = {
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/industrias_denue.geojson?${REACT_APP_SAS_TOKEN}`,
         title: "Industrias",
-        description: "Industrias ubicadas en el perímetro urbano de Ciudad Juárez, con su respectiva clasificación: \n– Energía electrica, agua y gas (22) \n– Industrias manufactureras de alimentos textiles y tabaco (31) \n– Manufactureras de madera, papel, quimicos y plástico (33) \n– Electronicos maquinaria y equipo (56)",
+        description: "Industrias ubicadas en el perímetro urbano de Ciudad Juárez, con su respectiva clasificación: \n– Energía electrica, agua y gas \n– Industrias manufactureras de alimentos textiles y tabaco \n– Manufactureras de madera, papel, quimicos y plástico \n– Electronicos maquinaria y equipo",
         source: "Directorio Estadístico Nacional de Unidades Económicas (DENUE), por parte del Instituto Nacional de Estadística y Geografía (INEGI).",
         property: "sector",
         tematica: "industria",
@@ -1016,17 +1016,16 @@ export const LAYERS: any = {
             { value: "parque", label: "Parque", color: "#8ab17d" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
-            { value: "educacion superior", label: "Educación superior", color: "#e9c46a" },
-            { value: "educacion basica", label: "Educación y cuidados", color: "#f4e1b0ff" },
+            { value: "educacion", label: "Educación superior", color: "#e9c46a" },
         ],
         dataProcessing: (data: any) => {
             const equipamiento_Groups: any = {
-                "guarderia": "educacion basica",
-                "preescolar": "educacion basica",
-                "primaria": "educacion basica",
-                "secundaria": "educacion basica",
-                "preparatoria": "educacion superior",
-                "universidad": "educacion superior",
+                "guarderia": "educacion",
+                "preescolar": "educacion",
+                "primaria": "educacion",
+                "secundaria": "educacion",
+                "preparatoria": "educacion",
+                "universidad": "educacion",
                 "auditorio": "recreativo",
                 "biblioteca": "recreativo",
                 "cine": "recreativo",
@@ -1059,8 +1058,7 @@ export const LAYERS: any = {
             title: "Total de equipamientos por tipo",
             source: "Fuente de ejemplo",
             legend: {
-                "Educación y cuidados": "#f4e1b0ff",
-                "Educación superior": "#e5c26aff",
+                "Educación": "#e5c26aff",
                 "Espacios recreativos": "#e76f51",
                 "Salud": "#4abfbd",
                 "Parques": "#8ab17d",
@@ -1071,8 +1069,7 @@ export const LAYERS: any = {
                 //agrupar por categoria
                 const equip_byCategory = Object.groupBy(data, (item: any) => item.properties.group);
                 const colorMap= {
-                    "educacion superior": "#e9c46a",
-                    "educacion basica": "#f4e1b0ff",
+                    "educacion": "#e9c46a",
                     "salud": "#4abfbd",
                     "recreativo": "#e76f51",
                     "parque": "#8ab17d",
@@ -1115,7 +1112,8 @@ export const LAYERS: any = {
                             color: '#fff',
                             fontSize: 10,
                             fontFamily: 'Roboto, sans-serif',
-                        }
+                        },
+                        appendToBody: true,
                     },
                     series: [
                         {
@@ -1180,8 +1178,7 @@ export const LAYERS: any = {
         }
     },
     tiempo_recreativos: {
-        scaleType: "quantile",
-        thresholds: [5, 20],
+        scaleType: "linear",
         title: "Tiempo promedio a espacios recreativos",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al parque más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1217,8 +1214,7 @@ export const LAYERS: any = {
        textRangesLegend: ["Poco accesible (> 20 min)", "Accesible (5 - 20 min)", "Muy accesible (< 5 min)"],
     },
     tiempo_hospitales: {
-        scaleType: "quantile",
-        thresholds: [20, 60],
+        scaleType: "linear",
         title: "Tiempo promedio a hospitales y clínicas",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al hospital o clínica más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1254,8 +1250,7 @@ export const LAYERS: any = {
        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20 - 60 min)", "Muy accesible (<20 min)"],
     },
     tiempo_preparatorias: {
-        scaleType: "quantile",
-        thresholds: [15, 45],
+        scaleType: "linear",
         colors : ["#ebedfc", "#b29ab1", "#6d576c"],
         title: "Tiempo promedio a preparatorias",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando a la preparatoria más cercana.",
@@ -1469,7 +1464,7 @@ export const LAYERS: any = {
     },
     porcentaje_pob_0a5: {
         scaleType: "quantile",
-        title: "Infancias",
+        title: "Porcentaje de infancias",
         description: "Porcentaje de población de 0 y 5 años.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
         property: "porcentaje_pob_0a5",
@@ -1518,7 +1513,7 @@ export const LAYERS: any = {
     porcentaje_pob_60: {
         scaleType: "quantile",
         colors : ["#ebe6dfff", "#c3beb9ff", "#9cadb4ff", "#40a7b9ff", "#007f99ff"],
-        title: "Adultos mayores",
+        title: "Porcentaje de dultos mayores",
         description: "Porcentaje de población de 60 años o más.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
         property: "porcentaje_pob_60",
@@ -1564,7 +1559,7 @@ export const LAYERS: any = {
     },
     porcentaje_escolaridad: {
         scaleType: "quantile",
-        colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
+        colors : ["#d9c8c3ff", "#c0a69eff", "#a68479ff", "#8d6153ff", "#733f2eff"],
         thresholds: [10, 25, 50, 75],
         title: "Población sin preparatoria terminada",
         description: "Porcentaje de la población mayor de 18 años que reportó tener menos de 12 años de escolaridad (preparatoria).",
@@ -1622,11 +1617,11 @@ export const LAYERS: any = {
         enabled: true,
         colonias: true,
         categoricalLegend: [
-            { value: 1, label: "1 - Muy Bajo", color: "#a5b6ce" },
-            { value: 2, label: "2 - Bajo", color: "#7e95b5" },
-            { value: 3, label: "3 - Medio", color: "#57749c" },
-            { value: 4, label: "4 - Alto", color: "#2f5284" },
-            { value: 5, label: "5 - Muy Alto", color: "#08316b" }
+            { value: 1, label: "1 - Muy Bajo", color: "#d9d8c3ff" },
+            { value: 2, label: "2 - Bajo", color: "#ccc992ff" },
+            { value: 3, label: "3 - Medio", color: "#c0bb62ff" },
+            { value: 4, label: "4 - Alto", color: "#969131ff" },
+            { value: 5, label: "5 - Muy Alto", color: "#807900ff" }
         ],
         dataProcessing: (data: any) => {
             const marginacionMap: any = {
@@ -1683,12 +1678,13 @@ export const CAPAS_BASE_CODEBOOK = {
         parent: null,
         isPointLayer: false,
         field: "",
-        colors: ["#cacacaff"],
+        colors: ["#0e0d0dff"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         categoryColors: {},
-        isLine: false,
-        opacity: 0.5,
+        isLine: true,
+        lineWidth: 3,
+        //opacity: 0.5,
     },
     vias_principales: {
         title: "vias principales",
@@ -1730,6 +1726,7 @@ export const CAPAS_BASE_CODEBOOK = {
             "recreativo": "#e76f51",
             "parque": "#8ab17d"
         },
+        children: ["educacion", "salud", "recreacion"],
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         dataProcessing: (data: any) => {
@@ -2056,9 +2053,11 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: false,
         field: "",
         colors: ["#272a28"],
+        opacity: 0.5,
         hoverInfo: false,
         dataFiltering: (data: any) => { return data},
         isLine: false,
+        lineWidth: 2
     },
 }
     

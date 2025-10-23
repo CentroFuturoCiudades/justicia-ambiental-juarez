@@ -138,7 +138,7 @@ export const accordionItems: AccordionItemType[] = [
                     mainHeader="temáticas"
                     items={[
                     {
-                        title: "riesgos ambientales",
+                        title: "ambiental",
                         description: (
                             <div className="cardContent">
                                 <p>
@@ -151,7 +151,7 @@ export const accordionItems: AccordionItemType[] = [
                         mainHeader: ""
                     },
                     {
-                        title: "riesgos relacionados \ncon la industria",
+                        title: "industria",
                         description: (
                             <div className="cardContent">
                                 <p>
@@ -164,7 +164,7 @@ export const accordionItems: AccordionItemType[] = [
                         mainHeader: ""
                     },
                     {
-                        title: "acceso a equipamientos urbanos",
+                        title: "equipamientos",
                         description: (
                             <div className="cardContent">
                                 <p>

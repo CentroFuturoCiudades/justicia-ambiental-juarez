@@ -3,6 +3,7 @@ import { generate } from '@pdfme/generator';
 import { rectangle, text, image, table } from '@pdfme/schemas';
 import { MapLayer } from "../classes/MapLayer";
 import { RasterLayer } from "../classes/RasterLayer";
+import {webpage_url} from "./constants";
 
 type Section = {
   map: string;
@@ -86,6 +87,23 @@ export const blobToBase64 = (blob: Blob) => {
     reader.readAsDataURL(blob);
   });
 }
+
+const logos: { path: string; base64: any }[] = [];
+
+const getLogos = (async () => {
+  const paths = [
+    "/assets/LOGO NATBANK.png",
+    "/assets/Baker.png",
+    "/assets/LOGO TEC CFC.png"
+  ];
+  for (const path of paths) {
+    const response = await fetch(path);
+    const blob = await response.blob();
+    const base64 = await blobToBase64(blob);
+    logos.push({ path, base64 });
+  }
+  return logos;
+})();
 
 export const getMapImage = (deck: any, map: any, layerInstance: MapLayer | RasterLayer | null): string | undefined => {
 
@@ -282,13 +300,17 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
   }));
   //console.log("sections:", sections);
 
+  const downloadDate = new Date().toLocaleDateString('es-MX', {
+    dateStyle: 'long',
+  });
+
   const pdfTtitle = [
     {
       name: "title",
       type: "text",
-      content: "Visor de Indicadores Ambientales",
+      content: "Visor de Indicadores Ambientales y Sociales | Ciudad Juárez, Chihuahua",
       position: { x: 17.95, y: 20 },
-      width: 174.1, height: 20.11, fontSize: 25, alignment: "center",
+      width: 174.1, height: 20.11, fontSize: 15, alignment: "center",
       fontColor: "#000000", fontName: "Roboto", opacity: 1, readOnly: true
     },
     {
@@ -298,6 +320,14 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
         position: { x: 21, y: 29 },
         width: 174.1, height: 20.11, fontSize: 40, alignment: "center",
         fontColor: "#2d5534", fontName: "Roboto", opacity: 1, readOnly: true
+    },
+    {
+      name: "date",
+        type: "text",
+        content: `${downloadDate}`,
+        position: { x: 21, y: 48 },
+        width: 174.1, height: 20.11, fontSize: 15, alignment: "center",
+        fontColor: "#000000", fontName: "Roboto", opacity: 1, readOnly: true
     }
   ];
 
@@ -351,9 +381,68 @@ export const downloadPdf = async (deck: any, map: any, layerInstances: any[]) =>
     schemas.push([keyTitle, table]);
   });
 
+  //footer
+  const logos = await getLogos;
+  const imgWidth = 50;
+  const imgHeight = 30;
+  const gapBetweenLogos = 10;
+  const startX = (210 - (imgWidth * 3 + gapBetweenLogos * 2)) / 2;
+  schemas.push([
+    {
+      name: "footer_link",
+      type: "text",
+      content: "Consulta las fuentes de información: " + webpage_url,
+      position: { x: 10, y: 257 },
+      width: 190,
+      height: 10,
+      fontSize: 12,
+      fontColor: "#2d5534",
+      fontName: "Roboto",
+      alignment: "center",
+      readOnly: true
+    },
+    {
+      name: "footer_logo1",
+      type: "image",
+      position: { x: startX, y: 267 },
+      width: imgWidth,
+      height: imgHeight,
+      opacity: 1,
+      required: true,
+      readOnly: true,
+      content: logos[0]?.base64 || ""
+    },
+    {
+      name: "footer_logo2",
+      type: "image",
+      position: { x: startX + imgWidth + gapBetweenLogos, y: 267 },
+      width: imgWidth,
+      height: imgHeight,
+      borderColor: "#000",
+      opacity: 1,
+      required: true,
+      readOnly: true,
+      content: logos[1]?.base64 || "",
+
+    },
+    {
+      name: "footer_logo3",
+      type: "image",
+      position: { x: startX + imgWidth * 2 + gapBetweenLogos * 2, y: 267 },
+      width: imgWidth,
+      height: imgHeight,
+      opacity: 1,
+      required: true,
+      readOnly: true,
+      content: logos[2]?.base64 || ""
+
+    }
+  ]) ;
+
+
   const template = {
     schemas,
-    basePdf: { width: 210, height: 297, padding: [20, 10, 20, 10] as [number, number, number, number] }
+    basePdf: { width: 210, height: 297, padding: [20, 10, 0, 10] as [number, number, number, number] }
   };
 
   const inputs = buildInputs(groupedSections, groupedByActiveKey);
