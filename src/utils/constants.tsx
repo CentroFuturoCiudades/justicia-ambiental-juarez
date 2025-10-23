@@ -1180,8 +1180,8 @@ export const LAYERS: any = {
         }
     },
     tiempo_recreativos: {
-        scaleType: "linear",
-        //thresholds: [5, 20],
+        scaleType: "quantile",
+        thresholds: [5, 20],
         title: "Tiempo promedio a espacios recreativos",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al parque más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1190,7 +1190,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        colors : ["#f0e8e8ff", "#6c350bff"],
+        colors : ["#ebedfc", "#b29ab1", "#6d576c"],
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_parque !== null);
             return data;
@@ -1217,7 +1217,8 @@ export const LAYERS: any = {
        textRangesLegend: ["Poco accesible (> 20 min)", "Accesible (5 - 20 min)", "Muy accesible (< 5 min)"],
     },
     tiempo_hospitales: {
-        scaleType: "linear",
+        scaleType: "quantile",
+        thresholds: [20, 60],
         title: "Tiempo promedio a hospitales y clínicas",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al hospital o clínica más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1226,7 +1227,7 @@ export const LAYERS: any = {
         type: "Continua",
         enabled: true,
         colonias: true,
-        colors : ["#e6edf0ff", "#0b3f69ff"],
+        colors : ["#ebedfc", "#b29ab1", "#6d576c"],
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.tiempo_clinica_hospital !== null);
             return data;
@@ -1253,7 +1254,9 @@ export const LAYERS: any = {
        textRangesLegend: ["Poco accesible (>60 min)", "Accesible (20 - 60 min)", "Muy accesible (<20 min)"],
     },
     tiempo_preparatorias: {
-        scaleType: "linear",
+        scaleType: "quantile",
+        thresholds: [15, 45],
+        colors : ["#ebedfc", "#b29ab1", "#6d576c"],
         title: "Tiempo promedio a preparatorias",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando a la preparatoria más cercana.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
@@ -1285,7 +1288,6 @@ export const LAYERS: any = {
             if(avg >= 15 && avg <= 45) return "accesible";
             else return "poco accesible";
         },
-        colors : ["#f1f2eaff","#caa201ff"],
        textRangesLegend: ["Poco accesible (>45 min)", "Accesible (15 - 45 min)", "Muy accesible (<15 min)"],
     },
     acceso_recreativos: {
@@ -1494,7 +1496,7 @@ export const LAYERS: any = {
             return formatNumber(x, 0) + "%"
         },
        // colors: ["#f4f9ff", "#08316b"],
-       colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
+       colors : ["#e8e6f1ff", "#c9d5ebff", "#a9c4e5ff", "#87b3deff", "#60a3d8ff"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
         selectionCard: (data) => {
@@ -1515,7 +1517,7 @@ export const LAYERS: any = {
     },
     porcentaje_pob_60: {
         scaleType: "quantile",
-        colors : ["#ebe6dfff", "#d9c2b1ff", "#afbac4ff", "#7d9ab3ff", "#436480ff"],
+        colors : ["#ebe6dfff", "#c3beb9ff", "#9cadb4ff", "#40a7b9ff", "#007f99ff"],
         title: "Adultos mayores",
         description: "Porcentaje de población de 60 años o más.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",

@@ -161,7 +161,7 @@ const ThemeLayer = () => {
             //6. set context variables
             setMapLayerInstance(mapLayerInstance);
             setTematicaData(data);
-            setTematicaLayer( extraGeoJsonLayer ? [newGeoJsonLayer, extraGeoJsonLayer] : [newGeoJsonLayer] );
+            setTematicaLayer( extraGeoJsonLayer ? [extraGeoJsonLayer, newGeoJsonLayer] : [newGeoJsonLayer] );
             setJsonData(graphData);
             if(graphData != null && selectedLayer==="industrias_contaminantes") {
                 setLayerInfoData(prev => ({
