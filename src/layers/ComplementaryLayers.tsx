@@ -126,7 +126,7 @@ const ComplementaryLayers = () => {
                                 getLineWidth: 10,
                             });
                         }
-                        setBaseLayers(prev => ({ ...prev, [layerKey]: extraLayer ? [newLayer, extraLayer] : [newLayer] }));
+                        setBaseLayers(prev => ({ ...prev, [layerKey]: extraLayer ? [extraLayer, newLayer] : [newLayer] }));
                     }
 
                     if(complementary?.jsonurl){

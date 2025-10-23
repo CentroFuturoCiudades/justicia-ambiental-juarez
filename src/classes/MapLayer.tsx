@@ -308,6 +308,7 @@ export class MapLayer {
       categorical={this.categorical}
       isPointLayer={isPointLayer}
       textRanges={textRanges}
+      scaleType={this.scaleType}
     />
   }
 

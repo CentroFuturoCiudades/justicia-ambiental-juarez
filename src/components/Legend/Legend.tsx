@@ -15,10 +15,11 @@ type LegendProps = {
   formatValue: (value: number) => string;
   isPointLayer?: boolean;
   textRanges?: string[];
+  scaleType?: string;
 };
 
 // receives rgb values from colorRange(uses SchemeBlues) and range boundaries from colorScale(uses scaleQuantile)
-const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer, textRanges }: LegendProps) => {
+const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer, textRanges, scaleType }: LegendProps) => {
   
 
   const { selectedLayer, mapLayerInstance, tematicaData } = useAppContext();
@@ -61,7 +62,7 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer,
         {title}
       </div>
       <div className="legend-body" >
-        {categorical ?
+        {categorical || scaleType === "quantile" ?
           <div className="categoricalStyle">
             {ranges.map((category, index) => {
               return (
