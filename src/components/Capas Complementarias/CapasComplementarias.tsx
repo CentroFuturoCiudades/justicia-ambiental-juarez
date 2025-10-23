@@ -66,9 +66,9 @@ const CapasComplementarias = () => {
                                 <Checkbox.Root key={subKey} 
                                     cursor="pointer" 
                                     variant={"solid"}
-                                    checked={selectedBaseLayers.includes(subKey)}
+                                    checked={selectedBaseLayers.includes(layerKey)}
                                     onCheckedChange={() => handleComplementaryLayerToggle(subKey)}
-                                    disabled={!subLayer.enabled}
+                                    disabled={selectedBaseLayers.includes(layerKey) ? false : true}
                                     className="checkbox checkbox--right"
                                 >
                                     <Checkbox.HiddenInput />

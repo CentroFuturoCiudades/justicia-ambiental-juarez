@@ -88,15 +88,25 @@ const ComplementaryLayers = () => {
                     } 
                     //else regular geojson complementary layer
                     else {
+                        let data;
                         const complementaryLayerInstance = new ComplementaryLayer({ 
                             colors: complementary?.colors || ["#f4f9ff", "#08316b"], 
                             title: complementary.title ,
                             opacity: complementary?.opacity || 1
                         });
-                        let data = await complementaryLayerInstance.loadData(urlBlob);
-                        if(complementary?.dataProcessing) {
-                            data = complementary.dataProcessing(data);
-                            console.log('processed data for', layerKey, data);
+                        if(complementary.parent){ //if parent is active, remove the children group from parent geojson data
+                            const parentLayer = baseLayers[complementary.parent]
+                            data = complementary.removeFromParentGroup(parentLayer[0].props.data)
+                            console.log('filteredData', data);
+
+                            console.log('parentLayer', parentLayer);
+                        }
+                        else {
+                            data = await complementaryLayerInstance.loadData(urlBlob);
+                            if(complementary?.dataProcessing) {
+                                data = complementary.dataProcessing(data);
+                                console.log('processed data for', layerKey, data);
+                            }
                         }
                         
                         const newLayer = complementaryLayerInstance.getLayer(

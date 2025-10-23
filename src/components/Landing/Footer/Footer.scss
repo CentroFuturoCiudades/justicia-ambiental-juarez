@@ -14,14 +14,11 @@
   }
   &__content {
     display: flex;
-    gap: 3dvw;
+    gap: 2.5dvw;
     z-index: 1;
   }
   &__logo-box {
-    height: 85%;
-    width: 20dvw;
-    border: 1px solid red;
-    padding: 0.5dvw;
+    max-width: 20dvw;
   }
   &__logo {
     height: 100%;

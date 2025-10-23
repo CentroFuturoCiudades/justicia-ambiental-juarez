@@ -245,7 +245,7 @@ export const LAYERS: any = {
     pob_afectada_inundaciones: { //quintil con puntos corte (revisar cortes)
         scaleType: "quantile",
         thresholds: [10, 25, 50, 75],
-        colors: ["#fffffeff","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
+        colors: ["#f2f2f2","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
         title: "Población afectada por inundaciones",
         description: "Porcentaje de la población que durante una lluvia de 60 minutos se ve afectada por un nivel de agua superior a 25 centímetros.",
         source: "Elaboración propia con datos  del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y del  Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ. (ver: https://www.inegi.org.mx/app/mapas/?tg=1015)",
@@ -279,7 +279,7 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-            {data.avg == 0 || data.num == 0 ?
+            {data.avg == "0%" || data.num == 0 ?
                 <span>En {data.introText}, no hay población afectada por las inundaciones </span>
                 :
                 <>
@@ -295,7 +295,7 @@ export const LAYERS: any = {
     superficie_inundada: {  //quintil con puntos corte (revisar cortes)
         scaleType: "quantile",
         thresholds: [5, 10, 15, 20],
-        colors: ["#fffffeff","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
+        colors: ["#f2f2f2","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
         title: "Porcentaje de superficie inundada",
         description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
         source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
@@ -327,21 +327,28 @@ export const LAYERS: any = {
         selectionCard: (data) => {
             return (
             <>
-                <span>En {data.introText}, <strong>{data.num} m<sup>2</sup></strong> se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
-                <br />
-                <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
+            {data.avg == "0%" || data.num == 0 ?
+                <span>En {data.introText}, menos del 1% de la población se ve afectada por las inundaciones </span>
+                :
+                <>
+                    <span>En {data.introText}, <strong>{data.num} m<sup>2</sup></strong> se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
+                    <br />
+                    <span>Este porcentaje está por <strong>{data.comparedToAvg}</strong> del porcentaje promedio de Ciudad Juárez.</span>
+                </>
+            }
             </>
             );
         },
     },
     riesgo_trafico_vehicular: { //quintil sin puntos corte
-        scaleType: "quantile",
+        scaleType: "linear",
         //thresholds: [50, 75, 100, 150], //que me defina los quintiles o yo defino los thresholds?
-        colors: ["#dfe1e6ff","#bbbfc9ff", "#b39e93ff", "#c4703eff", "#8c4a23ff",],
+        colors: ["#dfe1e6ff", "#8c4a23ff",],
         title: "Proximidad a alto tráfico vehicular",
         description: "La proximidad al alto tráfico vehicular representa el total de vehículos que circulan diariamente en las vialidades principales ubicadas a menos de 500 metros de cada AGEB o colonia.",
         source: "Elaboración propia con datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez",
         property: "tdpa_density",
+        legendTitle: "Vehículos",
         tematica: "ambiental",
         type: "Continua",
         is_lineLayer: false,
@@ -356,10 +363,10 @@ export const LAYERS: any = {
             return data;
         },
         formatValue: (x: number) => {
-            return formatNumber(x, 0)
+            return formatNumber(x, 0) 
         },
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.</span>,
+            <span>En Ciudad Juárez, los hogares están expuestos en promedio a <strong>{data.avg} vehículos</strong> diarios que circulan por las vialidades principales cercanas.</span>,
        selectionCard: (data) => {
         return (
             <>
@@ -367,7 +374,7 @@ export const LAYERS: any = {
                 <span>En {data.introText}, no hay exposición al tráfico vehicular </span>
                 :
                 <>
-               <span>En {data.introText}, los hogares están expuestos en promedio a <strong>{data.avg}</strong> vehículos diarios que circulan por las vialidades principales cercanas.</span>
+               <span>En {data.introText}, los hogares están expuestos en promedio a <strong>{data.avg} vehículos</strong> diarios que circulan por las vialidades principales cercanas.</span>
                <br />
                <span>Este flujo vehicular está por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juárez.</span>
                </>
@@ -1758,6 +1765,10 @@ export const CAPAS_BASE_CODEBOOK = {
         url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
         enabled: true,
         parent: "equipamientos",
+        removeFromParentGroup: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.group !== "educacion");
+            return data;
+        },
         dataFiltering: (data: any) => {
             const filteredData = data.features.filter((feature: any) => feature.properties.group === "educacion");
             return {
@@ -1768,28 +1779,16 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: true,
         field: "group",
         colors: ["#e9c46a"],
+        categoryColors: {
+            "educacion": "#e9c46a",
+            "salud": "#4abfbd",
+            "recreativo": "#e76f51",
+            "parque": "#8ab17d"
+        },
         hoverInfo: false,
         dataProcessing: (data: any) => {
-            const equipamiento_Groups: any = {
-                "guarderia": "educacion",
-                "preescolar": "educacion",
-                "primaria": "educacion",
-                "secundaria": "educacion",
-                "preparatoria": "educacion",
-                "universidad": "educacion",
-                "auditorio": "recreativo",
-                "biblioteca": "recreativo",
-                "cine": "recreativo",
-                "parque": "parque",
-                "unidad_deportiva": "recreativo",
-                "centro_salud": "salud",
-                "hospital": "salud",
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
-            });
-            data.features = data.features.filter((feature: any) => feature.properties.group === "educacion");
+            //filter out education features
+            data.features = data.features.filter((feature: any) => feature.properties.group !== "educacion");
             return data;
         },
         isLine: false,
@@ -1802,7 +1801,17 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: true,
         field: "group",
         colors: ["#4abfbd"],
+        categoryColors: {
+            "educacion": "#e9c46a",
+            "salud": "#4abfbd",
+            "recreativo": "#e76f51",
+            "parque": "#8ab17d"
+        },
         hoverInfo: false,
+        removeFromParentGroup: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.group !== "salud");
+            return data;
+        },
         dataFiltering: (data: any) => {
             const filteredData = data.features.filter((feature: any) => feature.properties.group === "salud");
             return {
@@ -1811,25 +1820,6 @@ export const CAPAS_BASE_CODEBOOK = {
             };
         },
         dataProcessing: (data: any) => {
-            const equipamiento_Groups: any = {
-                "guarderia": "educacion",
-                "preescolar": "educacion",
-                "primaria": "educacion",
-                "secundaria": "educacion",
-                "preparatoria": "educacion",
-                "universidad": "educacion",
-                "auditorio": "recreativo",
-                "biblioteca": "recreativo",
-                "cine": "recreativo",
-                "parque": "parque",
-                "unidad_deportiva": "recreativo",
-                "centro_salud": "salud",
-                "hospital": "salud",
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
-            });
             data.features = data.features.filter((feature: any) => feature.properties.group === "salud");
             return data;
         },
@@ -1843,7 +1833,17 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: true,
         field: "group",
         colors: ["#e76f51"],
+        categoryColors: {
+            "educacion": "#e9c46a",
+            "salud": "#4abfbd",
+            "recreativo": "#e76f51",
+            "parque": "#8ab17d"
+        },
         hoverInfo: false,
+        removeFromParentGroup: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.group !== "recreacion");
+            return data;
+        },
         dataFiltering: (data: any) => {
             const filteredData = data.features.filter((feature: any) => feature.properties.group === "recreativo");
             return {
@@ -1885,6 +1885,10 @@ export const CAPAS_BASE_CODEBOOK = {
         field: "group",
         colors: ["#8ab17d"],
         hoverInfo: false,
+        removeFromParentGroup: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.group !== "parques");
+            return data;
+        },
         dataFiltering: (data: any) => {
             const filteredData = data.features.filter((feature: any) => feature.properties.group === "parque");
             return {
