@@ -47,7 +47,8 @@ const Visor = () => {
         layerTooltip, setLayerTooltip,
         jsonData, setJsonData,
         selectedAGEBS,
-        layerInfoData
+        layerInfoData,
+        selectionMode
         
     } = useAppContext();
 
@@ -148,9 +149,9 @@ const Visor = () => {
     }, [layerInfoData, layerTooltip]);
 
 
-  /*useEffect(() => {
-    console.log('viewstate changed:', viewState);
-  }, [viewState]);*/
+  useEffect(() => {
+    console.log('selectionMode changed:', selectionMode);
+  }, [selectionMode]);
 
     if(!hydrated) return null;
 
@@ -267,7 +268,7 @@ const Visor = () => {
                     </>
                 ) : (
                     <>
-                    <div style={{position: 'absolute', top: 'min(3dvh, 1.75dvw)', left: ' min(3dvh, 1.75dvw)', right: 'min(3dvh, 1.75dvw)', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <span style={{position: 'absolute', top: 'min(3dvh, 1.75dvw)', left: ' min(3dvh, 1.75dvw)', right: 'min(3dvh, 1.75dvw)', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', pointerEvents: 'none'}}>
                         <Toolbar
                             rangeGraphRef={rangeGraphRef}
                             deck={deck}
@@ -283,7 +284,7 @@ const Visor = () => {
                             <CapasComplementarias />
                             { activeLayerKey === "colonias" && <BusquedaColonia /> }
                         </div>
-                    </div>
+                    </span>
 
                         {selectedLayer && mapLayerInstance && tematicaData && (
                             <div className="visor__legend">

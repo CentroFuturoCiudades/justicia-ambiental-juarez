@@ -70,6 +70,7 @@
         gap: min(0.5dvh, 0.3dvw);
         width: min(29.35dvh, 17.16dvw);
         z-index: 1;
+        pointer-events: all;
     }
 
     &__layerTooltip {

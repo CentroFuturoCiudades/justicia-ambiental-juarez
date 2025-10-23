@@ -35,7 +35,12 @@ const LensLayer = () => {
 
     // Crea circulo basado en coordenadas del mapa y valor de radio
     useEffect(() => {
-        if(!circleCoords) return;
+        if(!circleCoords) {
+            console.log('no circleCoords');
+            return;
+        };
+        console.log('circleCoords', circleCoords);
+        console.log('radius', radius);
         const temp = turf.circle(
             [circleCoords.longitude, circleCoords.latitude] as any,
             radius,
@@ -50,15 +55,25 @@ const LensLayer = () => {
     // Filtra los features: busca entre todos los features cuales intersectan con el circulo (cada que termina el Drag)
     useEffect(() => {
         if (!polygon || !selectedLayer || selectionMode !== "radius") return;
+        console.log("Filtering features within lens...");
+        console.log('selectionMode', selectionMode);
         const circlePolygon = turf.polygon([polygon.geometry.coordinates[0]]);
         //features dentro del circulo
+       // console.log('allFeatures', allFeatures); //si esta leyendo las all features de colonias
+        console.log('circlePolygon', circlePolygon);
+        const featuresWithInvalidGeometries = allFeatures.filter((f: any) => !f.geometry || (f.geometry.type === "Polygon" && f.geometry.coordinates.length === 0));
+        if (featuresWithInvalidGeometries.length > 0) {
+            //console.warn(`Warning: ${featuresWithInvalidGeometries.length} features have invalid geometries and will be skipped.`);
+            console.log('these features are invalid:', featuresWithInvalidGeometries);
+        }
         const filtered = allFeatures.filter((feature: any) =>
             booleanIntersects(feature, circlePolygon)
         );
+        console.log(`Found ${filtered.length} features within lens.`, filtered);
         setFilteredFeatures(filtered); //saves all features
         setFlagSlider(false);
         //NEW: depending on activeLayerKey, save identifiers of filtered features
-        const identifiers = filtered.map(f => f.properties[activeLayerKey === "agebs" ? "index" : "name"]);
+        const identifiers = filtered.map(f => f.properties[activeLayerKey === "agebs" ? "index" : "nombre"]);
         if (activeLayerKey === "agebs") {
             setSelectedAGEBS(identifiers);
         }

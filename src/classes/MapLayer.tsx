@@ -201,6 +201,7 @@ export class MapLayer {
     const geojsonLayer = new GeoJsonLayer({
       id: "geojson-layer",
       data: data,
+      //pickable: true,
       pickable: (selectionMode === "radius" || !isPickable) ? false : true,
       filled: true,
       stroked: true,

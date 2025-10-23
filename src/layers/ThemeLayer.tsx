@@ -117,9 +117,12 @@ const ThemeLayer = () => {
                 layerData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson));
             }
 
+            //extra! remove features with null geometry (en vulnerabilidad_calor habia varias que rompian radio y seleccion)
+            layerData.features = layerData.features.filter((feature: any) => feature.geometry !== null ); //filter out features with null geometry
             //2. dataProcessing (if any)
             if(layer.dataProcessing) {
                 layerData = layer.dataProcessing(layerData);
+                console.log('processed data', layerData);
             }
 
             //3.
@@ -130,6 +133,7 @@ const ThemeLayer = () => {
                 features: selectionMode === "radius" ? filteredFeatures : layerData.features,
                 allFeatures,
             };
+            console.log('layerData', layerData);
 
             //4. create GeoJsonLayer
             newGeoJsonLayer = mapLayerInstance.getLayer(

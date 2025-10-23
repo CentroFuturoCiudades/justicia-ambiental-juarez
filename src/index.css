@@ -88,7 +88,10 @@ button {
 
 @font-face {
   font-family: 'Lovelo Black';
-  src: url('./assets/fonts/Lovelo Black.otf') format('opentype');
+  src: url('/fonts/Lovelo-Black.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 @media (max-width: 800px) {

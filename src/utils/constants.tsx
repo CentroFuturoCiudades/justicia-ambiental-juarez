@@ -199,6 +199,10 @@ export const LAYERS: any = {
         tematica: "ambiental",
         type: "Categorica",
         is_lineLayer: false,
+        dataProcessing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.vulnerabilidad_calor !== null );
+            return data;
+        },
         categoricalLegend: [
             { value: 1, label: "1 - Baja", color: "#ffed85ff" },
             { value: 2, label: "2 - Ligera", color: "#fbaf52ff" },
