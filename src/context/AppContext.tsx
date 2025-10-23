@@ -101,7 +101,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [radius, setRadius] = useState<number>(2000);
     const [flagSlider, setFlagSlider] = useState<boolean>(false);
     //una capa a la vez
-    const [selectedLayer, setSelectedLayer] = useState<LayerKey>("vulnerabilidad_calor");
+    const [selectedLayer, setSelectedLayer] = useState<LayerKey>("pob_afectada_inundaciones");
     const [activeLayerKey, setActiveLayerKey] = useState<string | null>("agebs");
     const [selectionMode, setSelectionMode] = useState<string | null>("agebs");
 
