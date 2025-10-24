@@ -454,11 +454,11 @@ export const LAYERS: any = {
         colonias: false,
         categoricalLegend: [
             { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#00859c" },
-            { value: "Transporte", label: "Transporte", color: "#45151b" },
-            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#704776" },
             { value: "Manufactureras de alimentos textiles y tabaco", label: "Manufactureras de alimentos textiles y tabaco", color: "#699e38" },
-            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#be1a32" },
-            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#db9a0cff" },
+            { value: "Transporte", label: "Transporte", color: "#ccbe6a" },
+            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#85c1c8" },
+            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#90a1be" },
+            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#e99900" },
 
         ],
         dataProcessing: (data: any) => {
@@ -486,22 +486,22 @@ export const LAYERS: any = {
             //title: "Sectores industriales",
             source: "Fuente de ejemplo",
             legend: {
-                "Manejo de residuos": "#db9a0cff",
-                "Manufactureras de metálicos, maquinaria y electrónicos": "#be1a32",
+                "Manejo de residuos": "#e99900",
+                "Manufactureras de metálicos, maquinaria y electrónicos": "#90a1be",
                 "Manufactureras de alimentos textiles y tabaco": "#699e38",
-                "Manufactureras de madera, papel, químicos y plástico": "#704776",
-                "Transporte": "#45151b",
+                "Manufactureras de madera, papel, químicos y plástico": "#85c1c8",
+                "Transporte": "#ccbe6a",
                 "Energía electrica, agua y gas": "#00859c",
             },
             option: (data: any) => {
                 const industrias: any = {};
                 const colorMap = {
                     "Manufactureras de alimentos textiles y tabaco": "#699e38",
-                    "Manufactureras de madera, papel, químicos y plástico": "#704776",
-                    "Manufactureras de metálicos, maquinaria y electrónicos": "#be1a32",
+                    "Manufactureras de madera, papel, químicos y plástico": "#85c1c8",
+                    "Manufactureras de metálicos, maquinaria y electrónicos": "#90a1be",
                     "Energía electrica, agua y gas": "#00859c",
-                    "Transporte": "#45151b",
-                    "Manejo de residuos": "#db9a0cff",
+                    "Transporte": "#ccbe6a",
+                    "Manejo de residuos": "#e99900",
                 };
                 Object.values(data).forEach((industry: any) => {
                     const sector = industry.properties["sector"];
@@ -585,10 +585,10 @@ export const LAYERS: any = {
         type: "Categorica",
         categoricalLegend: [
             { value: "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de ambos", color: "#224ba5ff" },
-            { value: "Transporte", label: "Transporte", color: "#45151b" },
-            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#704776" },
-            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#be1a32" },
-            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#db9a0cff" },
+            { value: "Transporte", label: "Transporte", color: "#ccbe6a" },
+            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#85c1c8" },
+            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#90a1be" },
+            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#e99900" },
 
         ],
         is_PointLayer: true,
