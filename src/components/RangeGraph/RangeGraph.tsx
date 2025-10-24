@@ -83,7 +83,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
         );
       })()}
 
-<div style={{ position: 'relative', display: 'flex', width:"100%", minHeight: 'min(15dvh, 8.7dvw)', alignItems: 'center'}}>
+<div style={{ position: 'relative', display: 'flex', width:"100%", minHeight: isMobile ? 'min(51dvh, 30dvw)':'min(15dvh, 8.7dvw)', alignItems: 'center'}}>
     <div style={{ position: 'absolute', height: '100%', left: "1dvw", right: '1dvw'}}>
       
       {/* LINEA - Promedio Cd. Juárez */}
