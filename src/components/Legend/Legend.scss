@@ -3,10 +3,11 @@
   flex-direction: column;
   //height: 100%;
   width: 100%;
-  height: 100%;
+  //height: 100%;
   //flex: 1;
   background-color: var(--background);
   border-radius: var(--border-radius);
+  min-height: min(24.3dvh, 14.22dvw);
   animation: slideIn 0.4s;
 
   &__title {
@@ -40,6 +41,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  //gap: 0.6dvw;
+  gap: 1dvh;
   max-width: 80px;
 
   &__box {
@@ -61,8 +64,9 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 0.8dvw;
-  //border: 1px solid red;
+ // gap: 0.8dvw;
+ //gap: 0.6dvw;
+ gap: 1dvh;
 
   &__item {
     font-size: var(--font-size-button);
@@ -71,7 +75,7 @@
     align-items: center;
     //white-space: nowrap; 
     text-overflow: ellipsis; 
-    //border: 1px solid blue;
+    line-height: 1;
   }
 }
 
@@ -85,6 +89,7 @@ $tematicas: (
 @each $key, $color in $tematicas {
   .legend--#{$key} {
     border: 2px solid #{$color};
+    height: 100%;
   }
   .legend__title--#{$key} {
     background-color: #{$color};

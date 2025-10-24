@@ -91,7 +91,7 @@ export const SECTIONS = {
 }
 
 export const LAYERS: any = {
-    islas_de_calor: {   //quintil default (sin puntos corte)
+    islas_de_calor: {   
         scaleType: "linear",
         colors: ["#ffed85ff", "#910000ff"],
         capa: true,
@@ -118,7 +118,7 @@ export const LAYERS: any = {
         },
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, la temperatura promedio del cuatrimestre más caluroso del año (Mayo a Agosto) es de <strong>48.5 grados centigrados.</strong></span>,
+            <span>En Ciudad Juárez, la temperatura promedio del cuatrimestre más caluroso del año (Mayo a Agosto) es de <strong>48.54 grados centigrados.</strong></span>,
         selectionCard: (data) => {
             return (
             <>
@@ -297,7 +297,7 @@ export const LAYERS: any = {
         thresholds: [5, 10, 15, 20],
         colors: ["#f2f2f2","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
         title: "Porcentaje de superficie inundada",
-        description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centimetros durante una lluvia de 60 minutos.",
+        description: "Porcentaje de la superficie del AGEB/colonia que se ve afectada por un nivel de agua superior a 25 centímetros durante una lluvia de 60 minutos.",
         source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "porcentaje_area_inundada",
         propertyAbsolute: "area_inundada_m2",
@@ -328,7 +328,7 @@ export const LAYERS: any = {
             return (
             <>
             {data.avg == "0%" || data.num == 0 ?
-                <span>En {data.introText}, menos del 1% de la población se ve afectada por las inundaciones </span>
+                <span>En {data.introText}, <strong>menos del 1%</strong> de la superficie se ve afectada por las inundaciones </span>
                 :
                 <>
                     <span>En {data.introText}, <strong>{data.num} m<sup>2</sup></strong> se ven afectados por las inundaciones, lo que representa el <strong>{data.avg}</strong> de su superficie.</span>
@@ -340,9 +340,8 @@ export const LAYERS: any = {
             );
         },
     },
-    riesgo_trafico_vehicular: { //quintil sin puntos corte
+    riesgo_trafico_vehicular: { 
         scaleType: "linear",
-        //thresholds: [50, 75, 100, 150], //que me defina los quintiles o yo defino los thresholds?
         colors: ["#dfe1e6ff", "#8c4a23ff",],
         title: "Proximidad a alto tráfico vehicular",
         description: "La proximidad al alto tráfico vehicular representa el total de vehículos que circulan diariamente en las vialidades principales ubicadas a menos de 500 metros de cada AGEB o colonia.",
@@ -387,14 +386,6 @@ export const LAYERS: any = {
         description: "Da cuenta de las carencias de la población asociadas a la escolaridad, la vivienda, los ingresos y otros aspectos sociodemográficos.",
         source: "Consejo Nacional de Población (CONAPO), 2020.",
         property: "indice_marginacion", //para el mapa
-        /*propertyAbsolute: "total_poblacion", //para el total de juarez
-        filter: true,
-        juarezTotal: (data, mapProperty_Avg) => {
-           // return total_pob_juarez;
-           const features = Array.isArray(data) ? data : data?.features;
-            if (!features) return 0;
-            return features.reduce((sum: number, feature: any) => sum + (feature.properties.total_poblacion || 0), 0);
-        },*/
         tematica: "poblacion",
         type: "Categorica",
         enabled: true,
@@ -424,7 +415,6 @@ export const LAYERS: any = {
             return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
-        //quitar fixed!!!
         juarezCard: (data) =>
             <span>En Ciudad Juárez, <strong>555,863</strong> personas tienen un índice de marginación urbana <strong>{data.category}</strong>, lo que representa el <strong>37%</strong> de la población.</span>,
         selectionCard: (data) => {
@@ -463,12 +453,12 @@ export const LAYERS: any = {
         enabled: true,
         colonias: false,
         categoricalLegend: [
-            { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#00859c" },
-            { value: "Transporte", label: "Transporte", color: "#45151b" },
-            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#704776" },
-            { value: "Manufactureras de alimentos textiles y tabaco", label: "Manufactureras de alimentos textiles y tabaco", color: "#699e38" },
-            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#be1a32" },
-            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#db9a0cff" },
+            { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#85c1c8" },
+            { value: "Manufactureras de alimentos textiles y tabaco", label: "Manufactureras de alimentos textiles y tabaco", color: "#90a1be" },
+            { value: "Transporte", label: "Transporte", color: "#e99900" },
+            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#ccbe6a" },
+            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#9b87b6" },
+            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#2e6953" },
 
         ],
         dataProcessing: (data: any) => {
@@ -496,22 +486,22 @@ export const LAYERS: any = {
             //title: "Sectores industriales",
             source: "Fuente de ejemplo",
             legend: {
-                "Manejo de residuos": "#db9a0cff",
-                "Manufactureras de metálicos, maquinaria y electrónicos": "#be1a32",
-                "Manufactureras de alimentos textiles y tabaco": "#699e38",
-                "Manufactureras de madera, papel, químicos y plástico": "#704776",
-                "Transporte": "#45151b",
-                "Energía electrica, agua y gas": "#00859c",
+                "Manejo de residuos": "#2e6953",
+                "Manufactureras de metálicos, maquinaria y electrónicos": "#9b87b6",
+                "Manufactureras de madera, papel, químicos y plástico": "#ccbe6a",
+                "Transporte": "#e99900",
+                "Manufactureras de alimentos textiles y tabaco": "#90a1be",
+                "Energía electrica, agua y gas": "#85c1c8",
             },
             option: (data: any) => {
                 const industrias: any = {};
                 const colorMap = {
-                    "Manufactureras de alimentos textiles y tabaco": "#699e38",
-                    "Manufactureras de madera, papel, químicos y plástico": "#704776",
-                    "Manufactureras de metálicos, maquinaria y electrónicos": "#be1a32",
-                    "Energía electrica, agua y gas": "#00859c",
-                    "Transporte": "#45151b",
-                    "Manejo de residuos": "#db9a0cff",
+                    "Manufactureras de alimentos textiles y tabaco": "#90a1be",
+                    "Manufactureras de madera, papel, químicos y plástico": "#ccbe6a",
+                    "Manufactureras de metálicos, maquinaria y electrónicos": "#9b87b6",
+                    "Energía electrica, agua y gas": "#85c1c8",
+                    "Transporte": "#e99900",
+                    "Manejo de residuos": "#2e6953",
                 };
                 Object.values(data).forEach((industry: any) => {
                     const sector = industry.properties["sector"];
@@ -595,10 +585,10 @@ export const LAYERS: any = {
         type: "Categorica",
         categoricalLegend: [
             { value: "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de ambos", color: "#224ba5ff" },
-            { value: "Transporte", label: "Transporte", color: "#45151b" },
-            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#704776" },
-            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#be1a32" },
-            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#db9a0cff" },
+            { value: "Transporte", label: "Transporte", color: "#e99900" },
+            { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#ccbe6a" },
+            { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#9b87b6" },
+            { value: "Manejo de residuos", label: "Manejo de residuos", color: "#2e6953" },
 
         ],
         is_PointLayer: true,
@@ -662,11 +652,11 @@ export const LAYERS: any = {
             description: "cuando los contaminantes se liberan o tratan en el mismo lugar donde se lleva a cabo la actividad industrial.",
             source: "Fuente de ejemplo",
             legend: {
-                "Plomo (y sus componentes)": "#8C4242",
-                "Mercurio (y sus componentes)": "#592115",
-                "Níquel (y sus componentes)": "#BF964B",
-                "Arsenico (y sus componentes)": "#444b6e",
-                "Cromo (y sus componentes)": "#7c7b7f",
+                "Plomo": "#8C4242",
+                "Mercurio": "#592115",
+                "Níquel": "#BF964B",
+                "Arsenico": "#444b6e",
+                "Cromo": "#7c7b7f",
                 "Diisocianatos": "#73722F"
             },
             option: (data: any) => {
@@ -680,11 +670,11 @@ export const LAYERS: any = {
                     "Diisocyanates": "#73722F"
                 };
                const nameMap = {
-                    "Lead (and its compounds)": "Plomo (y sus componentes)",
-                    "Mercury (and its compounds)": "Mercurio (y sus componentes)",
-                    "Nickel (and its compounds)": "Níquel (y sus componentes)",
-                    "Arsenic (and its compounds)": "Arsenico (y sus componentes)",
-                    "Chromium (and its compounds)": "Cromo (y sus componentes)",
+                    "Lead (and its compounds)": "Plomo",
+                    "Mercury (and its compounds)": "Mercurio",
+                    "Nickel (and its compounds)": "Níquel",
+                    "Arsenic (and its compounds)": "Arsenico",
+                    "Chromium (and its compounds)": "Cromo",
                     "Diisocyanates": "Diisocianatos"
                 };
                 Object.values(data).forEach((industry: any) => {
@@ -756,11 +746,11 @@ export const LAYERS: any = {
             description: "cuando los desechos se trasladan a otro sitio para ser liberados o tratados fuera de las instalaciones de la industria.",
             source: "Fuente de ejemplo",
             legend: {
-                "Plomo (y sus componentes)": "#8C4242",
-                "Mercurio (y sus componentes)": "#592115",
-                "Níquel (y sus componentes)": "#BF964B",
-                "Arsenico (y sus componentes)": "#444b6e",
-                "Cromo (y sus componentes)": "#7c7b7f",
+                "Plomo": "#8C4242",
+                "Mercurio": "#592115",
+                "Níquel": "#BF964B",
+                "Arsenico": "#444b6e",
+                "Cromo": "#7c7b7f",
                 "Diisocianatos": "#73722F"
             },
             option: (data: any) => {
@@ -774,11 +764,11 @@ export const LAYERS: any = {
                     "Diisocyanates": "#73722F"
                 };
                const nameMap = {
-                    "Lead (and its compounds)": "Plomo (y sus componentes)",
-                    "Mercury (and its compounds)": "Mercurio (y sus componentes)",
-                    "Nickel (and its compounds)": "Níquel (y sus componentes)",
-                    "Arsenic (and its compounds)": "Arsenico (y sus componentes)",
-                    "Chromium (and its compounds)": "Cromo (y sus componentes)",
+                    "Lead (and its compounds)": "Plomo",
+                    "Mercury (and its compounds)": "Mercurio",
+                    "Nickel (and its compounds)": "Níquel",
+                    "Arsenic (and its compounds)": "Arsenico",
+                    "Chromium (and its compounds)": "Cromo",
                     "Diisocyanates": "Diisocianatos"
                 };
                 Object.values(data).forEach((industry: any) => {
@@ -989,7 +979,7 @@ export const LAYERS: any = {
         }
     },
     //ACCESO A EQUIPAMIENTOS
-    equipamientos: {    //definir colores categorica
+    equipamientos: {
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson?${REACT_APP_SAS_TOKEN}`,
@@ -1027,7 +1017,6 @@ export const LAYERS: any = {
             data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
             data.features.forEach((feature: any) => {
                 feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
-                //feature.properties.subgroup = equipamiento_Groups[feature.properties.equipamiento][1];
             });
             return data;
         },
@@ -1169,7 +1158,7 @@ export const LAYERS: any = {
     },
     tiempo_recreativos: {
         scaleType: "linear",
-        title: "Tiempo promedio a espacios recreativos",
+        title: "Tiempo promedio a parques",
         description: "Indica el tiempo promedio en minutos que tardarían los hogares en llegar caminando al parque más cercano.",
         source: "Elaboración propia con base en datos del Instituto Municipal de Investigación y Planeación (IMIP) de Ciudad Juárez y OpenStreetMap (OSM).",
         property: "tiempo_parque",
@@ -1398,8 +1387,6 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-        //colors: ["#f4f9ff", "#846b9eff", "#483a57ff"],
-        //colors: ["#b7c6e6", "#a58dc0ff", "#846b9eff", "#61457fff","#38264cff"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> hogares con al menos una preparatoria a 30 minutos caminando, lo que representa el <strong>{data.avg}</strong> de los hogares.</span>,
         selectionCard: (data) => {
@@ -1455,7 +1442,7 @@ export const LAYERS: any = {
     porcentaje_pob_0a5: {
         scaleType: "quantile",
         title: "Porcentaje de infancias",
-        description: "Porcentaje de población de 0 y 5 años.",
+        description: "Porcentaje de población entre 0 a 5 años.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
         property: "porcentaje_pob_0a5",
         propertyAbsolute: "total_pob_0a5",
@@ -1480,7 +1467,6 @@ export const LAYERS: any = {
         formatValue: (x: number) => {
             return formatNumber(x, 0) + "%"
         },
-       // colors: ["#f4f9ff", "#08316b"],
        colors : ["#e8e6f1ff", "#c9d5ebff", "#a9c4e5ff", "#87b3deff", "#60a3d8ff"],
         juarezCard: (data) =>
             <span>En Ciudad Juárez, hay <strong>{data.num}</strong> infantes de 0 a 5 años, lo que representa el <strong>{data.avg}</strong> de la población.</span>,
@@ -1631,15 +1617,11 @@ export const LAYERS: any = {
             return formatNumber(x, 0)
         },
         colors: ["#cdd8e6", "#08316b"],
-        //quitar fixed!!!
         juarezCard: (data) =>
-            <span>En Ciudad Juárez, <strong>576,032</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>, lo que representa el <strong>38%</strong> de la población.</span>,
+            <span>En Ciudad Juárez, <strong>576,032</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>, lo que representa el <strong>38.4%</strong> de la población.</span>,
         selectionCard: (data) => {
             return (
             <>
-                {/*<span>En {data.introText} hay <strong>{data.num}</strong> personas tienen un nivel de bienestar <strong>{data.category}</strong>.</span>
-                <br/>
-                <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de Ciudad Juarez (medio).</span>*/}
                 <span>En {data.introText}, el Nivel de Bienestar es <strong>{data.category}</strong>.</span>
                 <br/>
                 <span>Este nivel está por <strong>{data.comparedToAvg}</strong> del nivel de bienestar predominante de Ciudad Juarez (Medio).</span>

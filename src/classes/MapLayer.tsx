@@ -107,7 +107,6 @@ export class MapLayer {
     if(this.scaleType === "linear"){
       colorMap = scaleLinear<string>().domain(domain).range(this.colors);
     } else if (this.thresholds && this.thresholds.length > 0) {
-      //console.log('entro al elseif thresholds colormap', this.thresholds.length - 1 === this.colors.length);
       colorMap = scaleThreshold<number, string>().domain(domain).range(this.colors);
     } else {
       colorMap = scaleQuantile<string>().domain(domain).range(this.colors);
@@ -125,10 +124,7 @@ export class MapLayer {
 
     if (field) {
       let mappedData: any[] = featuresForStats.map((item: any) => item.properties[field]);
-      console.log('mappedData with nulls/undefs', mappedData.length);
       mappedData = mappedData.filter((value) => value !== null && value !== undefined);
-      console.log('mappedData after filtering nulls/undefs', mappedData.length);
-
 
       /*if( trimOutliers ){
         mappedData = this.trimOutliers( mappedData );
@@ -153,9 +149,7 @@ export class MapLayer {
       }
       else {
         //not categorical
-       // console.log('it had thresholds:', this.thresholds);
         this.domain = this.getDomain(mappedData);
-        //console.log('Domain:', this.domain);
 
         //colormap
         this.colorMap = this.getColorMap(this.domain);
@@ -172,7 +166,6 @@ export class MapLayer {
       //const positiveAvg = mappedData.reduce((sum, n) => sum + n, 0) / mappedData.length;
       const sumFeatureValues = mappedData.reduce((sum, n) => sum + n, 0);
       const positiveAvg = sumFeatureValues / mappedData.length;
-      console.log('sum', sumFeatureValues, 'divided by', mappedData.length, 'equals', positiveAvg);
       this.positiveAvg = positiveAvg;
       //const negativeAvg = mappedData.filter(n => n < 0).reduce((sum, n) => sum + n, 0) / mappedData.filter(n => n < 0).length;
       //this.negativeAvg = negativeAvg;
@@ -294,18 +287,14 @@ export class MapLayer {
   getLegend = (title: string, isPointLayer: boolean, legendTitle: string, textRanges?: string[]) => {
     if (!this.legend) return <></>;
     const ranges = this.categorical ? [...this.legend.categories].reverse() : this.getRanges() ;
-    //console.log('Generating legend with ranges:', ranges);
 
     let completeColors, legendRanges;
     if (this.categorical) {
         completeColors = ranges.map(cat => cat.color);
         legendRanges = ranges.map(cat => cat.label);
     } else {
-        //console.log('colors,', this.colors);
-        //console.log('Legend ranges:', ranges);
         //completeColors = ranges.map((range) => this.colorMap(range[1]));
         completeColors = this.scaleType === "quantile" ? ranges.map((_, i) => this.colors[i]).reverse() : ranges.map((range) => this.colorMap(range[1]));
-       // console.log('Legend colors:', completeColors);
         legendRanges = ranges;
     }
 
@@ -324,14 +313,12 @@ export class MapLayer {
    getAverage(features: Feature[], selected: string[], property: string, key: string, totalJuarez: any, filterFn: boolean) : number {
     
     this.absTotal_juarez = totalJuarez ? totalJuarez(features, this.positiveAvg) : 0; //total juarez
-    //console.log('total juarez', this.absTotal_juarez);
 
     // suma de la property de todas las features (AGEBS/Colonias)
     this.absTotal_property = totalJuarez ? features.reduce((sum: number, f: Feature) => {
       const value = f.properties?.[property];
       return sum + value;
     }, 0) : 0;
-    //console.log('en juarez hay un total de', this.absTotal_juarez, 'hogares y la suma de', property, 'es de', this.absTotal_property);
    
     this.averageJuarez = totalJuarez ? 
       (this.absTotal_property / this.absTotal_juarez) * 100 : this.positiveAvg;
@@ -343,13 +330,10 @@ export class MapLayer {
 
     //If there are selected AGEBS/Colonias, get their average
     const idField = key === "agebs" ? "index" : "nombre";
-    console.log("selected", selected);
 
     const selectedValues = features
     .filter((f: Feature) => selected.includes((f.properties as any)[idField]))
     //.filter(f => f.properties?.[property] != null)
-
-    console.log("selectedvalues", selectedValues);
 
     const sum = selectedValues.reduce((sum: number, f: Feature) => sum + f.properties?.[property] || 0, 0);
     this.absTotal_property = sum;
@@ -369,7 +353,6 @@ export class MapLayer {
 
   getDescription(selected: string[], key: string | null, average: number, descriptionCategories?: any, juarezCard: any, selectionCard: any, category: string) {
 
-    //console.log("average", average);
     let singleSelected = "";
     let multipleSelected = "";
     if (key) {

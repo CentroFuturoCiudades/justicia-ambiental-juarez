@@ -122,7 +122,6 @@ const ThemeLayer = () => {
             //2. dataProcessing (if any)
             if(layer.dataProcessing) {
                 layerData = layer.dataProcessing(layerData);
-                console.log('processed data', layerData);
             }
 
             //3.
@@ -133,7 +132,6 @@ const ThemeLayer = () => {
                 features: selectionMode === "radius" ? filteredFeatures : layerData.features,
                 allFeatures,
             };
-            console.log('layerData', layerData);
 
             //4. create GeoJsonLayer
             newGeoJsonLayer = mapLayerInstance.getLayer(
@@ -159,7 +157,6 @@ const ThemeLayer = () => {
                 }
             }
 
-            //console.log("estopy en theme layer y graphData es:", graphData);
             //6. set context variables
             setMapLayerInstance(mapLayerInstance);
             setTematicaData(data);

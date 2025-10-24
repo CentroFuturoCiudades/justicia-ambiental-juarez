@@ -90,9 +90,9 @@
         right: min(3dvh, 1.75dvw);
         bottom: min(3dvh, 1.75dvw);
         width: min(29.30dvh, 17.13dvw);
-        height: min(24.3dvh, 14.22dvw);
-        //border: 1px solid red;
-        //min-height: min(20dvh, 10dvw);
+       // min-height: min(24.3dvh, 14.22dvw);
+        display: flex;
+        flex-direction: column;
     }
     &__cdJuarez {
         //background-color: var(--background-medium);

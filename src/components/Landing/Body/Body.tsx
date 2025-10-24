@@ -8,13 +8,13 @@ import {accordionItems} from './AccordionItems';
 import { aboutContent } from './AccordionItems';
 import type { AccordionItemType } from './AccordionItems';
 import { useMediaQuery } from '@chakra-ui/react';
-import { link } from 'd3';
 
 const speedDialButtons = [
   {
     icon: ContactIcon,
     label: "contacto",
-    link: "/visor"
+    mailto: "mailto:correo@dominio.com?subject=Contacto%20desde%20el%20sitio",
+    link: "/contacto"
   },
   {
     icon: MoreIcon,
@@ -41,17 +41,26 @@ const Body = () => {
 
         {/* Speed Dial */}
         <div className="speed-dial">
-          {speedDialButtons.map((button, index) => (
-            <div className="speed-dial__item" key={index}>
-              <button type="button" onClick={() => window.location.href = button.link}>
-                <span className={`button-text${selectedItem ? " hidden" : ""}`}>{button.label}</span>
-                <span className="icon">
-                  <img src={button.icon} alt={`${button.label} icon`} />
-                </span>
-              </button>
-            </div>
-          ))}
-        </div>
+  {speedDialButtons.map((button, index) => (
+    <div className="speed-dial__item" key={index}>
+      {button.mailto ? (
+        <a href="mailto:mexicocenter@rice.edu?Subject=Visor%20de%20Indicadores%20Ambientales%20y%20Sociales">
+          <span className={`button-text${selectedItem ? " hidden" : ""}`}>{button.label}</span>
+          <span className="icon">
+            <img src={button.icon} alt={`${button.label} icon`} />
+          </span>
+        </a>
+      ) : (
+        <button type="button" onClick={() => window.location.href = button.link}>
+          <span className={`button-text${selectedItem ? " hidden" : ""}`}>{button.label}</span>
+          <span className="icon">
+            <img src={button.icon} alt={`${button.label} icon`} />
+          </span>
+        </button>
+      )}
+    </div>
+  ))}
+</div>
 
         {/* Botones Izquierda */}
         <div className={`buttonColumn${isMobile && selectedItem ? " buttonColumn--single" : ""}`}>
