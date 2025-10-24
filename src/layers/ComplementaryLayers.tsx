@@ -14,7 +14,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
-    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData } = useAppContext();
+    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
 
    /* const handleClick = (info: any) => {
@@ -94,6 +94,7 @@ const ComplementaryLayers = () => {
                             opacity: complementary?.opacity || 1
                         });
                         let data = await complementaryLayerInstance.loadData(urlBlob);
+                        
                         if(complementary?.dataProcessing) {
                             data = complementary.dataProcessing(data);
                             console.log('processed data for', layerKey, data);
@@ -147,7 +148,7 @@ const ComplementaryLayers = () => {
 
                 })();
         }});
-        }, [selectedBaseLayers]);
+        }, [selectedBaseLayers, selectedEquipamientosFilters]);
 
     return { layers: Object.values(baseLayers) };
 }

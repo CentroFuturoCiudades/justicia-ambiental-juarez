@@ -14,10 +14,13 @@
   }
   &__content {
     display: flex;
-    gap: 3dvw;
+    gap: 2.5dvw;
     z-index: 1;
   }
-  &__image {
+  &__logo-box {
+    max-width: 20dvw;
+  }
+  &__logo {
     height: 100%;
     width: 100%;
     object-fit: contain;

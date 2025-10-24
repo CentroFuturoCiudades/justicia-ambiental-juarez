@@ -6,16 +6,14 @@ import { useEffect } from "react";
 
 
 const LayerTooltip = () => {
-    const { layerTooltip, layerInfoData, mapLayerInstance } = useAppContext();
+    const { layerTooltip, layerInfoData } = useAppContext();
 
 
-    if (!layerTooltip || !layerInfoData){
-        console.log("no layerTooltip or no layerInfoData or no mapLayerInstance");
-        return null;
-    }
-    console.log("layerinfoData", layerInfoData);
+    if (!layerTooltip || !layerInfoData) return null;
     const jsonForLayer = layerInfoData[layerTooltip.layerKey || selectedLayer];
+    console.log("jsonforlayer:", jsonForLayer);
     const industry = jsonForLayer ? jsonForLayer[layerTooltip.content.ID] : null;
+    console.log("layerTooltip content:", layerTooltip.content);
 
     return (
         <div className="tooltip" style={{ left: layerTooltip.x, top: layerTooltip.y }} >

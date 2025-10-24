@@ -4,13 +4,18 @@ import {  CAPAS_BASE_CODEBOOK } from "../../utils/constants";
 import { useAppContext } from "../../context/AppContext";
 import { AiOutlineDown } from "react-icons/ai";
 import { useMediaQuery } from '@chakra-ui/react';
+import { useEffect } from "react";
 
 
 const CapasComplementarias = () => { 
-    const { selectedBaseLayers, setSelectedBaseLayers } = useAppContext();
+    const { selectedBaseLayers, setSelectedBaseLayers, setSelectedEquipamientosFilters, selectedEquipamientosFilters } = useAppContext();
     const mainLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => !value.parent);
     const subLayers = Object.entries(CAPAS_BASE_CODEBOOK).filter(([_, value]) => value.parent);
     const [isMobile] = useMediaQuery('(max-width: 800px)');
+    const equipamientosFilters = subLayers.reduce((acc, [key, _]) => {
+        acc[key] = selectedBaseLayers.includes(key);
+        return acc;
+    }, {} as { [key: string]: boolean });
     /*
         Seleccion y deseleccion de CAPAS COMPLEMENTARIAS
         - Array de keys de capas complementarias
@@ -24,7 +29,30 @@ const CapasComplementarias = () => {
                 ? prev.filter(item => item !== layerKey)
                 : [...prev, layerKey]
         );
+        //if equipamientos complementary activate all children
+        /*if(layerKey === "equipamientos"){
+            const subLayerKeys = CAPAS_BASE_CODEBOOK["equipamientos"].children
+            setSelectedEquipamientosFilters( prev =>
+                selectedBaseLayers.includes(layerKey)
+                ? [] : [ ...subLayerKeys ]
+                
+            )
+        }*/
     };
+
+    const handleChildren = (childKey: string) => {
+        setSelectedEquipamientosFilters(prev => {
+            if (prev.includes(childKey)) {
+                return prev.filter(item => item !== childKey);
+            } else {
+                return [...prev, childKey];
+            }
+        });
+    };
+
+    useEffect(() => {
+        console.log("selected equipamientos filters changed:", selectedEquipamientosFilters);
+    }, [selectedEquipamientosFilters]);
 
     return (
         <div>
@@ -60,22 +88,24 @@ const CapasComplementarias = () => {
                                 <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === layerKey) ? " checkbox__label--bold" : ""}`} > {value.title} </Checkbox.Label>
                             </Checkbox.Root>
                             <div className="sub-checkbox">
-                            {subLayers
-                             .filter(([_, subLayer]) => subLayer.parent === layerKey)
-                             .map(([subKey, subLayer]) => (
-                                <Checkbox.Root key={subKey} 
-                                    cursor="pointer" 
-                                    variant={"solid"}
-                                    checked={selectedBaseLayers.includes(subKey)}
-                                    onCheckedChange={() => handleComplementaryLayerToggle(subKey)}
-                                    disabled={!subLayer.enabled}
-                                    className="checkbox checkbox--right"
-                                >
-                                    <Checkbox.HiddenInput />
-                                    <Checkbox.Control />
-                                    <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === subKey) ? " checkbox__label--bold" : ""}`}> {subLayer.title} </Checkbox.Label>
-                                </Checkbox.Root>
-                            ))}
+                            {value.children && value.children.map((childKey) => {
+                                        const subLayer = CAPAS_BASE_CODEBOOK[childKey];
+                                        return (
+                                            <Checkbox.Root
+                                                key={childKey}
+                                                cursor="pointer"
+                                                variant={"solid"}
+                                                checked={selectedBaseLayers.includes(childKey) || selectedEquipamientosFilters.includes(childKey)}
+                                                onCheckedChange={() => handleChildren(childKey)}
+                                                disabled={!selectedBaseLayers.includes(layerKey)}
+                                                className="checkbox checkbox--right"
+                                            >
+                                                <Checkbox.HiddenInput />
+                                                <Checkbox.Control />
+                                                <Checkbox.Label className={`checkbox__label${selectedBaseLayers.some(item => item.key === childKey) ? " checkbox__label--bold" : ""}`}> {subLayer.title} </Checkbox.Label>
+                                            </Checkbox.Root>
+                                        );
+                                    })}
                             </div>
                             </>
                         ))}

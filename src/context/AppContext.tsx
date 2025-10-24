@@ -62,6 +62,8 @@ interface AppContextI {
     setJsonData: Dispatch<SetStateAction<any>>;
     layerInfoData: any;
     setLayerInfoData: Dispatch<SetStateAction<Record<string, any>>>;
+    selectedEquipamientosFilters: string[];
+    setSelectedEquipamientosFilters: Dispatch<SetStateAction<string[]>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -135,6 +137,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
     //json data for CAPA (diferentes)
     const [jsonData, setJsonData] = useState<any>(null);
     const [layerInfoData, setLayerInfoData] = useState<Record<string, any>>({});
+    const [selectedEquipamientosFilters, setSelectedEquipamientosFilters] = useState<string[]>(['educacion', 'salud', 'recreacion', 'parques']);
+
 
     return (
         <AppContext.Provider value={{
@@ -187,6 +191,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setJsonData,
             layerInfoData,
             setLayerInfoData,
+            selectedEquipamientosFilters,
+            setSelectedEquipamientosFilters,
         }}
         >
             {children}

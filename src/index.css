@@ -42,6 +42,7 @@
   --font-size-title: min(4.45dvh, 2.55dvw); /*50px*/
   --font-size-visor-header: min(3.20dvh, 1.87dvw); /*35px*/
   --font-size-header: min(2.67dvh, 1.53dvw); /*30*/
+  --font-size-equipo: min(2.2dvh, 1.3dvw); /*27*/
   --font-size-subtitle: min(1.95dvh, 1.12dvw); /*22px*/
   --font-size-body: min(1.78dvh, 1.02dvw); /*20px*/
   --font-size-button: min(1.33dvh, 0.76dvw); /*15px*/
