@@ -35,6 +35,7 @@ export class MapLayer {
   domain?: number[];
   scaleType?: string;
   thresholds?: number[];
+  quantiles?: number[];
 
 
   constructor({ opacity = 0.7, colors = ["#f4f9ff", "#08316b"], title = "Map Layer", theme = "default", amountOfColors = 6, formatValue, categorical = false, categoryLegend = [], scaleType = "linear", thresholds = [] }: {
@@ -244,6 +245,7 @@ export class MapLayer {
       quantiles = [this.minVal, ...quantiles, this.maxVal];
     }
 
+    this.quantiles = quantiles;
   //pares de rangos (inicio y fin) y revierte el orden
   return quantiles
     .slice(0, -1)
@@ -424,9 +426,8 @@ export class MapLayer {
       formatValue={this.formatValue || ((value: number) => value.toString())}
       colorsArray={completeColors}
       selectedCount={selected}
-      ranges={ranges}
-      layerType={this.categorical ? "categorical" : "continuous"}
-      colorMap={this.colorMap}
+      ranges={this.quantiles || []}
+      scaleType={this.scaleType || "linear"}
     />
   }
 }
