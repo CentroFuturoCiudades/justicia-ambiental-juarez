@@ -216,30 +216,30 @@ export const aboutContent: () => JSX.Element | string = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: "2dvh"}}>
             <p className="subtitle-card">|acerca de la plataforma|</p>
             <p className="subtitle-card" style={{  fontSize:"var(--font-size-subtitle)"}}>El desafío de la resiliencia en las ciudades fronterizas</p>
-                <p className="bodytext-card">
-                    <div style={{ display: "flex", flexDirection: "column", gap: "1dvh" }}>
-                    <p>
-                        Las ciudades fronterizas, al tener una ubicación comercial privilegiada con el mercado de los EUA, se han visto siempre frente 
-                        a la disyuntiva del desarrollo económico y el gran impacto socio-ambiental relacionado con dicho crecimiento que a la par, ha impactado 
-                        fuertemente las dinámicas comunitarias de sus poblaciones. 
-                    </p>
-                    <p>
-                        Las ciudades y municipios fronterizos han desarrollado herramientas de política pública, como planes de resiliencia, atlas de riesgos 
-                        y planes de acción climática, para enfrentar los desafíos que surgen del binomio del “desarrollo industrial y el impacto ambiental”. 
-                        Sin embargo, a pesar de estos avances, algunas áreas densamente pobladas o cerca de zonas industriales siguen siendo altamente vulnerables 
-                        a los impactos ambientales. Esta vulnerabilidad puede ser causada tanto por la actividad industrial y sus externalidades, como por vulnerabilidad 
-                        climática, que expone a las comunidades a riesgos como la contaminación y eventos climáticos extremos. 
-                    </p>
-                    <p>
-                        El desarrollo de herramientas que sirvan para diagnosticar zonas de alta vulnerabilidad frente a estos impactos mencionados se convierte prioritario 
-                        para poder mitigar o reparar daños a la salud pública o al medio ambiente y para mejorar la planeación urbana frente a nuevos proyectos de infraestructura de cualquier índole. 
-                    </p>
-                    <p>
-                        Este visor nos da información para restablecer procesos de equidad y participación ciudadana y al mismo tiempo, promueve que actores del sector privado 
-                        y del gobierno incluyan planes de inversión social y de protección ambiental en sus procesos productivos, de responsabilidad social corporativa y en sus planes de desarrollo local.  
-                    </p>
-                    </div>
+            <div className="bodytext-card">
+                <div style={{ display: "flex", flexDirection: "column", gap: "1dvh" }}>
+                <p>
+                    Las ciudades fronterizas, al tener una ubicación comercial privilegiada con el mercado de los EUA, se han visto siempre frente 
+                    a la disyuntiva del desarrollo económico y el gran impacto socio-ambiental relacionado con dicho crecimiento que a la par, ha impactado 
+                    fuertemente las dinámicas comunitarias de sus poblaciones. 
                 </p>
+                <p>
+                    Las ciudades y municipios fronterizos han desarrollado herramientas de política pública, como planes de resiliencia, atlas de riesgos 
+                    y planes de acción climática, para enfrentar los desafíos que surgen del binomio del “desarrollo industrial y el impacto ambiental”. 
+                    Sin embargo, a pesar de estos avances, algunas áreas densamente pobladas o cerca de zonas industriales siguen siendo altamente vulnerables 
+                    a los impactos ambientales. Esta vulnerabilidad puede ser causada tanto por la actividad industrial y sus externalidades, como por vulnerabilidad 
+                    climática, que expone a las comunidades a riesgos como la contaminación y eventos climáticos extremos. 
+                </p>
+                <p>
+                    El desarrollo de herramientas que sirvan para diagnosticar zonas de alta vulnerabilidad frente a estos impactos mencionados se convierte prioritario 
+                    para poder mitigar o reparar daños a la salud pública o al medio ambiente y para mejorar la planeación urbana frente a nuevos proyectos de infraestructura de cualquier índole. 
+                </p>
+                <p>
+                    Este visor nos da información para restablecer procesos de equidad y participación ciudadana y al mismo tiempo, promueve que actores del sector privado 
+                    y del gobierno incluyan planes de inversión social y de protección ambiental en sus procesos productivos, de responsabilidad social corporativa y en sus planes de desarrollo local.  
+                </p>
+                </div>
+            </div>
         </div>
     );
 };

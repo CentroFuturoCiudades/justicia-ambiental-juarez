@@ -138,21 +138,6 @@ const Visor = () => {
         })();
     }, []);
 
-    useEffect(() => {
-        console.log('selectedAGEBS changed:', selectedAGEBS);
-    }, [selectedAGEBS]);
-
-    useEffect(() => {
-        console.log('selectedPoint changed:', layerInfoData);
-        console.log('layertooltip changed:', layerTooltip);
-        console.log('layerinfodata', layerInfoData);
-    }, [layerInfoData, layerTooltip]);
-
-
-  useEffect(() => {
-    console.log('selectionMode changed:', selectionMode);
-  }, [selectionMode]);
-
     if(!hydrated) return null;
 
     return (
