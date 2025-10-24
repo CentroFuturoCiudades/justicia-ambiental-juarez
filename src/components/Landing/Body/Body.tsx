@@ -44,7 +44,7 @@ const Body = () => {
   {speedDialButtons.map((button, index) => (
     <div className="speed-dial__item" key={index}>
       {button.mailto ? (
-        <a href="mailto:rafa@gmail.com?Subject=Interesado%20en%20el%20curso">
+        <a href="mailto:mexicocenter@rice.edu?Subject=Visor%20de%20Indicadores%20Ambientales%20y%20Sociales">
           <span className={`button-text${selectedItem ? " hidden" : ""}`}>{button.label}</span>
           <span className="icon">
             <img src={button.icon} alt={`${button.label} icon`} />
