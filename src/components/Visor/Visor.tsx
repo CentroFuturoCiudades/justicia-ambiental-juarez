@@ -138,6 +138,10 @@ const Visor = () => {
         })();
     }, []);
 
+    useEffect(() => {
+        console.log("legend in maplayerinstance", mapLayerInstance?.legend);
+    }, [mapLayerInstance]);
+
     if(!hydrated) return null;
 
     return (
