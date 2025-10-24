@@ -1,9 +1,8 @@
 import { useAppContext } from "../../context/AppContext";
 import "./LayerCard.scss";
 import { IoInformationCircleSharp } from "react-icons/io5";
-import { use, useEffect, useState, type JSX } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { useMediaQuery } from '@chakra-ui/react';
-import MyCirclePacking from "../RangeGraph/CirclePackingChart";
 import EChartsReact from "echarts-for-react";
 
 type LayerCardProps = {

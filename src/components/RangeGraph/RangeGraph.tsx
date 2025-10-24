@@ -7,24 +7,28 @@ type RangeGraph = {
     formatValue: (value: number) => string;
     colorsArray: string[];
     selectedCount: number;
-    layerType?: string;
+    ranges: any[];
+    scaleType: string;
 };
 
+function quantilePercentile(averageAGEB: number, cuts: number[]) {
+  for(let i = 0; i < cuts.length - 1; i++) {
+    //if average falls withing cut and next cut
+    if(averageAGEB >= cuts[i] && averageAGEB <= cuts[i + 1]) {
+      const rangeStart = cuts[i];
+      const rangeEnd = cuts[i + 1];
+      const rangePercent = (averageAGEB - rangeStart) / (rangeEnd - rangeStart);
+      const overallPercent = (i + rangePercent) / (cuts.length - 1);
+      return overallPercent * 100;
+    }
+  }
+  return 0;
+}
+
 // Estilos in line para la conversion a imagen con html2canvas
-const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount, layerType }: RangeGraph) => {
+const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount, ranges, scaleType }: RangeGraph) => {
 
-  const [isMobile] = useMediaQuery('(max-width: 800px)');
-  /*const domain = ranges.map((range) => range[1]);
-  const colorMap = scaleLinear<string>().domain(domain).range(colorsArray);
-  const linearGradient = `linear-gradient(to left, ${Array.from({ length: ranges.length }, (_, i) => `${colorMap(domain[i])} ${i * 100 / ranges.length}%`).join(", ")})`;
-
-  const gradientStyle: React.CSSProperties = {
-    background: linearGradient,
-    width: "100%",
-    height: isMobile ? "min(10dvh, 14dvw)" : "min(5.5dvh, 3.2dvw)",
-    padding: "0 1dvw",
-  };*/
-  
+  const [isMobile] = useMediaQuery('(max-width: 800px)');  
 
   //if (!data || !data.positiveAvg) return null;
   return (
@@ -44,7 +48,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
           
       {/* INDICADOR de promedio de la selección */}
       {averageAGEB !=null && selectedCount > 0 && (() => {
-        const percent = ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
+        const percent = scaleType === "quantile" ? quantilePercentile(averageAGEB, ranges) : ((averageAGEB - data.minVal) / (data.maxVal - data.minVal)) * 100;
         const style: React.CSSProperties = {
           position: "absolute",
           display: "flex",
@@ -84,7 +88,7 @@ const RangeGraph = ({ data, averageAGEB, formatValue, colorsArray, selectedCount
       
       {/* LINEA - Promedio Cd. Juárez */}
           {(() => {
-            const percent = ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
+            const percent = scaleType === "quantile" ? quantilePercentile(data.positiveAvg, ranges) : ((data.positiveAvg - data.minVal) / (data.maxVal - data.minVal)) * 100;
             const style: React.CSSProperties = {
               display: "flex",
               flexDirection: "column",
