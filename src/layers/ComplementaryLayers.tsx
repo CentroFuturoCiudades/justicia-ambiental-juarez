@@ -16,18 +16,9 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 const ComplementaryLayers = () => {
     const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
+    const [equuipamientosData, setEquipamientosData] = useState<any>(null);
 
-   /* const handleClick = (info: any) => {
-        if (info) {
-            setLayerTooltip({
-                x: info.x,
-                y: info.y,
-                content: info.object.properties
-            });
-        } else {
-            setLayerTooltip(null);
-        }
-    };*/
+
     const handleClick = (layerKey: string) => (info: any) => {
         if (info) {
             setLayerTooltip({
@@ -42,7 +33,27 @@ const ComplementaryLayers = () => {
             setSelectedPoint(null);
         }
     };
+
+    //equipamientos selection/deselection filtering on equipamientos complementary layer
+    useEffect(() => {
+        //si capas seleccionadas tiene equipamientos
+        if (baseLayers['equipamientos']) {
+            const equipamientosLayer = baseLayers['equipamientos'];
+            //filter copy of fetched equipamientos data w/ selected equipamientos filters
+            const dataFiltered = equuipamientosData.features.filter((feature: any) =>
+                selectedEquipamientosFilters.includes(feature.properties.group)
+            );
+            const newLayer = new GeoJsonLayer({
+                ...equipamientosLayer[0].props,
+                data: dataFiltered
+            });
+            setBaseLayers(prev => ({ ...prev, 'equipamientos': [newLayer] }));
+        } else {
+            setEquipamientosData(null); 
+        }
+    }, [selectedEquipamientosFilters]);
     
+    //generate complementary layers
     useEffect(() => {
         //deseleccionar capas
         setBaseLayers(prev => {
@@ -97,7 +108,9 @@ const ComplementaryLayers = () => {
                         
                         if(complementary?.dataProcessing) {
                             data = complementary.dataProcessing(data);
-                            console.log('processed data for', layerKey, data);
+                            if(layerKey === 'equipamientos') {
+                                setEquipamientosData(data);     //copy of equipamientos data for filters
+                            }
                         }
                         
                         const newLayer = complementaryLayerInstance.getLayer(
