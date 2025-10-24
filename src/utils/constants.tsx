@@ -1713,15 +1713,16 @@ export const CAPAS_BASE_CODEBOOK = {
         categoryColors: {
             "educacion": "#e9c46a",
             "salud": "#4abfbd",
-            "recreativo": "#e76f51",
-            "parque": "#8ab17d"
+            "recreacion": "#e76f51",
+            "parques": "#8ab17d"
         },
-       // children: ["educacion", "salud", "recreacion", 'parques'],
+       children: {
+        "educacion": "educación",
+        "salud": "salud",
+        "recreacion": "recreación",
+        "parques": "parques"
+        },
         hoverInfo: false,
-        dataFiltering: (data: any, selectedFilters: any) => {
-            data.features = data.features.filter((feature: any) => selectedFilters.includes(feature.properties.group)); 
-            return data;
-        },
         dataProcessing: (data: any) => {
             const equipamiento_Groups: any = {
                 "guarderia": "educacion",
@@ -1730,11 +1731,11 @@ export const CAPAS_BASE_CODEBOOK = {
                 "secundaria": "educacion",
                 "preparatoria": "educacion",
                 "universidad": "educacion",
-                "auditorio": "recreativo",
-                "biblioteca": "recreativo",
-                "cine": "recreativo",
-                "parque": "parque",
-                "unidad_deportiva": "recreativo",
+                "auditorio": "recreacion",
+                "biblioteca": "recreacion",
+                "cine": "recreacion",
+                "parque": "parques",
+                "unidad_deportiva": "recreacion",
                 "centro_salud": "salud",
                 "hospital": "salud",
             }
@@ -1742,167 +1743,6 @@ export const CAPAS_BASE_CODEBOOK = {
             data.features.forEach((feature: any) => {
                 feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
             });
-            return data;
-        },
-        isLine: false,
-    },
-    educacion:{
-        title: "educación",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
-        enabled: true,
-        parent: "equipamientos",
-        removeFromParentGroup: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.group !== "educacion");
-            return data;
-        },
-        dataFiltering: (data: any) => {
-            const filteredData = data.features.filter((feature: any) => feature.properties.group === "educacion");
-            return {
-                ...data,
-                features: filteredData
-            };
-        },
-        isPointLayer: true,
-        field: "group",
-        colors: ["#e9c46a"],
-        categoryColors: {
-            "educacion": "#e9c46a",
-            "salud": "#4abfbd",
-            "recreativo": "#e76f51",
-            "parque": "#8ab17d"
-        },
-        hoverInfo: false,
-        dataProcessing: (data: any) => {
-            //filter out education features
-            data.features = data.features.filter((feature: any) => feature.properties.group !== "educacion");
-            return data;
-        },
-        isLine: false,
-    },
-    salud: {
-        title: "salud",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
-        enabled: true,
-        parent: "equipamientos",
-        isPointLayer: true,
-        field: "group",
-        colors: ["#4abfbd"],
-        categoryColors: {
-            "educacion": "#e9c46a",
-            "salud": "#4abfbd",
-            "recreativo": "#e76f51",
-            "parque": "#8ab17d"
-        },
-        hoverInfo: false,
-        removeFromParentGroup: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.group !== "salud");
-            return data;
-        },
-        dataFiltering: (data: any) => {
-            const filteredData = data.features.filter((feature: any) => feature.properties.group === "salud");
-            return {
-                ...data,
-                features: filteredData
-            };
-        },
-        dataProcessing: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.group === "salud");
-            return data;
-        },
-        isLine: false,
-    },
-    recreacion: {
-        title: "recreación",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
-        enabled: true,
-        parent: "equipamientos",
-        isPointLayer: true,
-        field: "group",
-        colors: ["#e76f51"],
-        categoryColors: {
-            "educacion": "#e9c46a",
-            "salud": "#4abfbd",
-            "recreativo": "#e76f51",
-            "parque": "#8ab17d"
-        },
-        hoverInfo: false,
-        removeFromParentGroup: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.group !== "recreacion");
-            return data;
-        },
-        dataFiltering: (data: any) => {
-            const filteredData = data.features.filter((feature: any) => feature.properties.group === "recreativo");
-            return {
-                ...data,
-                features: filteredData
-            };
-        },
-        dataProcessing: (data: any) => {
-            const equipamiento_Groups: any = {
-                "guarderia": "educacion",
-                "preescolar": "educacion",
-                "primaria": "educacion",
-                "secundaria": "educacion",
-                "preparatoria": "educacion",
-                "universidad": "educacion",
-                "auditorio": "recreativo",
-                "biblioteca": "recreativo",
-                "cine": "recreativo",
-                "parque": "parque",
-                "unidad_deportiva": "recreativo",
-                "centro_salud": "salud",
-                "hospital": "salud",
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
-            });
-            data.features = data.features.filter((feature: any) => feature.properties.group === "recreativo");
-            return data;
-        },
-        isLine: false
-    },
-    parques: {
-        title: "parques",
-        url: "https://justiciaambientalstore.blob.core.windows.net/data/equipamientos.geojson",
-        enabled: true,
-        parent: "equipamientos",
-        isPointLayer: true,
-        field: "group",
-        colors: ["#8ab17d"],
-        hoverInfo: false,
-        removeFromParentGroup: (data: any) => {
-            data.features = data.features.filter((feature: any) => feature.properties.group !== "parques");
-            return data;
-        },
-        dataFiltering: (data: any) => {
-            const filteredData = data.features.filter((feature: any) => feature.properties.group === "parque");
-            return {
-                ...data,
-                features: filteredData
-            };
-        },
-        dataProcessing: (data: any) => {
-            const equipamiento_Groups: any = {
-                "guarderia": "educacion",
-                "preescolar": "educacion",
-                "primaria": "educacion",
-                "secundaria": "educacion",
-                "preparatoria": "educacion",
-                "universidad": "educacion",
-                "auditorio": "recreativo",
-                "biblioteca": "recreativo",
-                "cine": "recreativo",
-                "parque": "parque",
-                "unidad_deportiva": "recreativo",
-                "centro_salud": "salud",
-                "hospital": "salud",
-            }
-            data.features = data.features.filter((feature: any) => feature.properties.equipamiento !== null);
-            data.features.forEach((feature: any) => {
-                feature.properties.group = equipamiento_Groups[feature.properties.equipamiento];
-            });
-            data.features = data.features.filter((feature: any) => feature.properties.group === "parque");
             return data;
         },
         isLine: false,
