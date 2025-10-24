@@ -72,7 +72,8 @@
   align-items: flex-end;
 
   &__item {
-    button {
+    button,
+    a {
       cursor: pointer;
       display: inline-flex;
       border-radius: 2dvw 99px 99px 2dvw;
@@ -113,7 +114,10 @@
 
 .speed-dial__item button:hover,
 .speed-dial__item button:focus,
-.speed-dial__item button:focus-visible {
+.speed-dial__item button:focus-visible,
+.speed-dial__item a:hover,
+.speed-dial__item a:focus,
+.speed-dial__item a:focus-visible {
   outline: none !important;
   border-color: transparent !important;
   .icon {
@@ -132,7 +136,8 @@
   }
 }
 
-.speed-dial__item button:hover:not(:has(.button-text.hidden)){
+.speed-dial__item button:hover:not(:has(.button-text.hidden)),
+.speed-dial__item a:hover:not(:has(.button-text.hidden)){
   background-color: #f5ede3;
   border: 1px solid #f5ede3;
 }
