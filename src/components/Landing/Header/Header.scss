@@ -11,13 +11,14 @@
     border-bottom: 3px solid black;
     display: flex;
     flex-direction: row;
+    gap: 4dvw;
   }
 
   &__title {
     font-family: 'Space Mono', monospace;
     font-size: var(--font-size-title);
-    border-right: 3px solid black;
-    width: 40%;
+    //width: 40%;
+    width: 32dvw;
     
     &__italic {
       font-style: italic;

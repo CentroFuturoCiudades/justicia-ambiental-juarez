@@ -39,7 +39,7 @@
   /*--border-radius: 0.5rem;*/
   --border-radius: 0.2dvw;
 
-  --font-size-title: min(4.45dvh, 2.55dvw); /*50px*/
+  --font-size-title: min(4.45dvh, 2.6dvw); /*50px*/
   --font-size-visor-header: min(3.20dvh, 1.87dvw); /*35px*/
   --font-size-header: min(2.67dvh, 1.53dvw); /*30*/
   --font-size-equipo: min(2.2dvh, 1.3dvw); /*27*/
