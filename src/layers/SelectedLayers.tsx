@@ -76,8 +76,9 @@ const SelectedLayer = () => {
             pickable: true,
             filled: true,
             getFillColor: [255, 0, 0, 255],
-            getPointRadius: 100,
-            pointRadiusMinPixels: 6,
+            getPointRadius: 5,
+            pointRadiusUnits: 'pixels',
+            //pointRadiusMinPixels: 6,
             onClick: () => setSelectedPoint(null),
         })];
     }

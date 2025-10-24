@@ -106,7 +106,6 @@ export class ComplementaryLayer {
             getLineColor: getColor,
             getLineWidth: lineWidth ? lineWidth : (feature: any) => {
                 const item = feature.properties[field];
-                console.log('line width item', item);
                 return item ? item * 2: 3;
             },
             lineWidthUnits:  units === "meters" ? 'meters' : 'pixels',

@@ -14,7 +14,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
-    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData } = useAppContext();
+    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
 
    /* const handleClick = (info: any) => {
@@ -88,25 +88,16 @@ const ComplementaryLayers = () => {
                     } 
                     //else regular geojson complementary layer
                     else {
-                        let data;
                         const complementaryLayerInstance = new ComplementaryLayer({ 
                             colors: complementary?.colors || ["#f4f9ff", "#08316b"], 
                             title: complementary.title ,
                             opacity: complementary?.opacity || 1
                         });
-                        if(complementary.parent){ //if parent is active, remove the children group from parent geojson data
-                            const parentLayer = baseLayers[complementary.parent]
-                            data = complementary.removeFromParentGroup(parentLayer[0].props.data)
-                            console.log('filteredData', data);
-
-                            console.log('parentLayer', parentLayer);
-                        }
-                        else {
-                            data = await complementaryLayerInstance.loadData(urlBlob);
-                            if(complementary?.dataProcessing) {
-                                data = complementary.dataProcessing(data);
-                                console.log('processed data for', layerKey, data);
-                            }
+                        let data = await complementaryLayerInstance.loadData(urlBlob);
+                        
+                        if(complementary?.dataProcessing) {
+                            data = complementary.dataProcessing(data);
+                            console.log('processed data for', layerKey, data);
                         }
                         
                         const newLayer = complementaryLayerInstance.getLayer(
@@ -157,7 +148,7 @@ const ComplementaryLayers = () => {
 
                 })();
         }});
-        }, [selectedBaseLayers]);
+        }, [selectedBaseLayers, selectedEquipamientosFilters]);
 
     return { layers: Object.values(baseLayers) };
 }

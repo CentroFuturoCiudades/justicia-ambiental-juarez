@@ -114,7 +114,7 @@ export class MapLayer {
     return colorMap;
   }
 
-  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean): GeoJsonLayer => {
+  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean, radius: number | null): GeoJsonLayer => {
     //this.isLineLayer = true;
     let getColor: any;
     const featuresForStats = data.allFeatures;
@@ -216,7 +216,7 @@ export class MapLayer {
       autoHighlight: true,
       highlightColor: [250, 200, 0, 100],
       getLineColor: [255, 255, 255, 255],
-      getPointRadius: is_PointLayer ? 3 : undefined,
+      getPointRadius: radius ? radius : is_PointLayer ? 3 : undefined,
       pointRadiusUnits: is_PointLayer ? 'pixels' : undefined,
       //pointRadiusMinPixels: is_PointLayer ? 6 : undefined,
       //pointRadiusMaxPixels: is_PointLayer ? 50 : undefined,

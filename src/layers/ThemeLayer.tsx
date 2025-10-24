@@ -145,6 +145,7 @@ const ThemeLayer = () => {
                 activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
                 selectionMode,
                 layer?.capa ? layer.pickable : true,
+                selectedLayer === "industrias_contaminantes" ? 5 : undefined
             )
 
             //5. fetch jsonData for graphs (if any)
@@ -158,6 +159,7 @@ const ThemeLayer = () => {
                 }
             }
 
+            //console.log("estopy en theme layer y graphData es:", graphData);
             //6. set context variables
             setMapLayerInstance(mapLayerInstance);
             setTematicaData(data);
