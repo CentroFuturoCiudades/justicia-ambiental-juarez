@@ -47,7 +47,7 @@ const InfoTooltip = ( { show, containerRef, layerCardRef, selectedLayerData } : 
             <span style={{ fontWeight: 700 }}>Fuente: </span>
             <span>{selectedLayerData?.source} </span>
           </div>
-          <p className="source">Para más información metodológica sobre este indicador, consulta el <a href={codebook_url} style={{ textDecoration: "underline" }}>Catálogo de datos</a>.</p>
+          <p className="source">Para más información metodológica sobre este indicador, consulta el <a href={codebook_url}  target="_blank" style={{ textDecoration: "underline" }}>Catálogo de datos</a>.</p>
         </div>
       </Portal>
       <div ref={containerRef} />
