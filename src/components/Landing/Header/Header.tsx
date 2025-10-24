@@ -11,7 +11,7 @@ export default function Header() {
                     <span className="page-header__title__bold">indicadores<br /></span>
                     <span className="page-header__title__bold">ambientales y sociales</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1}}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, borderLeft: '3px solid black'}}>
                     <span style={{fontFamily: 'Lovelo Black', fontSize: 'min(6dvh, 4dvw)', textAlign: 'center'}}>
                         CIUDAD JUÁREZ, CHIHUAHUA
                     </span>

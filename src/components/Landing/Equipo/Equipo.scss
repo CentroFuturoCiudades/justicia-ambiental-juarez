@@ -1,13 +1,17 @@
 .equipo {
     z-index: 2;
-    padding: 4dvh 7.5dvw 4dvh 4dvw;
+    position: relative;
+    //padding: 4dvh 7.5dvw 4dvh 4dvw;
+    padding: 0 8dvw 0 4dvw;
     gap: 2dvh;
-    font-size: var(--font-size-equipo);
+    font-size: var(--font-size-body);
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
 
     &__title {
         font-weight: bold;
         font-family: 'Space Mono', monospace;
-        font-size: min(7dvh, 5dvw);
+        font-size: var(--font-size-title);
         text-align: center;
         margin-bottom: min(2dvh, 1dvw);
     }
@@ -27,6 +31,9 @@
         gap: min(2dvh, 1dvw);
         max-width: min(30dvh, 20dvw);
     }
+}
+.bold {
+    font-weight: 700;
 }
 .home {
     position: absolute;

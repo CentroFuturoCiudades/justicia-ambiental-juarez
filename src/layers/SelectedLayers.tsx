@@ -58,7 +58,7 @@ const SelectedLayer = () => {
                 data: dissolved,
                 pickable: true,
                 filled: false,
-                getLineColor: [250, 200, 0, 255],
+                getLineColor: selectedLayer === "vulnerabilidad_calor" ? [0, 0, 0, 255] : [250, 200, 0, 255],
                 getLineWidth: 70,
             })];
         } catch (error) {
