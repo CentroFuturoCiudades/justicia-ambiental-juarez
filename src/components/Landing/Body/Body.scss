@@ -193,6 +193,12 @@
     &__item {
       button,
       a {
+        background-color: transparent !important;
+        border: none !important;
+        .button-text {
+          opacity: 0 !important;
+          visibility: hidden !important;
+        }
         .icon {
           height: min(6dvh, 7dvw);
           width: min(6dvh, 7dvw);

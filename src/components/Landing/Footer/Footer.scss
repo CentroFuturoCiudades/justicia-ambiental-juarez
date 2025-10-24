@@ -18,7 +18,7 @@
     z-index: 1;
   }
   &__logo-box {
-    max-width: 20dvw;
+    max-width: min(34dvh, 20dvw);
   }
   &__logo {
     height: 100%;
@@ -37,8 +37,11 @@
       gap: 0;
       align-items: center;
     }
+    &__logo-box {
+      max-width: 30dvw;
+  }
     &__image {
-      height: 85%;
+      height: 100%;
       width: auto;
     }
   }

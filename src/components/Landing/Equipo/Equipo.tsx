@@ -30,7 +30,7 @@ const Equipo = () => {
                 </div>
 
                     <div>
-                        <p className="equipo__title" style={{fontSize:'min(1.95dvh, 1.14dvw)'}}> Equipo </p>
+                        <p className="equipo__title equipo__title--small" > Equipo </p>
                         <div className="equipo__row" >
                             <div className="equipo__col">
                                 <p style={{ fontWeight: 'bold'}}>Coordinación</p>
