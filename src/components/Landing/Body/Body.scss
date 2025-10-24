@@ -191,7 +191,8 @@
     bottom: 3.5dvh;
     gap: 2dvh;
     &__item {
-      button {
+      button,
+      a {
         .icon {
           height: min(6dvh, 7dvw);
           width: min(6dvh, 7dvw);
