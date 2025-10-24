@@ -1489,7 +1489,7 @@ export const LAYERS: any = {
     porcentaje_pob_60: {
         scaleType: "quantile",
         colors : ["#ebe6dfff", "#c3beb9ff", "#9cadb4ff", "#40a7b9ff", "#007f99ff"],
-        title: "Porcentaje de dultos mayores",
+        title: "Porcentaje de adultos mayores",
         description: "Porcentaje de población de 60 años o más.",
         source: "Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda, 2020.",
         property: "porcentaje_pob_60",
