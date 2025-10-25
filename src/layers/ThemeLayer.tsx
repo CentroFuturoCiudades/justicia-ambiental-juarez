@@ -75,6 +75,10 @@ const ThemeLayer = () => {
         let extraGeoJsonLayer;
         let graphData = null;
 
+        if(!layer.colonias && activeLayerKey === "colonias") {
+            setActiveLayerKey("agebs");
+        }
+
         //fetch data de capa tematica
         (async () => {
             //1. create mapLayerInstance (but dont update context variable yet)
