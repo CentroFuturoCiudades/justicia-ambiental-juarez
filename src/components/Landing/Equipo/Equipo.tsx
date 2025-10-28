@@ -16,7 +16,7 @@ const Equipo = () => {
 
                 <div className="equipo__content" style={{marginBottom: 'min(4dvh, 2.3dvw)'}}>
                     <p>
-                        Este proyecto ha sido fondeado por el <span className="bold">Banco de Desarrollo del América del Norte (NADBank)</span> [Número de fondo: IVONNE] 
+                        Este proyecto ha sido fondeado por el <span className="bold">Banco de Desarrollo del América del Norte (NADBank)</span>
                     </p>
                     <p>
                         <span className="bold">El Centro México-U.S.</span> (CUSMX)- <span className="bold">Baker Institute for Public Policy de la Universidad de Rice</span> coordinó el proyecto, su ejecución y es la institución responsable de su resguardo.

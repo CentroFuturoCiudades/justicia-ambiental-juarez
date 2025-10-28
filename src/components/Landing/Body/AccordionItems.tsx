@@ -20,7 +20,7 @@ export const accordionItems: AccordionItemType[] = [
             <div className="cardContent">
                 <p className="cardContent__title">|el contexto fronterizo y sus vulnerabilidades|</p>
                 <p className="cardContent__text">
-                    El “Visor de Indicadores Ambientales y Sociales” Sirve como un valioso punto de partida para la identificación 
+                    El “Visor de Indicadores Ambientales y Sociales” sirve como un valioso punto de partida para la identificación 
                     y el análisis de áreas que pueden justificar una revisión, un análisis o un acercamiento comunitario más profundo. 
                     Se desarrolló para ayudar a abordar las cargas ambientales desproporcionadas que experimentan las personas más vulnerables 
                     en Ciudad Juárez. En otros países como EUA, se utilizó por agencias estatales y grupos comunitarios para tomar decisiones 
@@ -28,7 +28,7 @@ export const accordionItems: AccordionItemType[] = [
                 </p>
                 <p className="cardContent__title">|objetivo|</p> {/* |indicadores ambientales| */}
                 <p className="cardContent__text">
-                    Esta herramienta tiene como objetivo facilitar el uso de las normas de protección ambiental para mejorar la planificación y 
+                    Esta herramienta tiene como objetivo facilitar el acceso a los datos ambientales y sociales para mejorar la planificación y 
                     para elaborar criterios de igualdad en el desarrollo de actividades como el establecimiento de nuevas zonas industriales, 
                     la emisión de permisos, el desarrollo de infraestructura, proyectos de transporte y las evaluaciones de impacto relacionadas con la comunidad, 
                     la salud o vulnerabilidad climática. 
@@ -231,7 +231,7 @@ export const aboutContent: () => JSX.Element | string = () => {
                     climática, que expone a las comunidades a riesgos como la contaminación y eventos climáticos extremos. 
                 </p>
                 <p>
-                    El desarrollo de herramientas que sirvan para diagnosticar zonas de alta vulnerabilidad frente a estos impactos mencionados se convierte prioritario 
+                    El desarrollo de herramientas que sirvan para diagnosticar zonas de alta vulnerabilidad frente a estos impactos mencionados se convierte en algo prioritario 
                     para poder mitigar o reparar daños a la salud pública o al medio ambiente y para mejorar la planeación urbana frente a nuevos proyectos de infraestructura de cualquier índole. 
                 </p>
                 <p>
