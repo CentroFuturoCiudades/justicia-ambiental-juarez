@@ -78,7 +78,7 @@ export const useAppContext = () => {
 
 export const LONGITUDE_RANGE = [-106.6, -106.3];
 export const LATITUDE_RANGE = [31.5, 31.8];
-export const ZOOM_RANGE = [9.8, 12];
+export const ZOOM_RANGE = [9.8, 14];
 
 
 export const defaultViewState = {
