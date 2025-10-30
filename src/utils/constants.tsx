@@ -1861,35 +1861,21 @@ export const CAPAS_BASE_CODEBOOK = {
         field: "sector",
         colors: [],
         categoryColors: {
-            "Manufactureras de metálicos, maquinaria y electrónicos": "#be1a32" ,
-            "Manufactureras de madera, papel, químicos y plástico": "#704776",
-            "Manejo de residuos": "#db9a0cff",
-            "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico": "#224ba5ff",
-            "Transporte": "#45151b",
+            "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico": "#224ba5ff" ,
+            "Manufactureras de madera, papel, químicos y plástico": "#ccbe6a",
+            "Manejo de residuos": "#2e6953",
+            "Manufactureras de metálicos, maquinaria y electrónicos": "#9b87b6",
+            "Transporte": "#e99900",
         },
         clickInfo: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
             //split industries by +
             data.features.forEach((feature: any) => {
+                data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
                 const industries = feature.properties.industries ? feature.properties.industries.split("+") : [];
                 feature.properties.industries = industries;
             });
-
-            /*data.features.forEach((feature: any) => {
-                const industries = feature.properties.industries;
-                let bestMatchGroup = 'otras';
-                let maxMatches = 0;
-                Object.keys(industry_groups).forEach(group => {
-                    const groupIndustries = industry_groups[group];
-                    const matches = industries.filter((industry: string) => groupIndustries.includes(industry)).length;
-                    if (matches > maxMatches) {
-                        maxMatches = matches;
-                        bestMatchGroup = group;
-                    }
-                });
-                feature.properties.industry_group = bestMatchGroup;
-            });*/
             return data;
         },
        featureInfo: true,
