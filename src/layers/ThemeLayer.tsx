@@ -1,9 +1,9 @@
 import { useAppContext } from "../context/AppContext";
-import { useEffect, useState } from "react";
-import { GeoJsonLayer } from "deck.gl";
+import { use, useEffect, useState } from "react";
+import { GeoJsonLayer, BitmapLayer } from "deck.gl";
 import { MapLayer } from "../classes/MapLayer";
+import { RasterLayer } from "../classes/RasterLayer";
 import { LAYERS } from "../utils/constants";
-import { json } from "d3";
 
 /* THEME LAYER:
     - Crea una capa geojson con la TEMATICA seleccionada
@@ -23,9 +23,10 @@ const ThemeLayer = () => {
         setLayerTooltip,
         setJsonData,    //for graphs
         setLayerInfoData,   //for layer tooltio (copy of jsonData but for layer info)
+        setHoverColonia
     } = useAppContext();
 
-    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer[] | null>(null);
+    const [tematicaLayer, setTematicaLayer] = useState<GeoJsonLayer[] | BitmapLayer | null>(null);
 
     // Maneja la seleccion de agebs/colonias
     const handleSelectedElements = (info: any) => {
@@ -52,22 +53,44 @@ const ThemeLayer = () => {
         }
     };
 
+    const handleHover = (info:any) => {
+        console.log("Hover info in ThemeLayer:", info);
+        if (info && info.object && info.object.properties.nombre) { //only colonia geojson has 'nombre' property
+            setHoverColonia({
+                x: info.x,
+                y: info.y,
+                colonia: info.object.properties.nombre,
+            });
+        } else {
+            setHoverColonia(null);
+        }
+    };
+
+    //with every layer change, to avoid showing old layer while new one loads
+    useEffect(() => {
+            setMapLayerInstance(null);
+            setTematicaLayer(null);
+
+
+
+            setTematicaData(null);
+            setJsonData(null); 
+        
+    }, [selectedLayer]);
+
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
         setLayerTooltip(null); //cerrar tooltip al cambiar de capa
-       // setLayerInfoData({});
-        //setTematicaLayer(null);
-        //setJsonData(null);
-        //setMapLayerInstance(null);
-        //setTematicaData(null);
 
         if( !selectedLayer) {
-            setTematicaLayer(null);
-            setMapLayerInstance(null);
-            setTematicaData(null);
-            setJsonData(null); 
+            //setTematicaLayer(null);
+            //setMapLayerInstance(null);
+            //setTematicaData(null);
+            //setJsonData(null); 
             return;
         };
+
+       // setMapLayerInstance(null);
 
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
         let layerData; //feature collection object in order to create de layer
@@ -82,6 +105,21 @@ const ThemeLayer = () => {
         //fetch data de capa tematica
         (async () => {
             //1. create mapLayerInstance (but dont update context variable yet)
+            if(layer.raster ) {
+               // setSelectionMode(null);
+               // setActiveLayerKey(null);
+
+                console.log("Loading raster layer:", layer.title);
+                const rasterLayerInstance = new RasterLayer({
+                    opacity: 0.7,
+                    colors: layer?.colors,
+                    title: layer.title
+                });
+                await rasterLayerInstance.loadRaster(layer.url);
+                const newBitmapLayer = rasterLayerInstance.getBitmapLayer();
+                setTematicaLayer(newBitmapLayer);
+                setMapLayerInstance(rasterLayerInstance);
+            } else {
             const mapLayerInstance = new MapLayer({
                 opacity: 1,
                 colors: layer?.colors,
@@ -98,8 +136,8 @@ const ThemeLayer = () => {
             //2. Get data for layer
             //if capa, fetch data
             if(layer.url) {
-                setSelectionMode(null);
-                setActiveLayerKey(null);
+                //setSelectionMode(null);
+                //setActiveLayerKey(null);
 
                 layerData = await mapLayerInstance.loadData(`${layer.url}`);
                 //industrias contaminantes que viene con 2 capas
@@ -147,7 +185,8 @@ const ThemeLayer = () => {
                 activeLayerKey === "agebs" ? selectedAGEBS : selectedColonias,
                 selectionMode,
                 layer?.capa ? layer.pickable : true,
-                selectedLayer === "industrias_contaminantes" ? 5 : undefined
+                selectedLayer === "industrias_contaminantes" ? 5 : undefined,
+               handleHover
             )
 
             //5. fetch jsonData for graphs (if any)
@@ -172,6 +211,7 @@ const ThemeLayer = () => {
                     [selectedLayer]: graphData
                 })); //same data for layer tooltip
             }
+        }
 
         })();
 

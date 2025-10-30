@@ -26,6 +26,8 @@ const Tematica = () => {
         - Se establece el modo de selección
     */
     const handleLayerToggle = (layerKey: LayerKey) => {
+        const layer = LAYERS[layerKey as keyof typeof LAYERS];
+
         if (selectedLayer === layerKey) {
             setSelectedLayer("");
             setActiveLayerKey(null);
@@ -33,8 +35,18 @@ const Tematica = () => {
             setSelectedPoint(null);
         } else {
             setSelectedLayer(layerKey);
-            setActiveLayerKey(prev => prev ?? "agebs");
-            setSelectionMode(prev => prev ?? "agebs");
+            //setActiveLayerKey(prev => prev ?? "agebs");
+            //setSelectionMode(prev => prev ?? "agebs");
+            setActiveLayerKey(prev => {
+                if(layer.capa || layer.raster) return null;
+                if (prev === "agebs" || prev === "colonias") return prev;
+                return "agebs";
+            });
+            setSelectionMode(prev => {
+                if(layer.capa || layer.raster) return null;
+                if (prev === "agebs" || prev === "colonias") return prev;
+                return "agebs";
+            });
             setSelectedPoint(null);
         }
     }

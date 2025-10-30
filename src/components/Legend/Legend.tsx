@@ -27,11 +27,14 @@ const Legend = ({ ranges, title, colors, formatValue, categorical, isPointLayer,
   const themeKey = selectedLayerData?.tematica;
 
    if (!ranges || ranges.length === 0) return null;
-   if(!mapLayerInstance) return null;
-    //if(!layer) return null;
-    if(!tematicaData) return null;
-    //if(title === "Industrias contaminantes") return null;
-
+   //if(!mapLayerInstance) return null;
+    if(!mapLayerInstance || mapLayerInstance.title !== selectedLayerData.title) {
+        //console.log("LayerCard: mapLayerInstance or layer mismatch", mapLayerInstance?.title, layer?.title);
+        console.log('no mapLayerInstance');
+        return null;
+    }
+   // if(!tematicaData) return null;
+    
   // construct the amount of colors based on the colors provided
   const domain = categorical ? ranges.map((category, index) => category) : ranges.map((range) => range[1]);
   const colorMap = scaleLinear<string>().domain(domain).range(colors);

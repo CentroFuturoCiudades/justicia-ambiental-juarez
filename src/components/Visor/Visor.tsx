@@ -2,9 +2,9 @@ import "./Visor.scss";
 import DeckGL from "deck.gl";
 import Map from "react-map-gl/mapbox";
 import { useAppContext } from "../../context/AppContext";
-import { useEffect, useState, useRef, use } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LAYERS, CAPAS_BASE_CODEBOOK } from "../../utils/constants";
-import { Box } from "@chakra-ui/react";
+import { Box, Spinner } from "@chakra-ui/react";
 import Layers from "../Layers/Layers";
 import Tematica from "../Tematica/Tematica";
 import CapasComplementarias from "../Capas Complementarias/CapasComplementarias";
@@ -13,7 +13,7 @@ import LayerCard from "../Layer Card/LayerCard";
 import Toolbar from "../Toolbar/Toolbar";
 import InfoTooltip from "../Tooltip/Info Tooltip/InfoTooltip";
 import PopUp from "../Download Card/PopUp";
-import { Tooltip } from "../ui/tooltip";
+import { TileLayer, BitmapLayer } from "deck.gl";
 import { useMediaQuery } from '@chakra-ui/react';
 import { BsCardText } from "react-icons/bs";
 import { FaLayerGroup, FaSearch  } from "react-icons/fa";
@@ -35,20 +35,18 @@ const Visor = () => {
 
     const { 
         viewState, setViewState, 
-        agebsGeoJson,setAgebsGeoJson,
+        setAgebsGeoJson,
         setColoniasGeoJson,
         selectedPoint, setSelectedPoint,
         mapLayerInstance,
-        tematicaData,
         selectedLayer,  
         activeLayerKey,
         mapLayers,
         dragMap,
         layerTooltip, setLayerTooltip,
-        jsonData, setJsonData,
-        selectedAGEBS,
         layerInfoData,
-        selectionMode
+        selectionMode,
+        hoverColonia
         
     } = useAppContext();
 
@@ -139,8 +137,9 @@ const Visor = () => {
     }, []);
 
     useEffect(() => {
-        console.log("legend in maplayerinstance", mapLayerInstance?.legend);
-    }, [mapLayerInstance]);
+        console.log("activeLayerKey changed:", activeLayerKey);
+        console.log("selectionMode:", selectionMode);
+    }, [activeLayerKey, selectionMode]);
 
     if(!hydrated) return null;
 
@@ -164,7 +163,7 @@ const Visor = () => {
 
                         <Tematica />
 
-                        {selectedLayer && tematicaData && mapLayerInstance && !isMobile && (
+                        {selectedLayer && mapLayerInstance && !isMobile && (
                             <LayerCard
                                 layer={selectedLayerData}
                                 rangeGraphRef={rangeGraphRef}
@@ -275,7 +274,7 @@ const Visor = () => {
                         </div>
                     </span>
 
-                        {selectedLayer && mapLayerInstance && tematicaData && (
+                        {selectedLayer && mapLayerInstance && (
                             <div className="visor__legend">
                                 {mapLayerInstance.getLegend(selectedLayerData?.title || "", selectedLayerData?.is_PointLayer, selectedLayerData?.legendTitle, selectedLayerData?.textRangesLegend)}
                             </div>
@@ -301,6 +300,18 @@ const Visor = () => {
                 
                 {layerTooltip && selectedPoint && layerInfoData &&
                     <LayerTooltip />
+                }
+
+                {hoverColonia && 
+                    <div className="tooltip" style={{ left: hoverColonia.x, top: hoverColonia.y, border: "none", padding: 'min(0.5dvh, 0.4dvw)', pointerEvents: 'none', transform: 'translateY(-100%) translateX(-50%)' }}>
+                        {hoverColonia.colonia}
+                    </div>
+                }
+
+                {!mapLayerInstance && selectedLayer &&
+                    <div style={{position: "absolute", left:"50%", transform: "translateX(-50%)", top: "50%", width: "100%", display: "flex", justifyContent: "center", zIndex: 1000}}>
+                        <Spinner size={"xl"}/>
+                    </div>
                 }
             </div>
         </div>

@@ -114,7 +114,7 @@ export class MapLayer {
     return colorMap;
   }
 
-  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean, radius: number | null): GeoJsonLayer => {
+  getLayer = (data: any, field: string, is_PointLayer: boolean, trimOutliers: boolean, handleFeatureClick: (info: any) => void, selectedAGEBS: string[] = [], selectionMode: string | null, isPickable: boolean, radius: number | null, handleHover: (info: any) => void): GeoJsonLayer => {
     //this.isLineLayer = true;
     let getColor: any;
     const featuresForStats = data.allFeatures;
@@ -182,7 +182,7 @@ export class MapLayer {
           }*/
           const rgbValue = color(this.colorMap(item))?.rgb();
           const opacityFirstRange = this.scaleType === "quantile" && item <= this.colorMap.domain()[0] ? 200 : 255;
-          return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, opacityFirstRange] : [255, 255, 255, 255];
+          return rgbValue ? [rgbValue.r, rgbValue.g, rgbValue.b, 180] : [255, 255, 255, 255];
         }
     } else {
       getColor = (feature: any): [number, number, number] => {
@@ -209,6 +209,7 @@ export class MapLayer {
       getFillColor: getColor,
       autoHighlight: true,
       highlightColor: [250, 200, 0, 100],
+      onHover: handleHover,
       getLineColor: [255, 255, 255, 255],
       getPointRadius: radius ? radius : is_PointLayer ? 3 : undefined,
       pointRadiusUnits: is_PointLayer ? 'pixels' : undefined,
@@ -264,23 +265,7 @@ export class MapLayer {
       return ranges.map((range) => this.colorMap(range[1]));
       //return colors.filter((color) => color !== undefined).map((color) => rgb(color).formatHex());
     }
-    /*const min = this.minVal;
-    const max = this.maxVal;
-    const domain = [
-      min,
-      ...Array.from({ length: this.colors.length - 2 },
-        (_, i) => min + (max - min) * (i + 1) / (this.colors.length - 1)),
-      max,
-    ];
-    const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
-    const colors = ranges.map((range) => colorMap(range[1]));
-    const validColors = colors.filter((color) => color !== undefined);
-    return validColors.map((color) => rgb(color).formatHex());*/
-    // Mapea cada rango al color correspondiente en el colorMap
-  //const colors = ranges.map((range) => this.colorMap(range[1]));
 
-  // Filtra colores válidos y conviértelos a formato hexadecimal
-  //return colors.filter((color) => color !== undefined).map((color) => rgb(color).formatHex());
   }
 
   //no me gusta que getlegend se llama cada vez que selecciono una ageb/colonia
