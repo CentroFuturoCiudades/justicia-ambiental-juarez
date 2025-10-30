@@ -2,6 +2,7 @@ import { type MapViewState } from "deck.gl";
 import React, { createContext, useContext, useState, type Dispatch, type ReactElement, type SetStateAction } from "react";
 import type { FeatureCollection } from "geojson";
 import { MapLayer } from "../classes/MapLayer";
+import { RasterLayer } from "../classes/RasterLayer";
 import type { LayerKey } from "../utils/constants";
 import { max } from "d3";
 
@@ -19,7 +20,7 @@ interface AppContextI {
     coloniasGeoJson: FeatureCollection;
     setColoniasGeoJson: Dispatch<SetStateAction<FeatureCollection>>;
     mapLayerInstance: MapLayer | null;
-    setMapLayerInstance: Dispatch<SetStateAction<MapLayer | null>>;
+    setMapLayerInstance: Dispatch<SetStateAction<MapLayer | RasterLayer | null>>;
     tematicaData: any;
     setTematicaData: Dispatch<SetStateAction<any>>;
     filteredFeatures: any[];
@@ -64,6 +65,8 @@ interface AppContextI {
     setLayerInfoData: Dispatch<SetStateAction<Record<string, any>>>;
     selectedEquipamientosFilters: string[];
     setSelectedEquipamientosFilters: Dispatch<SetStateAction<string[]>>;
+    hoverColonia: { x: number; y: number; colonia: string; } | null;
+    setHoverColonia: Dispatch<SetStateAction<{ x: number; y: number; colonia: string; } | null>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -96,7 +99,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [agebsGeoJson, setAgebsGeoJson] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
     const [coloniasGeoJson, setColoniasGeoJson] = useState<FeatureCollection>({ type: "FeatureCollection", features: [] });
     //mapinstance y data
-    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | null>(null);
+    const [mapLayerInstance, setMapLayerInstance] = useState<MapLayer | RasterLayer | null>(null);
     const [tematicaData, setTematicaData] = useState<any>(null);
     const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]); //features filtradas por el lens
     const [dragMap, setDragMap] = useState<boolean>(false);
@@ -138,6 +141,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [jsonData, setJsonData] = useState<any>(null);
     const [layerInfoData, setLayerInfoData] = useState<Record<string, any>>({});
     const [selectedEquipamientosFilters, setSelectedEquipamientosFilters] = useState<string[]>(['educacion', 'salud', 'recreacion', 'parques']);
+    const [hoverColonia, setHoverColonia] = useState<{ x: number; y: number; colonia: string; } | null>(null);
 
 
     return (
@@ -193,6 +197,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setLayerInfoData,
             selectedEquipamientosFilters,
             setSelectedEquipamientosFilters,
+            hoverColonia,
+            setHoverColonia,
         }}
         >
             {children}

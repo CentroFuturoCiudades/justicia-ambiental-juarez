@@ -6,10 +6,10 @@
    // padding: 0 0.5dvw;
     border-radius: var(--border-radius);
     font-size: var(--font-size-body);
-    //min-width: 13dvw;
-    //max-height: 20dvw;
+  //  font-family: 'Roboto', sans-serif;
     max-width: 25dvw;
     overflow-y: auto;
+    transform: translateX(-50%) translateY(10%);
 
     &__title {
       font-size: var(--font-size-button);

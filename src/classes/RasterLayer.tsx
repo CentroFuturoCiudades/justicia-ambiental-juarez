@@ -16,6 +16,7 @@ export class RasterLayer {
   legend: any = null;
   minVal: number = 0;
   maxVal: number = 0;
+  positiveAvg: number = 0;
   title: string;
   amountOfColors: number;
   formatValue: (value: number) => string;
@@ -47,14 +48,19 @@ export class RasterLayer {
     const raster = rasters[0] as any;
     const validValues = raster.filter((v: any) => v !== Infinity && v !== -Infinity);
     const { min, max } = this.minMax(validValues);
+    const avg = validValues.reduce((a: number, b: number) => a + b, 0) / validValues.length;
+    console.log("Raster average:", avg);
+    console.log("Raster min/max:", min, max);
     this.minVal = min;
     this.maxVal = max;
+    this.positiveAvg = avg;
     const domain = [
       min,
       ...Array.from({ length: this.colors.length - 2 },
         (_, i) => min + (max - min) * (i + 1) / (this.colors.length - 1)),
       max,
     ];
+    console.log("Raster color domain:", domain);
     const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
     raster.forEach((v: any, i: number) => {
       if (v === Infinity || v === -Infinity || v === null || v === undefined || isNaN(v) || v === 0) {
@@ -82,7 +88,7 @@ export class RasterLayer {
         value: domain[i].toFixed(2)
       }))
     };
-    console.log("Raster image created", this.image, this.bounds);
+    //console.log("Raster image created", this.image, this.bounds);
   } catch (error) {
     console.error("Error loading raster:", error);
   }
@@ -114,6 +120,28 @@ export class RasterLayer {
       .reverse(); // Reverse the order of the ranges
   };
 
+   getRanges2 = (amountOfColors: number = 6) => {
+    let quantiles: number[] = [];
+    if(this.scaleType === "linear"){
+        const domain = Array.from({ length: amountOfColors }, (_, i) => this.minVal + (this.maxVal - this.minVal) * (i) / amountOfColors);
+        quantiles = [this.minVal, ...domain, this.maxVal];
+        quantiles = quantiles.filter((value, index, self) => self.indexOf(value) === index);
+    } else if (this.thresholds && this.thresholds.length > 0) {
+      quantiles = [this.minVal, ...this.thresholds, this.maxVal];
+    }
+    else {
+      quantiles = this.colorMap.quantiles();
+      quantiles = [this.minVal, ...quantiles, this.maxVal];
+    }
+
+    this.quantiles = quantiles;
+    //pares de rangos (inicio y fin) y revierte el orden
+    return quantiles
+      .slice(0, -1)
+      .map((num, i) => [num, quantiles[i + 1]])
+      .reverse(); // Opcional: invertir el orden si es necesario
+  }
+
   getColors = (amountOfColors: number = this.amountOfColors) => {
     const ranges = this.getRanges(amountOfColors);
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
@@ -123,8 +151,11 @@ export class RasterLayer {
   getLegend(title: string) {
     if (!this.legend) return <></>;
     const ranges = this.getRanges();
-    const completeColors = this.getColors();
-    return (
+    console.log("Legend ranges:", ranges);
+    //const completeColors = this.getColors();
+    const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    console.log("Legend colors:", completeColors);
+    /*return (
       <Legend
         title={title}
         colors={completeColors}
@@ -132,7 +163,17 @@ export class RasterLayer {
         formatValue={this.formatValue}
         categorical={true}
       />
-    );
+    );*/
+    return <Legend
+      title={title}
+      colors={completeColors}
+      ranges={ranges}
+      formatValue={this.formatValue || ((value: number) => value.toString())}
+      categorical={false}
+      isPointLayer={false}
+      textRanges={undefined}
+      scaleType={"linear"}
+    />
   }
 
   minMax(arr: number[]) {
@@ -148,11 +189,27 @@ export class RasterLayer {
     if (!this.colorMap) return <></>;
     const ranges = this.getRanges();
     const completeColors = ranges.map((range) => this.colorMap(range[1]));
-    return <RangeGraph
+    /*return <RangeGraph
       colorsArray={completeColors}
       data={{ minVal: this.minVal, maxVal: this.maxVal }}
       averageAGEB={avg}
       formatValue={this.formatValue}
+    />*/
+    const Data = {
+      minVal: this.minVal,
+      maxVal: this.maxVal,
+      //negativeAvg: this.negativeAvg,
+      positiveAvg: this.positiveAvg
+    }
+    return <RangeGraph
+      data={Data}
+      averageAGEB={avg}
+      formatValue={this.formatValue || ((value: number) => value.toString())}
+      colorsArray={completeColors}
+      selectedCount={0}
+      ranges={[]}
+      scaleType={"linear"}
     />
   }
 }
+

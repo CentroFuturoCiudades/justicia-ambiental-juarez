@@ -69,9 +69,12 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
 
 
     //if ( !mapLayerInstance || !layer || selectedLayer === layer) return;
-    if(!mapLayerInstance) return null;
-    if(!layer) return null;
-    if(!tematicaData || !tematicaData.allFeatures || !tematicaData.allFeatures.length) return null;
+    if(!mapLayerInstance || !layer || mapLayerInstance.title !== layer.title) {
+        //console.log("LayerCard: mapLayerInstance or layer mismatch", mapLayerInstance?.title, layer?.title);
+        console.log('no mapLayerInstance');
+        return null;
+    }
+    if((!tematicaData || !tematicaData.allFeatures || !tematicaData.allFeatures.length) && activeLayerKey) return null;
 
     const themeKey = layer?.tematica;
     let selected: string[] = [];
@@ -88,12 +91,14 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
             layer.juarezTotal,
             layer.filter
         );
+    } else {
+        average = mapLayerInstance.positiveAvg;
     }
 
     //console.log("average", average);
     //console.log("maplayerinstance positiveAvg", mapLayerInstance.positiveAvg);
     const category = layer.getAvgThreshold ? layer.getAvgThreshold(layer.filter ? mapLayerInstance.positiveAvg : average) : null;
-    const description = mapLayerInstance.getDescription(
+    const description = mapLayerInstance.getDescription ? mapLayerInstance.getDescription(
         selected, //agebs/colonias
         activeLayerKey, // key
         average, //average number
@@ -101,7 +106,7 @@ const LayerCard = ({ layer, rangeGraphRef, onInfoHover, layerCardRef, infoCardOp
         layer.juarezCard, //juarez card JSX
         layer.selectionCard, //selection card JSX
         category, //category string
-    );
+    ) : layer.juarezCard();
 
     //if(average === null || isNaN(average)) return null;
 

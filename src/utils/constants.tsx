@@ -3,7 +3,7 @@ import { formatNumber, capitalize } from "./utils";
 const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
 
 export const total_pob_juarez = 1503616.0;
-export const codebook_url= "/assets/Catálogo de Datos.pdf";
+export const codebook_url= "/assets/Catálogo de Datos.pdf";
 export const webpage_url="https://salmon-field-079add61e.1.azurestaticapps.net/";
 export const COLORS = {
     GLOBAL: {
@@ -52,6 +52,7 @@ export const SECTIONS = {
             "superficie_inundada",
             "riesgo_trafico_vehicular",
             "islas_de_calor",
+            "riesgo_inundaciones",
         ] as LayerKey[],
     },
     industria: {
@@ -190,6 +191,46 @@ export const LAYERS: any = {
             })
         }
         ]
+    },
+    riesgo_inundaciones: { 
+        raster: true,  
+        scaleType: "linear",
+        colors: ["#f4f9ff", "#08316b"],
+        capa: true,
+        pickable: false,
+        url: `https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif?${REACT_APP_SAS_TOKEN}`,
+        jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.json?${REACT_APP_SAS_TOKEN}`,
+        title: "Riesgo de inundaciones",
+        legendTitle: "Temperatura",
+        description: "tooltip descp. inundaciones",
+        source: "X",
+        property: "lst",
+        tematica: "industria",
+        type: "Continua",
+        is_lineLayer: false,
+        is_PointLayer: false,
+        enabled: true,
+        colonias: false,
+        dataProcessing: (data: any) => {
+            data.features = data.features.filter((feature: any) => feature.properties.ID !== null);
+            return data;
+        },
+        formatValue: (x: number) => {
+            return formatNumber(x, 0)
+        },
+        trimOutliers: false,
+        juarezCard: (data) =>
+            <span>Riesgo de inundaciones en Ciudad Juárez</span>,
+        selectionCard: (data) => {
+            return (
+            <>
+                <span>En {data.introText} la exposición a contaminantes industriales es de <strong>{data.avg}/km² </strong>.</span>
+                <br/>
+                <span>Este porcentaje esta por <strong>{data.comparedToAvg}</strong> del promedio de Ciudad Juarez.</span>
+            </>
+            );
+        },
+       // graphs: []
     },
     vulnerabilidad_calor: { //categorica
         title: "Índice de vulnerabilidad al calor",
@@ -1768,6 +1809,7 @@ export const CAPAS_BASE_CODEBOOK = {
         isPointLayer: true,
         field: "ID",
         //colors: ["#ff0000"],
+        colors: ["#f4f9ff", "#08316b"],
         clickInfo: true,
         dataFiltering: (data: any) => { return data},
        featureInfo: true,

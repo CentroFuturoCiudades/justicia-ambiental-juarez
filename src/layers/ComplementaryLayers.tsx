@@ -91,6 +91,7 @@ const ComplementaryLayers = () => {
                         console.log('loading raster layer for', layerKey, 'with url', urlBlob);
                         const rasterLayerInstance = new RasterLayer({
                             opacity: 0.7,
+                            colors: complementary?.colors || ["#f4f9ff", "#08316b"],
                             title: complementary.title
                         });
                         await rasterLayerInstance.loadRaster(urlBlob);
