@@ -41,14 +41,13 @@ const Toolbar = ({ rangeGraphRef, deck, map, setPopUp, setMobileVisibleElement }
                         setPopUp={setPopUp}
                         setMobileVisibleElement={setMobileVisibleElement}
                     />
-                        <Checkbox.Root variant={"solid"} gap={"0.5dvw"} checked={isSatellite} onCheckedChange={() => setSatellite(!isSatellite)} color={isSatellite ? "white": "black"} >
-                            <Checkbox.HiddenInput />
-                            <Checkbox.Control width={"1.5dvw"} height={"1.5dvw"}/>
-                            <Checkbox.Label fontSize={"var(--font-size-subtitle)"}>Mapa Satelital</Checkbox.Label>
-                        </Checkbox.Root>
-                    
                 </>
             }
+            <Checkbox.Root variant={"solid"} gap={"0.5dvw"} checked={isSatellite} onCheckedChange={() => setSatellite(!isSatellite)} color={isSatellite ? "white": "black"} >
+                <Checkbox.HiddenInput />
+                <Checkbox.Control width={"1.5dvw"} height={"1.5dvw"}/>
+                <Checkbox.Label fontSize={"var(--font-size-subtitle)"}>Mapa Satelital</Checkbox.Label>
+            </Checkbox.Root>
 
         </div>
     );
