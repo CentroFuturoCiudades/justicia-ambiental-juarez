@@ -93,7 +93,7 @@ const ThemeLayer = () => {
         const layer = LAYERS[selectedLayer as keyof typeof LAYERS];
         let layerData; //feature collection object in order to create de layer
         let newGeoJsonLayer;
-        let extraGeoJsonLayer;
+      //  let extraGeoJsonLayer;
         let graphData = null;
 
         if(!layer.colonias && activeLayerKey === "colonias") {
@@ -141,7 +141,7 @@ const ThemeLayer = () => {
 
                 layerData = await mapLayerInstance.loadData(`${layer.url}`);
                 //industrias contaminantes que viene con 2 capas
-                if(layer.extraLayerUrl) {
+                /*if(layer.extraLayerUrl) {
                     const extraLayerData = await mapLayerInstance.loadData(`${layer.extraLayerUrl}`);
                     //create extra GeoJsonLayer
                     extraGeoJsonLayer = new GeoJsonLayer({
@@ -153,7 +153,7 @@ const ThemeLayer = () => {
                         getLineColor: [0, 0, 0, 200],
                         getLineWidth: 10,
                     });
-                }
+                }*/
             } else {
                 //if regular indicator, just copy agebs/colonias geojson from context
                 layerData = JSON.parse(JSON.stringify(activeLayerKey === "agebs" ? agebsGeoJson : coloniasGeoJson));
@@ -203,8 +203,9 @@ const ThemeLayer = () => {
             //6. set context variables
             setMapLayerInstance(mapLayerInstance);
             setTematicaData(data);
-            setTematicaLayer( extraGeoJsonLayer ? [extraGeoJsonLayer, newGeoJsonLayer] : [newGeoJsonLayer] );
-            setJsonData(graphData);
+           // setTematicaLayer( extraGeoJsonLayer ? [extraGeoJsonLayer, newGeoJsonLayer] : [newGeoJsonLayer] );
+           setTematicaLayer( [newGeoJsonLayer] ); 
+           setJsonData(graphData);
             if(graphData != null && selectedLayer==="industrias_contaminantes") {
                 setLayerInfoData(prev => ({
                     ...prev,

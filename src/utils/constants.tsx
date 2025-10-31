@@ -1891,6 +1891,28 @@ export const CAPAS_BASE_CODEBOOK = {
             });
             return data;
         },
+        jsonDataProcessing: (data: any) => {
+            const riesgos: any = {
+                "Metals": "Metales",
+                "Persistent, Bioaccumulative and Toxic": "Persistentes, Bioacumulativos y Tóxicos",
+                "Known or Suspected Carcinogens": "Carcinógenos Conocidos o Sospechosos",
+                "Developmental/Reproductive Toxins": "Tóxicos para el Desarrollo/Reproductivos",
+            }
+            Object.values(data).forEach((industry: any) => {
+                const risks = industry.risks;
+                if (risks) {
+                    Object.values(risks).forEach((site: any) => {
+                        Object.keys(site).forEach((riskKey) => {
+                            if (riesgos[riskKey]) {
+                                site[riesgos[riskKey]] = site[riskKey];
+                                delete site[riskKey];
+                            }
+                        });
+                    });
+                }
+            });
+            return data;
+        },
        featureInfo: true,
        isLine: false,
        radius: 5
