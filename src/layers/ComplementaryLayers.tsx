@@ -126,7 +126,7 @@ const ComplementaryLayers = () => {
                             complementary.radius
                         );
 
-                        let extraLayer: GeoJsonLayer | null = null;
+                        /*let extraLayer: GeoJsonLayer | null = null;
                         //extra layer if extraurl (circles for industries)
                         if(complementary.extraUrl) {
                             const extraUrlBlob = `${complementary.extraUrl}?${REACT_APP_SAS_TOKEN}`;
@@ -141,12 +141,16 @@ const ComplementaryLayers = () => {
                                 getLineWidth: 10,
                             });
                         }
-                        setBaseLayers(prev => ({ ...prev, [layerKey]: extraLayer ? [extraLayer, newLayer] : [newLayer] }));
+                        setBaseLayers(prev => ({ ...prev, [layerKey]: extraLayer ? [extraLayer, newLayer] : [newLayer] }));*/
+                        setBaseLayers(prev => ({ ...prev, [layerKey]: [newLayer] }));
                     }
 
                     if(complementary?.jsonurl){
                         const data = await fetch(complementary.jsonurl);
                         graphData = await data.json();
+                        if(complementary?.jsonDataProcessing){
+                            graphData = complementary.jsonDataProcessing(graphData)
+                        }
                     }
 
                    // setJsonData(graphData)
