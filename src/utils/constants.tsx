@@ -100,7 +100,7 @@ export const LAYERS: any = {
         url: `https://justiciaambientalstore.blob.core.windows.net/data/Islas_de_calor_Juarez.geojson?${REACT_APP_SAS_TOKEN}`,
         jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.json?${REACT_APP_SAS_TOKEN}`,
         title: "Islas de calor",
-        legendTitle: "Temperatura",
+        legendTitle: "Temperatura promedio",
         description: "Las islas de calor describen áreas urbanas de muchas construcciones que son más calientes que las áreas rurales cercanas. Las islas de calor aumentan el calor y la contaminación, lo que provoca riesgos para la salud y afecta la calidad de vida.",
         source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017 (CIESIN) Columbia University (ver: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5251739)",
         property: "lst",
@@ -194,16 +194,28 @@ export const LAYERS: any = {
     },
     riesgo_inundaciones: { 
         raster: true,  
-        scaleType: "linear",
-        colors: ["#f4f9ff", "#08316b"],
+        scaleType: "quantile",
+        thresholds: [1, 2, 3, 4, 5, 6, 7, 8],
+        colors: [
+            
+            "#f4f9ff",
+            "#d6e6f6",
+            "#b8d3ed",
+            "#9ac0e4",
+            "#7caddb",
+            "#5e9ad2",
+            "#4187c9",
+            "#2364a0",
+            "#08316b"
+        ],
         capa: true,
         pickable: false,
         url: `https://justiciaambientalstore.blob.core.windows.net/data/inundaciones_raster.tif?${REACT_APP_SAS_TOKEN}`,
         jsonurl: `https://justiciaambientalstore.blob.core.windows.net/data/heat_island_graph.json?${REACT_APP_SAS_TOKEN}`,
         title: "Riesgo de inundaciones",
-        legendTitle: "Temperatura",
-        description: "tooltip descp. inundaciones",
-        source: "X",
+        legendTitle: "Profundidad del agua (m)",
+        description: "Esta capa representa las áreas susceptibles a inundaciones, mostrando la profundidad del agua esperada en durante una lluvia intensa de 60 min. Esta capa permite identificar zonas con distintos niveles de peligro para la población y la infraestructura.",
+        source: "Elaboración propia con datos de INEGI – Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ (https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "lst",
         tematica: "industria",
         type: "Continua",
@@ -220,7 +232,7 @@ export const LAYERS: any = {
         },
         trimOutliers: false,
         juarezCard: (data) =>
-            <span>Riesgo de inundaciones en Ciudad Juárez</span>,
+            <span>En Ciudad Juárez, hay <strong>16,939,894 m2</strong> afectados por las inundaciones, lo que representa el <strong>4%</strong> de su superficie.</span>,
         selectionCard: (data) => {
             return (
             <>
@@ -230,7 +242,8 @@ export const LAYERS: any = {
             </>
             );
         },
-       // graphs: []
+        graphs: [],
+        textRangesLegend: ["Mayor a 5 m", "2 - 5 m", "1 - 2 m", "0.5 - 1 m", "0.25 - 0.5 m", "0.1 - 0.25 m", "0.05 - 0.1 m", "0.02 - 0.05 m", "Menor a 0.02 m"],
     },
     vulnerabilidad_calor: { //categorica
         title: "Índice de vulnerabilidad al calor",
@@ -287,8 +300,8 @@ export const LAYERS: any = {
         scaleType: "quantile",
         thresholds: [10, 25, 50, 75],
         colors: ["#f2f2f2","#ebe6dfff", "#d9c2b1ff", "#7d9ab3ff", "#436480ff"],
-        title: "Población afectada por inundaciones",
-        description: "Porcentaje de la población que durante una lluvia de 60 minutos se ve afectada por un nivel de agua superior a 25 centímetros.",
+        title: "Población expuesta a inundaciones",
+        description: "Porcentaje de la población que durante una lluvia de 60 minutos se ve expuesta por un nivel de agua superior a 25 centímetros.",
         source: "Elaboración propia con datos  del Instituto Nacional de Estadística y Geografía (INEGI), Censo de Población y Vivienda 2020 y del  Modelos Digitales de Elevación (MDE) LiDAR de alta resolución (5 m) y cartas H13A15, H13A25 y H13A26, procesados en ArcGIS Pro (Mosaic to New Raster, ArcHydro). Intensidades de lluvia del Estudio Hidrológico e Hidráulico de la zona sur de la cuenca El Barreal, UACJ. (ver: https://www.inegi.org.mx/app/mapas/?tg=1015)",
         property: "porcentaje_poblacion_inundada",
         propertyAbsolute: "total_poblacion_inundada",

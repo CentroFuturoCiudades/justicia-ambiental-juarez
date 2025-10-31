@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
-import { Button } from "@chakra-ui/react";
+import { Button, Checkbox } from "@chakra-ui/react";
 import Home from '/assets/Icono HOME.png'
 import ZoomTools from "./ZoomTools";
 import SelectionTools from "./SelectionTools";
@@ -18,7 +18,7 @@ export type DownloadProps = {
 
 const Toolbar = ({ rangeGraphRef, deck, map, setPopUp, setMobileVisibleElement }: DownloadProps) => {
     const navigate = useNavigate();
-    const { selectedLayer } = useAppContext();
+    const { selectedLayer, isSatellite, setSatellite } = useAppContext();
     return (
         <div className="toolbar">
 
@@ -41,6 +41,12 @@ const Toolbar = ({ rangeGraphRef, deck, map, setPopUp, setMobileVisibleElement }
                         setPopUp={setPopUp}
                         setMobileVisibleElement={setMobileVisibleElement}
                     />
+                        <Checkbox.Root variant={"solid"} gap={"0.5dvw"} checked={isSatellite} onCheckedChange={() => setSatellite(!isSatellite)}>
+                            <Checkbox.HiddenInput />
+                            <Checkbox.Control width={"1.5dvw"} height={"1.5dvw"}/>
+                            <Checkbox.Label fontSize={"var(--font-size-subtitle)"}>Mapa Satelital</Checkbox.Label>
+                        </Checkbox.Root>
+                    
                 </>
             }
 

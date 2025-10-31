@@ -14,7 +14,8 @@ const Layers = () => {
     const { layers: selectedLayers } = SelectedLayers();
 
     const openStreetMapLayer = new TileLayer({
-        data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        //data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        data: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
         minZoom: 9,
         maxZoom: 14,
         tileSize: 256,
@@ -32,7 +33,7 @@ const Layers = () => {
     });
 
     const layers: any[] = [
-        ...[openStreetMapLayer],    //first layer is osm base map
+     //   ...[openStreetMapLayer],    //first layer is osm base map
         ...themeLayers,
         ...complementaryLayers,
         ...lensLayers,
