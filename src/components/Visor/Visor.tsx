@@ -46,7 +46,8 @@ const Visor = () => {
         layerTooltip, setLayerTooltip,
         layerInfoData,
         selectionMode,
-        hoverColonia
+        hoverColonia,
+        isSatellite
         
     } = useAppContext();
 
@@ -136,11 +137,6 @@ const Visor = () => {
         })();
     }, []);
 
-    useEffect(() => {
-        console.log("activeLayerKey changed:", activeLayerKey);
-        console.log("selectionMode:", selectionMode);
-    }, [activeLayerKey, selectionMode]);
-
     if(!hydrated) return null;
 
     return (
@@ -202,7 +198,7 @@ const Visor = () => {
                     onDrag={() => setSelectedPoint(null)}
                 >
                     <Map
-                        mapStyle="mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"
+                        mapStyle= {isSatellite ? "mapbox://styles/mapbox/satellite-v9" : "mapbox://styles/lameouchi/cmdhi6yd6007401qw525702ru"}
                         mapboxAccessToken={REACT_APP_MAPBOX_TOKEN}
                         ref={map}
                         reuseMaps

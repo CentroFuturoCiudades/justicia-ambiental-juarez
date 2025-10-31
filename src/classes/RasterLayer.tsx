@@ -1,5 +1,5 @@
 import { BitmapLayer } from "@deck.gl/layers";
-import { scaleLinear } from "d3-scale";
+import { scaleLinear, scaleThreshold, scaleQuantile } from "d3-scale";
 import { rgb } from "d3-color";
 import { fromUrl } from "geotiff";
 import Legend from "../components/Legend/Legend";
@@ -20,21 +20,54 @@ export class RasterLayer {
   title: string;
   amountOfColors: number;
   formatValue: (value: number) => string;
+  scaleType: string;
+  thresholds: number[] | null = null;
+  quantiles: number[] = []; 
 
-  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer", amountOfColors = 6, formatValue }: { opacity?: number, colors?: string[], title?: string, amountOfColors?: number, formatValue?: (value: number) => string }) {
+  constructor({ opacity = 0.7, colors = ["blue", "cyan", "white", "yellow", "red"], title = "Raster Layer", scaleType = "linear", thresholds = null, amountOfColors = 6, formatValue }: { opacity?: number, colors?: string[], title?: string, scaleType?: string, thresholds?: number[] | null, amountOfColors?: number, formatValue?: (value: number) => string }) {
     this.opacity = opacity;
     this.colors = colors;
     this.title = title;
+    this.scaleType = scaleType;
+    this.thresholds = thresholds;
     this.amountOfColors = amountOfColors;
     this.formatValue = formatValue || ((value: number) => formatNumber(value, 2));
   }
 
+  getDomain = (mappedData: number[]) => {
+    let domain;
+    if(this.scaleType === "linear"){ //lineal domain [min, max]
+      domain = [
+          this.minVal,
+          ...Array.from({ length: this.colors.length - 2 },
+            (_, i) => this.minVal + (this.maxVal - this.minVal) * (i + 1) / (this.colors.length - 1)),
+          this.maxVal,
+        ];
+    } else if (this.thresholds && this.thresholds.length > 0) { //quantile domain (thresholds)
+      domain = this.thresholds;
+    } else { //quantile domain (every value)
+      domain = mappedData;
+    }
+    return domain;
+  }
+
+    //get color map (for lineal and quantile scales)
+    getColorMap = (domain: number[]) => {
+      let colorMap;
+      if(this.scaleType === "linear"){
+        colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+      } else if (this.thresholds && this.thresholds.length > 0) {
+        colorMap = scaleThreshold<number, string>().domain(domain).range(this.colors);
+      } else {
+        colorMap = scaleQuantile<string>().domain(domain).range(this.colors);
+      }
+      return colorMap;
+    }
+
   async loadRaster(url: string) {
     try {
     const tiff = await fromUrl(url);
-    console.log("TIFF loaded from", url);
     const img = await tiff.getImage();
-    console.log("TIFF image read", img.getWidth(), "x", img.getHeight());
     const [wX, wY, eX, eY] = img.getBoundingBox();
     const width = img.getWidth();
     const height = img.getHeight();    
@@ -49,19 +82,22 @@ export class RasterLayer {
     const validValues = raster.filter((v: any) => v !== Infinity && v !== -Infinity);
     const { min, max } = this.minMax(validValues);
     const avg = validValues.reduce((a: number, b: number) => a + b, 0) / validValues.length;
-    console.log("Raster average:", avg);
-    console.log("Raster min/max:", min, max);
     this.minVal = min;
     this.maxVal = max;
     this.positiveAvg = avg;
-    const domain = [
+    //Domain
+    /*const domain = [
       min,
       ...Array.from({ length: this.colors.length - 2 },
         (_, i) => min + (max - min) * (i + 1) / (this.colors.length - 1)),
       max,
-    ];
-    console.log("Raster color domain:", domain);
-    const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+    ];*/
+    const domain = this.getDomain(validValues);
+
+    //const colorMap = scaleLinear<string>().domain(domain).range(this.colors);
+    const colorMap = this.getColorMap(domain);
+
+
     raster.forEach((v: any, i: number) => {
       if (v === Infinity || v === -Infinity || v === null || v === undefined || isNaN(v) || v === 0) {
         imageData?.data.set([0, 0, 0, 0], i * 4);
@@ -83,9 +119,9 @@ export class RasterLayer {
     this.legend = {
       title: this.title,
       categories: this.colors.map((color, i) => ({
-        label: domain[i].toFixed(2),
+        label: domain[i],
         color,
-        value: domain[i].toFixed(2)
+        value: domain[i]
       }))
     };
     //console.log("Raster image created", this.image, this.bounds);
@@ -148,13 +184,12 @@ export class RasterLayer {
     return completeColors.map((color) => rgb(color).formatHex());
   }
 
-  getLegend(title: string) {
+  getLegend(title: string, isPointLayer: boolean, legendTitle: string, textRanges?: string[]) {
     if (!this.legend) return <></>;
-    const ranges = this.getRanges();
-    console.log("Legend ranges:", ranges);
+    const ranges = this.getRanges2();
     //const completeColors = this.getColors();
-    const completeColors = ranges.map((range) => this.colorMap(range[1]));
-    console.log("Legend colors:", completeColors);
+    //const completeColors = ranges.map((range) => this.colorMap(range[1]));
+    const completeColors = this.scaleType === "quantile" ? ranges.map((_, i) => this.colors[i]).reverse() : ranges.map((range) => this.colorMap(range[1]));
     /*return (
       <Legend
         title={title}
@@ -165,14 +200,14 @@ export class RasterLayer {
       />
     );*/
     return <Legend
-      title={title}
+      title={legendTitle ? legendTitle : title}
       colors={completeColors}
       ranges={ranges}
       formatValue={this.formatValue || ((value: number) => value.toString())}
       categorical={false}
-      isPointLayer={false}
-      textRanges={undefined}
-      scaleType={"linear"}
+      isPointLayer={isPointLayer}
+      textRanges={textRanges}
+      scaleType={this.scaleType}
     />
   }
 

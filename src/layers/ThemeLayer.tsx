@@ -55,11 +55,11 @@ const ThemeLayer = () => {
 
     const handleHover = (info:any) => {
         console.log("Hover info in ThemeLayer:", info);
-        if (info && info.object && info.object.properties.nombre) { //only colonia geojson has 'nombre' property
+        if (info && info.object && activeLayerKey) { //only colonia geojson has 'nombre' property
             setHoverColonia({
                 x: info.x,
                 y: info.y,
-                colonia: info.object.properties.nombre,
+                colonia: activeLayerKey === "colonias" ? info.object.properties.nombre : info.object.properties.index,
             });
         } else {
             setHoverColonia(null);
@@ -70,11 +70,9 @@ const ThemeLayer = () => {
     useEffect(() => {
             setMapLayerInstance(null);
             setTematicaLayer(null);
-
-
-
             setTematicaData(null);
             setJsonData(null); 
+            setHoverColonia(null);
         
     }, [selectedLayer]);
 
@@ -113,7 +111,9 @@ const ThemeLayer = () => {
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
                     colors: layer?.colors,
-                    title: layer.title
+                    title: layer.title,
+                    scaleType: layer?.scaleType,
+                    thresholds: layer?.thresholds,
                 });
                 await rasterLayerInstance.loadRaster(layer.url);
                 const newBitmapLayer = rasterLayerInstance.getBitmapLayer();

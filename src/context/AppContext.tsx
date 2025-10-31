@@ -67,6 +67,8 @@ interface AppContextI {
     setSelectedEquipamientosFilters: Dispatch<SetStateAction<string[]>>;
     hoverColonia: { x: number; y: number; colonia: string; } | null;
     setHoverColonia: Dispatch<SetStateAction<{ x: number; y: number; colonia: string; } | null>>;
+    isSatellite: boolean;
+    setSatellite: Dispatch<SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -142,6 +144,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [layerInfoData, setLayerInfoData] = useState<Record<string, any>>({});
     const [selectedEquipamientosFilters, setSelectedEquipamientosFilters] = useState<string[]>(['educacion', 'salud', 'recreacion', 'parques']);
     const [hoverColonia, setHoverColonia] = useState<{ x: number; y: number; colonia: string; } | null>(null);
+    const [isSatellite, setSatellite] = useState<boolean>(false);
 
 
     return (
@@ -199,6 +202,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setSelectedEquipamientosFilters,
             hoverColonia,
             setHoverColonia,
+            isSatellite,
+            setSatellite,
         }}
         >
             {children}
