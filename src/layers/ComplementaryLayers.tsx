@@ -55,6 +55,7 @@ const ComplementaryLayers = () => {
     
     //generate complementary layers
     useEffect(() => {
+        let isCurrent = true;
         //deseleccionar capas
         setBaseLayers(prev => {
             const filtered = Object.fromEntries(
@@ -88,13 +89,13 @@ const ComplementaryLayers = () => {
                 (async () => {
                     //if complementary is raster
                     if(complementary?.raster){
-                        console.log('loading raster layer for', layerKey, 'with url', urlBlob);
                         const rasterLayerInstance = new RasterLayer({
                             opacity: 0.7,
                             colors: complementary?.colors || ["#f4f9ff", "#08316b"],
                             title: complementary.title
                         });
                         await rasterLayerInstance.loadRaster(urlBlob);
+                        if(!isCurrent) return;
                         const newLayer = rasterLayerInstance.getBitmapLayer();
                         setBaseLayers(prev => ({ ...prev, [layerKey]: [newLayer] }));
                     } 
@@ -106,6 +107,7 @@ const ComplementaryLayers = () => {
                             opacity: complementary?.opacity || 1
                         });
                         let data = await complementaryLayerInstance.loadData(urlBlob);
+                        if(!isCurrent) return;
                         
                         if(complementary?.dataProcessing) {
                             data = complementary.dataProcessing(data);
@@ -165,7 +167,9 @@ const ComplementaryLayers = () => {
                     console.log('layerInfoData', layerInfoData)
 
                 })();
+
         }});
+        return () => { isCurrent = false; };
         }, [selectedBaseLayers, selectedEquipamientosFilters]);
 
     return { layers: Object.values(baseLayers) };
