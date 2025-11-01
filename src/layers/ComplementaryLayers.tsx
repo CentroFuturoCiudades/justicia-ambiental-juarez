@@ -14,7 +14,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
-    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters } = useAppContext();
+    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters, isLoadingComplementaryLayer, setIsLoadingComplementaryLayer } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
     const [equuipamientosData, setEquipamientosData] = useState<any>(null);
 
@@ -75,6 +75,7 @@ const ComplementaryLayers = () => {
     
         selectedBaseLayers.forEach(layerKey => {
             if (!baseLayers[layerKey]) {
+                if(setIsLoadingComplementaryLayer) setIsLoadingComplementaryLayer(true);
                 const complementary = CAPAS_BASE_CODEBOOK[layerKey as keyof typeof CAPAS_BASE_CODEBOOK];
                 
                 const url = complementary?.url;
@@ -164,7 +165,8 @@ const ComplementaryLayers = () => {
                             [layerKey]: graphData
                         }));
                     }
-                    console.log('layerInfoData', layerInfoData)
+                    //console.log('layerInfoData', layerInfoData)
+                    if(setIsLoadingComplementaryLayer) setIsLoadingComplementaryLayer(false);
 
                 })();
 

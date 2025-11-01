@@ -107,8 +107,6 @@ const ThemeLayer = () => {
             if(layer.raster ) {
                // setSelectionMode(null);
                // setActiveLayerKey(null);
-
-                console.log("Loading raster layer:", layer.title);
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
                     colors: layer?.colors,

@@ -19,7 +19,7 @@ interface AppContextI {
     setAgebsGeoJson: Dispatch<SetStateAction<FeatureCollection>>;
     coloniasGeoJson: FeatureCollection;
     setColoniasGeoJson: Dispatch<SetStateAction<FeatureCollection>>;
-    mapLayerInstance: MapLayer | null;
+    mapLayerInstance: MapLayer | RasterLayer | null;
     setMapLayerInstance: Dispatch<SetStateAction<MapLayer | RasterLayer | null>>;
     tematicaData: any;
     setTematicaData: Dispatch<SetStateAction<any>>;
@@ -69,6 +69,8 @@ interface AppContextI {
     setHoverColonia: Dispatch<SetStateAction<{ x: number; y: number; colonia: string; } | null>>;
     isSatellite: boolean;
     setSatellite: Dispatch<SetStateAction<boolean>>;
+    isLoadingComplementaryLayer: boolean;
+    setIsLoadingComplementaryLayer?: Dispatch<SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextI | undefined>(undefined);
@@ -145,6 +147,7 @@ const AppContextProvider = ({ children }: { children: any }) => {
     const [selectedEquipamientosFilters, setSelectedEquipamientosFilters] = useState<string[]>(['educacion', 'salud', 'recreacion', 'parques']);
     const [hoverColonia, setHoverColonia] = useState<{ x: number; y: number; colonia: string; } | null>(null);
     const [isSatellite, setSatellite] = useState<boolean>(false);
+    const [isLoadingComplementaryLayer, setIsLoadingComplementaryLayer] = useState<boolean>(false);
 
 
     return (
@@ -204,6 +207,8 @@ const AppContextProvider = ({ children }: { children: any }) => {
             setHoverColonia,
             isSatellite,
             setSatellite,
+            isLoadingComplementaryLayer,
+            setIsLoadingComplementaryLayer
         }}
         >
             {children}
