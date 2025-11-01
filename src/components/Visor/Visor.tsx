@@ -47,7 +47,8 @@ const Visor = () => {
         layerInfoData,
         selectionMode,
         hoverColonia,
-        isSatellite
+        isSatellite,
+        isLoadingComplementaryLayer
         
     } = useAppContext();
 
@@ -304,7 +305,7 @@ const Visor = () => {
                     </div>
                 }
 
-                {!mapLayerInstance && selectedLayer &&
+                {((!mapLayerInstance && selectedLayer) || isLoadingComplementaryLayer) &&
                     <div style={{position: "absolute", left:"50%", transform: "translateX(-50%)", top: "50%", width: "100%", display: "flex", justifyContent: "center", zIndex: 1000}}>
                         <Spinner size={"xl"}/>
                     </div>

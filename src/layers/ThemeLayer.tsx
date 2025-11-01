@@ -79,6 +79,7 @@ const ThemeLayer = () => {
     // Crea la capa de la tematica seleccionada
     useEffect(() => {
         setLayerTooltip(null); //cerrar tooltip al cambiar de capa
+        let isCurrent = true;
 
         if( !selectedLayer) {
             //setTematicaLayer(null);
@@ -106,8 +107,6 @@ const ThemeLayer = () => {
             if(layer.raster ) {
                // setSelectionMode(null);
                // setActiveLayerKey(null);
-
-                console.log("Loading raster layer:", layer.title);
                 const rasterLayerInstance = new RasterLayer({
                     opacity: 0.7,
                     colors: layer?.colors,
@@ -116,6 +115,7 @@ const ThemeLayer = () => {
                     thresholds: layer?.thresholds,
                 });
                 await rasterLayerInstance.loadRaster(layer.url);
+                if(!isCurrent) return;
                 const newBitmapLayer = rasterLayerInstance.getBitmapLayer();
                 setTematicaLayer(newBitmapLayer);
                 setMapLayerInstance(rasterLayerInstance);
@@ -140,6 +140,7 @@ const ThemeLayer = () => {
                 //setActiveLayerKey(null);
 
                 layerData = await mapLayerInstance.loadData(`${layer.url}`);
+                if(!isCurrent) return;
                 //industrias contaminantes que viene con 2 capas
                 /*if(layer.extraLayerUrl) {
                     const extraLayerData = await mapLayerInstance.loadData(`${layer.extraLayerUrl}`);
@@ -215,6 +216,7 @@ const ThemeLayer = () => {
         }
 
         })();
+        return () => { isCurrent = false; };
 
     }, [selectedLayer, activeLayerKey, selectionMode, filteredFeatures, agebsGeoJson]);
     

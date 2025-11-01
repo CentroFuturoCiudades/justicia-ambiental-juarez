@@ -14,7 +14,7 @@ const REACT_APP_SAS_TOKEN = import.meta.env.VITE_AZURE_SAS_TOKEN;
     - Se crea una GeoJsonLayer por cada selectedBaseLayer
 */
 const ComplementaryLayers = () => {
-    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters } = useAppContext();
+    const { selectedBaseLayers, setLayerTooltip, setSelectedPoint, setJsonData, setLayerInfoData, layerInfoData, selectedEquipamientosFilters, isLoadingComplementaryLayer, setIsLoadingComplementaryLayer } = useAppContext();
     const [baseLayers, setBaseLayers] = useState<{ [key: string]: GeoJsonLayer[] | BitmapLayer }>({});
     const [equuipamientosData, setEquipamientosData] = useState<any>(null);
 
@@ -55,6 +55,7 @@ const ComplementaryLayers = () => {
     
     //generate complementary layers
     useEffect(() => {
+        let isCurrent = true;
         //deseleccionar capas
         setBaseLayers(prev => {
             const filtered = Object.fromEntries(
@@ -74,6 +75,7 @@ const ComplementaryLayers = () => {
     
         selectedBaseLayers.forEach(layerKey => {
             if (!baseLayers[layerKey]) {
+                if(setIsLoadingComplementaryLayer) setIsLoadingComplementaryLayer(true);
                 const complementary = CAPAS_BASE_CODEBOOK[layerKey as keyof typeof CAPAS_BASE_CODEBOOK];
                 
                 const url = complementary?.url;
@@ -88,13 +90,13 @@ const ComplementaryLayers = () => {
                 (async () => {
                     //if complementary is raster
                     if(complementary?.raster){
-                        console.log('loading raster layer for', layerKey, 'with url', urlBlob);
                         const rasterLayerInstance = new RasterLayer({
                             opacity: 0.7,
                             colors: complementary?.colors || ["#f4f9ff", "#08316b"],
                             title: complementary.title
                         });
                         await rasterLayerInstance.loadRaster(urlBlob);
+                        if(!isCurrent) return;
                         const newLayer = rasterLayerInstance.getBitmapLayer();
                         setBaseLayers(prev => ({ ...prev, [layerKey]: [newLayer] }));
                     } 
@@ -106,6 +108,7 @@ const ComplementaryLayers = () => {
                             opacity: complementary?.opacity || 1
                         });
                         let data = await complementaryLayerInstance.loadData(urlBlob);
+                        if(!isCurrent) return;
                         
                         if(complementary?.dataProcessing) {
                             data = complementary.dataProcessing(data);
@@ -162,10 +165,13 @@ const ComplementaryLayers = () => {
                             [layerKey]: graphData
                         }));
                     }
-                    console.log('layerInfoData', layerInfoData)
+                    //console.log('layerInfoData', layerInfoData)
+                    if(setIsLoadingComplementaryLayer) setIsLoadingComplementaryLayer(false);
 
                 })();
+
         }});
+        return () => { isCurrent = false; };
         }, [selectedBaseLayers, selectedEquipamientosFilters]);
 
     return { layers: Object.values(baseLayers) };
