@@ -247,7 +247,7 @@ export const LAYERS: any = {
     },
     vulnerabilidad_calor: { //categorica
         title: "Índice de vulnerabilidad al calor",
-        description: "Índice que evalúa la exposición al calor, la sensibilidad al calor y la capacidad de adaptación para evaluar de manera integral la vulnerabilidad al calor.",
+        description: "Este índice evalúa la vulnerabilidad al calor mediante un índice compuesto que integra tres subíndices: exposición, sensibilidad y capacidad de adaptación.",
         source: "Elaboración Propia con datos de Earth Resources Observation and Science (EROS) Center; European Space Agency, Center for International Earth Science Information Network, Demuzere et al., 2022; Schiavina et al., 2023; Tatem, 2017 (CIESIN) Columbia University (ver: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5251739)",
         property: "vulnerabilidad_calor",
         tematica: "ambiental",
@@ -1050,7 +1050,7 @@ export const LAYERS: any = {
             { value: "parque", label: "Parque", color: "#8ab17d" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
-            { value: "educacion", label: "Educación superior", color: "#e9c46a" },
+            { value: "educacion", label: "Educación", color: "#e9c46a" },
         ],
         dataProcessing: (data: any) => {
             const equipamiento_Groups: any = {
