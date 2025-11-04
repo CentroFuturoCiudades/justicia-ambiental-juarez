@@ -1050,7 +1050,7 @@ export const LAYERS: any = {
             { value: "parque", label: "Parque", color: "#8ab17d" },
             { value: "salud", label: "Salud", color: "#4abfbd" },
             { value: "recreativo", label: "Recreativo", color: "#e76f51" },
-            { value: "educacion", label: "Educación superior", color: "#e9c46a" },
+            { value: "educacion", label: "Educación", color: "#e9c46a" },
         ],
         dataProcessing: (data: any) => {
             const equipamiento_Groups: any = {
