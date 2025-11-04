@@ -638,7 +638,7 @@ export const LAYERS: any = {
         tematica: "industria",
         type: "Categorica",
         categoricalLegend: [
-            { value: "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de ambos", color: "#224ba5ff" },
+            { value: "Manufactureras de metálicos, maquinaria y electrónicos+Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, metálicos, electrónicos, etc.", color: "#224ba5ff" },
             { value: "Transporte", label: "Transporte", color: "#e99900" },
             { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#ccbe6a" },
             { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#9b87b6" },
