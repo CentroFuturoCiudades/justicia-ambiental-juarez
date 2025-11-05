@@ -68,10 +68,10 @@ export const SECTIONS = {
     equipamiento: {
         label: "equipamientos",
         layers: [
-            "indice_accesibilidad",
-            "acceso_recreativos",
-            "acceso_hospitales",
-            "acceso_preparatorias",
+          //  "indice_accesibilidad",
+          //  "acceso_recreativos",
+          //  "acceso_hospitales",
+          //  "acceso_preparatorias",
             "tiempo_recreativos",
             "tiempo_hospitales",
             "tiempo_preparatorias",
@@ -508,7 +508,7 @@ export const LAYERS: any = {
         colonias: false,
         categoricalLegend: [
             { value: "Energía electrica, agua y gas", label: "Energía electrica, agua y gas", color: "#85c1c8" },
-            { value: "Manufactureras de alimentos textiles y tabaco", label: "Manufactureras de alimentos textiles y tabaco", color: "#90a1be" },
+            { value: "Manufactureras de alimentos textiles y tabaco", label: "Manufactureras de alimentos, textiles y tabaco", color: "#90a1be" },
             { value: "Transporte", label: "Transporte", color: "#e99900" },
             { value: "Manufactureras de madera, papel, químicos y plástico", label: "Manufactureras de madera, papel, químicos y plástico", color: "#ccbe6a" },
             { value: "Manufactureras de metálicos, maquinaria y electrónicos", label: "Manufactureras de metálicos, maquinaria y electrónicos", color: "#9b87b6" },
@@ -544,7 +544,7 @@ export const LAYERS: any = {
                 "Manufactureras de metálicos, maquinaria y electrónicos": "#9b87b6",
                 "Manufactureras de madera, papel, químicos y plástico": "#ccbe6a",
                 "Transporte": "#e99900",
-                "Manufactureras de alimentos textiles y tabaco": "#90a1be",
+                "Manufactureras de alimentos, textiles y tabaco": "#90a1be",
                 "Energía electrica, agua y gas": "#85c1c8",
             },
             option: (data: any) => {
@@ -709,7 +709,7 @@ export const LAYERS: any = {
                 "Plomo": "#8C4242",
                 "Mercurio": "#592115",
                 "Níquel": "#BF964B",
-                "Arsenico": "#444b6e",
+                "Arsénico": "#444b6e",
                 "Cromo": "#7c7b7f",
                 "Diisocianatos": "#73722F"
             },
@@ -727,7 +727,7 @@ export const LAYERS: any = {
                     "Lead (and its compounds)": "Plomo",
                     "Mercury (and its compounds)": "Mercurio",
                     "Nickel (and its compounds)": "Níquel",
-                    "Arsenic (and its compounds)": "Arsenico",
+                    "Arsenic (and its compounds)": "Arsénico",
                     "Chromium (and its compounds)": "Cromo",
                     "Diisocyanates": "Diisocianatos"
                 };
@@ -803,7 +803,7 @@ export const LAYERS: any = {
                 "Plomo": "#8C4242",
                 "Mercurio": "#592115",
                 "Níquel": "#BF964B",
-                "Arsenico": "#444b6e",
+                "Arsénico": "#444b6e",
                 "Cromo": "#7c7b7f",
                 "Diisocianatos": "#73722F"
             },
@@ -821,7 +821,7 @@ export const LAYERS: any = {
                     "Lead (and its compounds)": "Plomo",
                     "Mercury (and its compounds)": "Mercurio",
                     "Nickel (and its compounds)": "Níquel",
-                    "Arsenic (and its compounds)": "Arsenico",
+                    "Arsenic (and its compounds)": "Arsénico",
                     "Chromium (and its compounds)": "Cromo",
                     "Diisocyanates": "Diisocianatos"
                 };
