@@ -68,10 +68,10 @@ export const SECTIONS = {
     equipamiento: {
         label: "equipamientos",
         layers: [
-          //  "indice_accesibilidad",
-          //  "acceso_recreativos",
-          //  "acceso_hospitales",
-          //  "acceso_preparatorias",
+           "indice_accesibilidad",
+           "acceso_recreativos",
+           "acceso_hospitales",
+           "acceso_preparatorias",
             "tiempo_recreativos",
             "tiempo_hospitales",
             "tiempo_preparatorias",
@@ -1186,7 +1186,7 @@ export const LAYERS: any = {
         property: "indice_accesibilidad",
         tematica: "equipamiento",
         type: "Continua",
-        enabled: true,
+        enabled: false,
         colonias: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.indice_accesibilidad !== null);
@@ -1334,7 +1334,7 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        enabled: true,
+        enabled: false,
         colonias: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_parque_15min !== null);
@@ -1381,7 +1381,7 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        enabled: true,
+        enabled: false,
         colonias: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_clinica_hospital_30min !== null);
@@ -1428,7 +1428,7 @@ export const LAYERS: any = {
         },
         tematica: "equipamiento",
         type: "Continua",
-        enabled: true,
+        enabled: false,
         colonias: true,
         dataProcessing: (data: any) => {
             data.features = data.features.filter((feature: any) => feature.properties.porcentaje_hogares_preparatoria_30min !== null);
