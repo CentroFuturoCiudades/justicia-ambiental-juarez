@@ -22,11 +22,11 @@ export const accordionItems: AccordionItemType[] = [
                 <p className="cardContent__text">
                     El “Visor de Indicadores Ambientales y Sociales” sirve como un valioso punto de partida
                     para la identificación y el análisis de áreas que pueden justificar una revisión, un
-                    análisis o un acercamiento comunitario más profundo. Se desarrolló para ayudar a
-                    abordar las cargas ambientales desproporcionadas que experimentan las personas
+                    análisis o un acercamiento comunitario más profundo. Se desarrolló para identificar 
+                    cargas o externalidades ambientales negativas que experimentan las personas
                     más vulnerables en Ciudad Juárez. En otros países como EUA, se utilizó por agencias
                     estatales y grupos comunitarios para tomar decisiones relacionadas con permisos,
-                    regulaciones y solicitudes de subvenciones.  
+                    regulaciones y solicitudes de subvenciones, así como para mitigar y/o compensar dichos impactos.
                 </p>
                 <p className="cardContent__title">|Objetivo|</p> {/* |indicadores ambientales| */}
                 <p className="cardContent__text">
